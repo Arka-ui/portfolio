@@ -206,7 +206,7 @@ export default function InteractiveBackground() {
             />
             {showOverlay && (
                 <div className="konami-overlay fade-in-out">
-                    You're going to see my best friend (but I'm always better than him)
+                    Vous allez sur le portfolio de mon meilleur ami (mais vous en faites pas je suis bien plus fort que lui)
                 </div>
             )}
         </>
