@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useOptimizationConfig } from "@/lib/optimization";
 
 export default function InteractiveBackground() {
@@ -10,6 +10,7 @@ export default function InteractiveBackground() {
     const config = useOptimizationConfig();
 
     const canvasRef = useRef<HTMLCanvasElement>(null);
+    const [showOverlay, setShowOverlay] = useState(false);
 
     useEffect(() => {
         const canvas = canvasRef.current;
@@ -110,7 +111,6 @@ export default function InteractiveBackground() {
             particles = [];
             const w = canvas.width;
             const h = canvas.height;
-            // Use config for particle count if available, otherwise default
             const particleCount = config.background?.particleCount || (w < 768 ? 40 : 80);
             for (let i = 0; i < particleCount; i++) {
                 particles.push(new Particle(w, h));
@@ -133,10 +133,7 @@ export default function InteractiveBackground() {
                     const dx = a.x - b.x;
                     const dy = a.y - b.y;
                     const distance = Math.sqrt(dx * dx + dy * dy);
-
-                    // Use config for connection distance if available
                     const maxDist = config.background?.connectionDistance || CONNECTION_RADIUS;
-
                     if (distance < maxDist) {
                         ctx.beginPath();
                         ctx.strokeStyle = LINE_COLOR;
@@ -167,15 +164,16 @@ export default function InteractiveBackground() {
             if (now - lastKeyTime > 5000) konamiIndex = 0;
             lastKeyTime = now;
 
-            // Case-insensitive check for letters
             const key = e.key.toLowerCase();
             const expected = konamiCode[konamiIndex].toLowerCase();
 
             if (key === expected) {
                 konamiIndex++;
                 if (konamiIndex === konamiCode.length) {
-                    // Redirect to friend's portfolio
-                    window.location.href = "https://btmpierre.is-a.dev";
+                    setShowOverlay(true);
+                    setTimeout(() => {
+                        window.location.href = "https://btmpierre.is-a.dev";
+                    }, 3000);
                     konamiIndex = 0;
                 }
             } else {
@@ -201,9 +199,16 @@ export default function InteractiveBackground() {
     }, []);
 
     return (
-        <canvas
-            ref={canvasRef}
-            className="fixed inset-0 -z-10 bg-gradient-to-br from-slate-900 via-slate-900 to-slate-800 pointer-events-none"
-        />
+        <>
+            <canvas
+                ref={canvasRef}
+                className="fixed inset-0 -z-10 bg-gradient-to-br from-slate-900 via-slate-900 to-slate-800 pointer-events-none"
+            />
+            {showOverlay && (
+                <div className="konami-overlay fade-in-out">
+                    You're going to see my best friend (but I'm always better than him)
+                </div>
+            )}
+        </>
     );
 }
