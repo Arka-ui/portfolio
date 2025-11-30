@@ -98,25 +98,125 @@
     opacity: 1;
   }
 
-  100% {
-    opacity: 0;
+  @import "tailwindcss";
+
+  @theme {
+    --color-background: #020617;
+    --color-foreground: #f8fafc;
+
+    --color-card: #0f172a;
+    --color-card-foreground: #f8fafc;
+
+    --color-primary: #6366f1;
+    --color-primary-foreground: #ffffff;
+
+    --color-secondary: #1e293b;
+    --color-secondary-foreground: #f8fafc;
+
+    --color-accent: #8b5cf6;
+    --color-accent-foreground: #ffffff;
+
+    --color-muted: #334155;
+    --color-muted-foreground: #94a3b8;
+
+    --font-sans: var(--font-inter);
+
+    --animate-fade-in: fade-in 0.5s ease-out;
+    --animate-slide-up: slide-up 0.5s ease-out;
+
+    @keyframes fade-in {
+      0% {
+        opacity: 0;
+      }
+
+      100% {
+        opacity: 1;
+      }
+    }
+
+    @keyframes slide-up {
+      0% {
+        transform: translateY(10px);
+        opacity: 0;
+      }
+
+      100% {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    --animate-gradient-x: gradient-x 15s ease infinite;
+    --animate-float: float 6s ease-in-out infinite;
+
+    @keyframes gradient-x {
+
+      0%,
+      100% {
+        background-size: 200% 200%;
+        background-position: left center;
+      }
+
+      50% {
+        background-size: 200% 200%;
+        background-position: right center;
+      }
+    }
+
+    @keyframes float {
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-20px);
+      }
+    }
   }
-}
 
-.konami-overlay {
-  position: fixed;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(0, 0, 0, 0.8);
-  color: #fff;
-  font-size: 1.5rem;
-  text-align: center;
-  padding: 2rem;
-  z-index: 1000;
-}
+  @layer base {
+    body {
+      background-color: var(--color-background);
+      color: var(--color-foreground);
+      font-family: var(--font-sans);
+    }
+  }
 
-.fade-in-out {
-  animation: fadeInOut 3s forwards;
-}
+  /* Overlay animation for Konami easter egg */
+  @keyframes fadeInOut {
+    0% {
+      opacity: 0;
+    }
+
+    20% {
+      opacity: 1;
+    }
+
+    80% {
+      opacity: 1;
+    }
+
+    100% {
+      opacity: 0;
+    }
+  }
+
+  .konami-overlay {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    font-size: 1.5rem;
+    text-align: center;
+    padding: 2rem;
+    z-index: 1000;
+  }
+
+  .fade-in-out {
+    animation: fadeInOut 5s forwards;
+  }
