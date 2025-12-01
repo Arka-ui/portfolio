@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
+import LanguageSelector from "@/components/LanguageSelector";
 
 const navItems = [
     { name: "Home", href: "#" },
@@ -44,7 +45,7 @@ export default function Navbar() {
                 </div>
 
                 {/* Desktop Menu */}
-                <div className="hidden md:block">
+                <div className="hidden md:flex items-center gap-4">
                     <div className="flex items-center space-x-1">
                         {navItems.map((item) => (
                             <Link
@@ -68,6 +69,7 @@ export default function Navbar() {
                             </Link>
                         ))}
                     </div>
+                    <LanguageSelector />
                 </div>
 
                 {/* Mobile Menu Button */}
@@ -101,6 +103,9 @@ export default function Navbar() {
                                     {item.name}
                                 </Link>
                             ))}
+                            <div className="px-4 py-2">
+                                <LanguageSelector />
+                            </div>
                         </div>
                     </motion.div>
                 )}
