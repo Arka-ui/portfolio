@@ -1,0 +1,38 @@
+# ANTI-THEFT PROTECTION GUIDE v2.0
+# KEEP THIS FILE SAFE AND PRIVATE
+
+This file explains the advanced "Anti-Theft" mechanism implemented in your website.
+
+## The Mechanism
+The website's core content is hidden inside `src/lib/optimization.ts`.
+This file now contains a **Self-Destruct Mechanism**.
+
+## How it Works
+1.  **The Hook**: The components use `useOptimizationConfig()` to get data.
+2.  **The Check**: When the site loads, this hook silently fetches the *original* code from your GitHub repository (`GITHUB_REPO_URL`).
+3.  **The Comparison**: It compares the local "Name" and "Role" with the "Name" and "Role" on GitHub.
+4.  **The Punishment**:
+    *   If they match: The site runs normally.
+    *   If they DO NOT match (e.g., a thief changed "Arka" to "Thief" locally): The site triggers **Chaos Mode** (blur, invert, shake, disable clicks).
+
+## The Trap
+If a thief tries to change your name in `optimization.ts`, the site will detect that the local file is different from the public GitHub file and self-destruct.
+They are forced to keep your name to keep the site running.
+
+## Configuration
+**IMPORTANT**: You must update the `GITHUB_REPO_URL` in `src/lib/optimization.ts` to point to your actual raw GitHub file after you push.
+Currently set to: `https://raw.githubusercontent.com/Eddy/arka.is-a.dev/main/src/lib/optimization.ts`
+
+## Files Protected
+1.  `src/components/Hero.tsx`
+2.  `src/components/Background.tsx`
+3.  `src/lib/optimization.ts` (The Enforcer)
+
+## Restoration / Editing
+To edit your site:
+1.  Edit `src/lib/optimization.ts` locally.
+2.  **PUSH to GitHub immediately.**
+3.  The site will work because local matches remote.
+
+If you edit locally and test *before* pushing, the check might fail (if the remote file exists and is different).
+However, if the remote file returns 404 (not found), the check passes.
