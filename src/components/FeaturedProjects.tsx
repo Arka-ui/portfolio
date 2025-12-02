@@ -1,9 +1,10 @@
 "use client";
 
 import { motion, useMotionValue, useSpring, useTransform, AnimatePresence, useAnimation } from "framer-motion";
-import { ExternalLink, Github, Star, ChevronLeft, ChevronRight, Layers, Zap, Globe } from "lucide-react";
+import { ExternalLink, Github, Star, ChevronLeft, ChevronRight, Layers, Zap, Globe, Code, Database, Layout } from "lucide-react";
 import useSWR from "swr";
 import { useState, useEffect, useRef } from "react";
+import { useBlueprint } from "@/context/BlueprintContext";
 
 const GITHUB_USERNAME = "Arka-ui";
 
@@ -46,6 +47,63 @@ const getShadowColor = (language: string) => {
 function ProjectCard({ project, isActive, index }: { project: any; isActive: boolean; index: number }) {
     const gradient = getProjectColor(project.language);
     const shadowColor = getShadowColor(project.language);
+    const { isBlueprintMode } = useBlueprint();
+
+    if (isBlueprintMode) {
+        return (
+            <div className="relative w-full h-full p-6 border-2 border-dashed border-white/30 bg-blue-900/20 font-mono">
+                {/* Annotation Lines */}
+                <div className="absolute -left-4 top-10 w-4 h-[1px] bg-yellow-400"></div>
+                <div className="absolute -left-20 top-8 text-xs text-yellow-400">COMPONENT_CARD</div>
+
+                <div className="flex justify-between items-start mb-4 border-b border-white/20 pb-4">
+                    <div className="flex items-center gap-2">
+                        <Code size={16} className="text-yellow-400" />
+                        <span className="text-sm">ID: {project.id}</span>
+                    </div>
+                    <div className="text-xs opacity-70">Rendered: {new Date().toLocaleTimeString()}</div>
+                </div>
+
+                <div className="space-y-4">
+                    <div>
+                        <span className="text-xs text-blue-300 block mb-1">// Project Name</span>
+                        <h3 className="text-xl font-bold text-white">{project.name}</h3>
+                    </div>
+
+                    <div>
+                        <span className="text-xs text-blue-300 block mb-1">// Description Data</span>
+                        <p className="text-sm text-gray-300 leading-relaxed">
+                            {project.description || "No description provided in API response."}
+                        </p>
+                    </div>
+
+                    <div>
+                        <span className="text-xs text-blue-300 block mb-1">// Tech Stack Array</span>
+                        <div className="flex flex-wrap gap-2">
+                            {project.language && (
+                                <span className="px-2 py-1 text-xs border border-white/30">
+                                    "{project.language}"
+                                </span>
+                            )}
+                            {project.topics?.slice(0, 3).map((topic: string) => (
+                                <span key={topic} className="px-2 py-1 text-xs border border-white/30">
+                                    "{topic}"
+                                </span>
+                            ))}
+                        </div>
+                    </div>
+
+                    <div className="pt-4 border-t border-white/20">
+                        <span className="text-xs text-blue-300 block mb-2">// Action Handlers</span>
+                        <div className="flex gap-2">
+                            <div className="px-3 py-1 bg-white/10 text-xs">[Link: GitHub]</div>
+                            {project.homepage && <div className="px-3 py-1 bg-white/10 text-xs">[Link: Demo]</div>}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="relative w-full h-full perspective-1000">
@@ -162,6 +220,7 @@ export default function FeaturedProjects() {
     const [isAutoPlaying, setIsAutoPlaying] = useState(true);
     const containerRef = useRef<HTMLDivElement>(null);
     const controls = useAnimation();
+    const { isBlueprintMode } = useBlueprint();
 
     const projects = Array.isArray(data)
         ? data
@@ -183,13 +242,41 @@ export default function FeaturedProjects() {
 
     // Auto-rotation logic
     useEffect(() => {
-        if (!isAutoPlaying) return;
+        if (!isAutoPlaying || isBlueprintMode) return;
         const interval = setInterval(nextProject, 5000);
         return () => clearInterval(interval);
-    }, [isAutoPlaying, displayProjects.length]);
+    }, [isAutoPlaying, displayProjects.length, isBlueprintMode]);
 
     if (error) return null;
     if (displayProjects.length === 0) return null;
+
+    if (isBlueprintMode) {
+        return (
+            <section className="py-32 relative min-h-screen bg-[#0044cc]" id="featured">
+                <div className="container mx-auto px-4">
+                    <div className="mb-12 border-b-2 border-dashed border-white/30 pb-4">
+                        <h2 className="text-4xl font-mono font-bold text-white mb-2">&lt;SECTION: FEATURED_PROJECTS /&gt;</h2>
+                        <p className="text-yellow-300 font-mono text-sm">// This section dynamically fetches data from GitHub API and renders it.</p>
+                        <p className="text-yellow-300 font-mono text-sm">// In standard mode, this uses a 3D carousel. Here, we see the raw grid structure.</p>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        {displayProjects.map((project: any, index: number) => (
+                            <motion.div
+                                key={project.id}
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: index * 0.1 }}
+                                className="h-[400px]"
+                            >
+                                <ProjectCard project={project} isActive={true} index={index} />
+                            </motion.div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+        );
+    }
 
     return (
         <section className="py-32 relative overflow-hidden min-h-screen flex flex-col justify-center" id="featured">

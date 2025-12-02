@@ -161,3 +161,52 @@ body {
 @utility transform-style-3d {
   transform-style: preserve-3d;
 }
+/* Blueprint Mode Styles */
+body.blueprint-mode {
+  background-color: #0044cc !important;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px) !important;
+  background-size: 40px 40px !important;
+  color: #ffffff !important;
+  font-family: 'Courier New', Courier, monospace !important;
+}
+
+body.blueprint-mode * {
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+body.blueprint-mode h1,
+body.blueprint-mode h2,
+body.blueprint-mode h3,
+body.blueprint-mode h4,
+body.blueprint-mode h5,
+body.blueprint-mode h6 {
+  font-family: 'Courier New', Courier, monospace !important;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: #fbbf24 !important; /* Yellow-400 */
+}
+
+body.blueprint-mode p {
+  font-family: 'Courier New', Courier, monospace !important;
+  color: #e2e8f0 !important;
+}
+
+body.blueprint-mode .glass-panel,
+body.blueprint-mode .bg-black\/40,
+body.blueprint-mode .bg-white\/5 {
+  background: rgba(0, 68, 204, 0.9) !important;
+  border: 1px dashed rgba(255, 255, 255, 0.5) !important;
+  backdrop-filter: none !important;
+}
+
+/* Hide decorative elements in blueprint mode */
+body.blueprint-mode .blur-\[150px\],
+body.blueprint-mode .blur-\[120px\],
+body.blueprint-mode .bg-gradient-to-br,
+body.blueprint-mode .bg-gradient-to-tr {
+  display: none !important;
+}
+

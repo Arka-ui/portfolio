@@ -2,10 +2,11 @@
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { Menu, X } from "lucide-react";
+import { Menu, X, FileCode } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import LanguageSelector from "@/components/LanguageSelector";
+import { useBlueprint } from "@/context/BlueprintContext";
 
 const navItems = [
     { name: "Home", href: "#" },
@@ -18,6 +19,7 @@ export default function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
     const [activeHover, setActiveHover] = useState<string | null>(null);
+    const { isBlueprintMode, toggleBlueprintMode } = useBlueprint();
 
     useEffect(() => {
         const handleScroll = () => {
@@ -36,11 +38,15 @@ export default function Navbar() {
         >
             <div className={cn(
                 "pointer-events-auto relative mx-4 flex items-center justify-between rounded-full border border-white/10 bg-black/50 backdrop-blur-xl px-6 py-3 shadow-lg transition-all duration-300",
-                scrolled ? "w-[90%] max-w-5xl" : "w-[95%] max-w-7xl"
+                scrolled ? "w-[90%] max-w-5xl" : "w-[95%] max-w-7xl",
+                isBlueprintMode && "bg-[#0044cc]/90 border-white/50 rounded-none border-2 border-dashed"
             )}>
                 <div className="flex-shrink-0 mr-8">
-                    <Link href="#" className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent">
-                        Arka
+                    <Link href="#" className={cn(
+                        "text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent",
+                        isBlueprintMode && "text-white bg-none font-mono tracking-widest"
+                    )}>
+                        {isBlueprintMode ? "<ARKA_DEV />" : "Arka"}
                     </Link>
                 </div>
 
@@ -53,9 +59,12 @@ export default function Navbar() {
                                 href={item.href}
                                 onMouseEnter={() => setActiveHover(item.name)}
                                 onMouseLeave={() => setActiveHover(null)}
-                                className="relative px-4 py-2 text-sm font-medium text-gray-300 transition-colors hover:text-white"
+                                className={cn(
+                                    "relative px-4 py-2 text-sm font-medium text-gray-300 transition-colors hover:text-white",
+                                    isBlueprintMode && "font-mono hover:bg-white/20 hover:text-yellow-300"
+                                )}
                             >
-                                {activeHover === item.name && (
+                                {activeHover === item.name && !isBlueprintMode && (
                                     <motion.div
                                         layoutId="navbar-hover"
                                         className="absolute inset-0 rounded-full bg-white/10"
@@ -69,11 +78,32 @@ export default function Navbar() {
                             </Link>
                         ))}
                     </div>
+
+                    <button
+                        onClick={toggleBlueprintMode}
+                        className={cn(
+                            "p-2 rounded-full transition-all hover:bg-white/10",
+                            isBlueprintMode ? "text-yellow-300 bg-white/20 animate-pulse" : "text-gray-300 hover:text-white"
+                        )}
+                        title={isBlueprintMode ? "Exit Blueprint Mode" : "Enter Blueprint Mode"}
+                    >
+                        <FileCode size={20} />
+                    </button>
+
                     <LanguageSelector />
                 </div>
 
                 {/* Mobile Menu Button */}
-                <div className="md:hidden">
+                <div className="md:hidden flex items-center gap-2">
+                    <button
+                        onClick={toggleBlueprintMode}
+                        className={cn(
+                            "p-2 rounded-full transition-all hover:bg-white/10",
+                            isBlueprintMode ? "text-yellow-300 bg-white/20" : "text-gray-300 hover:text-white"
+                        )}
+                    >
+                        <FileCode size={20} />
+                    </button>
                     <button
                         onClick={() => setIsOpen(!isOpen)}
                         className="text-gray-300 hover:text-white p-2"
@@ -90,7 +120,10 @@ export default function Navbar() {
                         initial={{ opacity: 0, y: -20, scale: 0.95 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: -20, scale: 0.95 }}
-                        className="absolute top-20 left-4 right-4 p-4 rounded-2xl border border-white/10 bg-black/90 backdrop-blur-xl shadow-2xl md:hidden pointer-events-auto"
+                        className={cn(
+                            "absolute top-20 left-4 right-4 p-4 rounded-2xl border border-white/10 bg-black/90 backdrop-blur-xl shadow-2xl md:hidden pointer-events-auto",
+                            isBlueprintMode && "bg-[#0044cc] border-white/50 rounded-none border-dashed font-mono"
+                        )}
                     >
                         <div className="flex flex-col space-y-2">
                             {navItems.map((item) => (
@@ -98,7 +131,10 @@ export default function Navbar() {
                                     key={item.name}
                                     href={item.href}
                                     onClick={() => setIsOpen(false)}
-                                    className="px-4 py-3 rounded-xl text-base font-medium text-gray-300 hover:text-white hover:bg-white/10 transition-colors"
+                                    className={cn(
+                                        "px-4 py-3 rounded-xl text-base font-medium text-gray-300 hover:text-white hover:bg-white/10 transition-colors",
+                                        isBlueprintMode && "hover:text-yellow-300 rounded-none border-b border-white/20"
+                                    )}
                                 >
                                     {item.name}
                                 </Link>

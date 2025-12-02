@@ -3,6 +3,9 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import InteractiveBackground from "@/components/InteractiveBackground";
+import { BlueprintProvider } from "@/context/BlueprintContext";
+import Footer from "@/components/Footer";
+import BlueprintOverlay from "@/components/BlueprintOverlay";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -14,10 +17,6 @@ export const metadata: Metadata = {
   description: "Portfolio of Arka, a passionate Full Stack Developer.",
 };
 
-import Footer from "@/components/Footer";
-
-// ... imports
-
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -26,12 +25,15 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth">
       <body className={`${inter.variable} antialiased bg-background text-foreground`}>
-        <InteractiveBackground />
-        <Navbar />
-        <main className="min-h-screen pt-16">
-          {children}
-        </main>
-        <Footer />
+        <BlueprintProvider>
+          <BlueprintOverlay />
+          <InteractiveBackground />
+          <Navbar />
+          <main className="min-h-screen pt-16">
+            {children}
+          </main>
+          <Footer />
+        </BlueprintProvider>
       </body>
     </html>
   );
