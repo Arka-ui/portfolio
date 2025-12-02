@@ -41,4 +41,4 @@ yarn-error.log*
 next-env.d.ts
 
 # protection
-# PROTECTION_GUIDE.txt
+PROTECTION_GUIDE.txt
