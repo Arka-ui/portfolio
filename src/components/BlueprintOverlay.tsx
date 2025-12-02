@@ -1,27 +1,33 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useBlueprint } from "@/context/BlueprintContext";
 
 export default function BlueprintOverlay() {
     const { isBlueprintMode } = useBlueprint();
+    const [showOverlay, setShowOverlay] = useState(false);
+
+    // Show overlay for a short duration when entering blueprint mode
+    useEffect(() => {
+        if (isBlueprintMode) {
+            setShowOverlay(true);
+            const timer = setTimeout(() => setShowOverlay(false), 3000); // 3 seconds
+            return () => clearTimeout(timer);
+        } else {
+            setShowOverlay(false);
+        }
+    }, [isBlueprintMode]);
 
     return (
         <AnimatePresence>
-            {isBlueprintMode && (
+            {isBlueprintMode && showOverlay && (
                 <motion.div
                     initial={{ y: "-100%" }}
                     animate={{ y: 0 }}
                     exit={{ y: "-100%" }}
                     transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-                    className="fixed inset-0 z-[100] bg-[#0044cc] pointer-events-none flex items-center justify-center overflow-hidden"
-                    style={{
-                        backgroundImage: `
-                            linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px),
-                            linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px)
-                        `,
-                        backgroundSize: '40px 40px'
-                    }}
+                    className="fixed inset-0 z-[100] bg-black pointer-events-none flex items-center justify-center overflow-hidden"
                 >
                     <motion.div
                         initial={{ opacity: 0, scale: 0.8 }}

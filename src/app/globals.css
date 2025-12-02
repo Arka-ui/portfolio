@@ -161,15 +161,13 @@ body {
 @utility transform-style-3d {
   transform-style: preserve-3d;
 }
+
 /* Blueprint Mode Styles */
 body.blueprint-mode {
-  background-color: #0044cc !important;
-  background-image:
-    linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px) !important;
-  background-size: 40px 40px !important;
-  color: #ffffff !important;
+  background-color: #000 !important;
+  color: #fff !important;
   font-family: 'Courier New', Courier, monospace !important;
+  filter: grayscale(100%);
 }
 
 body.blueprint-mode * {
@@ -186,7 +184,8 @@ body.blueprint-mode h6 {
   font-family: 'Courier New', Courier, monospace !important;
   text-transform: uppercase;
   letter-spacing: 2px;
-  color: #fbbf24 !important; /* Yellow-400 */
+  color: #fbbf24 !important;
+  /* Yellow-400 */
 }
 
 body.blueprint-mode p {
@@ -209,4 +208,3 @@ body.blueprint-mode .bg-gradient-to-br,
 body.blueprint-mode .bg-gradient-to-tr {
   display: none !important;
 }
-
