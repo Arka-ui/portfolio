@@ -11,6 +11,7 @@ interface BlueprintAnnotationProps {
     direction?: "top" | "bottom" | "left" | "right";
     className?: string;
     children?: React.ReactNode;
+    offset?: number;
 }
 
 export default function BlueprintAnnotation({
@@ -19,37 +20,44 @@ export default function BlueprintAnnotation({
     techSpecs,
     direction = "right",
     className,
-    children
+    children,
+    offset = 0
 }: BlueprintAnnotationProps) {
     const { isBlueprintMode } = useBlueprint();
 
     if (!isBlueprintMode) return <>{children}</>;
 
     const getPositionStyles = () => {
+        const baseOffset = 24; // 6 * 4px = 24px (mb-6/mt-6 etc)
+        const totalOffset = baseOffset + offset;
+
         switch (direction) {
             case "top":
-                return "bottom-full left-1/2 -translate-x-1/2 mb-6";
+                return `bottom-full left-1/2 -translate-x-1/2 mb-[${totalOffset}px]`;
             case "bottom":
-                return "top-full left-1/2 -translate-x-1/2 mt-6";
+                return `top-full left-1/2 -translate-x-1/2 mt-[${totalOffset}px]`;
             case "left":
-                return "right-full top-1/2 -translate-y-1/2 mr-6";
+                return `right-full top-1/2 -translate-y-1/2 mr-[${totalOffset}px]`;
             case "right":
-                return "left-full top-1/2 -translate-y-1/2 ml-6";
+                return `left-full top-1/2 -translate-y-1/2 ml-[${totalOffset}px]`;
             default:
-                return "left-full top-1/2 -translate-y-1/2 ml-6";
+                return `left-full top-1/2 -translate-y-1/2 ml-[${totalOffset}px]`;
         }
     };
 
     const getConnectorStyles = () => {
+        const baseLength = 24; // 6 * 4px = 24px
+        const totalLength = baseLength + offset;
+
         switch (direction) {
             case "top":
-                return "top-full left-1/2 -translate-x-1/2 h-6 w-[1px]";
+                return `top-full left-1/2 -translate-x-1/2 h-[${totalLength}px] w-[1px]`;
             case "bottom":
-                return "bottom-full left-1/2 -translate-x-1/2 h-6 w-[1px]";
+                return `bottom-full left-1/2 -translate-x-1/2 h-[${totalLength}px] w-[1px]`;
             case "left":
-                return "left-full top-1/2 -translate-y-1/2 w-6 h-[1px]";
+                return `left-full top-1/2 -translate-y-1/2 w-[${totalLength}px] h-[1px]`;
             case "right":
-                return "right-full top-1/2 -translate-y-1/2 w-6 h-[1px]";
+                return `right-full top-1/2 -translate-y-1/2 w-[${totalLength}px] h-[1px]`;
         }
     };
 

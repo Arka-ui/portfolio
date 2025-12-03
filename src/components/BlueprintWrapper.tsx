@@ -9,6 +9,7 @@ interface BlueprintWrapperProps {
     techSpecs?: Record<string, string>;
     direction?: "top" | "bottom" | "left" | "right";
     className?: string;
+    offset?: number;
 }
 
 export default function BlueprintWrapper({
@@ -17,7 +18,8 @@ export default function BlueprintWrapper({
     description,
     techSpecs,
     direction,
-    className
+    className,
+    offset
 }: BlueprintWrapperProps) {
     return (
         <BlueprintAnnotation
@@ -26,6 +28,7 @@ export default function BlueprintWrapper({
             techSpecs={techSpecs}
             direction={direction}
             className={className}
+            offset={offset}
         >
             {children}
         </BlueprintAnnotation>

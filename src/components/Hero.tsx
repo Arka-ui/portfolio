@@ -120,7 +120,12 @@ export default function Hero() {
                         </Link>
                     </BlueprintWrapper>
 
-                    <BlueprintWrapper label="COMM_CHANNEL" description="Initiate Contact" direction="bottom">
+                    <BlueprintWrapper
+                        label="COMM_CHANNEL"
+                        description="Initiate Contact"
+                        direction="bottom"
+                        offset={60} // Offset to avoid overlap with View Projects
+                    >
                         <Link
                             href="#contact"
                             className="px-8 py-4 bg-white/5 text-white rounded-full font-medium transition-all hover:bg-white/10 hover:scale-105 border border-white/10 backdrop-blur-sm"

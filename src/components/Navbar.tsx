@@ -67,8 +67,14 @@ export default function Navbar() {
                 {/* Desktop Menu */}
                 <div className="hidden md:flex items-center gap-4">
                     <div className="flex items-center space-x-1">
-                        {navItems.map((item) => (
-                            <BlueprintWrapper key={item.name} label="NAV_LINK" description={`Jump to ${item.name}`} direction="bottom">
+                        {navItems.map((item, index) => (
+                            <BlueprintWrapper
+                                key={item.name}
+                                label="NAV_LINK"
+                                description={`Jump to ${item.name}`}
+                                direction="bottom"
+                                offset={index * 40} // Stagger by 40px each
+                            >
                                 <Link
                                     href={item.href}
                                     onMouseEnter={() => setActiveHover(item.name)}
