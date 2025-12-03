@@ -15,6 +15,8 @@ const navItems = [
     { name: "Contact", href: "#contact" },
 ];
 
+import BlueprintWrapper from "@/components/BlueprintWrapper";
+
 export default function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
@@ -42,55 +44,62 @@ export default function Navbar() {
                 isBlueprintMode && "bg-[#0044cc]/90 border-white/50 rounded-none border-2 border-dashed"
             )}>
                 <div className="flex-shrink-0 mr-8">
-                    <Link href="#" className={cn(
-                        "text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent",
-                        isBlueprintMode && "text-white bg-none font-mono tracking-widest"
-                    )}>
-                        {isBlueprintMode ? "<ARKA_DEV />" : "Arka"}
-                    </Link>
+                    <BlueprintWrapper label="IDENTITY_CORE" description="Main site identifier" direction="bottom">
+                        <Link href="#" className={cn(
+                            "text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent",
+                            isBlueprintMode && "text-white bg-none font-mono tracking-widest"
+                        )}>
+                            {isBlueprintMode ? "<ARKA_DEV />" : "Arka"}
+                        </Link>
+                    </BlueprintWrapper>
                 </div>
 
                 {/* Desktop Menu */}
                 <div className="hidden md:flex items-center gap-4">
                     <div className="flex items-center space-x-1">
                         {navItems.map((item) => (
-                            <Link
-                                key={item.name}
-                                href={item.href}
-                                onMouseEnter={() => setActiveHover(item.name)}
-                                onMouseLeave={() => setActiveHover(null)}
-                                className={cn(
-                                    "relative px-4 py-2 text-sm font-medium text-gray-300 transition-colors hover:text-white",
-                                    isBlueprintMode && "font-mono hover:bg-white/20 hover:text-yellow-300"
-                                )}
-                            >
-                                {activeHover === item.name && !isBlueprintMode && (
-                                    <motion.div
-                                        layoutId="navbar-hover"
-                                        className="absolute inset-0 rounded-full bg-white/10"
-                                        initial={{ opacity: 0 }}
-                                        animate={{ opacity: 1 }}
-                                        exit={{ opacity: 0 }}
-                                        transition={{ duration: 0.2 }}
-                                    />
-                                )}
-                                <span className="relative z-10">{item.name}</span>
-                            </Link>
+                            <BlueprintWrapper key={item.name} label="NAV_LINK" description={`Jump to ${item.name}`} direction="bottom">
+                                <Link
+                                    href={item.href}
+                                    onMouseEnter={() => setActiveHover(item.name)}
+                                    onMouseLeave={() => setActiveHover(null)}
+                                    className={cn(
+                                        "relative px-4 py-2 text-sm font-medium text-gray-300 transition-colors hover:text-white",
+                                        isBlueprintMode && "font-mono hover:bg-white/20 hover:text-yellow-300"
+                                    )}
+                                >
+                                    {activeHover === item.name && !isBlueprintMode && (
+                                        <motion.div
+                                            layoutId="navbar-hover"
+                                            className="absolute inset-0 rounded-full bg-white/10"
+                                            initial={{ opacity: 0 }}
+                                            animate={{ opacity: 1 }}
+                                            exit={{ opacity: 0 }}
+                                            transition={{ duration: 0.2 }}
+                                        />
+                                    )}
+                                    <span className="relative z-10">{item.name}</span>
+                                </Link>
+                            </BlueprintWrapper>
                         ))}
                     </div>
 
-                    <button
-                        onClick={toggleBlueprintMode}
-                        className={cn(
-                            "p-2 rounded-full transition-all hover:bg-white/10",
-                            isBlueprintMode ? "text-yellow-300 bg-white/20 animate-pulse" : "text-gray-300 hover:text-white"
-                        )}
-                        title={isBlueprintMode ? "Exit Blueprint Mode" : "Enter Blueprint Mode"}
-                    >
-                        <FileCode size={20} />
-                    </button>
+                    <BlueprintWrapper label="MODE_SWITCH" description="Toggle System View" direction="bottom">
+                        <button
+                            onClick={toggleBlueprintMode}
+                            className={cn(
+                                "p-2 rounded-full transition-all hover:bg-white/10",
+                                isBlueprintMode ? "text-yellow-300 bg-white/20 animate-pulse" : "text-gray-300 hover:text-white"
+                            )}
+                            title={isBlueprintMode ? "Exit Blueprint Mode" : "Enter Blueprint Mode"}
+                        >
+                            <FileCode size={20} />
+                        </button>
+                    </BlueprintWrapper>
 
-                    <LanguageSelector />
+                    <BlueprintWrapper label="I18N_MODULE" description="Language Selection" direction="bottom">
+                        <LanguageSelector />
+                    </BlueprintWrapper>
                 </div>
 
                 {/* Mobile Menu Button */}

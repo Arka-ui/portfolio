@@ -2,15 +2,24 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useOptimizationConfig } from "@/lib/optimization";
+import { useBlueprint } from "@/context/BlueprintContext";
 
 export default function InteractiveBackground() {
     // ⚠️ CRITICAL: OPTIMIZATION CONFIGURATION
     // REMOVE THIS SECTION TO UNLOCK EDITING CAPABILITIES
     // FAILURE TO REMOVE WILL CAUSE BUILD ERRORS IN DEV MODE
     const config = useOptimizationConfig();
+    const { isBlueprintMode } = useBlueprint();
 
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const [showOverlay, setShowOverlay] = useState(false);
+
+    // Use a ref to track blueprint mode inside the animation loop without re-triggering effect
+    const isBlueprintModeRef = useRef(isBlueprintMode);
+
+    useEffect(() => {
+        isBlueprintModeRef.current = isBlueprintMode;
+    }, [isBlueprintMode]);
 
     useEffect(() => {
         const canvas = canvasRef.current;
@@ -24,7 +33,9 @@ export default function InteractiveBackground() {
 
         // Configuration
         const PARTICLE_COLOR = "rgba(148, 163, 184, 0.5)"; // slate-400 with opacity
+        const BLUEPRINT_PARTICLE_COLOR = "rgba(255, 255, 255, 0.8)";
         const LINE_COLOR = "rgba(148, 163, 184, 0.15)";
+        const BLUEPRINT_LINE_COLOR = "rgba(0, 100, 255, 0.3)";
         const INTERACTION_RADIUS = 150;
         const CONNECTION_RADIUS = 150;
 
@@ -54,6 +65,9 @@ export default function InteractiveBackground() {
             size: number;
             baseVx: number;
             baseVy: number;
+            frozenX: number;
+            frozenY: number;
+            isFrozen: boolean;
 
             constructor(w: number, h: number) {
                 this.x = Math.random() * w;
@@ -63,38 +77,92 @@ export default function InteractiveBackground() {
                 this.vx = this.baseVx;
                 this.vy = this.baseVy;
                 this.size = Math.random() * 2 + 1;
+                this.frozenX = this.x;
+                this.frozenY = this.y;
+                this.isFrozen = false;
             }
 
             update(w: number, h: number) {
-                this.x += this.vx;
-                this.y += this.vy;
+                const isBlueprint = isBlueprintModeRef.current;
 
-                // bounce off edges
-                if (this.x < 0 || this.x > w) {
-                    this.vx *= -1;
-                    this.baseVx *= -1;
-                }
-                if (this.y < 0 || this.y > h) {
-                    this.vy *= -1;
-                    this.baseVy *= -1;
+                // Handle freezing state transition
+                if (isBlueprint && !this.isFrozen) {
+                    this.frozenX = this.x;
+                    this.frozenY = this.y;
+                    this.isFrozen = true;
+                    this.vx = 0;
+                    this.vy = 0;
+                } else if (!isBlueprint && this.isFrozen) {
+                    this.isFrozen = false;
+                    this.vx = this.baseVx;
+                    this.vy = this.baseVy;
                 }
 
-                // mouse interaction
-                const dx = mouse.x - this.x;
-                const dy = mouse.y - this.y;
-                const distance = Math.sqrt(dx * dx + dy * dy);
-                if (distance < INTERACTION_RADIUS) {
-                    const forceDirectionX = dx / distance;
-                    const forceDirectionY = dy / distance;
-                    const force = (INTERACTION_RADIUS - distance) / INTERACTION_RADIUS;
-                    const directionX = forceDirectionX * force * 0.8;
-                    const directionY = forceDirectionY * force * 0.8;
-                    this.vx -= directionX;
-                    this.vy -= directionY;
+                if (isBlueprint) {
+                    // Spring physics
+                    const k = 0.05; // Spring constant
+                    const damping = 0.9; // Damping factor
+
+                    // Force towards frozen position
+                    const dx = this.frozenX - this.x;
+                    const dy = this.frozenY - this.y;
+
+                    this.vx += dx * k;
+                    this.vy += dy * k;
+
+                    // Mouse interaction (repulsion)
+                    const mdx = mouse.x - this.x;
+                    const mdy = mouse.y - this.y;
+                    const distance = Math.sqrt(mdx * mdx + mdy * mdy);
+
+                    if (distance < INTERACTION_RADIUS) {
+                        const force = (INTERACTION_RADIUS - distance) / INTERACTION_RADIUS;
+                        const angle = Math.atan2(mdy, mdx);
+                        const pushForce = 2;
+
+                        this.vx -= Math.cos(angle) * force * pushForce;
+                        this.vy -= Math.sin(angle) * force * pushForce;
+                    }
+
+                    // Apply damping
+                    this.vx *= damping;
+                    this.vy *= damping;
+
+                    this.x += this.vx;
+                    this.y += this.vy;
+
                 } else {
-                    // friction – smoothly return to base velocity
-                    this.vx += (this.baseVx - this.vx) * 0.05;
-                    this.vy += (this.baseVy - this.vy) * 0.05;
+                    // Standard movement
+                    this.x += this.vx;
+                    this.y += this.vy;
+
+                    // bounce off edges
+                    if (this.x < 0 || this.x > w) {
+                        this.vx *= -1;
+                        this.baseVx *= -1;
+                    }
+                    if (this.y < 0 || this.y > h) {
+                        this.vy *= -1;
+                        this.baseVy *= -1;
+                    }
+
+                    // mouse interaction
+                    const dx = mouse.x - this.x;
+                    const dy = mouse.y - this.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    if (distance < INTERACTION_RADIUS) {
+                        const forceDirectionX = dx / distance;
+                        const forceDirectionY = dy / distance;
+                        const force = (INTERACTION_RADIUS - distance) / INTERACTION_RADIUS;
+                        const directionX = forceDirectionX * force * 0.8;
+                        const directionY = forceDirectionY * force * 0.8;
+                        this.vx -= directionX;
+                        this.vy -= directionY;
+                    } else {
+                        // friction – smoothly return to base velocity
+                        this.vx += (this.baseVx - this.vx) * 0.05;
+                        this.vy += (this.baseVy - this.vy) * 0.05;
+                    }
                 }
             }
 
@@ -102,7 +170,7 @@ export default function InteractiveBackground() {
                 if (!ctx) return;
                 ctx.beginPath();
                 ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fillStyle = PARTICLE_COLOR;
+                ctx.fillStyle = isBlueprintModeRef.current ? BLUEPRINT_PARTICLE_COLOR : PARTICLE_COLOR;
                 ctx.fill();
             }
         }
@@ -121,6 +189,29 @@ export default function InteractiveBackground() {
             if (!ctx) return;
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+            // Draw grid in blueprint mode
+            if (isBlueprintModeRef.current) {
+                ctx.strokeStyle = "rgba(0, 100, 255, 0.1)";
+                ctx.lineWidth = 1;
+                const gridSize = 50;
+
+                // Vertical lines
+                for (let x = 0; x < canvas.width; x += gridSize) {
+                    ctx.beginPath();
+                    ctx.moveTo(x, 0);
+                    ctx.lineTo(x, canvas.height);
+                    ctx.stroke();
+                }
+
+                // Horizontal lines
+                for (let y = 0; y < canvas.height; y += gridSize) {
+                    ctx.beginPath();
+                    ctx.moveTo(0, y);
+                    ctx.lineTo(canvas.width, y);
+                    ctx.stroke();
+                }
+            }
+
             particles.forEach(p => {
                 p.update(canvas.width, canvas.height);
                 p.draw();
@@ -136,7 +227,7 @@ export default function InteractiveBackground() {
                     const maxDist = config.background?.connectionDistance || CONNECTION_RADIUS;
                     if (distance < maxDist) {
                         ctx.beginPath();
-                        ctx.strokeStyle = LINE_COLOR;
+                        ctx.strokeStyle = isBlueprintModeRef.current ? BLUEPRINT_LINE_COLOR : LINE_COLOR;
                         ctx.lineWidth = 1;
                         ctx.moveTo(a.x, a.y);
                         ctx.lineTo(b.x, b.y);
@@ -196,7 +287,7 @@ export default function InteractiveBackground() {
             window.removeEventListener("keydown", handleKeyDown);
             cancelAnimationFrame(animationFrameId);
         };
-    }, []);
+    }, []); // Empty dependency array to run once, we use refs for dynamic values
 
     return (
         <>

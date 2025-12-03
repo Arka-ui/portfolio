@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { Briefcase, GraduationCap, Calendar, FolderGit2 } from "lucide-react";
 import useSWR from "swr";
+import BlueprintWrapper from "@/components/BlueprintWrapper";
 
 // User can replace this with their own JSON Resume Gist URL
 const RESUME_URL = "https://gist.githubusercontent.com/Arka-ui/raw/resume.json";
@@ -98,6 +99,7 @@ export default function Timeline() {
 
                 <div className="space-y-12">
                     {experience.map((item, index) => (
+
                         <motion.div
                             key={index}
                             initial={{ opacity: 0, y: 20 }}
@@ -108,41 +110,47 @@ export default function Timeline() {
                                 }`}
                         >
                             {/* Timeline Dot */}
-                            <div className={`absolute left-[-8px] md:left-1/2 md:-ml-[8px] top-6 w-4 h-4 rounded-full border-4 border-background z-10 shadow-[0_0_10px_rgba(0,0,0,0.5)] ${item.type === "work" ? "bg-primary shadow-primary/50" : item.type === "education" ? "bg-accent shadow-accent/50" : "bg-green-500 shadow-green-500/50"
-                                }`} />
+                            <div className={`absolute left-[-8px] md:left-1/2 md:-ml-[8px] top-6 z-10`}>
+                                <BlueprintWrapper label="MARKER" description="Milestone Node" direction={index % 2 === 0 ? "left" : "right"}>
+                                    <div className={`w-4 h-4 rounded-full border-4 border-background shadow-[0_0_10px_rgba(0,0,0,0.5)] ${item.type === "work" ? "bg-primary shadow-primary/50" : item.type === "education" ? "bg-accent shadow-accent/50" : "bg-green-500 shadow-green-500/50"
+                                        }`} />
+                                </BlueprintWrapper>
+                            </div>
 
                             {/* Content */}
                             <div className="ml-8 md:ml-0 md:w-1/2 group">
-                                <div className={`relative bg-card/20 backdrop-blur-sm border border-white/5 p-8 rounded-2xl hover:bg-white/5 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl ${index % 2 === 0 ? "md:text-left" : "md:text-right"
-                                    }`}>
-                                    <div className={`flex items-center gap-2 mb-4 ${index % 2 === 0 ? "md:justify-start" : "md:justify-end"
+                                <BlueprintWrapper label="DATA_RECORD" description={`${item.type.toUpperCase()} Entry`} direction={index % 2 === 0 ? "right" : "left"}>
+                                    <div className={`relative bg-card/20 backdrop-blur-sm border border-white/5 p-8 rounded-2xl hover:bg-white/5 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl ${index % 2 === 0 ? "md:text-left" : "md:text-right"
                                         }`}>
-                                        <div className={`p-2 rounded-lg bg-white/5 ${item.type === "work" ? "text-primary" : item.type === "education" ? "text-accent" : "text-green-500"}`}>
-                                            {item.type === "work" ? (
-                                                <Briefcase className="w-4 h-4" />
-                                            ) : item.type === "education" ? (
-                                                <GraduationCap className="w-4 h-4" />
-                                            ) : (
-                                                <FolderGit2 className="w-4 h-4" />
-                                            )}
+                                        <div className={`flex items-center gap-2 mb-4 ${index % 2 === 0 ? "md:justify-start" : "md:justify-end"
+                                            }`}>
+                                            <div className={`p-2 rounded-lg bg-white/5 ${item.type === "work" ? "text-primary" : item.type === "education" ? "text-accent" : "text-green-500"}`}>
+                                                {item.type === "work" ? (
+                                                    <Briefcase className="w-4 h-4" />
+                                                ) : item.type === "education" ? (
+                                                    <GraduationCap className="w-4 h-4" />
+                                                ) : (
+                                                    <FolderGit2 className="w-4 h-4" />
+                                                )}
+                                            </div>
+                                            <span className={`text-sm font-bold uppercase tracking-wider ${item.type === "work" ? "text-primary" : item.type === "education" ? "text-accent" : "text-green-500"
+                                                }`}>{item.type}</span>
                                         </div>
-                                        <span className={`text-sm font-bold uppercase tracking-wider ${item.type === "work" ? "text-primary" : item.type === "education" ? "text-accent" : "text-green-500"
-                                            }`}>{item.type}</span>
+
+                                        <h3 className="text-2xl font-bold mb-2 text-white group-hover:text-primary transition-colors">{item.title}</h3>
+                                        <p className="text-lg font-medium text-white/60 mb-4">{item.company}</p>
+
+                                        <div className={`flex items-center gap-2 text-muted-foreground text-sm mb-6 ${index % 2 === 0 ? "md:justify-start" : "md:justify-end"
+                                            }`}>
+                                            <Calendar className="w-4 h-4" />
+                                            <span className="font-mono">{item.period}</span>
+                                        </div>
+
+                                        <p className="text-muted-foreground leading-relaxed">
+                                            {item.description}
+                                        </p>
                                     </div>
-
-                                    <h3 className="text-2xl font-bold mb-2 text-white group-hover:text-primary transition-colors">{item.title}</h3>
-                                    <p className="text-lg font-medium text-white/60 mb-4">{item.company}</p>
-
-                                    <div className={`flex items-center gap-2 text-muted-foreground text-sm mb-6 ${index % 2 === 0 ? "md:justify-start" : "md:justify-end"
-                                        }`}>
-                                        <Calendar className="w-4 h-4" />
-                                        <span className="font-mono">{item.period}</span>
-                                    </div>
-
-                                    <p className="text-muted-foreground leading-relaxed">
-                                        {item.description}
-                                    </p>
-                                </div>
+                                </BlueprintWrapper>
                             </div>
 
                             {/* Empty space for the other side */}
