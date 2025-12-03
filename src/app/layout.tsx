@@ -6,6 +6,8 @@ import InteractiveBackground from "@/components/InteractiveBackground";
 import { BlueprintProvider } from "@/context/BlueprintContext";
 import Footer from "@/components/Footer";
 import BlueprintOverlay from "@/components/BlueprintOverlay";
+import BlueprintCursor from "@/components/BlueprintCursor";
+import BlueprintGrid from "@/components/BlueprintGrid";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -27,6 +29,8 @@ export default function RootLayout({
       <body className={`${inter.variable} antialiased bg-background text-foreground`}>
         <BlueprintProvider>
           <BlueprintOverlay />
+          <BlueprintCursor />
+          <BlueprintGrid />
           <InteractiveBackground />
           <Navbar />
           <main className="min-h-screen pt-16">
