@@ -6,6 +6,7 @@ interface BlueprintWrapperProps {
     children: React.ReactNode;
     label: string;
     description?: string;
+    techSpecs?: Record<string, string>;
     direction?: "top" | "bottom" | "left" | "right";
     className?: string;
 }
@@ -14,6 +15,7 @@ export default function BlueprintWrapper({
     children,
     label,
     description,
+    techSpecs,
     direction,
     className
 }: BlueprintWrapperProps) {
@@ -21,6 +23,7 @@ export default function BlueprintWrapper({
         <BlueprintAnnotation
             label={label}
             description={description}
+            techSpecs={techSpecs}
             direction={direction}
             className={className}
         >

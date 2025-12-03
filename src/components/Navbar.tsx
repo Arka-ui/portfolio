@@ -44,7 +44,17 @@ export default function Navbar() {
                 isBlueprintMode && "bg-[#0044cc]/90 border-white/50 rounded-none border-2 border-dashed"
             )}>
                 <div className="flex-shrink-0 mr-8">
-                    <BlueprintWrapper label="IDENTITY_CORE" description="Main site identifier" direction="bottom">
+                    <BlueprintWrapper
+                        label="IDENTITY_CORE"
+                        description="Main site identifier and brand logo"
+                        direction="bottom"
+                        techSpecs={{
+                            "Type": "Brand Component",
+                            "Render": "Static/Client",
+                            "Font": "Inter/Mono",
+                            "State": "Active"
+                        }}
+                    >
                         <Link href="#" className={cn(
                             "text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent",
                             isBlueprintMode && "text-white bg-none font-mono tracking-widest"
@@ -84,7 +94,16 @@ export default function Navbar() {
                         ))}
                     </div>
 
-                    <BlueprintWrapper label="MODE_SWITCH" description="Toggle System View" direction="bottom">
+                    <BlueprintWrapper
+                        label="MODE_SWITCH"
+                        description="Toggle System View / Blueprint Mode"
+                        direction="bottom"
+                        techSpecs={{
+                            "Function": "Theme Toggle",
+                            "Context": "Global State",
+                            "Effect": "DOM Class Mutation"
+                        }}
+                    >
                         <button
                             onClick={toggleBlueprintMode}
                             className={cn(

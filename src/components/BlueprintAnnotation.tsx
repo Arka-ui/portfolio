@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 interface BlueprintAnnotationProps {
     label: string;
     description?: string;
+    techSpecs?: Record<string, string>;
     direction?: "top" | "bottom" | "left" | "right";
     className?: string;
     children?: React.ReactNode;
@@ -15,6 +16,7 @@ interface BlueprintAnnotationProps {
 export default function BlueprintAnnotation({
     label,
     description,
+    techSpecs,
     direction = "right",
     className,
     children
@@ -26,28 +28,28 @@ export default function BlueprintAnnotation({
     const getPositionStyles = () => {
         switch (direction) {
             case "top":
-                return "bottom-full left-1/2 -translate-x-1/2 mb-4";
+                return "bottom-full left-1/2 -translate-x-1/2 mb-6";
             case "bottom":
-                return "top-full left-1/2 -translate-x-1/2 mt-4";
+                return "top-full left-1/2 -translate-x-1/2 mt-6";
             case "left":
-                return "right-full top-1/2 -translate-y-1/2 mr-4";
+                return "right-full top-1/2 -translate-y-1/2 mr-6";
             case "right":
-                return "left-full top-1/2 -translate-y-1/2 ml-4";
+                return "left-full top-1/2 -translate-y-1/2 ml-6";
             default:
-                return "left-full top-1/2 -translate-y-1/2 ml-4";
+                return "left-full top-1/2 -translate-y-1/2 ml-6";
         }
     };
 
     const getConnectorStyles = () => {
         switch (direction) {
             case "top":
-                return "top-full left-1/2 -translate-x-1/2 h-4 w-[1px]";
+                return "top-full left-1/2 -translate-x-1/2 h-6 w-[1px]";
             case "bottom":
-                return "bottom-full left-1/2 -translate-x-1/2 h-4 w-[1px]";
+                return "bottom-full left-1/2 -translate-x-1/2 h-6 w-[1px]";
             case "left":
-                return "left-full top-1/2 -translate-y-1/2 w-4 h-[1px]";
+                return "left-full top-1/2 -translate-y-1/2 w-6 h-[1px]";
             case "right":
-                return "right-full top-1/2 -translate-y-1/2 w-4 h-[1px]";
+                return "right-full top-1/2 -translate-y-1/2 w-6 h-[1px]";
         }
     };
 
@@ -57,35 +59,59 @@ export default function BlueprintAnnotation({
             <AnimatePresence>
                 {isBlueprintMode && (
                     <motion.div
-                        initial={{ opacity: 0, scale: 0.8 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        exit={{ opacity: 0, scale: 0.8 }}
-                        transition={{ duration: 0.3 }}
+                        initial={{ opacity: 0, scale: 0.9, filter: "blur(10px)" }}
+                        animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
+                        exit={{ opacity: 0, scale: 0.9, filter: "blur(10px)" }}
+                        transition={{ duration: 0.4, ease: "easeOut" }}
                         className={cn(
                             "absolute z-50 pointer-events-none whitespace-nowrap",
                             getPositionStyles()
                         )}
                     >
                         {/* Connector Line */}
-                        <div className={cn("absolute bg-blue-500/50", getConnectorStyles())}>
-                            <div className="absolute w-1.5 h-1.5 bg-blue-500 rounded-full top-0 left-0" />
+                        <div className={cn("absolute bg-cyan-400/80 shadow-[0_0_10px_rgba(34,211,238,0.5)]", getConnectorStyles())}>
+                            <div className="absolute w-2 h-2 bg-cyan-400 rounded-full top-0 left-0 -translate-x-1/2 -translate-y-1/2 shadow-[0_0_10px_rgba(34,211,238,0.8)]" />
                         </div>
 
                         {/* Label Box */}
-                        <div className="bg-blue-900/80 backdrop-blur-sm border border-blue-500/50 p-2 rounded text-xs font-mono text-blue-100 shadow-[0_0_15px_rgba(59,130,246,0.3)]">
-                            <div className="font-bold uppercase tracking-wider text-[10px] text-blue-300 mb-0.5">
-                                {label}
+                        <div className="bg-[#001529]/95 backdrop-blur-md border border-cyan-500/60 p-3 rounded-sm text-xs font-mono text-cyan-100 shadow-[0_0_20px_rgba(34,211,238,0.2)] min-w-[200px]">
+                            {/* Header */}
+                            <div className="flex items-center justify-between border-b border-cyan-500/30 pb-2 mb-2">
+                                <div className="font-bold uppercase tracking-widest text-[11px] text-cyan-300">
+                                    {label}
+                                </div>
+                                <div className="text-[9px] text-cyan-600">ID: {Math.random().toString(36).substr(2, 4).toUpperCase()}</div>
                             </div>
+
+                            {/* Description */}
                             {description && (
-                                <div className="text-[9px] opacity-80 max-w-[150px] whitespace-normal">
+                                <div className="text-[10px] leading-relaxed opacity-90 whitespace-normal mb-3 text-cyan-50">
                                     {description}
                                 </div>
                             )}
+
+                            {/* Tech Specs */}
+                            {techSpecs && (
+                                <div className="grid grid-cols-2 gap-x-4 gap-y-1 border-t border-cyan-500/30 pt-2 mt-2">
+                                    {Object.entries(techSpecs).map(([key, value]) => (
+                                        <div key={key} className="flex flex-col">
+                                            <span className="text-[8px] uppercase text-cyan-600 tracking-wider">{key}</span>
+                                            <span className="text-[9px] text-cyan-300 font-bold">{value}</span>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+
                             {/* Technical decorative corners */}
-                            <div className="absolute -top-px -left-px w-1.5 h-1.5 border-t border-l border-blue-400" />
-                            <div className="absolute -top-px -right-px w-1.5 h-1.5 border-t border-r border-blue-400" />
-                            <div className="absolute -bottom-px -left-px w-1.5 h-1.5 border-b border-l border-blue-400" />
-                            <div className="absolute -bottom-px -right-px w-1.5 h-1.5 border-b border-r border-blue-400" />
+                            <div className="absolute -top-px -left-px w-2 h-2 border-t-2 border-l-2 border-cyan-400" />
+                            <div className="absolute -top-px -right-px w-2 h-2 border-t-2 border-r-2 border-cyan-400" />
+                            <div className="absolute -bottom-px -left-px w-2 h-2 border-b-2 border-l-2 border-cyan-400" />
+                            <div className="absolute -bottom-px -right-px w-2 h-2 border-b-2 border-r-2 border-cyan-400" />
+
+                            {/* Scanning line effect */}
+                            <div className="absolute inset-0 overflow-hidden opacity-20 pointer-events-none">
+                                <div className="absolute top-0 left-0 w-full h-[1px] bg-cyan-400 animate-scan-line" />
+                            </div>
                         </div>
                     </motion.div>
                 )}

@@ -54,7 +54,16 @@ export default function Hero() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, ease: "easeOut" }}
                 >
-                    <BlueprintWrapper label="ROLE_DEF" description="Current Professional Status" direction="top">
+                    <BlueprintWrapper
+                        label="ROLE_DEF"
+                        description="Current Professional Status & Title"
+                        direction="top"
+                        techSpecs={{
+                            "Data Source": "Config",
+                            "Visibility": "Public",
+                            "Priority": "High"
+                        }}
+                    >
                         <div className="inline-block mb-4 px-4 py-1.5 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm">
                             <span className="text-sm font-medium text-primary tracking-wider uppercase">
                                 {config.role}
@@ -62,7 +71,16 @@ export default function Hero() {
                         </div>
                     </BlueprintWrapper>
 
-                    <BlueprintWrapper label="ENTITY_ID" description="Primary Subject Name" direction="right">
+                    <BlueprintWrapper
+                        label="ENTITY_ID"
+                        description="Primary Subject Name with Gradient Effect"
+                        direction="right"
+                        techSpecs={{
+                            "Element": "H1 Heading",
+                            "Animation": "Gradient-X",
+                            "Font Weight": "Bold (700)"
+                        }}
+                    >
                         <h1 className="text-6xl md:text-8xl lg:text-9xl font-bold mb-8 tracking-tight">
                             <span className="bg-clip-text text-transparent bg-gradient-to-b from-white to-white/40">
                                 Hi, I'm
