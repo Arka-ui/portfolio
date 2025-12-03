@@ -56,7 +56,8 @@ const fallbackExperience = [
 ];
 
 export default function Timeline() {
-    const { data, error } = useSWR(RESUME_URL, fetcher);
+    // const { data, error } = useSWR(RESUME_URL, fetcher);
+    const data: any = null; // Fallback to local data until valid Gist URL is provided
 
     // Transform JSON Resume data to our format if available
     const experience = data ? [

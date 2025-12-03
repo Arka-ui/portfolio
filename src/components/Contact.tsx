@@ -6,6 +6,8 @@ import { useForm, ValidationError } from '@formspree/react';
 import BlueprintWrapper from "@/components/BlueprintWrapper";
 
 export default function Contact() {
+    // Note: If you see a 403 Forbidden error, check your Formspree settings.
+    // Ensure the domain (localhost or production) is allowed in your Formspree dashboard.
     const [state, handleSubmit] = useForm("xblnyneb");
 
     if (state.succeeded) {

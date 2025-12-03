@@ -58,7 +58,8 @@ export default function TechStack() {
         fetcher
     );
 
-    const { data: resumeData } = useSWR(RESUME_URL, fetcher);
+    // const { data: resumeData } = useSWR(RESUME_URL, fetcher);
+    const resumeData: any = null; // Fallback to local data until valid Gist URL is provided
 
     const languages = githubData
         ? Array.from(new Set(githubData.map((repo: any) => repo.language).filter(Boolean))).slice(0, 10)
