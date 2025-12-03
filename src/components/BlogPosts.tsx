@@ -26,13 +26,30 @@ export default function BlogPosts() {
                 viewport={{ once: false, amount: 0.2 }}
                 className="text-center mb-20"
             >
+                import BlueprintWrapper from "@/components/BlueprintWrapper";
+
+                // ... existing imports
+
+                // ... existing code
+
                 <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-sm font-medium mb-6">
                     <BookOpen className="w-4 h-4" />
                     <span>Writing</span>
                 </div>
-                <h2 className="text-4xl md:text-5xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-white via-white/80 to-white/40">
-                    Latest Articles
-                </h2>
+                <BlueprintWrapper
+                    label="KNOWLEDGE_BASE"
+                    description="Technical Writing & Tutorials"
+                    direction="bottom"
+                    techSpecs={{
+                        "Source": "Dev.to API",
+                        "Content": "Tech Writing",
+                        "Sync": "Real-time"
+                    }}
+                >
+                    <h2 className="text-4xl md:text-5xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-white via-white/80 to-white/40">
+                        Latest Articles
+                    </h2>
+                </BlueprintWrapper>
                 <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
                     Thoughts, tutorials, and insights on web development and technology.
                 </p>

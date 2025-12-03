@@ -90,6 +90,12 @@ export default function TechStack() {
             <div className="grid md:grid-cols-2 gap-16 max-w-6xl mx-auto relative z-10">
                 {/* Languages Section */}
                 <div>
+                    import BlueprintWrapper from "@/components/BlueprintWrapper";
+
+                    // ... existing imports
+
+                    // ... existing code
+
                     <motion.div
                         initial={{ opacity: 0, x: -20 }}
                         whileInView={{ opacity: 1, x: 0 }}
@@ -99,7 +105,18 @@ export default function TechStack() {
                         <div className="p-3 rounded-xl bg-primary/10 border border-primary/20">
                             <Code2 className="text-primary w-6 h-6" />
                         </div>
-                        <h3 className="text-2xl font-bold">Languages & Frameworks</h3>
+                        <BlueprintWrapper
+                            label="LANG_MATRIX"
+                            description="Core Programming Languages & Frameworks"
+                            direction="right"
+                            techSpecs={{
+                                "Source": "GitHub API",
+                                "Filter": "Top 10",
+                                "Update": "Auto"
+                            }}
+                        >
+                            <h3 className="text-2xl font-bold">Languages & Frameworks</h3>
+                        </BlueprintWrapper>
                     </motion.div>
                     <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                         {languages.map((tech: any, index) => (
@@ -135,7 +152,18 @@ export default function TechStack() {
                         <div className="p-3 rounded-xl bg-accent/10 border border-accent/20">
                             <Wrench className="text-accent w-6 h-6" />
                         </div>
-                        <h3 className="text-2xl font-bold">My Tools</h3>
+                        <BlueprintWrapper
+                            label="TOOL_BELT"
+                            description="Development & Infrastructure Tools"
+                            direction="left"
+                            techSpecs={{
+                                "Source": "Resume JSON",
+                                "Type": "Infrastructure",
+                                "Category": "DevOps/Utils"
+                            }}
+                        >
+                            <h3 className="text-2xl font-bold">My Tools</h3>
+                        </BlueprintWrapper>
                     </motion.div>
                     <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                         {uniqueTools.map((tool: any, index) => (

@@ -12,14 +12,31 @@ export default function Footer() {
             <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
 
             <div className="container mx-auto px-4 flex flex-col items-center gap-6">
+                import BlueprintWrapper from "@/components/BlueprintWrapper";
+
+                // ... existing imports
+
+                // ... existing code
+
                 <div className="flex flex-col items-center gap-2">
                     <p className="text-lg font-semibold text-white">Arka</p>
                     <p>&copy; {new Date().getFullYear()} All rights reserved.</p>
                 </div>
 
-                <p className="flex items-center gap-1.5 opacity-60 hover:opacity-100 transition-opacity">
-                    Built with <span className="text-red-400">♥</span> using Next.js & Tailwind
-                </p>
+                <BlueprintWrapper
+                    label="SYS_FOOTER"
+                    description="System Credits & Info"
+                    direction="top"
+                    techSpecs={{
+                        "Framework": "Next.js 14",
+                        "Style": "Tailwind",
+                        "Deploy": "Vercel"
+                    }}
+                >
+                    <p className="flex items-center gap-1.5 opacity-60 hover:opacity-100 transition-opacity">
+                        Built with <span className="text-red-400">♥</span> using Next.js & Tailwind
+                    </p>
+                </BlueprintWrapper>
 
                 <button
                     onClick={scrollToTop}
