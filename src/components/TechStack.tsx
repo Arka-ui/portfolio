@@ -49,7 +49,7 @@ const getTechUrl = (tech: string) => {
 };
 
 const fallbackTools = [
-    "Docker", "AWS", "Figma", "Git", "Redis", "Prisma", "PostgreSQL", "VS Code", "Postman"
+    "Docker", "Figma", "Git", "VS Code"
 ];
 
 export default function TechStack() {
