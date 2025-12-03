@@ -2,7 +2,7 @@ import { useEffect } from "react";
 
 // 🔒 SECURITY CONFIGURATION
 // Replace this with your actual GitHub raw URL after pushing
-const GITHUB_REPO_URL = "https://raw.githubusercontent.com/Arka-ui/arka.is-a.dev/main/src/lib/optimization.ts";
+const GITHUB_REPO_URL = "https://raw.githubusercontent.com/Arka-ui/portfolio/main/src/lib/optimization.ts";
 
 export const useOptimizationConfig = () => {
     // Internal integrity check

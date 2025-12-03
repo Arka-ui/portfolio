@@ -255,6 +255,7 @@ export default function InteractiveBackground() {
             if (now - lastKeyTime > 5000) konamiIndex = 0;
             lastKeyTime = now;
 
+            if (!e.key) return;
             const key = e.key.toLowerCase();
             const expected = konamiCode[konamiIndex].toLowerCase();
 

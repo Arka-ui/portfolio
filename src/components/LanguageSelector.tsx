@@ -77,7 +77,7 @@ export default function LanguageSelector() {
                 document.title = data.translatedText;
             }
         } catch (e) {
-            console.error("Translation error", e);
+            console.warn("Translation service unavailable:", e);
         } finally {
             setIsTranslating(false);
         }
