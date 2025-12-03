@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import useSWR from "swr";
 import { Calendar, Clock, ArrowRight, BookOpen } from "lucide-react";
 import Image from "next/image";
+import BlueprintWrapper from "@/components/BlueprintWrapper";
 
 // Placeholder - User should replace with their username or tag
 const DEVTO_USERNAME = "ben"; // Using 'ben' (Ben Halpern) as a reliable placeholder with posts
@@ -26,12 +27,6 @@ export default function BlogPosts() {
                 viewport={{ once: false, amount: 0.2 }}
                 className="text-center mb-20"
             >
-                import BlueprintWrapper from "@/components/BlueprintWrapper";
-
-                // ... existing imports
-
-                // ... existing code
-
                 <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-sm font-medium mb-6">
                     <BookOpen className="w-4 h-4" />
                     <span>Writing</span>

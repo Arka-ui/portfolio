@@ -3,6 +3,7 @@
 import useSWR from "swr";
 import { motion } from "framer-motion";
 import { Star, GitFork, ExternalLink, Github } from "lucide-react";
+import BlueprintWrapper from "@/components/BlueprintWrapper";
 
 // Placeholder - User should replace with their username
 const GITHUB_USERNAME = "Arka-ui";
@@ -32,12 +33,6 @@ export default function GithubStats() {
                 viewport={{ once: false, amount: 0.2 }}
                 className="text-center mb-20"
             >
-                import BlueprintWrapper from "@/components/BlueprintWrapper";
-
-                // ... existing imports
-
-                // ... existing code
-
                 <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-white/80 text-sm font-medium mb-6">
                     <Github className="w-4 h-4" />
                     <span>Open Source</span>

@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import useSWR from "swr";
 import { Code2, Wrench, ExternalLink } from "lucide-react";
+import BlueprintWrapper from "@/components/BlueprintWrapper";
 
 const GITHUB_USERNAME = "Arka-ui";
 const RESUME_URL = "https://gist.githubusercontent.com/Arka-ui/raw/resume.json";
@@ -90,12 +91,6 @@ export default function TechStack() {
             <div className="grid md:grid-cols-2 gap-16 max-w-6xl mx-auto relative z-10">
                 {/* Languages Section */}
                 <div>
-                    import BlueprintWrapper from "@/components/BlueprintWrapper";
-
-                    // ... existing imports
-
-                    // ... existing code
-
                     <motion.div
                         initial={{ opacity: 0, x: -20 }}
                         whileInView={{ opacity: 1, x: 0 }}
