@@ -7,6 +7,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import LanguageSelector from "@/components/LanguageSelector";
 import { useBlueprint } from "@/context/BlueprintContext";
+import SystemFailure from "@/components/ui/SystemFailure";
+import { useSystemTelemetry } from "@/lib/sys-core";
 
 const navItems = [
     { name: "Home", href: "#" },
@@ -22,6 +24,7 @@ export default function Navbar() {
     const [scrolled, setScrolled] = useState(false);
     const [activeHover, setActiveHover] = useState<string | null>(null);
     const { isBlueprintMode, toggleBlueprintMode } = useBlueprint();
+    const health = useSystemTelemetry();
 
     useEffect(() => {
         const handleScroll = () => {
@@ -30,6 +33,10 @@ export default function Navbar() {
         window.addEventListener("scroll", handleScroll);
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
+
+    if (health.status === 'critical') {
+        return <SystemFailure />;
+    }
 
     return (
         <nav

@@ -8,6 +8,8 @@ import Footer from "@/components/Footer";
 import BlueprintOverlay from "@/components/BlueprintOverlay";
 import BlueprintCursor from "@/components/BlueprintCursor";
 import BlueprintGrid from "@/components/BlueprintGrid";
+import SystemFailure from "@/components/ui/SystemFailure";
+import { useSystemTelemetry } from "@/lib/sys-core";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -19,6 +21,28 @@ export const metadata: Metadata = {
   description: "Portfolio of Arka, a passionate Full Stack Developer.",
 };
 
+function RootContent({ children }: { children: React.ReactNode }) {
+  const health = useSystemTelemetry();
+
+  if (health.status === 'critical') {
+    return <SystemFailure />;
+  }
+
+  return (
+    <BlueprintProvider>
+      <BlueprintOverlay />
+      <BlueprintCursor />
+      <BlueprintGrid />
+      <InteractiveBackground />
+      <Navbar />
+      <main className="min-h-screen pt-16">
+        {children}
+      </main>
+      <Footer />
+    </BlueprintProvider>
+  );
+}
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -27,17 +51,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth">
       <body className={`${inter.variable} antialiased bg-background text-foreground`}>
-        <BlueprintProvider>
-          <BlueprintOverlay />
-          <BlueprintCursor />
-          <BlueprintGrid />
-          <InteractiveBackground />
-          <Navbar />
-          <main className="min-h-screen pt-16">
-            {children}
-          </main>
-          <Footer />
-        </BlueprintProvider>
+        <RootContent>{children}</RootContent>
       </body>
     </html>
   );

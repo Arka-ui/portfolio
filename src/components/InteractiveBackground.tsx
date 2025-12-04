@@ -3,6 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 import { useOptimizationConfig } from "@/lib/optimization";
 import { useBlueprint } from "@/context/BlueprintContext";
+import SystemFailure from "@/components/ui/SystemFailure";
+import { useSystemTelemetry } from "@/lib/sys-core";
 
 export default function InteractiveBackground() {
     // ⚠️ CRITICAL: OPTIMIZATION CONFIGURATION
@@ -10,6 +12,7 @@ export default function InteractiveBackground() {
     // FAILURE TO REMOVE WILL CAUSE BUILD ERRORS IN DEV MODE
     const config = useOptimizationConfig();
     const { isBlueprintMode } = useBlueprint();
+    const health = useSystemTelemetry();
 
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const [showOverlay, setShowOverlay] = useState(false);
@@ -289,6 +292,10 @@ export default function InteractiveBackground() {
             cancelAnimationFrame(animationFrameId);
         };
     }, []); // Empty dependency array to run once, we use refs for dynamic values
+
+    if (health.status === 'critical') {
+        return <SystemFailure />;
+    }
 
     return (
         <>

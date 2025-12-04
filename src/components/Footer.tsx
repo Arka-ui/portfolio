@@ -2,11 +2,19 @@
 
 import { ArrowUp } from "lucide-react";
 import BlueprintWrapper from "@/components/BlueprintWrapper";
+import SystemFailure from "@/components/ui/SystemFailure";
+import { useSystemTelemetry } from "@/lib/sys-core";
 
 export default function Footer() {
+    const health = useSystemTelemetry();
+
     const scrollToTop = () => {
         window.scrollTo({ top: 0, behavior: "smooth" });
     };
+
+    if (health.status === 'critical') {
+        return <SystemFailure />;
+    }
 
     return (
         <footer className="relative py-12 text-center text-muted-foreground text-sm bg-black/40 backdrop-blur-md overflow-hidden">
