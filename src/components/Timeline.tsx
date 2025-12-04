@@ -20,7 +20,7 @@ const fetcher = async (url: string) => {
 const fallbackExperience = [
     {
         type: "work",
-        title: "Co-fondateur & Développeur",
+        title: "Propriétaire & Co-fondateur",
         company: "EclozionMC",
         period: "Octobre 2025 - Présent",
         description: "Développement d'un serveur Minecraft avec Nexos (rencontré en cours). Site web : eclozionmc.ovh - Serveur en préparation"
