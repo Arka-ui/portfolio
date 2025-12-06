@@ -420,3 +420,38 @@ body.blueprint-mode ::selection {
   background: rgba(34, 211, 238, 0.3);
   color: #fff;
 }
+
+/* Christmas Theme Animations */
+@keyframes twinkle {
+  0%, 100% { opacity: 0.5; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+
+@keyframes snowfall {
+  0% { transform: translateY(-10px) translateX(0); opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { transform: translateY(100vh) translateX(20px); opacity: 0; }
+}
+
+:root {
+  /* Default Theme Variables (Dark) */
+  --christmas-primary: #ef4444; /* Red-500 */
+  --christmas-secondary: #166534; /* Green-800 */
+  --christmas-accent: #fbbf24; /* Amber-400 */
+  --christmas-background: #0f172a; /* Slate-900 */
+}
+
+/* Christmas Mode Overrides */
+body.christmas-mode {
+  --color-primary: var(--christmas-primary);
+  --color-secondary: var(--christmas-secondary);
+  --color-accent: var(--christmas-accent);
+  --color-background: #0b1121;
+  --color-card: rgba(255, 255, 255, 0.05);
+}
+
+body.christmas-mode ::selection {
+  background: var(--christmas-primary);
+  color: white;
+}
