@@ -7,6 +7,8 @@ import Footer from "@/components/Footer";
 import BlueprintOverlay from "@/components/BlueprintOverlay";
 import BlueprintCursor from "@/components/BlueprintCursor";
 import BlueprintGrid from "@/components/BlueprintGrid";
+import { ChristmasProvider } from "@/context/ChristmasContext";
+import ChristmasTheme from "@/components/ChristmasTheme";
 import SystemFailure from "@/components/ui/SystemFailure";
 import { useSystemTelemetry } from "@/lib/sys-core";
 
@@ -19,15 +21,18 @@ export default function RootContent({ children }: { children: React.ReactNode })
 
     return (
         <BlueprintProvider>
-            <BlueprintOverlay />
-            <BlueprintCursor />
-            <BlueprintGrid />
-            <InteractiveBackground />
-            <Navbar />
-            <main className="min-h-screen pt-16">
-                {children}
-            </main>
-            <Footer />
+            <ChristmasProvider>
+                <ChristmasTheme />
+                <BlueprintOverlay />
+                <BlueprintCursor />
+                <BlueprintGrid />
+                <InteractiveBackground />
+                <Navbar />
+                <main className="min-h-screen pt-16">
+                    {children}
+                </main>
+                <Footer />
+            </ChristmasProvider>
         </BlueprintProvider>
     );
 }
