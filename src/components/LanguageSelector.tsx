@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Check, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useChristmas } from "@/context/ChristmasContext";
 
 // Top languages displayed first (most common)
 const TOP_LANGUAGES = [
@@ -55,6 +56,7 @@ export default function LanguageSelector() {
     const [currentLang, setCurrentLang] = useState(TOP_LANGUAGES[0]);
     const [mounted, setMounted] = useState(false);
     const [isTranslating, setIsTranslating] = useState(false);
+    const { isChristmasTime } = useChristmas();
 
     // Change language using LibreTranslate public instance
     const handleLanguageChange = useCallback(async (lang: typeof TOP_LANGUAGES[0]) => {
@@ -137,7 +139,7 @@ export default function LanguageSelector() {
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: 10, scale: 0.95 }}
                         transition={{ duration: 0.2 }}
-                        className="absolute right-0 mt-2 w-64 max-h-96 overflow-y-auto rounded-xl border border-white/10 bg-black/90 backdrop-blur-xl shadow-2xl p-2 scrollbar-hide"
+                        className={`absolute right-0 mt-2 w-64 max-h-96 overflow-y-auto rounded-xl border border-white/10 bg-black/90 backdrop-blur-xl shadow-2xl p-2 scrollbar-hide ${isChristmasTime ? 'snow-cap' : ''}`}
                     >
                         <div className="sticky top-0 bg-black/90 p-2 border-b border-white/10 mb-2">
                             <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Most Used</span>

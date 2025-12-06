@@ -434,6 +434,46 @@ body.blueprint-mode ::selection {
   100% { transform: translateY(100vh) translateX(20px); opacity: 0; }
 }
 
+@keyframes swing {
+  0% { transform: rotate(0deg); }
+  25% { transform: rotate(10deg); }
+  75% { transform: rotate(-10deg); }
+  100% { transform: rotate(0deg); }
+}
+
+@keyframes fall {
+  0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+}
+
+@keyframes santa-fly {
+  0% { transform: translateX(-100vw) translateY(20vh); }
+  25% { transform: translateX(-25vw) translateY(10vh); }
+  50% { transform: translateX(50vw) translateY(30vh); }
+  75% { transform: translateX(125vw) translateY(0vh); }
+  100% { transform: translateX(200vw) translateY(-20vh); }
+}
+
+.snow-cap::before {
+  content: "";
+  position: absolute;
+  top: -4px;
+  left: 0;
+  right: 0;
+  height: 8px;
+  background: white;
+  border-radius: 50% 50% 0 0;
+  filter: blur(2px);
+  opacity: 0.8;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.frost-vignette {
+  background: radial-gradient(circle, transparent 60%, rgba(255, 255, 255, 0.4) 100%);
+  pointer-events: none;
+}
+
 :root {
   /* Default Theme Variables (Dark) */
   --christmas-primary: #ef4444; /* Red-500 */

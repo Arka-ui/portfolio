@@ -5,6 +5,7 @@ import { ExternalLink, Github, Star, ChevronLeft, ChevronRight, Layers, Zap, Glo
 import useSWR from "swr";
 import { useState, useEffect, useRef } from "react";
 import { useBlueprint } from "@/context/BlueprintContext";
+import { useChristmas } from "@/context/ChristmasContext";
 
 const GITHUB_USERNAME = "Arka-ui";
 
@@ -52,6 +53,7 @@ function ProjectCard({ project, isActive, index }: { project: any; isActive: boo
     const gradient = getProjectColor(project.language);
     const shadowColor = getShadowColor(project.language);
     const { isBlueprintMode } = useBlueprint();
+    const { isChristmasTime } = useChristmas();
 
     if (isBlueprintMode) {
         return (
@@ -127,6 +129,10 @@ function ProjectCard({ project, isActive, index }: { project: any; isActive: boo
                     rotateX: isActive ? 0 : 5,
                 }}
             >
+                {/* Christmas Snow Cap */}
+                {isChristmasTime && (
+                    <div className="absolute top-0 left-0 right-0 h-4 bg-white/80 blur-sm rounded-t-3xl z-30" />
+                )}
                 {/* Dynamic Ambient Glow (Internal) */}
                 <div className={`absolute inset-0 bg-gradient-to-br ${gradient} opacity-10 mix-blend-overlay transition-opacity duration-500`} />
 

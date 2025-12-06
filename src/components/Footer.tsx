@@ -4,6 +4,7 @@ import { ArrowUp } from "lucide-react";
 import BlueprintWrapper from "@/components/BlueprintWrapper";
 import SystemFailure from "@/components/ui/SystemFailure";
 import { useSystemTelemetry } from "@/lib/sys-core";
+import { useChristmas } from "@/context/ChristmasContext";
 
 export default function Footer() {
     const health = useSystemTelemetry();
@@ -16,8 +17,10 @@ export default function Footer() {
         return <SystemFailure />;
     }
 
+    const { isChristmasTime } = useChristmas();
+
     return (
-        <footer className="relative py-12 text-center text-muted-foreground text-sm bg-black/40 backdrop-blur-md overflow-hidden">
+        <footer className={`relative py-12 text-center text-muted-foreground text-sm bg-black/40 backdrop-blur-md overflow-hidden ${isChristmasTime ? 'snow-cap mt-4' : ''}`}>
             <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
 
             <div className="container mx-auto px-4 flex flex-col items-center gap-6">
