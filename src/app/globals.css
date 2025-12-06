@@ -423,35 +423,67 @@ body.blueprint-mode ::selection {
 
 /* Christmas Theme Animations */
 @keyframes twinkle {
-  0%, 100% { opacity: 0.5; transform: scale(1); }
-  50% { opacity: 1; transform: scale(1.2); }
+
+  0%,
+  100% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
 }
 
 @keyframes snowfall {
-  0% { transform: translateY(-10px) translateX(0); opacity: 0; }
-  10% { opacity: 1; }
-  90% { opacity: 1; }
-  100% { transform: translateY(100vh) translateX(20px); opacity: 0; }
+  0% {
+    transform: translateY(-10px) translateX(0);
+    opacity: 0;
+  }
+
+  10% {
+    opacity: 1;
+  }
+
+  90% {
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(100vh) translateX(20px);
+    opacity: 0;
+  }
 }
 
 @keyframes swing {
-  0% { transform: rotate(0deg); }
-  25% { transform: rotate(10deg); }
-  75% { transform: rotate(-10deg); }
-  100% { transform: rotate(0deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+
+  25% {
+    transform: rotate(10deg);
+  }
+
+  75% {
+    transform: rotate(-10deg);
+  }
+
+  100% {
+    transform: rotate(0deg);
+  }
 }
 
 @keyframes fall {
-  0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-  100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
-}
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 1;
+  }
 
-@keyframes santa-fly {
-  0% { transform: translateX(-100vw) translateY(20vh); }
-  25% { transform: translateX(-25vw) translateY(10vh); }
-  50% { transform: translateX(50vw) translateY(30vh); }
-  75% { transform: translateX(125vw) translateY(0vh); }
-  100% { transform: translateX(200vw) translateY(-20vh); }
+  100% {
+    transform: translateY(100vh) rotate(720deg);
+    opacity: 0;
+  }
 }
 
 .snow-cap::before {
@@ -470,16 +502,23 @@ body.blueprint-mode ::selection {
 }
 
 .frost-vignette {
-  background: radial-gradient(circle, transparent 60%, rgba(255, 255, 255, 0.4) 100%);
+  background: radial-gradient(circle, transparent 50%, rgba(186, 230, 253, 0.1) 85%, rgba(186, 230, 253, 0.3) 100%);
+  /* Add a subtle noise texture if possible via noise image (optional), keeping clean for now */
   pointer-events: none;
+  mix-blend-mode: screen;
+  /* Helps it look icy/glossy */
 }
 
 :root {
   /* Default Theme Variables (Dark) */
-  --christmas-primary: #ef4444; /* Red-500 */
-  --christmas-secondary: #166534; /* Green-800 */
-  --christmas-accent: #fbbf24; /* Amber-400 */
-  --christmas-background: #0f172a; /* Slate-900 */
+  --christmas-primary: #ef4444;
+  /* Red-500 */
+  --christmas-secondary: #166534;
+  /* Green-800 */
+  --christmas-accent: #fbbf24;
+  /* Amber-400 */
+  --christmas-background: #0f172a;
+  /* Slate-900 */
 }
 
 /* Christmas Mode Overrides */
