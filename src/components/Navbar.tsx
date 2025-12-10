@@ -117,16 +117,19 @@ export default function Navbar() {
                             "Effect": "DOM Class Mutation"
                         }}
                     >
-                        <button
+                        <motion.button
                             onClick={toggleBlueprintMode}
+                            whileHover={{ scale: 1.1, rotate: 10 }}
+                            whileTap={{ scale: 0.9 }}
                             className={cn(
-                                "p-2 rounded-full transition-all hover:bg-white/10",
-                                isBlueprintMode ? "text-yellow-300 bg-white/20 animate-pulse" : "text-gray-300 hover:text-white"
+                                "p-2 rounded-full transition-colors",
+                                isBlueprintMode ? "text-yellow-300 bg-white/20 shadow-[0_0_15px_rgba(253,224,71,0.5)]" : "text-gray-300 hover:text-white hover:bg-white/10"
                             )}
                             title={isBlueprintMode ? "Exit Blueprint Mode" : "Enter Blueprint Mode"}
+                            aria-label={isBlueprintMode ? "Exit Blueprint Mode" : "Enter Blueprint Mode"}
                         >
                             <FileCode size={20} />
-                        </button>
+                        </motion.button>
                     </BlueprintWrapper>
 
                     <BlueprintWrapper label="I18N_MODULE" description="Language Selection" direction="bottom">

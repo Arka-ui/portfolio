@@ -7,12 +7,22 @@ import Image from "next/image";
 import BlueprintWrapper from "@/components/BlueprintWrapper";
 
 // Placeholder - User should replace with their username or tag
-const DEVTO_USERNAME = "ben"; // Using 'ben' (Ben Halpern) as a reliable placeholder with posts
+const DEVTO_USERNAME = "arkaui"; // Using 'ben' (Ben Halpern) as a reliable placeholder with posts
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
+interface BlogPost {
+    id: number;
+    url: string;
+    cover_image: string | null;
+    title: string;
+    description: string;
+    published_at: string;
+    reading_time_minutes: number;
+}
+
 export default function BlogPosts() {
-    const { data, error } = useSWR(
+    const { data, error } = useSWR<BlogPost[]>(
         `https://dev.to/api/articles?username=${DEVTO_USERNAME}&per_page=3`,
         fetcher
     );
@@ -51,7 +61,7 @@ export default function BlogPosts() {
             </motion.div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                {data?.map((post: any, index: number) => (
+                {data?.map((post, index) => (
                     <motion.a
                         key={post.id}
                         href={post.url}

@@ -1,0 +1,218 @@
+﻿
+> arka.is-a.dev@0.1.0 lint
+> eslint
+
+
+C:\Users\Eddy\Desktop\arka.is-a.dev\src\components\Background.tsx
+   32:9  warning  Compilation Skipped: Inline `class` declarations are not supported
+
+Move class declarations outside of components/hooks.
+
+C:\Users\Eddy\Desktop\arka.is-a.dev\src\components\Background.tsx:32:9
+  30 |         resizeCanvas();
+  31 |
+> 32 |         class Particle {
+     |         ^^^^^^^^^^^^^^^^
+> 33 |             x: number;
+     | ^^^^^^^^^^^^^^^^^^^^^^
+> 34 |             y: number;
+     ÔÇª
+     | ^^^^^^^^^^^^^^^^^^^^^^
+> 65 |             }
+     | ^^^^^^^^^^^^^^^^^^^^^^
+> 66 |         }
+     | ^^^^^^^^^^ Inline `class` declarations are not supported
+  67 |
+  68 |         const init = () => {
+  69 |             particles = [];
+
+  react-hooks/unsupported-syntax
+  114:8  warning  React Hook useEffect has missing dependencies: 'config.background.connectionDistance' and 'config.background.particleCount'. Either include them or remove the dependency array                                                                                                                                                                                                                                                                                                                                                                                                                                                                            react-hooks/exhaustive-deps
+
+C:\Users\Eddy\Desktop\arka.is-a.dev\src\components\BlogPosts.tsx
+  54:35  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\Eddy\Desktop\arka.is-a.dev\src\components\BlueprintAnnotation.tsx
+  91:80  error  Error: Cannot call impure function during render
+
+`Math.random` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+C:\Users\Eddy\Desktop\arka.is-a.dev\src\components\BlueprintAnnotation.tsx:91:80
+  89 |                                     {label}
+  90 |                                 </div>
+> 91 |                                 <div className="text-[9px] text-cyan-600">ID: {Math.random().toString(36).substr(2, 4).toUpperCase()}</div>
+     |                                                                                ^^^^^^^^^^^^^ Cannot call impure function
+  92 |                             </div>
+  93 |
+  94 |                             {/* Description */}  react-hooks/purity
+
+C:\Users\Eddy\Desktop\arka.is-a.dev\src\components\BlueprintOverlay.tsx
+  14:13  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+C:\Users\Eddy\Desktop\arka.is-a.dev\src\components\BlueprintOverlay.tsx:14:13
+  12 |     useEffect(() => {
+  13 |         if (isBlueprintMode) {
+> 14 |             setShowOverlay(true);
+     |             ^^^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  15 |             const timer = setTimeout(() => setShowOverlay(false), 2500);
+  16 |             return () => clearTimeout(timer);
+  17 |         } else {  react-hooks/set-state-in-effect
+
+C:\Users\Eddy\Desktop\arka.is-a.dev\src\components\ChristmasTheme.tsx
+   38:15  warning  'h' is assigned a value but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          @typescript-eslint/no-unused-vars
+  140:9   error    Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+C:\Users\Eddy\Desktop\arka.is-a.dev\src\components\ChristmasTheme.tsx:140:9
+  138 |         if (!isChristmasTime) return;
+  139 |
+> 140 |         handleResize();
+      |         ^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  141 |         window.addEventListener("resize", handleResize);
+  142 |
+  143 |         return () => window.removeEventListener("resize", handleResize);  react-hooks/set-state-in-effect
+
+C:\Users\Eddy\Desktop\arka.is-a.dev\src\components\Contact.tsx
+   4:22  warning  'MessageSquare' is defined but never used                        @typescript-eslint/no-unused-vars
+   4:51  warning  'AlertCircle' is defined but never used                          @typescript-eslint/no-unused-vars
+  25:84  error    `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+  57:32  error    `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+C:\Users\Eddy\Desktop\arka.is-a.dev\src\components\FeaturedProjects.tsx
+    3:18   warning  'useMotionValue' is defined but never used                                                                      @typescript-eslint/no-unused-vars
+    3:34   warning  'useSpring' is defined but never used                                                                           @typescript-eslint/no-unused-vars
+    3:45   warning  'useTransform' is defined but never used                                                                        @typescript-eslint/no-unused-vars
+    4:10   warning  'ExternalLink' is defined but never used                                                                        @typescript-eslint/no-unused-vars
+    4:65   warning  'Layers' is defined but never used                                                                              @typescript-eslint/no-unused-vars
+    4:91   warning  'Database' is defined but never used                                                                            @typescript-eslint/no-unused-vars
+    4:101  warning  'Layout' is defined but never used                                                                              @typescript-eslint/no-unused-vars
+   52:43   warning  'index' is defined but never used                                                                               @typescript-eslint/no-unused-vars
+   52:63   error    Unexpected any. Specify a different type                                                                        @typescript-eslint/no-explicit-any
+   75:80   error    Comments inside children section of tag should be placed inside braces                                          react/jsx-no-comment-textnodes
+   80:80   error    Comments inside children section of tag should be placed inside braces                                          react/jsx-no-comment-textnodes
+   88:84   error    Comments inside children section of tag should be placed inside braces                                          react/jsx-no-comment-textnodes
+   92:45   error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`                                                 react/no-unescaped-entities
+   92:64   error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`                                                 react/no-unescaped-entities
+   97:45   error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`                                                 react/no-unescaped-entities
+   97:53   error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`                                                 react/no-unescaped-entities
+  105:80   error    Comments inside children section of tag should be placed inside braces                                          react/jsx-no-comment-textnodes
+  234:11   warning  'containerRef' is assigned a value but never used                                                               @typescript-eslint/no-unused-vars
+  235:11   warning  'controls' is assigned a value but never used                                                                   @typescript-eslint/no-unused-vars
+  240:28   error    Unexpected any. Specify a different type                                                                        @typescript-eslint/no-explicit-any
+  246:48   error    Unexpected any. Specify a different type                                                                        @typescript-eslint/no-explicit-any
+  246:56   error    Unexpected any. Specify a different type                                                                        @typescript-eslint/no-explicit-any
+  261:8    warning  React Hook useEffect has a missing dependency: 'nextProject'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  272:74   error    Comments inside children section of tag should be placed inside braces                                          react/jsx-no-comment-textnodes
+  273:74   error    Comments inside children section of tag should be placed inside braces                                          react/jsx-no-comment-textnodes
+  277:56   error    Unexpected any. Specify a different type                                                                        @typescript-eslint/no-explicit-any
+  332:60   error    Unexpected any. Specify a different type                                                                        @typescript-eslint/no-explicit-any
+  407:46   error    Unexpected any. Specify a different type                                                                        @typescript-eslint/no-explicit-any
+
+C:\Users\Eddy\Desktop\arka.is-a.dev\src\components\Footer.tsx
+  20:33  error  React Hook "useChristmas" is called conditionally. React Hooks must be called in the exact same order in every component render  react-hooks/rules-of-hooks
+
+C:\Users\Eddy\Desktop\arka.is-a.dev\src\components\GithubStats.tsx
+  60:57  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\Eddy\Desktop\arka.is-a.dev\src\components\Hero.tsx
+  86:38  error  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+C:\Users\Eddy\Desktop\arka.is-a.dev\src\components\InteractiveBackground.tsx
+   35:13  error    'mouse' is never reassigned. Use 'const' instead                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           prefer-const
+   63:9   warning  Compilation Skipped: Inline `class` declarations are not supported
+
+Move class declarations outside of components/hooks.
+
+C:\Users\Eddy\Desktop\arka.is-a.dev\src\components\InteractiveBackground.tsx:63:9
+   61 |         let lastKeyTime = 0;
+   62 |
+>  63 |         class Particle {
+      |         ^^^^^^^^^^^^^^^^
+>  64 |             x: number;
+      | ^^^^^^^^^^^^^^^^^^^^^^
+>  65 |             y: number;
+      ÔÇª
+      | ^^^^^^^^^^^^^^^^^^^^^^
+> 178 |             }
+      | ^^^^^^^^^^^^^^^^^^^^^^
+> 179 |         }
+      | ^^^^^^^^^^ Inline `class` declarations are not supported
+  180 |
+  181 |         const init = () => {
+  182 |             particles = [];
+
+  react-hooks/unsupported-syntax
+  294:8   warning  React Hook useEffect has missing dependencies: 'config.background?.connectionDistance' and 'config.background?.particleCount'. Either include them or remove the dependency array                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          react-hooks/exhaustive-deps
+
+C:\Users\Eddy\Desktop\arka.is-a.dev\src\components\LiveStatus.tsx
+  13:7   warning  'SPOTIFY_PROFILE_URL' is assigned a value but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            @typescript-eslint/no-unused-vars
+  18:52  error    Error: Cannot call impure function during render
+
+`Date.now` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+C:\Users\Eddy\Desktop\arka.is-a.dev\src\components\LiveStatus.tsx:18:52
+  16 |     const { data: lanyardData } = useLanyard(DISCORD_ID);
+  17 |     const { isBlueprintMode } = useBlueprint();
+> 18 |     const [currentTime, setCurrentTime] = useState(Date.now());
+     |                                                    ^^^^^^^^^^ Cannot call impure function
+  19 |
+  20 |     // 3D Tilt Effect
+  21 |     const x = useMotionValue(0);  react-hooks/purity
+  71:35  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            @typescript-eslint/no-explicit-any
+
+C:\Users\Eddy\Desktop\arka.is-a.dev\src\components\MusicPlayer.tsx
+  19:13  error    Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+C:\Users\Eddy\Desktop\arka.is-a.dev\src\components\MusicPlayer.tsx:19:13
+  17 |     useEffect(() => {
+  18 |         if (data?.spotify) {
+> 19 |             setIsVisible(true);
+     |             ^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  20 |         }
+  21 |     }, [data?.spotify?.track_id]);
+  22 |  react-hooks/set-state-in-effect
+  21:8   warning  React Hook useEffect has a missing dependency: 'data?.spotify'. Either include it or remove the dependency array                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          react-hooks/exhaustive-deps
+
+C:\Users\Eddy\Desktop\arka.is-a.dev\src\components\TechStack.tsx
+    9:7   warning  'RESUME_URL' is assigned a value but never used  @typescript-eslint/no-unused-vars
+   62:23  error    Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+   65:52  error    Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+   69:45  error    Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  118:47  error    Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  165:49  error    Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+
+C:\Users\Eddy\Desktop\arka.is-a.dev\src\components\Timeline.tsx
+   5:8   warning  'useSWR' is defined but never used               @typescript-eslint/no-unused-vars
+   9:7   warning  'RESUME_URL' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  11:7   warning  'fetcher' is assigned a value but never used     @typescript-eslint/no-unused-vars
+  60:17  error    Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  64:40  error    Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  71:45  error    Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+
+C:\Users\Eddy\Desktop\arka.is-a.dev\src\lib\optimization.ts
+  1:10  warning  'useEffect' is defined but never used                 @typescript-eslint/no-unused-vars
+  5:7   warning  'GITHUB_REPO_URL' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\Eddy\Desktop\arka.is-a.dev\src\lib\sys-core.ts
+  81:22  warning  'e' is defined but never used  @typescript-eslint/no-unused-vars
+
+Ô£û 65 problems (38 errors, 27 warnings)
+  1 error and 0 warnings potentially fixable with the `--fix` option.
+

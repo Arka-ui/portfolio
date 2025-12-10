@@ -32,7 +32,7 @@ export default function InteractiveBackground() {
 
         let animationFrameId: number;
         let particles: Particle[] = [];
-        let mouse = { x: -1000, y: -1000 };
+        const mouse = { x: -1000, y: -1000 };
 
         // Configuration
         const PARTICLE_COLOR = "rgba(148, 163, 184, 0.5)"; // slate-400 with opacity

@@ -49,9 +49,20 @@ import BlueprintWrapper from "@/components/BlueprintWrapper";
 
 // ... (imports)
 
-function ProjectCard({ project, isActive, index }: { project: any; isActive: boolean; index: number }) {
-    const gradient = getProjectColor(project.language);
-    const shadowColor = getShadowColor(project.language);
+interface Project {
+    id: number;
+    name: string;
+    description: string | null;
+    language: string | null;
+    topics: string[];
+    html_url: string;
+    homepage: string | null;
+    stargazers_count: number;
+}
+
+function ProjectCard({ project, isActive, index }: { project: Project; isActive: boolean; index: number }) {
+    const gradient = getProjectColor(project.language || "default");
+    const shadowColor = getShadowColor(project.language || "default");
     const { isBlueprintMode } = useBlueprint();
     const { isChristmasTime } = useChristmas();
 
@@ -72,12 +83,12 @@ function ProjectCard({ project, isActive, index }: { project: any; isActive: boo
 
                     <div className="space-y-4">
                         <div>
-                            <span className="text-xs text-blue-300 block mb-1">// Project Name</span>
+                            <span className="text-xs text-blue-300 block mb-1">{"// Project Name"}</span>
                             <h3 className="text-xl font-bold text-white">{project.name}</h3>
                         </div>
 
                         <div>
-                            <span className="text-xs text-blue-300 block mb-1">// Description Data</span>
+                            <span className="text-xs text-blue-300 block mb-1">{"// Description Data"}</span>
                             <p className="text-sm text-gray-300 leading-relaxed">
                                 {project.description || "No description provided in API response."}
                             </p>
@@ -85,7 +96,7 @@ function ProjectCard({ project, isActive, index }: { project: any; isActive: boo
 
                         <BlueprintWrapper label="DEPENDENCIES" description="Tech Stack Array" direction="right">
                             <div>
-                                <span className="text-xs text-blue-300 block mb-1">// Tech Stack Array</span>
+                                <span className="text-xs text-blue-300 block mb-1">{"// Tech Stack Array"}</span>
                                 <div className="flex flex-wrap gap-2">
                                     {project.language && (
                                         <span className="px-2 py-1 text-xs border border-white/30">
@@ -102,7 +113,7 @@ function ProjectCard({ project, isActive, index }: { project: any; isActive: boo
                         </BlueprintWrapper>
 
                         <div className="pt-4 border-t border-white/20">
-                            <span className="text-xs text-blue-300 block mb-2">// Action Handlers</span>
+                            <span className="text-xs text-blue-300 block mb-2">{"// Action Handlers"}</span>
                             <div className="flex gap-2">
                                 <div className="px-3 py-1 bg-white/10 text-xs">[Link: GitHub]</div>
                                 {project.homepage && <div className="px-3 py-1 bg-white/10 text-xs">[Link: Demo]</div>}
@@ -224,7 +235,7 @@ function ProjectCard({ project, isActive, index }: { project: any; isActive: boo
 }
 
 export default function FeaturedProjects() {
-    const { data, error } = useSWR(
+    const { data, error } = useSWR<Project[]>(
         `https://api.github.com/users/${GITHUB_USERNAME}/repos?sort=pushed&per_page=100`,
         fetcher
     );
@@ -237,13 +248,13 @@ export default function FeaturedProjects() {
 
     const projects = Array.isArray(data)
         ? data
-            .filter((repo: any) => repo.topics?.includes("featured"))
+            .filter((repo) => repo.topics?.includes("featured"))
             .slice(0, 7) // Increased limit for better carousel feel
         : [];
 
     const displayProjects = projects.length > 0
         ? projects
-        : (Array.isArray(data) ? data.sort((a: any, b: any) => b.stargazers_count - a.stargazers_count).slice(0, 7) : []);
+        : (Array.isArray(data) ? [...data].sort((a, b) => b.stargazers_count - a.stargazers_count).slice(0, 7) : []);
 
     const nextProject = () => {
         setActiveIndex((prev) => (prev + 1) % displayProjects.length);
@@ -269,12 +280,12 @@ export default function FeaturedProjects() {
                 <div className="container mx-auto px-4">
                     <div className="mb-12 border-b-2 border-dashed border-white/30 pb-4">
                         <h2 className="text-4xl font-mono font-bold text-white mb-2">&lt;SECTION: FEATURED_PROJECTS /&gt;</h2>
-                        <p className="text-yellow-300 font-mono text-sm">// This section dynamically fetches data from GitHub API and renders it.</p>
-                        <p className="text-yellow-300 font-mono text-sm">// In standard mode, this uses a 3D carousel. Here, we see the raw grid structure.</p>
+                        <p className="text-yellow-300 font-mono text-sm">{"// This section dynamically fetches data from GitHub API and renders it."}</p>
+                        <p className="text-yellow-300 font-mono text-sm">{"// In standard mode, this uses a 3D carousel. Here, we see the raw grid structure."}</p>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        {displayProjects.map((project: any, index: number) => (
+                        {displayProjects.map((project, index) => (
                             <motion.div
                                 key={project.id}
                                 initial={{ opacity: 0, y: 20 }}
@@ -329,7 +340,7 @@ export default function FeaturedProjects() {
                 >
                     <div className="absolute inset-0 flex items-center justify-center transform-style-3d">
                         <AnimatePresence mode="popLayout">
-                            {displayProjects.map((project: any, index: number) => {
+                            {displayProjects.map((project, index) => {
                                 // Calculate offset from active index
                                 let offset = index - activeIndex;
                                 // Handle wrap-around for infinite feel logic (visual only here)
@@ -404,7 +415,7 @@ export default function FeaturedProjects() {
 
                 {/* Pagination Indicators */}
                 <div className="flex justify-center gap-3 mt-4">
-                    {displayProjects.map((_: any, idx: number) => (
+                    {displayProjects.map((_, idx) => (
                         <button
                             key={idx}
                             onClick={() => setActiveIndex(idx)}
@@ -416,5 +427,6 @@ export default function FeaturedProjects() {
                 </div>
             </div>
         </section>
+
     );
 }
