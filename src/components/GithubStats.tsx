@@ -2,7 +2,7 @@
 
 import useSWR from "swr";
 import { motion } from "framer-motion";
-import { Star, GitFork, ExternalLink, Github, GitCommit, Zap, Code } from "lucide-react";
+import { Star, GitFork, ExternalLink, Github, GitCommit, Zap, Code, Layers } from "lucide-react";
 import BlueprintWrapper from "@/components/BlueprintWrapper";
 
 // Placeholder - User should replace with their username
@@ -31,6 +31,10 @@ interface GitHubEvent {
     created_at: string;
 }
 
+interface GroupedEvent extends GitHubEvent {
+    count: number;
+}
+
 const fetcher = async (url: string) => {
     const res = await fetch(url);
     if (!res.ok) {
@@ -40,7 +44,7 @@ const fetcher = async (url: string) => {
     return Array.isArray(data) ? data : [];
 };
 
-function EventCard({ event }: { event: GitHubEvent }) {
+function EventCard({ event }: { event: GroupedEvent }) {
     const getEventIcon = () => {
         switch (event.type) {
             case "PushEvent":
@@ -92,6 +96,15 @@ function EventCard({ event }: { event: GitHubEvent }) {
         >
             <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
+            {event.count > 1 && (
+                <div className="absolute top-4 right-4 z-20">
+                    <div className="flex items-center gap-1.5 px-2 py-1 rounded-full bg-primary/10 border border-primary/20 backdrop-blur-md">
+                        <Layers className="w-3 h-3 text-primary" />
+                        <span className="text-xs font-medium text-primary">+{event.count - 1}</span>
+                    </div>
+                </div>
+            )}
+
             <div className="relative z-10">
                 <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center gap-3">
@@ -100,7 +113,9 @@ function EventCard({ event }: { event: GitHubEvent }) {
                         </div>
                         <span className="text-xs text-white/40 font-mono">{formattedDate}</span>
                     </div>
-                    <ExternalLink className="w-4 h-4 text-white/20 group-hover:text-white/60 transition-colors" />
+                    {event.count === 1 && (
+                        <ExternalLink className="w-4 h-4 text-white/20 group-hover:text-white/60 transition-colors" />
+                    )}
                 </div>
 
                 <div className="mb-2">
@@ -121,17 +136,48 @@ function EventCard({ event }: { event: GitHubEvent }) {
                     </div>
                 )}
             </div>
+
+            {/* Visual stack effect for multiple items */}
+            {event.count > 1 && (
+                <div className="absolute inset-0 -z-10 translate-x-1 translate-y-1 rounded-2xl border border-white/5 bg-card/20 opacity-50" />
+            )}
         </motion.a>
     );
 }
 
+const groupEvents = (events: GitHubEvent[]): GroupedEvent[] => {
+    if (!Array.isArray(events)) return [];
+
+    const groupedMap = new Map<string, GroupedEvent>();
+    const result: GroupedEvent[] = [];
+
+    events.forEach(event => {
+        const key = `${event.type}-${event.repo.name}`;
+
+        if (groupedMap.has(key)) {
+            const existing = groupedMap.get(key)!;
+            existing.count += 1;
+            // Keep the existing (latest) event as the display one, just increment count
+        } else {
+            const newGroup: GroupedEvent = { ...event, count: 1 };
+            groupedMap.set(key, newGroup);
+            result.push(newGroup);
+        }
+    });
+
+    return result;
+};
+
 export default function GithubStats() {
+    // Increase limit to get more potential duplicates to group
     const { data: events, error } = useSWR<GitHubEvent[]>(
-        `https://api.github.com/users/${GITHUB_USERNAME}/events?per_page=6`,
+        `https://api.github.com/users/${GITHUB_USERNAME}/events?per_page=20`,
         fetcher
     );
 
     if (error) return null;
+
+    const groupedEvents = groupEvents(events || []).slice(0, 6);
 
     return (
         <section className="py-20 container mx-auto px-4" id="recent-activity">
@@ -151,7 +197,7 @@ export default function GithubStats() {
                     direction="bottom"
                     techSpecs={{
                         "API": "GitHub Events",
-                        "Limit": "6"
+                        "Grouped": "True"
                     }}
                 >
                     <h2 className="text-4xl md:text-5xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-white via-white/80 to-white/40">
@@ -164,7 +210,7 @@ export default function GithubStats() {
             </motion.div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {Array.isArray(events) && events.map((event, index) => (
+                {groupedEvents.map((event) => (
                     <EventCard key={event.id} event={event} />
                 ))}
             </div>
