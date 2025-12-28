@@ -1,151 +1,171 @@
 "use client";
 
-import Link from "next/link";
 import { useState, useEffect } from "react";
-import { Menu, X, Terminal, Cpu } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { cn } from "@/lib/utils";
-import LanguageSelector from "@/components/LanguageSelector";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { Home, User, Briefcase, Mail, Terminal, Menu, X, Cpu } from "lucide-react";
 import { useBlueprint } from "@/context/BlueprintContext";
+import QuantumDock from "@/components/ui/QuantumDock";
+import SpectralBorder from "@/components/ui/SpectralBorder";
+import LanguageSelector from "@/components/LanguageSelector";
+import { cn } from "@/lib/utils";
+import { useLanyard } from "@/hooks/useLanyard";
+
+const DISCORD_ID = "871084043838566400"; // Ensure this matches everywhere
 
 const navItems = [
-    { name: "Home", href: "#" },
-    { name: "About", href: "#about" },
-    { name: "Projects", href: "#projects" },
-    { name: "Contact", href: "#contact" },
+    { title: "Home", icon: <Home className="w-5 h-5" />, href: "/" },
+    { title: "About", icon: <User className="w-5 h-5" />, href: "/#about" },
+    { title: "Projects", icon: <Briefcase className="w-5 h-5" />, href: "/#projects" },
+    { title: "Contact", icon: <Mail className="w-5 h-5" />, href: "/#contact" },
 ];
 
 export default function Navbar() {
-    const [isOpen, setIsOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
-    const [hoveredTab, setHoveredTab] = useState<string | null>(null);
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const { isBlueprintMode, toggleBlueprintMode } = useBlueprint();
+    const { data: lanyardData } = useLanyard(DISCORD_ID);
+    const pathname = usePathname();
+    const [mounted, setMounted] = useState(false);
 
     useEffect(() => {
+        setMounted(true);
         const handleScroll = () => {
-            setScrolled(window.scrollY > 20);
+            setScrolled(window.scrollY > 50);
         };
         window.addEventListener("scroll", handleScroll);
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
+    // Active tab logic based on hash or path
+    // Simple approximation
+    const activeTab = navItems.find(item => item.href === pathname || (typeof window !== 'undefined' && item.href === window.location.hash))?.title || "Home";
+
+    if (!mounted) return null;
+
     return (
-        <motion.nav
-            initial={{ y: -100 }}
-            animate={{ y: 0 }}
-            transition={{ type: "spring", stiffness: 300, damping: 30 }}
-            className={cn(
-                "fixed top-0 left-0 right-0 z-50 flex justify-center pointer-events-none transition-all duration-500",
-                scrolled ? "pt-4" : "pt-8"
-            )}
-        >
-            <div className={cn(
-                "pointer-events-auto relative flex items-center justify-between",
-                "bg-slate-950/80 backdrop-blur-xl border border-slate-800/50 shadow-2xl",
-                "px-2 py-2 rounded-full transition-all duration-500",
-                scrolled ? "w-auto min-w-[300px] gap-2" : "w-[90%] max-w-5xl gap-8 px-6 py-3"
-            )}>
-                {/* Logo Area */}
-                <div className={cn("flex items-center gap-2", scrolled && "hidden md:flex")}>
-                    <div className="relative group overflow-hidden rounded-full p-2 bg-gradient-to-br from-indigo-500/20 to-purple-500/20 border border-indigo-500/30">
-                        <Cpu className="w-5 h-5 text-indigo-400 group-hover:animate-spin-slow transition-transform" />
-                        <div className="absolute inset-0 bg-indigo-500/20 blur-md group-hover:bg-indigo-400/30 transition-colors" />
-                    </div>
-                    {!scrolled && (
-                        <span className="font-heading font-bold text-lg tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white to-slate-400">
-                            Arka<span className="text-indigo-500">.dev</span>
-                        </span>
-                    )}
-                </div>
-
-                {/* Desktop Menu */}
-                <div className="hidden md:flex items-center bg-slate-900/50 rounded-full p-1 border border-white/5">
-                    {navItems.map((item) => (
-                        <Link
-                            key={item.name}
-                            href={item.href}
-                            onMouseEnter={() => setHoveredTab(item.name)}
-                            onMouseLeave={() => setHoveredTab(null)}
+        <>
+            {/* Desktop Quantum Dock */}
+            <motion.div
+                initial={{ y: -100, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ type: "spring", stiffness: 200, damping: 20, delay: 0.5 }}
+                className="fixed top-6 left-0 right-0 z-50 hidden md:flex justify-center pointer-events-none"
+            >
+                <div className="pointer-events-auto">
+                    <SpectralBorder className="rounded-2xl">
+                        <QuantumDock
+                            items={navItems}
+                            activeTab={activeTab}
                             className={cn(
-                                "relative px-5 py-2 text-sm font-medium transition-colors rounded-full",
-                                "text-slate-400 hover:text-white"
+                                "transition-all duration-500",
+                                scrolled ? "scale-90 bg-slate-900/80" : "scale-100"
                             )}
-                        >
-                            {hoveredTab === item.name && (
-                                <motion.div
-                                    layoutId="nav-pill"
-                                    className="absolute inset-0 bg-white/10 rounded-full"
-                                    transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
-                                />
-                            )}
-                            <span className="relative z-10">{item.name}</span>
-                        </Link>
-                    ))}
+                        />
+                    </SpectralBorder>
                 </div>
 
-                {/* Controls Area */}
-                <div className="flex items-center gap-2">
-                    <button
-                        onClick={toggleBlueprintMode}
-                        className={cn(
-                            "relative p-2 rounded-full transition-all duration-300 group overflow-hidden",
-                            isBlueprintMode ? "bg-amber-500/20 text-amber-400 border border-amber-500/50" : "bg-slate-800/50 text-slate-400 hover:text-white border border-transparent hover:border-slate-700"
-                        )}
-                        title="Toggle Blueprint Mode"
-                    >
-                        <Terminal size={18} />
+                {/* Satellite Controls (Language & Blueprint) */}
+                <div className="absolute top-2 right-8 pointer-events-auto flex items-center gap-4">
+                    <div className="relative group">
+                        <button
+                            onClick={toggleBlueprintMode}
+                            className={cn(
+                                "p-3 rounded-full transition-all duration-300 backdrop-blur-md border",
+                                isBlueprintMode
+                                    ? "bg-amber-500/10 border-amber-500/50 text-amber-400 shadow-[0_0_15px_rgba(245,158,11,0.2)]"
+                                    : "bg-slate-900/50 border-white/5 text-slate-400 hover:text-white hover:bg-slate-800/80"
+                            )}
+                            title="Toggle Blueprint Mode"
+                        >
+                            <Terminal size={20} />
+                        </button>
                         {isBlueprintMode && (
-                            <div className="absolute inset-0 bg-amber-400/10 animate-pulse" />
+                            <span className="absolute top-full mt-2 left-1/2 -translate-x-1/2 text-[10px] font-mono text-amber-500 bg-black/80 px-2 py-1 rounded border border-amber-500/30 whitespace-nowrap">
+                                DEBUG_MODE
+                            </span>
                         )}
-                    </button>
+                    </div>
 
-                    <div className={cn("w-px h-6 bg-slate-800", scrolled && "hidden")} />
-
-                    <div className={cn(scrolled && "hidden md:block")}>
+                    <div className="className">
                         <LanguageSelector />
                     </div>
-
-                    {/* Mobile Toggle */}
-                    <button
-                        onClick={() => setIsOpen(!isOpen)}
-                        className="md:hidden p-2 rounded-full bg-slate-800/50 text-slate-300 hover:bg-slate-700 transition-colors"
-                    >
-                        {isOpen ? <X size={20} /> : <Menu size={20} />}
-                    </button>
                 </div>
+
+                {/* Logo / Identity (Left Side) - The "Eye" */}
+                <div className="absolute top-2 left-8 pointer-events-auto">
+                    <Link href="/" className="group relative flex items-center gap-3">
+                        <div className="relative w-12 h-12 rounded-full bg-slate-900/50 border border-white/10 flex items-center justify-center overflow-hidden backdrop-blur-md">
+                            <div className="absolute inset-0 bg-indigo-500/20 blur-xl group-hover:bg-indigo-400/30 transition-colors duration-500" />
+                            <Cpu className="text-indigo-400 w-6 h-6 group-hover:rotate-180 transition-transform duration-700 ease-in-out" />
+
+                            {/* Music Pulse Ring */}
+                            {lanyardData?.spotify && (
+                                <div className="absolute inset-0 border-2 border-cyan-400/50 rounded-full animate-ping opacity-20" />
+                            )}
+                        </div>
+
+                        <div className="flex flex-col">
+                            <span className="font-heading font-bold text-xl tracking-tighter text-white">
+                                Arka<span className="text-indigo-400">.dev</span>
+                            </span>
+                            <span className="text-[10px] font-mono text-slate-400 tracking-widest uppercase opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition-all duration-300">
+                                Systems Online
+                            </span>
+                        </div>
+                    </Link>
+                </div>
+            </motion.div>
+
+            {/* Mobile Menu (Simplified) */}
+            <div className="md:hidden fixed top-4 right-4 z-50">
+                <button
+                    onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                    className="p-3 rounded-full bg-slate-900/80 backdrop-blur-xl border border-white/10 text-white shadow-lg active:scale-95 transition-transform"
+                >
+                    {mobileMenuOpen ? <X /> : <Menu />}
+                </button>
             </div>
 
-            {/* Mobile Menu Dropdown */}
             <AnimatePresence>
-                {isOpen && (
+                {mobileMenuOpen && (
                     <motion.div
-                        initial={{ opacity: 0, scale: 0.9, y: -20 }}
-                        animate={{ opacity: 1, scale: 1, y: 0 }}
-                        exit={{ opacity: 0, scale: 0.9, y: -20 }}
-                        className={cn(
-                            "absolute top-24 left-4 right-4 p-4 rounded-3xl",
-                            "bg-slate-900/95 backdrop-blur-2xl border border-slate-800 shadow-2xl z-50 pointer-events-auto"
-                        )}
+                        initial={{ opacity: 0, y: -20, scale: 0.95 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: -20, scale: 0.95 }}
+                        className="fixed inset-4 z-40 bg-slate-950/95 backdrop-blur-2xl border border-white/10 rounded-3xl p-6 flex flex-col justify-center gap-6 shadow-2xl md:hidden"
                     >
-                        <div className="flex flex-col gap-2">
-                            {navItems.map((item) => (
-                                <Link
-                                    key={item.name}
-                                    href={item.href}
-                                    onClick={() => setIsOpen(false)}
-                                    className="px-4 py-3 rounded-xl text-base font-medium text-slate-300 bg-white/5 hover:bg-indigo-500/20 hover:text-indigo-300 transition-all border border-transparent hover:border-indigo-500/30"
-                                >
-                                    {item.name}
-                                </Link>
-                            ))}
-                            <div className="h-px bg-slate-800 my-2" />
-                            <div className="px-2">
-                                <LanguageSelector />
-                            </div>
+                        {navItems.map((item) => (
+                            <Link
+                                key={item.title}
+                                href={item.href}
+                                onClick={() => setMobileMenuOpen(false)}
+                                className="flex items-center gap-4 text-2xl font-medium text-slate-300 active:text-white"
+                            >
+                                <div className="p-3 rounded-xl bg-white/5">
+                                    {item.icon}
+                                </div>
+                                {item.title}
+                            </Link>
+                        ))}
+                        <div className="h-px bg-white/10 w-full my-2" />
+                        <div className="flex justify-between items-center">
+                            <span className="text-sm text-slate-400">Settings</span>
+                            <button
+                                onClick={toggleBlueprintMode}
+                                className={cn(
+                                    "p-2 rounded-lg border",
+                                    isBlueprintMode ? "bg-amber-500/20 border-amber-500 text-amber-400" : "bg-white/5 border-transparent text-slate-300"
+                                )}
+                            >
+                                <Terminal size={20} />
+                            </button>
                         </div>
+                        <LanguageSelector />
                     </motion.div>
                 )}
             </AnimatePresence>
-        </motion.nav>
+        </>
     );
 }
