@@ -52,7 +52,7 @@ interface ExperienceItem {
 
 export default function Timeline() {
     const { t, language } = useLanguage();
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+     
     const data = null as ResumeData | null; // Fallback to local data until valid Gist URL is provided
 
     const fallbackExperience = {

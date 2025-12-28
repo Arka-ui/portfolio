@@ -1,10 +1,9 @@
 "use client";
 
-import { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import { createContext, useContext, useState, ReactNode } from "react";
 import Lenis from "lenis";
 
 interface WarpContextType {
-    isWarping: boolean;
     warpTo: (targetId: string) => void;
     lenis: Lenis | null;
     registerLenis: (instance: Lenis) => void;
@@ -13,7 +12,6 @@ interface WarpContextType {
 const WarpContext = createContext<WarpContextType | undefined>(undefined);
 
 export function WarpProvider({ children }: { children: ReactNode }) {
-    const [isWarping, setIsWarping] = useState(false);
     const [lenis, setLenis] = useState<Lenis | null>(null);
 
     const warpTo = (targetId: string) => {
@@ -57,7 +55,7 @@ export function WarpProvider({ children }: { children: ReactNode }) {
     };
 
     return (
-        <WarpContext.Provider value={{ isWarping, warpTo, lenis, registerLenis }}>
+        <WarpContext.Provider value={{ warpTo, lenis, registerLenis }}>
             {children}
         </WarpContext.Provider>
     );

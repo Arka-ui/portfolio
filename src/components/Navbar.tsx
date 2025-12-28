@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, ReactNode } from "react";
 import { motion, AnimatePresence, useScroll, useMotionValue, useSpring } from "framer-motion";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -21,7 +21,7 @@ export default function Navbar() {
     const { t } = useLanguage();
 
     // Dynamic nav items based on language
-    const navItems = [
+    const navItems: { title: string; icon: ReactNode; href: string }[] = [
         { title: t("nav.home"), icon: <Home className="w-5 h-5" />, href: "#" },
         { title: t("nav.about"), icon: <User className="w-5 h-5" />, href: "#about" },
         { title: t("nav.projects"), icon: <Briefcase className="w-5 h-5" />, href: "#projects" },
