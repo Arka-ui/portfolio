@@ -5,7 +5,7 @@ import RootContent from "@/components/RootContent";
 import ScrollManager from "@/components/ScrollManager";
 import { WarpProvider } from "@/context/WarpContext";
 import { BlueprintProvider } from "@/context/BlueprintContext";
-import WarpTunnel from "@/components/ui/WarpTunnel";
+import KineticBlur from "@/components/ui/KineticBlur";
 import CommandPalette from "@/components/CommandPalette";
 
 // Primary Heading Font
@@ -38,7 +38,7 @@ export default function RootLayout({
         <WarpProvider>
           <BlueprintProvider>
             <ScrollManager />
-            <WarpTunnel />
+            <KineticBlur />
             <CommandPalette />
             <RootContent>{children}</RootContent>
           </BlueprintProvider>

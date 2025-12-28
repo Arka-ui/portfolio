@@ -19,34 +19,37 @@ export function WarpProvider({ children }: { children: ReactNode }) {
     const warpTo = (targetId: string) => {
         if (!lenis) {
             // Fallback for no Lenis
+            if (targetId === "#" || targetId === "/") {
+                window.scrollTo({ top: 0, behavior: "smooth" });
+                return;
+            }
             const el = document.querySelector(targetId);
             el?.scrollIntoView({ behavior: 'smooth' });
             return;
         }
 
-        // 1. Engage Warp
-        setIsWarping(true);
-
-        // 2. Calculate time based on distance (Basic) or fixed duration
-        // We want a "Cinematic" long scroll for the warp effect
-        const target = document.querySelector(targetId) as HTMLElement;
-        if (!target) {
-            setIsWarping(false);
+        // Kinetic Glide Logic
+        // 1. Handle Home / Top
+        if (targetId === "#" || targetId === "/") {
+            lenis.scrollTo(0, {
+                duration: 1.5,
+                easing: (t) => t === 1 ? 1 : 1 - Math.pow(2, -10 * t) // ExpoOut for "Glide"
+            });
             return;
         }
 
-        setTimeout(() => {
-            lenis.scrollTo(target, {
-                duration: 2.0,
-                lock: true, // Lock user interaction during warp
-                easing: (t) => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2 // EaseInOutCubic
-            });
-        }, 100); // Slight delay for entrance animation
+        // 2. Locate Target
+        const target = document.querySelector(targetId) as HTMLElement;
+        if (!target) {
+            console.warn(`Target ${targetId} not found`);
+            return;
+        }
 
-        // 3. Disengage Warp after arrival
-        setTimeout(() => {
-            setIsWarping(false);
-        }, 2200); // 2.0s duration + 200ms buffer
+        // 3. Glide
+        lenis.scrollTo(target, {
+            duration: 1.5,
+            easing: (t) => t === 1 ? 1 : 1 - Math.pow(2, -10 * t) // ExpoOut for "Glide"
+        });
     };
 
     const registerLenis = (instance: Lenis) => {
