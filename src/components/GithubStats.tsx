@@ -35,7 +35,7 @@ interface GroupedEvent extends GitHubEvent {
     count: number;
 }
 
-const fetcher = async (url: string) => {
+const fetcher = async (url: string): Promise<GitHubEvent[]> => {
     const res = await fetch(url);
     if (!res.ok) {
         return [];

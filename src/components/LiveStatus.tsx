@@ -68,7 +68,7 @@ export default function LiveStatus() {
 
     // Sort activities: Dev > Music > Games > Other
     const sortedActivities = [...activities].sort((a, b) => {
-        const getPriority = (act: any) => {
+        const getPriority = (act: { name: string; type: number }) => {
             if (act.name === "Visual Studio Code" || act.name.includes("Code") || act.name.includes("Terminal")) return 0;
             if (act.name === "Spotify" || act.name === "Apple Music") return 1;
             return 2;

@@ -33,14 +33,14 @@ export default function Footer() {
                 <div className="grid md:grid-cols-2 gap-12 items-center mb-16">
                     <div className="space-y-4">
                         <h2 className="text-4xl md:text-5xl font-heading font-bold tracking-tight text-white">
-                            Let's build something <br />
+                            Let&apos;s build something <br />
                             <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-cyan-400">
                                 extraordinary.
                             </span>
                         </h2>
                         <p className="text-slate-400 max-w-md">
                             Open for freelance opportunities and collaborations.
-                            Let's maximize your digital potential.
+                            Let&apos;s maximize your digital potential.
                         </p>
                     </div>
 

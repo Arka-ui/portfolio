@@ -1,13 +1,11 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { useOptimizationConfig } from "@/lib/optimization";
 import { useBlueprint } from "@/context/BlueprintContext";
 import { useSystemTelemetry } from "@/lib/sys-core";
 import SystemFailure from "@/components/ui/SystemFailure";
 
 export default function InteractiveBackground() {
-    const config = useOptimizationConfig();
     const { isBlueprintMode } = useBlueprint();
     const health = useSystemTelemetry();
     const canvasRef = useRef<HTMLCanvasElement>(null);

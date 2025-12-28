@@ -3,7 +3,6 @@
 import { motion } from "framer-motion";
 import { ExternalLink, Github, Star, GitFork, ArrowUpRight } from "lucide-react";
 import useSWR from "swr";
-import { useBlueprint } from "@/context/BlueprintContext";
 import BlueprintWrapper from "@/components/BlueprintWrapper";
 
 const GITHUB_USERNAME = "Arka-ui";
@@ -98,7 +97,6 @@ export default function FeaturedProjects() {
         fetcher
     );
 
-    const { isBlueprintMode } = useBlueprint();
 
     // Filter and sort
     const featured = projects && Array.isArray(projects)
