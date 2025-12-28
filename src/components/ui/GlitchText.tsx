@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
 
 export default function GlitchText({ text }: { text: string }) {
     return (

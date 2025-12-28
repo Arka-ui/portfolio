@@ -3,6 +3,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useBlueprint } from "@/context/BlueprintContext";
 import { cn } from "@/lib/utils";
+import { useState, useEffect } from "react";
 
 interface BlueprintAnnotationProps {
     label: string;
@@ -24,6 +25,11 @@ export default function BlueprintAnnotation({
     offset = 0
 }: BlueprintAnnotationProps) {
     const { isBlueprintMode } = useBlueprint();
+    const [id, setId] = useState("0000");
+
+    useEffect(() => {
+        setId(Math.random().toString(36).substr(2, 4).toUpperCase());
+    }, []);
 
     if (!isBlueprintMode) return <>{children}</>;
 
@@ -88,7 +94,7 @@ export default function BlueprintAnnotation({
                                 <div className="font-bold uppercase tracking-widest text-[11px] text-cyan-300">
                                     {label}
                                 </div>
-                                <div className="text-[9px] text-cyan-600">ID: {Math.random().toString(36).substr(2, 4).toUpperCase()}</div>
+                                <div className="text-[9px] text-cyan-600">ID: {id}</div>
                             </div>
 
                             {/* Description */}

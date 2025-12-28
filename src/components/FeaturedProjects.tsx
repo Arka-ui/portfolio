@@ -3,7 +3,6 @@
 import { motion } from "framer-motion";
 import { ExternalLink, Github, Star, GitFork, ArrowUpRight } from "lucide-react";
 import useSWR from "swr";
-import { useState } from "react";
 import { useBlueprint } from "@/context/BlueprintContext";
 import BlueprintWrapper from "@/components/BlueprintWrapper";
 
