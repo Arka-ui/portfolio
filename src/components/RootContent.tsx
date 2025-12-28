@@ -2,7 +2,6 @@
 
 import Navbar from "@/components/Navbar";
 import InteractiveBackground from "@/components/InteractiveBackground";
-import { BlueprintProvider } from "@/context/BlueprintContext";
 import Footer from "@/components/Footer";
 import BlueprintOverlay from "@/components/BlueprintOverlay";
 import BlueprintCursor from "@/components/BlueprintCursor";
@@ -20,19 +19,17 @@ export default function RootContent({ children }: { children: React.ReactNode })
     }
 
     return (
-        <BlueprintProvider>
-            <ChristmasProvider>
-                <ChristmasTheme />
-                <BlueprintOverlay />
-                <BlueprintCursor />
-                <BlueprintGrid />
-                <InteractiveBackground />
-                <Navbar />
-                <main className="min-h-screen pt-16">
-                    {children}
-                </main>
-                <Footer />
-            </ChristmasProvider>
-        </BlueprintProvider>
+        <ChristmasProvider>
+            <ChristmasTheme />
+            <BlueprintOverlay />
+            <BlueprintCursor />
+            <BlueprintGrid />
+            <InteractiveBackground />
+            <Navbar />
+            <main className="min-h-screen pt-16">
+                {children}
+            </main>
+            <Footer />
+        </ChristmasProvider>
     );
 }

@@ -4,21 +4,22 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, User, Briefcase, Mail, Terminal, Menu, X, Cpu } from "lucide-react";
+import { Home, User, Briefcase, Mail, Terminal, Menu, X, Cpu, Search, Command } from "lucide-react";
 import { useBlueprint } from "@/context/BlueprintContext";
 import QuantumDock from "@/components/ui/QuantumDock";
 import SpectralBorder from "@/components/ui/SpectralBorder";
 import LanguageSelector from "@/components/LanguageSelector";
 import { cn } from "@/lib/utils";
 import { useLanyard } from "@/hooks/useLanyard";
+import { useWarp } from "@/context/WarpContext";
 
 const DISCORD_ID = "871084043838566400"; // Ensure this matches everywhere
 
 const navItems = [
-    { title: "Home", icon: <Home className="w-5 h-5" />, href: "/" },
-    { title: "About", icon: <User className="w-5 h-5" />, href: "/#about" },
-    { title: "Projects", icon: <Briefcase className="w-5 h-5" />, href: "/#projects" },
-    { title: "Contact", icon: <Mail className="w-5 h-5" />, href: "/#contact" },
+    { title: "Home", icon: <Home className="w-5 h-5" />, href: "#" },
+    { title: "About", icon: <User className="w-5 h-5" />, href: "#about" },
+    { title: "Projects", icon: <Briefcase className="w-5 h-5" />, href: "#projects" },
+    { title: "Contact", icon: <Mail className="w-5 h-5" />, href: "#contact" },
 ];
 
 export default function Navbar() {
@@ -28,6 +29,7 @@ export default function Navbar() {
     const { data: lanyardData } = useLanyard(DISCORD_ID);
     const pathname = usePathname();
     const [mounted, setMounted] = useState(false);
+    const { warpTo } = useWarp();
 
     useEffect(() => {
         setMounted(true);
@@ -40,9 +42,16 @@ export default function Navbar() {
 
     // Active tab logic based on hash or path
     // Simple approximation
-    const activeTab = navItems.find(item => item.href === pathname || (typeof window !== 'undefined' && item.href === window.location.hash))?.title || "Home";
+    const activeTab = navItems.find(item => typeof window !== 'undefined' && item.href === window.location.hash)?.title || "Home";
 
     if (!mounted) return null;
+
+    // Trigger Command Palette with generic event if needed, but the Palette listens to keys.
+    // We can also trigger it by simulating keypress or exposing a state, 
+    // but for now let's just show the visual cue that it exists.
+    const openCommandPalette = () => {
+        document.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', metaKey: true }));
+    };
 
     return (
         <>
@@ -53,20 +62,50 @@ export default function Navbar() {
                 transition={{ type: "spring", stiffness: 200, damping: 20, delay: 0.5 }}
                 className="fixed top-6 left-0 right-0 z-50 hidden md:flex justify-center pointer-events-none"
             >
-                <div className="pointer-events-auto">
+                <div className="pointer-events-auto flex items-center gap-4">
+
+                    {/* Command Module Button */}
+                    <button
+                        onClick={openCommandPalette}
+                        className={cn(
+                            "group flex items-center gap-2 px-4 h-16 rounded-2xl bg-slate-900/50 backdrop-blur-2xl border border-white/5 transition-all duration-500 hover:bg-white/10 hover:border-white/10",
+                            scrolled ? "scale-90" : "scale-100"
+                        )}
+                    >
+                        <Search className="w-5 h-5 text-slate-400 group-hover:text-white transition-colors" />
+                        <span className="hidden lg:flex items-center gap-1 text-xs font-mono text-slate-500 group-hover:text-slate-300">
+                            <span className="text-xs">⌘</span>K
+                        </span>
+                    </button>
+
                     <SpectralBorder className="rounded-2xl">
                         <QuantumDock
                             items={navItems}
                             activeTab={activeTab}
+                            onWarp={(href) => warpTo(href)}
                             className={cn(
                                 "transition-all duration-500",
                                 scrolled ? "scale-90 bg-slate-900/80" : "scale-100"
                             )}
                         />
                     </SpectralBorder>
+
+                    {/* Live Status Module */}
+                    <div className={cn(
+                        "h-16 px-4 rounded-2xl bg-slate-900/50 backdrop-blur-2xl border border-white/5 flex flex-col justify-center items-end transition-all duration-500",
+                        scrolled ? "scale-90" : "scale-100"
+                    )}>
+                        <div className="flex items-center gap-2">
+                            <div className={cn("w-2 h-2 rounded-full animate-pulse", lanyardData?.discord_status === "online" ? "bg-green-500" : "bg-slate-500")} />
+                            <span className="text-[10px] font-mono text-slate-400">NET.Link</span>
+                        </div>
+                        <span className="text-xs font-heading font-bold text-white">
+                            {new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false })}
+                        </span>
+                    </div>
                 </div>
 
-                {/* Satellite Controls (Language & Blueprint) */}
+                {/* Satellite Controls */}
                 <div className="absolute top-2 right-8 pointer-events-auto flex items-center gap-4">
                     <div className="relative group">
                         <button
@@ -93,9 +132,9 @@ export default function Navbar() {
                     </div>
                 </div>
 
-                {/* Logo / Identity (Left Side) - The "Eye" */}
+                {/* Logo */}
                 <div className="absolute top-2 left-8 pointer-events-auto">
-                    <Link href="/" className="group relative flex items-center gap-3">
+                    <button onClick={() => warpTo("#")} className="group relative flex items-center gap-3">
                         <div className="relative w-12 h-12 rounded-full bg-slate-900/50 border border-white/10 flex items-center justify-center overflow-hidden backdrop-blur-md">
                             <div className="absolute inset-0 bg-indigo-500/20 blur-xl group-hover:bg-indigo-400/30 transition-colors duration-500" />
                             <Cpu className="text-indigo-400 w-6 h-6 group-hover:rotate-180 transition-transform duration-700 ease-in-out" />
@@ -106,15 +145,15 @@ export default function Navbar() {
                             )}
                         </div>
 
-                        <div className="flex flex-col">
+                        <div className="flex flex-col text-left">
                             <span className="font-heading font-bold text-xl tracking-tighter text-white">
                                 Arka<span className="text-indigo-400">.dev</span>
                             </span>
-                            <span className="text-[10px] font-mono text-slate-400 tracking-widest uppercase opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition-all duration-300">
-                                Systems Online
+                            <span className="text-[10px] font-mono text-slate-400 tracking-widest uppercase opacity-0 group-hover:opacity-100 transition-all duration-300">
+                                Warp Ready
                             </span>
                         </div>
-                    </Link>
+                    </button>
                 </div>
             </motion.div>
 
@@ -137,17 +176,19 @@ export default function Navbar() {
                         className="fixed inset-4 z-40 bg-slate-950/95 backdrop-blur-2xl border border-white/10 rounded-3xl p-6 flex flex-col justify-center gap-6 shadow-2xl md:hidden"
                     >
                         {navItems.map((item) => (
-                            <Link
+                            <button
                                 key={item.title}
-                                href={item.href}
-                                onClick={() => setMobileMenuOpen(false)}
+                                onClick={() => {
+                                    setMobileMenuOpen(false);
+                                    warpTo(item.href);
+                                }}
                                 className="flex items-center gap-4 text-2xl font-medium text-slate-300 active:text-white"
                             >
                                 <div className="p-3 rounded-xl bg-white/5">
                                     {item.icon}
                                 </div>
                                 {item.title}
-                            </Link>
+                            </button>
                         ))}
                         <div className="h-px bg-white/10 w-full my-2" />
                         <div className="flex justify-between items-center">

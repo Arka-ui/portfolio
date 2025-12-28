@@ -13,9 +13,10 @@ interface QuantumDockProps {
     }[];
     className?: string;
     activeTab?: string;
+    onWarp: (href: string) => void;
 }
 
-export default function QuantumDock({ items, className, activeTab }: QuantumDockProps) {
+export default function QuantumDock({ items, className, activeTab, onWarp }: QuantumDockProps) {
     const mouseX = useMotionValue(Infinity);
 
     return (
@@ -35,6 +36,7 @@ export default function QuantumDock({ items, className, activeTab }: QuantumDock
                     icon={item.icon}
                     href={item.href}
                     isActive={activeTab === item.title}
+                    onWarp={onWarp}
                 />
             ))}
         </motion.div>
@@ -46,13 +48,15 @@ function DockItem({
     title,
     icon,
     href,
-    isActive
+    isActive,
+    onWarp,
 }: {
     mouseX: MotionValue;
     title: string;
     icon: React.ReactNode;
     href: string;
     isActive: boolean;
+    onWarp: (href: string) => void;
 }) {
     const ref = useRef<HTMLDivElement>(null);
     const [hovered, setHovered] = useState(false);
@@ -69,7 +73,11 @@ function DockItem({
     const y = useSpring(ySync, { mass: 0.1, stiffness: 150, damping: 12 });
 
     return (
-        <Link href={href} onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
+        <button
+            onClick={() => onWarp(href)}
+            onMouseEnter={() => setHovered(true)}
+            onMouseLeave={() => setHovered(false)}
+        >
             <motion.div
                 ref={ref}
                 style={{ width, y }}
@@ -94,7 +102,7 @@ function DockItem({
                         initial={{ opacity: 0, y: 10, scale: 0.8 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: 10, scale: 0.8 }}
-                        className="absolute -top-10 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md border border-indigo-500/30 bg-slate-900/90 px-2 py-0.5 text-xs text-indigo-300 backdrop-blur-md"
+                        className="absolute -top-10 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md border border-indigo-500/30 bg-slate-900/90 px-2 py-0.5 text-xs text-indigo-300 backdrop-blur-md pointer-events-none"
                     >
                         {title}
                         <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 border-4 border-transparent border-t-indigo-500/30" />
@@ -109,6 +117,6 @@ function DockItem({
                     />
                 )}
             </motion.div>
-        </Link>
+        </button>
     );
 }

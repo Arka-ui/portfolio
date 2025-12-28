@@ -3,6 +3,10 @@ import { Outfit, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import RootContent from "@/components/RootContent";
 import ScrollManager from "@/components/ScrollManager";
+import { WarpProvider } from "@/context/WarpContext";
+import { BlueprintProvider } from "@/context/BlueprintContext";
+import WarpTunnel from "@/components/ui/WarpTunnel";
+import CommandPalette from "@/components/CommandPalette";
 
 // Primary Heading Font
 const outfit = Outfit({
@@ -31,8 +35,14 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth">
       <body className={`${jakarta.variable} ${outfit.variable} antialiased bg-background text-foreground overflow-x-hidden`}>
-        <ScrollManager />
-        <RootContent>{children}</RootContent>
+        <WarpProvider>
+          <BlueprintProvider>
+            <ScrollManager />
+            <WarpTunnel />
+            <CommandPalette />
+            <RootContent>{children}</RootContent>
+          </BlueprintProvider>
+        </WarpProvider>
       </body>
     </html>
   );
