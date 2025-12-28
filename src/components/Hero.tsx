@@ -12,7 +12,7 @@ export default function Hero() {
     const config = useOptimizationConfig();
 
     return (
-        <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
+        <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20" id="hero">
             {/* Background Atmosphere */}
             <div className="absolute inset-0 bg-gradient-to-b from-transparent via-slate-950/50 to-slate-950 pointer-events-none" />
 

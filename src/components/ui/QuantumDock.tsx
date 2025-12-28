@@ -77,48 +77,40 @@ function DockItem({
             onClick={() => onWarp(href)}
             onMouseEnter={() => setHovered(true)}
             onMouseLeave={() => setHovered(false)}
-            className="relative px-6 py-3 rounded-xl flex items-center justify-center transition-all duration-300 group"
+            className="relative px-4 py-3 flex flex-col items-center justify-center transition-all duration-300 group"
         >
-            {/* Plasma Pool (Active Background) */}
-            {isActive && (
-                <motion.div
-                    layoutId="plasma-pool"
-                    className="absolute inset-0 bg-gradient-to-r from-indigo-500/20 via-cyan-500/20 to-indigo-500/20 rounded-xl border border-cyan-500/30 shadow-[0_0_15px_rgba(6,182,212,0.15)] backdrop-blur-sm"
-                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                />
-            )}
-
             {/* Icon Container */}
             <div className={cn(
-                "relative z-10 flex items-center gap-2 transition-colors duration-300",
-                isActive ? "text-cyan-400 drop-shadow-[0_0_8px_rgba(34,211,238,0.5)]" : "text-slate-400 group-hover:text-slate-200"
+                "relative z-10 flex items-center justify-center p-2 rounded-full transition-all duration-300",
+                isActive ? "text-cyan-400 bg-cyan-500/10 shadow-[0_0_15px_rgba(34,211,238,0.3)] scale-110" : "text-slate-400 group-hover:text-slate-200 group-hover:bg-white/5 scale-100"
             )}>
                 <motion.div
-                    animate={isActive || hovered ? { scale: 1.1, y: -2 } : { scale: 1, y: 0 }}
+                    animate={hovered ? { y: -2 } : { y: 0 }}
                 >
                     {icon}
                 </motion.div>
-
-                {/* Text Label (Visible on Hover or Active) */}
-                <AnimatePresence>
-                    {(hovered || isActive) && (
-                        <motion.span
-                            initial={{ opacity: 0, width: 0 }}
-                            animate={{ opacity: 1, width: "auto" }}
-                            exit={{ opacity: 0, width: 0 }}
-                            className="text-sm font-medium whitespace-nowrap overflow-hidden ml-2"
-                        >
-                            {title}
-                        </motion.span>
-                    )}
-                </AnimatePresence>
             </div>
 
-            {/* Holographic Reflection (Bottom) */}
+            {/* Tooltip (Holographic Label) */}
+            <AnimatePresence>
+                {(hovered && !isActive) && (
+                    <motion.span
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 5 }}
+                        className="absolute -bottom-6 text-[10px] font-mono tracking-widest text-cyan-500 uppercase pointer-events-none"
+                    >
+                        {title}
+                    </motion.span>
+                )}
+            </AnimatePresence>
+
+            {/* Active Scanner Underline */}
             {isActive && (
                 <motion.div
-                    layoutId="plasma-reflection"
-                    className="absolute -bottom-1 left-2 right-2 h-[1px] bg-cyan-400/50 blur-[2px]"
+                    layoutId="scanner-line"
+                    className="absolute -bottom-1 w-12 h-[2px] bg-gradient-to-r from-transparent via-cyan-400 to-transparent shadow-[0_0_10px_rgba(34,211,238,0.8)]"
+                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
                 />
             )}
         </button>

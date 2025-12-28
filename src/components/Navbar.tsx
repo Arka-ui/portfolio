@@ -59,23 +59,38 @@ export default function Navbar() {
 
     const [activeSection, setActiveSection] = useState("Home");
 
-    // Scroll Spy
+    // Center-Point Scroll Spy
     useEffect(() => {
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach((entry) => {
-                if (entry.isIntersecting) {
-                    const title = navItems.find(item => item.href === `#${entry.target.id}`)?.title;
-                    if (title) setActiveSection(title);
-                    if (entry.target.id === "hero") setActiveSection("Home");
+        const handleScroll = () => {
+            const viewportCenter = window.innerHeight / 2;
+            const sections = document.querySelectorAll("section[id]");
+            let currentSection = "Home"; // Default to Home/Hero
+
+            // Find section closest to center
+            sections.forEach(section => {
+                const rect = section.getBoundingClientRect();
+                // If section covers the center of the screen
+                if (rect.top <= viewportCenter && rect.bottom >= viewportCenter) {
+                    const id = section.id;
+                    // Map ID to Title
+                    if (id === "hero") currentSection = "Home";
+                    else if (id === "about") currentSection = "About";
+                    else if (id === "projects") currentSection = "Projects";
+                    else if (id === "contact") currentSection = "Contact";
                 }
             });
-        }, { threshold: 0.5 });
 
-        document.querySelectorAll("section[id], div[id='hero']").forEach((section) => {
-            observer.observe(section);
-        });
+            // Special case for top of page (Hero might be too large)
+            if (window.scrollY < 100) currentSection = "Home";
 
-        return () => observer.disconnect();
+            setActiveSection(currentSection);
+        };
+
+        window.addEventListener("scroll", handleScroll);
+        // Initial check
+        handleScroll();
+
+        return () => window.removeEventListener("scroll", handleScroll);
     }, []);
     if (!mounted) return null;
 
