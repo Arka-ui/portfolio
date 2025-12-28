@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useScroll, useMotionValue, useSpring } from "framer-motion";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Home, User, Briefcase, Mail, Terminal, Menu, X, Cpu, Search, Command } from "lucide-react";
@@ -9,6 +9,7 @@ import { useBlueprint } from "@/context/BlueprintContext";
 import QuantumDock from "@/components/ui/QuantumDock";
 import SpectralBorder from "@/components/ui/SpectralBorder";
 import LanguageSelector from "@/components/LanguageSelector";
+import SystemTicker from "@/components/ui/SystemTicker"; // Import HUD
 import { cn } from "@/lib/utils";
 import { useLanyard } from "@/hooks/useLanyard";
 import { useWarp } from "@/context/WarpContext";
@@ -30,6 +31,22 @@ export default function Navbar() {
     const pathname = usePathname();
     const [mounted, setMounted] = useState(false);
     const { warpTo } = useWarp();
+    const [isIdle, setIsIdle] = useState(false);
+
+    // Awareness Engine
+    useEffect(() => {
+        let timeout: NodeJS.Timeout;
+        const resetIdle = () => {
+            setIsIdle(false);
+            clearTimeout(timeout);
+            timeout = setTimeout(() => setIsIdle(true), 5000);
+        };
+        window.addEventListener("mousemove", resetIdle);
+        return () => {
+            window.removeEventListener("mousemove", resetIdle);
+            clearTimeout(timeout);
+        }
+    }, []);
 
     useEffect(() => {
         setMounted(true);
@@ -55,11 +72,18 @@ export default function Navbar() {
 
     return (
         <>
-            {/* Desktop Quantum Dock */}
+            {/* Desktop Sentient Dock */}
+            {/* Materialization: Wait 1s then assemble */}
             <motion.div
-                initial={{ y: -100, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ type: "spring", stiffness: 200, damping: 20, delay: 0.5 }}
+                initial={{ y: -100, opacity: 0, scaleX: 0.8 }}
+                animate={{ y: 0, opacity: 1, scaleX: 1 }}
+                transition={{
+                    type: "spring",
+                    stiffness: 100,
+                    damping: 20,
+                    delay: 0.5,
+                    opacity: { duration: 1.5 }, // Slow fade in for "Printing" feel
+                }}
                 className="fixed top-6 left-0 right-0 z-50 hidden md:flex justify-center pointer-events-none"
             >
                 <div className="pointer-events-auto flex items-center gap-4">
@@ -78,6 +102,7 @@ export default function Navbar() {
                         </span>
                     </button>
 
+                    {/* Central Dock with Sentient Border */}
                     <SpectralBorder className="rounded-2xl">
                         <QuantumDock
                             items={navItems}
@@ -90,18 +115,12 @@ export default function Navbar() {
                         />
                     </SpectralBorder>
 
-                    {/* Live Status Module */}
+                    {/* Live Telemetry / System Ticker */}
                     <div className={cn(
-                        "h-16 px-4 rounded-2xl bg-slate-900/50 backdrop-blur-2xl border border-white/5 flex flex-col justify-center items-end transition-all duration-500",
+                        "h-16 px-4 rounded-2xl bg-slate-900/50 backdrop-blur-2xl border border-white/5 flex flex-col justify-center items-end transition-all duration-500 overflow-hidden",
                         scrolled ? "scale-90" : "scale-100"
                     )}>
-                        <div className="flex items-center gap-2">
-                            <div className={cn("w-2 h-2 rounded-full animate-pulse", lanyardData?.discord_status === "online" ? "bg-green-500" : "bg-slate-500")} />
-                            <span className="text-[10px] font-mono text-slate-400">NET.Link</span>
-                        </div>
-                        <span className="text-xs font-heading font-bold text-white">
-                            {new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false })}
-                        </span>
+                        <SystemTicker />
                     </div>
                 </div>
 
@@ -132,12 +151,32 @@ export default function Navbar() {
                     </div>
                 </div>
 
-                {/* Logo */}
+                {/* Sentient Eye (Logo) */}
                 <div className="absolute top-2 left-8 pointer-events-auto">
                     <button onClick={() => warpTo("#")} className="group relative flex items-center gap-3">
-                        <div className="relative w-12 h-12 rounded-full bg-slate-900/50 border border-white/10 flex items-center justify-center overflow-hidden backdrop-blur-md">
-                            <div className="absolute inset-0 bg-indigo-500/20 blur-xl group-hover:bg-indigo-400/30 transition-colors duration-500" />
-                            <Cpu className="text-indigo-400 w-6 h-6 group-hover:rotate-180 transition-transform duration-700 ease-in-out" />
+                        <div className={cn(
+                            "relative w-12 h-12 rounded-full bg-slate-900/50 border flex items-center justify-center overflow-hidden backdrop-blur-md transition-colors duration-500",
+                            isIdle ? "border-indigo-500/30 shadow-[0_0_20px_rgba(99,102,241,0.2)]" : "border-white/10"
+                        )}>
+                            <div className={cn(
+                                "absolute inset-0 blur-xl transition-all duration-1000",
+                                isIdle ? "bg-indigo-500/10" : "bg-cyan-500/0"
+                            )} />
+
+                            {/* The Eye */}
+                            <motion.div
+                                animate={isIdle ? "idle" : "active"}
+                                variants={{
+                                    idle: { scale: 0.9, rotate: 0, opacity: 0.5 },
+                                    active: { scale: 1.1, rotate: 180, opacity: 1 }
+                                }}
+                                transition={{ duration: 0.5 }}
+                            >
+                                <Cpu className={cn(
+                                    "w-6 h-6 transition-colors duration-500",
+                                    isIdle ? "text-indigo-500" : "text-cyan-400 group-hover:text-white"
+                                )} />
+                            </motion.div>
 
                             {/* Music Pulse Ring */}
                             {lanyardData?.spotify && (
@@ -149,8 +188,11 @@ export default function Navbar() {
                             <span className="font-heading font-bold text-xl tracking-tighter text-white">
                                 Arka<span className="text-indigo-400">.dev</span>
                             </span>
-                            <span className="text-[10px] font-mono text-slate-400 tracking-widest uppercase opacity-0 group-hover:opacity-100 transition-all duration-300">
-                                Warp Ready
+                            <span className={cn(
+                                "text-[10px] font-mono tracking-widest uppercase transition-all duration-300",
+                                isIdle ? "text-indigo-500 opacity-100" : "text-slate-400 opacity-0 group-hover:opacity-100"
+                            )}>
+                                {isIdle ? "SLEEP MODE" : "ONLINE"}
                             </span>
                         </div>
                     </button>
