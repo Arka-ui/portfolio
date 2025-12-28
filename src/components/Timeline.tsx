@@ -102,7 +102,7 @@ export default function Timeline() {
         : fallbackExperience;
 
     return (
-        <section className="py-32 container mx-auto px-4" id="experience">
+        <section className="py-32 container mx-auto px-4" id="about">
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
