@@ -111,7 +111,7 @@ export default function Background() {
             window.removeEventListener("resize", resizeCanvas);
             cancelAnimationFrame(animationFrameId);
         };
-    }, []);
+    }, [config]);
 
     return (
         <canvas

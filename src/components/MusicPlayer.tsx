@@ -12,6 +12,11 @@ const DISCORD_ID = "871084043838566400";
 export default function MusicPlayer() {
     const { data } = useLanyard(DISCORD_ID);
     const [isVisible, setIsVisible] = useState(true);
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
 
     // Auto-show when song changes
     useEffect(() => {
@@ -20,7 +25,7 @@ export default function MusicPlayer() {
         }
     }, [data?.spotify?.track_id]);
 
-    if (!data?.spotify) return null;
+    if (!mounted || !data?.spotify) return null;
 
     const { song, artist, album_art_url } = data.spotify;
 

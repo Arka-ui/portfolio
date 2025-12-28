@@ -17,6 +17,28 @@ const fetcher = async (url: string) => {
     return res.json();
 };
 
+interface Job {
+    position: string;
+    name: string;
+    startDate: string;
+    endDate?: string;
+    summary: string;
+}
+
+interface Education {
+    area: string;
+    institution: string;
+    startDate: string;
+    endDate: string;
+    studyType: string;
+    score?: string;
+}
+
+interface ResumeData {
+    work?: Job[];
+    education?: Education[];
+}
+
 const fallbackExperience = [
     {
         type: "work",
@@ -57,18 +79,19 @@ const fallbackExperience = [
 
 export default function Timeline() {
     // const { data, error } = useSWR(RESUME_URL, fetcher);
-    const data: any = null; // Fallback to local data until valid Gist URL is provided
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const data = null as ResumeData | null; // Fallback to local data until valid Gist URL is provided
 
     // Transform JSON Resume data to our format if available
     const experience = data ? [
-        ...(data.work || []).map((job: any) => ({
+        ...(data.work || []).map((job: Job) => ({
             type: "work",
             title: job.position,
             company: job.name,
             period: `${job.startDate} - ${job.endDate || "Present"}`,
             description: job.summary
         })),
-        ...(data.education || []).map((edu: any) => ({
+        ...(data.education || []).map((edu: Education) => ({
             type: "education",
             title: edu.area,
             company: edu.institution,

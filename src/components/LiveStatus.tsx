@@ -12,10 +12,30 @@ import { useEffect, useState } from "react";
 const DISCORD_ID = "871084043838566400";
 const SPOTIFY_PROFILE_URL = "https://open.spotify.com/user/YOUR_SPOTIFY_USER_ID"; // Replace with actual profile
 
+// Define Interfaces
+interface LanyardActivity {
+    name: string;
+    type: number;
+    details?: string;
+    state?: string;
+    timestamps?: { start: number; end?: number };
+    assets?: { large_image?: string; };
+    id?: string;
+}
+
+
+// Helper for sorting activities
+const getActivityPriority = (act: LanyardActivity) => {
+    if (act.name === "Visual Studio Code" || act.name.includes("Code") || act.name.includes("Terminal")) return 0;
+    if (act.name === "Spotify" || act.name === "Apple Music") return 1;
+    return 2;
+};
+
 export default function LiveStatus() {
     const { data: lanyardData } = useLanyard(DISCORD_ID);
     const { isBlueprintMode } = useBlueprint();
     const [currentTime, setCurrentTime] = useState(Date.now());
+    const [mounted, setMounted] = useState(false);
 
     // 3D Tilt Effect
     const x = useMotionValue(0);
@@ -26,9 +46,12 @@ export default function LiveStatus() {
     const rotateY = useTransform(mouseX, [-0.5, 0.5], ["-17.5deg", "17.5deg"]);
 
     useEffect(() => {
+        setMounted(true);
         const interval = setInterval(() => setCurrentTime(Date.now()), 1000);
         return () => clearInterval(interval);
     }, []);
+
+    if (!mounted) return null;
 
     const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
         const rect = e.currentTarget.getBoundingClientRect();
@@ -59,21 +82,21 @@ export default function LiveStatus() {
 
     const { discord_status, activities, discord_user, spotify, active_on_discord_desktop, active_on_discord_mobile, active_on_discord_web } = lanyardData;
 
-    const statusColor = {
-        online: "bg-green-500 shadow-[0_0_10px_rgba(34,197,94,0.5)]",
-        idle: "bg-yellow-500 shadow-[0_0_10px_rgba(234,179,8,0.5)]",
-        dnd: "bg-red-500 shadow-[0_0_10px_rgba(239,68,68,0.5)]",
-        offline: "bg-gray-500",
-    }[discord_status] || "bg-gray-500";
+    const getStatusColor = (status: string) => {
+        switch (status) {
+            case "online": return "bg-green-500 shadow-[0_0_10px_rgba(34,197,94,0.5)]";
+            case "idle": return "bg-yellow-500 shadow-[0_0_10px_rgba(234,179,8,0.5)]";
+            case "dnd": return "bg-red-500 shadow-[0_0_10px_rgba(239,68,68,0.5)]";
+            case "offline": return "bg-gray-500";
+            default: return "bg-gray-500";
+        }
+    };
+
+    const statusColor = getStatusColor(discord_status);
 
     // Sort activities: Dev > Music > Games > Other
-    const sortedActivities = [...activities].sort((a, b) => {
-        const getPriority = (act: { name: string; type: number }) => {
-            if (act.name === "Visual Studio Code" || act.name.includes("Code") || act.name.includes("Terminal")) return 0;
-            if (act.name === "Spotify" || act.name === "Apple Music") return 1;
-            return 2;
-        };
-        return getPriority(a) - getPriority(b);
+    const sortedActivities = [...activities].sort((a: LanyardActivity, b: LanyardActivity) => {
+        return getActivityPriority(a) - getActivityPriority(b);
     });
 
     // --- BLUEPRINT MODE RENDER ---

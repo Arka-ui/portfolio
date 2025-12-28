@@ -111,7 +111,9 @@
   }
 
   .text-gradient {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 via-cyan-400 to-indigo-400 background-animate;
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 via-cyan-400 to-indigo-400;
+    background-size: 200%;
+    animation: gradient-x 5s ease infinite;
   }
 
   .background-animate {
