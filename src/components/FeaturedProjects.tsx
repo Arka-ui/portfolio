@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { ExternalLink, Github, Star, GitFork, ArrowUpRight } from "lucide-react";
 import useSWR from "swr";
 import BlueprintWrapper from "@/components/BlueprintWrapper";
+import { useLanguage } from "@/context/LanguageContext";
 
 const GITHUB_USERNAME = "Arka-ui";
 
@@ -92,6 +93,7 @@ const BentoCard = ({ project, className = "" }: { project: Project; className?: 
 };
 
 export default function FeaturedProjects() {
+    const { t } = useLanguage();
     const { data: projects } = useSWR<Project[]>(
         `https://api.github.com/users/${GITHUB_USERNAME}/repos?sort=pushed&per_page=100`,
         fetcher
@@ -121,10 +123,10 @@ export default function FeaturedProjects() {
                             whileInView={{ opacity: 1, y: 0 }}
                             className="text-5xl md:text-7xl font-bold font-heading text-white tracking-tighter mb-6"
                         >
-                            Selected <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-cyan-400">Works</span>
+                            {t("projects.title")}
                         </motion.h2>
                         <p className="text-xl text-slate-400 max-w-2xl">
-                            A showcase of technical excellence and creative problem solving.
+                            {t("projects.subtitle")}
                         </p>
                     </div>
                 </BlueprintWrapper>

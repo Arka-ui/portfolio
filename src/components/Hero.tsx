@@ -7,9 +7,11 @@ import { useOptimizationConfig } from "@/lib/optimization";
 import BlueprintWrapper from "@/components/BlueprintWrapper";
 import MagneticButton from "@/components/ui/MagneticButton";
 import GlitchText from "@/components/ui/GlitchText";
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function Hero() {
     const config = useOptimizationConfig();
+    const { t } = useLanguage();
 
     return (
         <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20" id="hero">
@@ -32,7 +34,7 @@ export default function Hero() {
                                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
                                 <span className="relative inline-flex rounded-full h-2 w-2 bg-indigo-500"></span>
                             </span>
-                            {config.role}
+                            {t("hero.role")}
                         </div>
                     </BlueprintWrapper>
 
@@ -60,7 +62,7 @@ export default function Hero() {
                     </h1>
 
                     <p className="text-xl md:text-2xl text-slate-400 max-w-2xl mx-auto mb-12 leading-relaxed">
-                        Crafting digital experiences that exist on the boundary between <span className="text-white font-medium">magic</span> and <span className="text-white font-medium">logic</span>.
+                        {t("hero.description")}
                     </p>
 
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
@@ -69,7 +71,7 @@ export default function Hero() {
                                 href="#projects"
                                 className="relative group px-8 py-4 bg-white text-black rounded-full font-bold text-lg transition-all hover:shadow-[0_0_40px_-5px_rgba(255,255,255,0.3)] flex items-center gap-2 overflow-hidden"
                             >
-                                <span className="relative z-10">View Work</span>
+                                <span className="relative z-10">{t("hero.cta_projects")}</span>
                                 <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1 relative z-10" />
                                 <div className="absolute inset-0 bg-indigo-100 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
                             </Link>
@@ -80,7 +82,7 @@ export default function Hero() {
                                 href="#contact"
                                 className="group px-8 py-4 bg-transparent border border-white/10 text-white rounded-full font-medium text-lg transition-all hover:bg-white/5 backdrop-blur-sm"
                             >
-                                Contact Me
+                                {t("hero.cta_contact")}
                             </Link>
                         </MagneticButton>
                     </div>

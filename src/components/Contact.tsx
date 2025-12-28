@@ -4,11 +4,13 @@ import { motion } from "framer-motion";
 import { Send, Mail, MapPin, Wifi } from "lucide-react";
 import { useForm, ValidationError } from '@formspree/react';
 import BlueprintWrapper from "@/components/BlueprintWrapper";
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function Contact() {
     // Note: If you see a 403 Forbidden error, check your Formspree settings.
     // Ensure the domain (localhost or production) is allowed in your Formspree dashboard.
     const [state, handleSubmit] = useForm("xblnyneb");
+    const { t } = useLanguage();
 
     if (state.succeeded) {
         return (
@@ -21,8 +23,8 @@ export default function Contact() {
                     >
                         <Wifi className="w-10 h-10 text-green-500" />
                     </motion.div>
-                    <h2 className="text-3xl font-bold mb-4 font-mono text-green-400">TRANSMISSION_RECEIVED</h2>
-                    <p className="text-green-300/80 font-mono">Standby for response signal.</p>
+                    <h2 className="text-3xl font-bold mb-4 font-mono text-green-400">{t("contact.success_title")}</h2>
+                    <p className="text-green-300/80 font-mono">{t("contact.success_desc")}</p>
                 </div>
             </section>
         );
@@ -53,14 +55,10 @@ export default function Contact() {
                                 </motion.div>
 
                                 <h2 className="text-5xl md:text-6xl font-heading font-bold text-white tracking-tighter">
-                                    Initialize <br />
-                                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-cyan-400">
-                                        Handshake.
-                                    </span>
+                                    {t("contact.title")}
                                 </h2>
                                 <p className="text-slate-400 text-lg max-w-md">
-                                    Ready to collaborate on high-impact digital solutions.
-                                    Transmission lines are open.
+                                    {t("contact.subtitle")}
                                 </p>
                             </div>
                         </BlueprintWrapper>
@@ -95,25 +93,25 @@ export default function Contact() {
                             <form onSubmit={handleSubmit} className="space-y-6 relative z-10">
                                 <div className="grid md:grid-cols-2 gap-6">
                                     <div className="space-y-2">
-                                        <label htmlFor="name" className="text-xs font-mono text-slate-500 uppercase tracking-wider">Identity</label>
+                                        <label htmlFor="name" className="text-xs font-mono text-slate-500 uppercase tracking-wider">{t("contact.name")}</label>
                                         <input
                                             id="name"
                                             type="text"
                                             name="name"
                                             className="w-full bg-slate-900/50 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-indigo-500/50 focus:bg-indigo-500/5 transition-all font-mono text-sm"
-                                            placeholder="John Doe"
+                                            placeholder={t("contact.placeholder_name")}
                                             required
                                         />
                                         <ValidationError prefix="Name" field="name" errors={state.errors} className="text-red-400 text-xs" />
                                     </div>
                                     <div className="space-y-2">
-                                        <label htmlFor="email" className="text-xs font-mono text-slate-500 uppercase tracking-wider">Return Address</label>
+                                        <label htmlFor="email" className="text-xs font-mono text-slate-500 uppercase tracking-wider">{t("contact.email")}</label>
                                         <input
                                             id="email"
                                             type="email"
                                             name="email"
                                             className="w-full bg-slate-900/50 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-indigo-500/50 focus:bg-indigo-500/5 transition-all font-mono text-sm"
-                                            placeholder="john@example.com"
+                                            placeholder={t("contact.placeholder_email")}
                                             required
                                         />
                                         <ValidationError prefix="Email" field="email" errors={state.errors} className="text-red-400 text-xs" />
@@ -121,7 +119,7 @@ export default function Contact() {
                                 </div>
 
                                 <div className="space-y-2">
-                                    <label htmlFor="subject" className="text-xs font-mono text-slate-500 uppercase tracking-wider">Subject Line</label>
+                                    <label htmlFor="subject" className="text-xs font-mono text-slate-500 uppercase tracking-wider">Subject</label>
                                     <input
                                         id="subject"
                                         type="text"
@@ -134,13 +132,13 @@ export default function Contact() {
                                 </div>
 
                                 <div className="space-y-2">
-                                    <label htmlFor="message" className="text-xs font-mono text-slate-500 uppercase tracking-wider">Transmission Payload</label>
+                                    <label htmlFor="message" className="text-xs font-mono text-slate-500 uppercase tracking-wider">{t("contact.message")}</label>
                                     <textarea
                                         id="message"
                                         name="message"
                                         rows={5}
                                         className="w-full bg-slate-900/50 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-indigo-500/50 focus:bg-indigo-500/5 transition-all resize-none font-mono text-sm"
-                                        placeholder="Enter your message parameters..."
+                                        placeholder={t("contact.placeholder_message")}
                                         required
                                     />
                                     <ValidationError prefix="Message" field="message" errors={state.errors} className="text-red-400 text-xs" />

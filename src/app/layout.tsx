@@ -5,6 +5,7 @@ import RootContent from "@/components/RootContent";
 import ScrollManager from "@/components/ScrollManager";
 import { WarpProvider } from "@/context/WarpContext";
 import { BlueprintProvider } from "@/context/BlueprintContext";
+import { LanguageProvider } from "@/context/LanguageContext";
 import KineticBlur from "@/components/ui/KineticBlur";
 import CommandPalette from "@/components/CommandPalette";
 
@@ -36,12 +37,14 @@ export default function RootLayout({
     <html lang="en" className="scroll-smooth">
       <body className={`${jakarta.variable} ${outfit.variable} antialiased bg-background text-foreground overflow-x-hidden`}>
         <WarpProvider>
-          <BlueprintProvider>
-            <ScrollManager />
-            <KineticBlur />
-            <CommandPalette />
-            <RootContent>{children}</RootContent>
-          </BlueprintProvider>
+          <LanguageProvider>
+            <BlueprintProvider>
+              <ScrollManager />
+              <KineticBlur />
+              <CommandPalette />
+              <RootContent>{children}</RootContent>
+            </BlueprintProvider>
+          </LanguageProvider>
         </WarpProvider>
       </body>
     </html>
