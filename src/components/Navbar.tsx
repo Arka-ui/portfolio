@@ -57,10 +57,26 @@ export default function Navbar() {
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
-    // Active tab logic based on hash or path
-    // Simple approximation
-    const activeTab = navItems.find(item => typeof window !== 'undefined' && item.href === window.location.hash)?.title || "Home";
+    const [activeSection, setActiveSection] = useState("Home");
 
+    // Scroll Spy
+    useEffect(() => {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    const title = navItems.find(item => item.href === `#${entry.target.id}`)?.title;
+                    if (title) setActiveSection(title);
+                    if (entry.target.id === "hero") setActiveSection("Home");
+                }
+            });
+        }, { threshold: 0.5 });
+
+        document.querySelectorAll("section[id], div[id='hero']").forEach((section) => {
+            observer.observe(section);
+        });
+
+        return () => observer.disconnect();
+    }, []);
     if (!mounted) return null;
 
     // Trigger Command Palette with generic event if needed, but the Palette listens to keys.
@@ -106,7 +122,7 @@ export default function Navbar() {
                     <SpectralBorder className="rounded-2xl">
                         <QuantumDock
                             items={navItems}
-                            activeTab={activeTab}
+                            activeTab={activeSection}
                             onWarp={(href) => warpTo(href)}
                             className={cn(
                                 "transition-all duration-500",

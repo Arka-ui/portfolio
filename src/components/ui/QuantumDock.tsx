@@ -1,6 +1,6 @@
 "use client";
 
-import { MotionValue, motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { MotionValue, motion, useMotionValue, useSpring, useTransform, AnimatePresence } from "framer-motion";
 import { useRef, useState } from "react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
@@ -77,46 +77,50 @@ function DockItem({
             onClick={() => onWarp(href)}
             onMouseEnter={() => setHovered(true)}
             onMouseLeave={() => setHovered(false)}
+            className="relative px-6 py-3 rounded-xl flex items-center justify-center transition-all duration-300 group"
         >
-            <motion.div
-                ref={ref}
-                style={{ width, y }}
-                className={cn(
-                    "relative flex aspect-square items-center justify-center rounded-full transition-colors",
-                    isActive ? "bg-indigo-500/20 text-indigo-400 shadow-[0_0_20px_rgba(99,102,241,0.3)] border border-indigo-500/30" : "bg-white/5 text-slate-400 hover:bg-white/10 hover:text-white border border-white/5"
-                )}
-            >
-                <div className="relative z-10 w-full h-full flex items-center justify-center">
-                    {/* Icon Scaling */}
-                    <motion.div
-                        style={{ scale: useTransform(width, [40, 80], [1, 2]) }}
-                        className="flex items-center justify-center"
-                    >
-                        {icon}
-                    </motion.div>
-                </div>
+            {/* Plasma Pool (Active Background) */}
+            {isActive && (
+                <motion.div
+                    layoutId="plasma-pool"
+                    className="absolute inset-0 bg-gradient-to-r from-indigo-500/20 via-cyan-500/20 to-indigo-500/20 rounded-xl border border-cyan-500/30 shadow-[0_0_15px_rgba(6,182,212,0.15)] backdrop-blur-sm"
+                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                />
+            )}
 
-                {/* Holographic Tooltip */}
-                {hovered && (
-                    <motion.div
-                        initial={{ opacity: 0, y: 10, scale: 0.8 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: 10, scale: 0.8 }}
-                        className="absolute -top-10 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md border border-indigo-500/30 bg-slate-900/90 px-2 py-0.5 text-xs text-indigo-300 backdrop-blur-md pointer-events-none"
-                    >
-                        {title}
-                        <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 border-4 border-transparent border-t-indigo-500/30" />
-                    </motion.div>
-                )}
+            {/* Icon Container */}
+            <div className={cn(
+                "relative z-10 flex items-center gap-2 transition-colors duration-300",
+                isActive ? "text-cyan-400 drop-shadow-[0_0_8px_rgba(34,211,238,0.5)]" : "text-slate-400 group-hover:text-slate-200"
+            )}>
+                <motion.div
+                    animate={isActive || hovered ? { scale: 1.1, y: -2 } : { scale: 1, y: 0 }}
+                >
+                    {icon}
+                </motion.div>
 
-                {/* Active Dot */}
-                {isActive && (
-                    <motion.div
-                        layoutId="activeDockDot"
-                        className="absolute -bottom-2 w-1 h-1 bg-indigo-500 rounded-full shadow-[0_0_10px_rgba(99,102,241,1)]"
-                    />
-                )}
-            </motion.div>
+                {/* Text Label (Visible on Hover or Active) */}
+                <AnimatePresence>
+                    {(hovered || isActive) && (
+                        <motion.span
+                            initial={{ opacity: 0, width: 0 }}
+                            animate={{ opacity: 1, width: "auto" }}
+                            exit={{ opacity: 0, width: 0 }}
+                            className="text-sm font-medium whitespace-nowrap overflow-hidden ml-2"
+                        >
+                            {title}
+                        </motion.span>
+                    )}
+                </AnimatePresence>
+            </div>
+
+            {/* Holographic Reflection (Bottom) */}
+            {isActive && (
+                <motion.div
+                    layoutId="plasma-reflection"
+                    className="absolute -bottom-1 left-2 right-2 h-[1px] bg-cyan-400/50 blur-[2px]"
+                />
+            )}
         </button>
     );
 }
