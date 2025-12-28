@@ -1,64 +1,38 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { useOptimizationConfig } from "@/lib/optimization";
 import { useBlueprint } from "@/context/BlueprintContext";
-import SystemFailure from "@/components/ui/SystemFailure";
 import { useSystemTelemetry } from "@/lib/sys-core";
+import SystemFailure from "@/components/ui/SystemFailure";
 
 export default function InteractiveBackground() {
-    // ⚠️ CRITICAL: OPTIMIZATION CONFIGURATION
-    // REMOVE THIS SECTION TO UNLOCK EDITING CAPABILITIES
-    // FAILURE TO REMOVE WILL CAUSE BUILD ERRORS IN DEV MODE
     const config = useOptimizationConfig();
     const { isBlueprintMode } = useBlueprint();
     const health = useSystemTelemetry();
-
     const canvasRef = useRef<HTMLCanvasElement>(null);
-    const [showOverlay, setShowOverlay] = useState(false);
-
-    // Use a ref to track blueprint mode inside the animation loop without re-triggering effect
-    const isBlueprintModeRef = useRef(isBlueprintMode);
-
-    useEffect(() => {
-        isBlueprintModeRef.current = isBlueprintMode;
-    }, [isBlueprintMode]);
+    const containerRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         const canvas = canvasRef.current;
-        if (!canvas) return;
-        const ctx = canvas.getContext("2d");
+        const container = containerRef.current;
+        if (!canvas || !container) return;
+
+        const ctx = canvas.getContext("2d", { alpha: true });
         if (!ctx) return;
 
         let animationFrameId: number;
         let particles: Particle[] = [];
+        let width = 0;
+        let height = 0;
         const mouse = { x: -1000, y: -1000 };
 
-        // Configuration
-        const PARTICLE_COLOR = "rgba(148, 163, 184, 0.5)"; // slate-400 with opacity
-        const BLUEPRINT_PARTICLE_COLOR = "rgba(255, 255, 255, 0.8)";
-        const LINE_COLOR = "rgba(148, 163, 184, 0.15)";
-        const BLUEPRINT_LINE_COLOR = "rgba(0, 100, 255, 0.3)";
-        const INTERACTION_RADIUS = 150;
-        const CONNECTION_RADIUS = 150;
-
-        // Konami Code (UP UP DOWN DOWN LEFT RIGHT LEFT RIGHT A B A B)
-        const konamiCode = [
-            "ArrowUp",
-            "ArrowUp",
-            "ArrowDown",
-            "ArrowDown",
-            "ArrowLeft",
-            "ArrowRight",
-            "ArrowLeft",
-            "ArrowRight",
-            "a",
-            "b",
-            "a",
-            "b",
-        ];
-        let konamiIndex = 0;
-        let lastKeyTime = 0;
+        // Premium Colors
+        const COLORS = {
+            particle: isBlueprintMode ? "rgba(255, 255, 255, 0.9)" : "rgba(99, 102, 241, 0.6)", // Indigo
+            particleGlow: isBlueprintMode ? "rgba(0, 100, 255, 0.4)" : "rgba(34, 211, 238, 0.4)", // Cyan
+            line: isBlueprintMode ? "rgba(0, 100, 255, 0.15)" : "rgba(99, 102, 241, 0.1)",
+        };
 
         class Particle {
             x: number;
@@ -66,186 +40,116 @@ export default function InteractiveBackground() {
             vx: number;
             vy: number;
             size: number;
-            baseVx: number;
-            baseVy: number;
-            frozenX: number;
-            frozenY: number;
-            isFrozen: boolean;
+            baseSize: number;
+            angle: number;
+            spin: number;
+            brightness: number;
 
-            constructor(w: number, h: number) {
-                this.x = Math.random() * w;
-                this.y = Math.random() * h;
-                this.baseVx = (Math.random() - 0.5) * 0.1; // base slow drift
-                this.baseVy = (Math.random() - 0.5) * 0.1;
-                this.vx = this.baseVx;
-                this.vy = this.baseVy;
-                this.size = Math.random() * 2 + 1;
-                this.frozenX = this.x;
-                this.frozenY = this.y;
-                this.isFrozen = false;
+            constructor() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                this.vx = (Math.random() - 0.5) * 0.2;
+                this.vy = (Math.random() - 0.5) * 0.2;
+                this.baseSize = Math.random() * 2;
+                this.size = this.baseSize;
+                this.angle = Math.random() * Math.PI * 2;
+                this.spin = (Math.random() - 0.5) * 0.02;
+                this.brightness = Math.random();
             }
 
-            update(w: number, h: number) {
-                const isBlueprint = isBlueprintModeRef.current;
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
 
-                // Handle freezing state transition
-                if (isBlueprint && !this.isFrozen) {
-                    this.frozenX = this.x;
-                    this.frozenY = this.y;
-                    this.isFrozen = true;
-                    this.vx = 0;
-                    this.vy = 0;
-                } else if (!isBlueprint && this.isFrozen) {
-                    this.isFrozen = false;
-                    this.vx = this.baseVx;
-                    this.vy = this.baseVy;
-                }
+                // Mouse influence
+                const dx = mouse.x - this.x;
+                const dy = mouse.y - this.y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                const interactionRadius = 200;
 
-                if (isBlueprint) {
-                    // Spring physics
-                    const k = 0.05; // Spring constant
-                    const damping = 0.9; // Damping factor
-
-                    // Force towards frozen position
-                    const dx = this.frozenX - this.x;
-                    const dy = this.frozenY - this.y;
-
-                    this.vx += dx * k;
-                    this.vy += dy * k;
-
-                    // Mouse interaction (repulsion)
-                    const mdx = mouse.x - this.x;
-                    const mdy = mouse.y - this.y;
-                    const distance = Math.sqrt(mdx * mdx + mdy * mdy);
-
-                    if (distance < INTERACTION_RADIUS) {
-                        const force = (INTERACTION_RADIUS - distance) / INTERACTION_RADIUS;
-                        const angle = Math.atan2(mdy, mdx);
-                        const pushForce = 2;
-
-                        this.vx -= Math.cos(angle) * force * pushForce;
-                        this.vy -= Math.sin(angle) * force * pushForce;
-                    }
-
-                    // Apply damping
-                    this.vx *= damping;
-                    this.vy *= damping;
-
-                    this.x += this.vx;
-                    this.y += this.vy;
-
+                if (distance < interactionRadius) {
+                    const force = (interactionRadius - distance) / interactionRadius;
+                    const angle = Math.atan2(dy, dx);
+                    this.vx -= Math.cos(angle) * force * 0.02;
+                    this.vy -= Math.sin(angle) * force * 0.02;
+                    this.size = this.baseSize * (1 + force * 2);
+                    this.brightness = Math.min(1, this.brightness + 0.1);
                 } else {
-                    // Standard movement
-                    this.x += this.vx;
-                    this.y += this.vy;
-
-                    // bounce off edges
-                    if (this.x < 0 || this.x > w) {
-                        this.vx *= -1;
-                        this.baseVx *= -1;
-                    }
-                    if (this.y < 0 || this.y > h) {
-                        this.vy *= -1;
-                        this.baseVy *= -1;
-                    }
-
-                    // mouse interaction
-                    const dx = mouse.x - this.x;
-                    const dy = mouse.y - this.y;
-                    const distance = Math.sqrt(dx * dx + dy * dy);
-                    if (distance < INTERACTION_RADIUS) {
-                        const forceDirectionX = dx / distance;
-                        const forceDirectionY = dy / distance;
-                        const force = (INTERACTION_RADIUS - distance) / INTERACTION_RADIUS;
-                        const directionX = forceDirectionX * force * 0.8;
-                        const directionY = forceDirectionY * force * 0.8;
-                        this.vx -= directionX;
-                        this.vy -= directionY;
-                    } else {
-                        // friction – smoothly return to base velocity
-                        this.vx += (this.baseVx - this.vx) * 0.05;
-                        this.vy += (this.baseVy - this.vy) * 0.05;
-                    }
+                    this.size += (this.baseSize - this.size) * 0.05;
+                    this.brightness += (Math.random() * 0.5 - this.brightness) * 0.01;
                 }
+
+                // Warp edges
+                if (this.x < 0) this.x = width;
+                if (this.x > width) this.x = 0;
+                if (this.y < 0) this.y = height;
+                if (this.y > height) this.y = 0;
             }
 
-            draw() {
-                if (!ctx) return;
+            draw(ctx: CanvasRenderingContext2D) {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.globalAlpha = 0.4 + this.brightness * 0.4;
+
+                // Glow effect
+                if (!isBlueprintMode) {
+                    const gradient = ctx.createRadialGradient(0, 0, 0, 0, 0, this.size * 3);
+                    gradient.addColorStop(0, COLORS.particleGlow);
+                    gradient.addColorStop(1, "transparent");
+                    ctx.fillStyle = gradient;
+                    ctx.beginPath();
+                    ctx.arc(0, 0, this.size * 3, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+
+                ctx.fillStyle = COLORS.particle;
                 ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fillStyle = isBlueprintModeRef.current ? BLUEPRINT_PARTICLE_COLOR : PARTICLE_COLOR;
+                ctx.arc(0, 0, this.size, 0, Math.PI * 2);
                 ctx.fill();
+                ctx.restore();
             }
         }
 
-        const init = () => {
-            particles = [];
-            const w = canvas.width;
-            const h = canvas.height;
-            const particleCount = config.background?.particleCount || (w < 768 ? 40 : 80);
-            for (let i = 0; i < particleCount; i++) {
-                particles.push(new Particle(w, h));
-            }
+        const resize = () => {
+            width = window.innerWidth;
+            height = window.innerHeight;
+            canvas.width = width;
+            canvas.height = height;
+
+            const count = width < 768 ? 40 : 100;
+            particles = Array.from({ length: count }, () => new Particle());
         };
 
         const animate = () => {
             if (!ctx) return;
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            // Draw grid in blueprint mode
-            if (isBlueprintModeRef.current) {
-                ctx.strokeStyle = "rgba(0, 100, 255, 0.1)";
-                ctx.lineWidth = 1;
-                const gridSize = 50;
-
-                // Vertical lines
-                for (let x = 0; x < canvas.width; x += gridSize) {
-                    ctx.beginPath();
-                    ctx.moveTo(x, 0);
-                    ctx.lineTo(x, canvas.height);
-                    ctx.stroke();
-                }
-
-                // Horizontal lines
-                for (let y = 0; y < canvas.height; y += gridSize) {
-                    ctx.beginPath();
-                    ctx.moveTo(0, y);
-                    ctx.lineTo(canvas.width, y);
-                    ctx.stroke();
-                }
-            }
-
-            particles.forEach(p => {
-                p.update(canvas.width, canvas.height);
-                p.draw();
-            });
+            ctx.clearRect(0, 0, width, height);
 
             // Draw connections
-            particles.forEach((a, index) => {
-                for (let i = index + 1; i < particles.length; i++) {
-                    const b = particles[i];
-                    const dx = a.x - b.x;
-                    const dy = a.y - b.y;
-                    const distance = Math.sqrt(dx * dx + dy * dy);
-                    const maxDist = config.background?.connectionDistance || CONNECTION_RADIUS;
-                    if (distance < maxDist) {
+            ctx.strokeStyle = COLORS.line;
+            ctx.lineWidth = 1;
+
+            for (let i = 0; i < particles.length; i++) {
+                const p = particles[i];
+                p.update();
+                p.draw(ctx);
+
+                for (let j = i + 1; j < particles.length; j++) {
+                    const p2 = particles[j];
+                    const dx = p.x - p2.x;
+                    const dy = p.y - p2.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+
+                    if (dist < 120) {
                         ctx.beginPath();
-                        ctx.strokeStyle = isBlueprintModeRef.current ? BLUEPRINT_LINE_COLOR : LINE_COLOR;
-                        ctx.lineWidth = 1;
-                        ctx.moveTo(a.x, a.y);
-                        ctx.lineTo(b.x, b.y);
+                        ctx.moveTo(p.x, p.y);
+                        ctx.lineTo(p2.x, p2.y);
+                        ctx.globalAlpha = (1 - dist / 120) * 0.3;
                         ctx.stroke();
                     }
                 }
-            });
+            }
 
             animationFrameId = requestAnimationFrame(animate);
-        };
-
-        const handleResize = () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            init();
         };
 
         const handleMouseMove = (e: MouseEvent) => {
@@ -253,61 +157,25 @@ export default function InteractiveBackground() {
             mouse.y = e.clientY;
         };
 
-        const handleKeyDown = (e: KeyboardEvent) => {
-            const now = Date.now();
-            if (now - lastKeyTime > 5000) konamiIndex = 0;
-            lastKeyTime = now;
+        window.addEventListener("resize", resize);
+        window.addEventListener("mousemove", handleMouseMove);
 
-            if (!e.key) return;
-            const key = e.key.toLowerCase();
-            const expected = konamiCode[konamiIndex].toLowerCase();
-
-            if (key === expected) {
-                konamiIndex++;
-                if (konamiIndex === konamiCode.length) {
-                    setShowOverlay(true);
-                    setTimeout(() => {
-                        window.location.href = "https://btmpierre.is-a.dev";
-                    }, 3000);
-                    konamiIndex = 0;
-                }
-            } else {
-                konamiIndex = 0;
-            }
-        };
-
-        // Initial setup
-        handleResize();
+        resize();
         animate();
 
-        // Event listeners
-        window.addEventListener("resize", handleResize);
-        window.addEventListener("mousemove", handleMouseMove);
-        window.addEventListener("keydown", handleKeyDown);
-
         return () => {
-            window.removeEventListener("resize", handleResize);
+            window.removeEventListener("resize", resize);
             window.removeEventListener("mousemove", handleMouseMove);
-            window.removeEventListener("keydown", handleKeyDown);
             cancelAnimationFrame(animationFrameId);
         };
-    }, []); // Empty dependency array to run once, we use refs for dynamic values
+    }, [isBlueprintMode]);
 
-    if (health.status === 'critical') {
-        return <SystemFailure />;
-    }
+    if (health.status === 'critical') return <SystemFailure />;
 
     return (
-        <>
-            <canvas
-                ref={canvasRef}
-                className="fixed inset-0 -z-10 bg-gradient-to-br from-slate-900 via-slate-900 to-slate-800 pointer-events-none"
-            />
-            {showOverlay && (
-                <div className="konami-overlay fade-in-out">
-                    Vous allez sur le portfolio de mon meilleur ami (mais vous en faites pas je suis bien plus fort que lui)
-                </div>
-            )}
-        </>
+        <div ref={containerRef} className="fixed inset-0 -z-10 bg-slate-950">
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-indigo-950/20 via-slate-950/50 to-slate-950 pointer-events-none" />
+            <canvas ref={canvasRef} className="absolute inset-0 block w-full h-full" />
+        </div>
     );
 }

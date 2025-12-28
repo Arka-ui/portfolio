@@ -1,28 +1,38 @@
 @import "tailwindcss";
 
 @theme {
-  --color-background: #020617;
-  --color-foreground: #f8fafc;
+  /* Fonts */
+  --font-sans: var(--font-jakarta);
+  --font-heading: var(--font-outfit);
 
-  --color-card: #0f172a;
-  --color-card-foreground: #f8fafc;
+  /* Colors - Cyber/Glass Theme */
+  --color-background: #030712;
+  /* Gray 950/Black */
+  --color-foreground: #f8fafc;
+  /* Slate 50 */
 
   --color-primary: #6366f1;
+  /* Indigo 500 */
   --color-primary-foreground: #ffffff;
 
   --color-secondary: #1e293b;
+  /* Slate 800 */
   --color-secondary-foreground: #f8fafc;
 
-  --color-accent: #8b5cf6;
-  --color-accent-foreground: #ffffff;
+  --color-accent: #22d3ee;
+  /* Cyan 400 */
+  --color-accent-foreground: #0f172a;
 
-  --color-muted: #334155;
-  --color-muted-foreground: #94a3b8;
+  --color-card: rgba(15, 23, 42, 0.6);
+  --color-card-foreground: #f8fafc;
 
-  --font-sans: var(--font-inter);
+  --color-border: rgba(148, 163, 184, 0.1);
 
-  --animate-fade-in: fade-in 0.5s ease-out;
-  --animate-slide-up: slide-up 0.5s ease-out;
+  /* Animations */
+  --animate-fade-in: fade-in 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  --animate-slide-up: slide-up 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-pulse-slow: pulse-slow 4s ease-in-out infinite;
 
   @keyframes fade-in {
     0% {
@@ -36,30 +46,13 @@
 
   @keyframes slide-up {
     0% {
-      transform: translateY(10px);
+      transform: translateY(20px);
       opacity: 0;
     }
 
     100% {
       transform: translateY(0);
       opacity: 1;
-    }
-  }
-
-  --animate-gradient-x: gradient-x 15s ease infinite;
-  --animate-float: float 6s ease-in-out infinite;
-
-  @keyframes gradient-x {
-
-    0%,
-    100% {
-      background-size: 200% 200%;
-      background-position: left center;
-    }
-
-    50% {
-      background-size: 200% 200%;
-      background-position: right center;
     }
   }
 
@@ -71,7 +64,19 @@
     }
 
     50% {
-      transform: translateY(-20px);
+      transform: translateY(-10px);
+    }
+  }
+
+  @keyframes pulse-slow {
+
+    0%,
+    100% {
+      opacity: 1;
+    }
+
+    50% {
+      opacity: 0.5;
     }
   }
 }
@@ -81,456 +86,90 @@
     background-color: var(--color-background);
     color: var(--color-foreground);
     font-family: var(--font-sans);
+    overflow-x: hidden;
+    @apply antialiased selection:bg-indigo-500/30 selection:text-indigo-200;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-heading);
+    letter-spacing: -0.02em;
   }
 }
 
-/* Overlay animation for Konami easter egg */
-@keyframes fadeInOut {
-  0% {
-    opacity: 0;
+@layer utilities {
+  .glass-panel {
+    @apply backdrop-blur-md bg-white/5 border border-white/10;
   }
 
-  20% {
-    opacity: 1;
+  .glass-card {
+    @apply backdrop-blur-xl bg-slate-900/40 border border-slate-700/30 shadow-xl;
   }
 
-  80% {
-    opacity: 1;
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 via-cyan-400 to-indigo-400 background-animate;
   }
 
-  100% {
-    opacity: 0;
+  .background-animate {
+    background-size: 200%;
+    animation: gradient-x 5s ease infinite;
   }
-}
-
-.konami-overlay {
-  position: fixed;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(0, 0, 0, 0.8);
-  color: #fff;
-  font-size: 1.5rem;
-  text-align: center;
-  padding: 2rem;
-  z-index: 1000;
-}
-
-.fade-in-out {
-  animation: fadeInOut 5s forwards;
-}
-
-/* Google Translate Styles */
-.goog-te-banner-frame {
-  display: none !important;
-}
-
-.goog-te-gadget-icon {
-  display: none !important;
-}
-
-.goog-te-gadget-simple {
-  background-color: transparent !important;
-  border: none !important;
-  padding: 0 !important;
-  font-size: 0 !important;
-}
-
-.goog-te-gadget-simple .goog-te-menu-value {
-  display: none !important;
-}
-
-body {
-  top: 0 !important;
-}
-
-/* Hide the "Powered by Google" text */
-.goog-logo-link {
-  display: none !important;
-}
-
-.goog-te-gadget {
-  color: transparent !important;
-}
-
-@utility perspective-1000 {
-  perspective: 1000px;
-}
-
-@import "tailwindcss";
-
-@theme {
-  --color-background: #020617;
-  --color-foreground: #f8fafc;
-
-  --color-card: #0f172a;
-  --color-card-foreground: #f8fafc;
-
-  --color-primary: #6366f1;
-  --color-primary-foreground: #ffffff;
-
-  --color-secondary: #1e293b;
-  --color-secondary-foreground: #f8fafc;
-
-  --color-accent: #8b5cf6;
-  --color-accent-foreground: #ffffff;
-
-  --color-muted: #334155;
-  --color-muted-foreground: #94a3b8;
-
-  --font-sans: var(--font-inter);
-
-  --animate-fade-in: fade-in 0.5s ease-out;
-  --animate-slide-up: slide-up 0.5s ease-out;
-
-  @keyframes fade-in {
-    0% {
-      opacity: 0;
-    }
-
-    100% {
-      opacity: 1;
-    }
-  }
-
-  @keyframes slide-up {
-    0% {
-      transform: translateY(10px);
-      opacity: 0;
-    }
-
-    100% {
-      transform: translateY(0);
-      opacity: 1;
-    }
-  }
-
-  --animate-gradient-x: gradient-x 15s ease infinite;
-  --animate-float: float 6s ease-in-out infinite;
 
   @keyframes gradient-x {
-
-    0%,
-    100% {
-      background-size: 200% 200%;
-      background-position: left center;
+    0% {
+      background-position: 0% 50%;
     }
 
     50% {
-      background-size: 200% 200%;
-      background-position: right center;
+      background-position: 100% 50%;
     }
-  }
 
-  @keyframes float {
-
-    0%,
     100% {
-      transform: translateY(0);
-    }
-
-    50% {
-      transform: translateY(-20px);
+      background-position: 0% 50%;
     }
   }
 }
 
-@layer base {
-  body {
-    background-color: var(--color-background);
-    color: var(--color-foreground);
-    font-family: var(--font-sans);
-  }
+/* Hide Scrollbar for clean look (optional) */
+::-webkit-scrollbar {
+  width: 8px;
 }
 
-/* Overlay animation for Konami easter egg */
-@keyframes fadeInOut {
-  0% {
-    opacity: 0;
-  }
-
-  20% {
-    opacity: 1;
-  }
-
-  80% {
-    opacity: 1;
-  }
-
-  100% {
-    opacity: 0;
-  }
+::-webkit-scrollbar-track {
+  background: transparent;
 }
 
-.konami-overlay {
-  position: fixed;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(0, 0, 0, 0.8);
-  color: #fff;
-  font-size: 1.5rem;
-  text-align: center;
-  padding: 2rem;
-  z-index: 1000;
+::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 4px;
 }
 
-.fade-in-out {
-  animation: fadeInOut 5s forwards;
+::-webkit-scrollbar-thumb:hover {
+  background: #475569;
 }
 
-/* Google Translate Styles */
-.goog-te-banner-frame {
-  display: none !important;
+/* Lenis Recommended CSS */
+html.lenis,
+html.lenis body {
+  height: auto;
 }
 
-.goog-te-gadget-icon {
-  display: none !important;
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
 }
 
-.goog-te-gadget-simple {
-  background-color: transparent !important;
-  border: none !important;
-  padding: 0 !important;
-  font-size: 0 !important;
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
 }
 
-.goog-te-gadget-simple .goog-te-menu-value {
-  display: none !important;
+.lenis.lenis-stopped {
+  overflow: hidden;
 }
 
-body {
-  top: 0 !important;
-}
-
-/* Hide the "Powered by Google" text */
-.goog-logo-link {
-  display: none !important;
-}
-
-.goog-te-gadget {
-  color: transparent !important;
-}
-
-@utility perspective-1000 {
-  perspective: 1000px;
-}
-
-@utility transform-style-3d {
-  transform-style: preserve-3d;
-}
-
-/* Blueprint Mode Styles */
-body.blueprint-mode {
-  background-color: #001529 !important;
-  color: #e0f2fe !important;
-  font-family: 'Courier New', Courier, monospace !important;
-  overflow-x: hidden;
-}
-
-body.blueprint-mode * {
-  border-radius: 0 !important;
-  box-shadow: none !important;
-}
-
-/* Typography Overrides */
-body.blueprint-mode h1,
-body.blueprint-mode h2,
-body.blueprint-mode h3,
-body.blueprint-mode h4,
-body.blueprint-mode h5,
-body.blueprint-mode h6 {
-  font-family: 'Courier New', Courier, monospace !important;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  color: #22d3ee !important;
-  /* Cyan-400 */
-  text-shadow: 0 0 5px rgba(34, 211, 238, 0.5);
-}
-
-body.blueprint-mode p,
-body.blueprint-mode span,
-body.blueprint-mode div {
-  font-family: 'Courier New', Courier, monospace !important;
-  color: #bae6fd !important;
-  /* Sky-200 */
-}
-
-body.blueprint-mode a {
-  color: #38bdf8 !important;
-  /* Sky-400 */
-  text-decoration: none;
-  border-bottom: 1px dashed #38bdf8;
-}
-
-body.blueprint-mode a:hover {
-  background-color: rgba(56, 189, 248, 0.1);
-}
-
-/* Container Styles */
-body.blueprint-mode .glass-panel,
-body.blueprint-mode .bg-black\/40,
-body.blueprint-mode .bg-white\/5,
-body.blueprint-mode section {
-  background: rgba(0, 21, 41, 0.8) !important;
-  border: 1px solid rgba(34, 211, 238, 0.3) !important;
-  backdrop-filter: blur(4px) !important;
-  position: relative;
-}
-
-/* Corner Markers for Containers */
-body.blueprint-mode section::before,
-body.blueprint-mode .glass-panel::before {
-  content: '';
-  position: absolute;
-  top: -1px;
-  left: -1px;
-  width: 10px;
-  height: 10px;
-  border-top: 2px solid #22d3ee;
-  border-left: 2px solid #22d3ee;
-  z-index: 10;
-}
-
-body.blueprint-mode section::after,
-body.blueprint-mode .glass-panel::after {
-  content: '';
-  position: absolute;
-  bottom: -1px;
-  right: -1px;
-  width: 10px;
-  height: 10px;
-  border-bottom: 2px solid #22d3ee;
-  border-right: 2px solid #22d3ee;
-  z-index: 10;
-}
-
-/* Hide decorative elements in blueprint mode */
-body.blueprint-mode .blur-\[150px\],
-body.blueprint-mode .blur-\[120px\],
-body.blueprint-mode .bg-gradient-to-br,
-body.blueprint-mode .bg-gradient-to-tr {
-  display: none !important;
-}
-
-/* Selection Style */
-body.blueprint-mode ::selection {
-  background: rgba(34, 211, 238, 0.3);
-  color: #fff;
-}
-
-/* Christmas Theme Animations */
-@keyframes twinkle {
-
-  0%,
-  100% {
-    opacity: 0.5;
-    transform: scale(1);
-  }
-
-  50% {
-    opacity: 1;
-    transform: scale(1.2);
-  }
-}
-
-@keyframes snowfall {
-  0% {
-    transform: translateY(-10px) translateX(0);
-    opacity: 0;
-  }
-
-  10% {
-    opacity: 1;
-  }
-
-  90% {
-    opacity: 1;
-  }
-
-  100% {
-    transform: translateY(100vh) translateX(20px);
-    opacity: 0;
-  }
-}
-
-@keyframes swing {
-  0% {
-    transform: rotate(0deg);
-  }
-
-  25% {
-    transform: rotate(10deg);
-  }
-
-  75% {
-    transform: rotate(-10deg);
-  }
-
-  100% {
-    transform: rotate(0deg);
-  }
-}
-
-@keyframes fall {
-  0% {
-    transform: translateY(0) rotate(0deg);
-    opacity: 1;
-  }
-
-  100% {
-    transform: translateY(100vh) rotate(720deg);
-    opacity: 0;
-  }
-}
-
-.snow-cap::before {
-  content: "";
-  position: absolute;
-  top: -4px;
-  left: 0;
-  right: 0;
-  height: 8px;
-  background: white;
-  border-radius: 50% 50% 0 0;
-  filter: blur(2px);
-  opacity: 0.8;
+.lenis.lenis-scrolling iframe {
   pointer-events: none;
-  z-index: 10;
-}
-
-.frost-vignette {
-  background: radial-gradient(circle, transparent 50%, rgba(186, 230, 253, 0.1) 85%, rgba(186, 230, 253, 0.3) 100%);
-  /* Add a subtle noise texture if possible via noise image (optional), keeping clean for now */
-  pointer-events: none;
-  mix-blend-mode: screen;
-  /* Helps it look icy/glossy */
-}
-
-:root {
-  /* Default Theme Variables (Dark) */
-  --christmas-primary: #ef4444;
-  /* Red-500 */
-  --christmas-secondary: #166534;
-  /* Green-800 */
-  --christmas-accent: #fbbf24;
-  /* Amber-400 */
-  --christmas-background: #0f172a;
-  /* Slate-900 */
-}
-
-/* Christmas Mode Overrides */
-body.christmas-mode {
-  --color-primary: var(--christmas-primary);
-  --color-secondary: var(--christmas-secondary);
-  --color-accent: var(--christmas-accent);
-  --color-background: #0b1121;
-  --color-card: rgba(255, 255, 255, 0.05);
-}
-
-body.christmas-mode ::selection {
-  background: var(--christmas-primary);
-  color: white;
 }

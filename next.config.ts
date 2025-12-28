@@ -2,8 +2,7 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   output: "export",
-  trailingSlash: true,  // ← IMPORTANT
-  basePath: "/portfolio",  // ← IMPORTANT
+  trailingSlash: true,
   images: {
     unoptimized: true,
     remotePatterns: [

@@ -1,53 +1,20 @@
 "use client";
 
-import { motion, useMotionValue, useSpring, useTransform, AnimatePresence, useAnimation } from "framer-motion";
-import { ExternalLink, Github, Star, ChevronLeft, ChevronRight, Layers, Zap, Globe, Code, Database, Layout } from "lucide-react";
+import { motion } from "framer-motion";
+import { ExternalLink, Github, Star, GitFork, ArrowUpRight } from "lucide-react";
 import useSWR from "swr";
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
 import { useBlueprint } from "@/context/BlueprintContext";
-import { useChristmas } from "@/context/ChristmasContext";
+import BlueprintWrapper from "@/components/BlueprintWrapper";
 
 const GITHUB_USERNAME = "Arka-ui";
 
 const fetcher = async (url: string) => {
     const res = await fetch(url);
-    if (!res.ok) {
-        return [];
-    }
+    if (!res.ok) return [];
     const data = await res.json();
     return Array.isArray(data) ? data : [];
 };
-
-// Helper to get color based on language/topic
-const getProjectColor = (language: string) => {
-    const colors: Record<string, string> = {
-        TypeScript: "from-blue-500 to-cyan-400",
-        JavaScript: "from-yellow-400 to-orange-500",
-        Python: "from-green-400 to-emerald-600",
-        Rust: "from-orange-600 to-red-600",
-        Go: "from-cyan-500 to-blue-600",
-        HTML: "from-orange-500 to-red-500",
-        CSS: "from-blue-400 to-indigo-500",
-        default: "from-violet-500 to-purple-600"
-    };
-    return colors[language] || colors.default;
-};
-
-const getShadowColor = (language: string) => {
-    const colors: Record<string, string> = {
-        TypeScript: "rgba(59, 130, 246, 0.5)",
-        JavaScript: "rgba(234, 179, 8, 0.5)",
-        Python: "rgba(16, 185, 129, 0.5)",
-        Rust: "rgba(234, 88, 12, 0.5)",
-        Go: "rgba(6, 182, 212, 0.5)",
-        default: "rgba(139, 92, 246, 0.5)"
-    };
-    return colors[language] || colors.default;
-};
-
-import BlueprintWrapper from "@/components/BlueprintWrapper";
-
-// ... (imports)
 
 interface Project {
     id: number;
@@ -58,375 +25,146 @@ interface Project {
     html_url: string;
     homepage: string | null;
     stargazers_count: number;
+    forks_count: number;
+    fork: boolean;
 }
 
-function ProjectCard({ project, isActive, index }: { project: Project; isActive: boolean; index: number }) {
-    const gradient = getProjectColor(project.language || "default");
-    const shadowColor = getShadowColor(project.language || "default");
-    const { isBlueprintMode } = useBlueprint();
-    const { isChristmasTime } = useChristmas();
-
-    if (isBlueprintMode) {
-        return (
-            <BlueprintWrapper label="MODULE_CARD" description="Project Component Unit" direction="left" className="h-full">
-                <div className="relative w-full h-full p-6 border-2 border-dashed border-white/30 bg-blue-900/20 font-mono hover:bg-blue-900/30 transition-colors">
-
-                    <div className="flex justify-between items-start mb-4 border-b border-white/20 pb-4">
-                        <BlueprintWrapper label="UID" description="Unique Identifier" direction="top">
-                            <div className="flex items-center gap-2">
-                                <Code size={16} className="text-yellow-400" />
-                                <span className="text-sm">ID: {project.id}</span>
-                            </div>
-                        </BlueprintWrapper>
-                        <div className="text-xs opacity-70">Rendered: {new Date().toLocaleTimeString()}</div>
-                    </div>
-
-                    <div className="space-y-4">
-                        <div>
-                            <span className="text-xs text-blue-300 block mb-1">{"// Project Name"}</span>
-                            <h3 className="text-xl font-bold text-white">{project.name}</h3>
-                        </div>
-
-                        <div>
-                            <span className="text-xs text-blue-300 block mb-1">{"// Description Data"}</span>
-                            <p className="text-sm text-gray-300 leading-relaxed">
-                                {project.description || "No description provided in API response."}
-                            </p>
-                        </div>
-
-                        <BlueprintWrapper label="DEPENDENCIES" description="Tech Stack Array" direction="right">
-                            <div>
-                                <span className="text-xs text-blue-300 block mb-1">{"// Tech Stack Array"}</span>
-                                <div className="flex flex-wrap gap-2">
-                                    {project.language && (
-                                        <span className="px-2 py-1 text-xs border border-white/30">
-                                            "{project.language}"
-                                        </span>
-                                    )}
-                                    {project.topics?.slice(0, 3).map((topic: string) => (
-                                        <span key={topic} className="px-2 py-1 text-xs border border-white/30">
-                                            "{topic}"
-                                        </span>
-                                    ))}
-                                </div>
-                            </div>
-                        </BlueprintWrapper>
-
-                        <div className="pt-4 border-t border-white/20">
-                            <span className="text-xs text-blue-300 block mb-2">{"// Action Handlers"}</span>
-                            <div className="flex gap-2">
-                                <div className="px-3 py-1 bg-white/10 text-xs">[Link: GitHub]</div>
-                                {project.homepage && <div className="px-3 py-1 bg-white/10 text-xs">[Link: Demo]</div>}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </BlueprintWrapper>
-        );
-    }
-
+const BentoCard = ({ project, className = "" }: { project: Project; className?: string }) => {
     return (
-        <div className="relative w-full h-full perspective-1000">
-            <motion.div
-                className={`
-                    relative w-full h-full bg-black/40 backdrop-blur-xl border border-white/10 rounded-3xl overflow-hidden
-                    transition-all duration-700 ease-out transform-style-3d
-                    ${isActive ? 'shadow-2xl scale-100 opacity-100' : 'scale-90 opacity-40 grayscale-[50%]'}
-                `}
-                style={{
-                    boxShadow: isActive ? `0 0 100px -20px ${shadowColor}` : 'none'
-                }}
-                animate={{
-                    rotateX: isActive ? 0 : 5,
-                }}
-            >
-                {/* Christmas Snow Cap */}
-                {isChristmasTime && (
-                    <div className="absolute top-0 left-0 right-0 h-4 bg-white/80 blur-sm rounded-t-3xl z-30" />
-                )}
-                {/* Dynamic Ambient Glow (Internal) */}
-                <div className={`absolute inset-0 bg-gradient-to-br ${gradient} opacity-10 mix-blend-overlay transition-opacity duration-500`} />
+        <motion.div
+            whileHover={{ y: -5, scale: 1.02 }}
+            className={`group relative overflow-hidden rounded-3xl bg-slate-900/40 border border-white/10 backdrop-blur-md p-6 lg:p-8 flex flex-col justify-between ${className}`}
+        >
+            <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 via-purple-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
-                {/* Holographic Overlay */}
-                <div className={`absolute inset-0 bg-gradient-to-tr from-white/10 via-transparent to-transparent opacity-0 transition-opacity duration-500 ${isActive ? 'opacity-100' : ''} z-20 pointer-events-none`} />
-
-                <div className="flex flex-col h-full p-6 md:p-8 relative z-10 transform-style-3d">
-                    {/* Header Layer - Parallax Depth 20px */}
-                    <div className="flex justify-between items-start mb-6 transform-style-3d translate-z-20">
-                        <div className="p-3 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md shadow-lg">
-                            <Github className="w-6 h-6 text-white" />
-                        </div>
-                        <div className="flex items-center gap-1 text-yellow-400 bg-yellow-400/10 px-3 py-1 rounded-full border border-yellow-400/20 backdrop-blur-md shadow-lg">
-                            <Star size={14} fill="currentColor" />
-                            <span className="text-sm font-bold">{project.stargazers_count}</span>
-                        </div>
+            {/* Content */}
+            <div className="relative z-10">
+                <div className="flex items-center justify-between mb-4">
+                    <div className="p-2 rounded-full bg-white/5 border border-white/10 text-indigo-400">
+                        <Github size={20} />
                     </div>
-
-                    {/* Content Layer - Parallax Depth 30px */}
-                    <div className="flex-1 transform-style-3d translate-z-30">
-                        <h3 className="text-3xl md:text-4xl font-bold mb-3 text-white tracking-tight drop-shadow-lg">
-                            {project.name}
-                        </h3>
-                        <p className="text-muted-foreground line-clamp-3 text-sm md:text-base leading-relaxed font-light">
-                            {project.description || "A cutting-edge project built with modern web technologies. Focused on performance, accessibility, and user experience."}
-                        </p>
-                    </div>
-
-                    {/* Tech Stack Layer - Parallax Depth 40px */}
-                    <div className="flex flex-wrap gap-2 mb-8 transform-style-3d translate-z-40">
-                        {project.language && (
-                            <span className={`px-3 py-1 text-xs font-bold bg-gradient-to-r ${gradient} text-white rounded-full shadow-lg`}>
-                                {project.language}
-                            </span>
-                        )}
-                        {project.topics?.slice(0, 2).map((topic: string) => (
-                            <span key={topic} className="px-3 py-1 text-xs font-medium bg-white/5 text-gray-300 border border-white/10 rounded-full backdrop-blur-sm">
-                                {topic}
-                            </span>
-                        ))}
-                    </div>
-
-                    {/* Actions Layer - Parallax Depth 50px */}
-                    <div className="flex gap-3 mt-auto transform-style-3d translate-z-50">
-                        <a
-                            href={project.html_url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex-1 flex items-center justify-center gap-2 py-3 bg-white text-black rounded-xl font-bold hover:bg-gray-200 transition-all hover:scale-105 active:scale-95 shadow-xl"
-                        >
-                            <Github size={18} />
-                            Code
-                        </a>
+                    <div className="flex gap-2">
                         {project.homepage && (
                             <a
                                 href={project.homepage}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="flex-1 flex items-center justify-center gap-2 py-3 bg-white/10 text-white rounded-xl font-bold hover:bg-white/20 transition-all hover:scale-105 active:scale-95 border border-white/10 backdrop-blur-md shadow-xl"
+                                className="p-2 rounded-full bg-white/5 hover:bg-white/20 transition-colors text-white"
                             >
-                                <Globe size={18} />
-                                Demo
+                                <ArrowUpRight size={18} />
                             </a>
                         )}
                     </div>
                 </div>
-            </motion.div>
 
-            {/* Realistic Reflection */}
-            {isActive && (
-                <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 0.4 }}
-                    transition={{ duration: 1 }}
-                    className="absolute -bottom-[20px] left-0 right-0 h-full transform-style-3d origin-bottom pointer-events-none"
-                    style={{
-                        transform: 'rotateX(180deg) scaleY(0.5) translateZ(-1px)',
-                        maskImage: 'linear-gradient(to bottom, rgba(0,0,0,1), transparent 60%)',
-                        WebkitMaskImage: 'linear-gradient(to bottom, rgba(0,0,0,1), transparent 60%)'
-                    }}
-                >
-                    <div className={`w-full h-full bg-black/40 backdrop-blur-xl border border-white/10 rounded-3xl overflow-hidden grayscale-[30%] blur-[2px]`}>
-                        <div className={`absolute inset-0 bg-gradient-to-br ${gradient} opacity-20`} />
-                    </div>
-                </motion.div>
-            )}
-        </div>
+                <h3 className="text-2xl font-bold text-white mb-2 group-hover:text-indigo-300 transition-colors">
+                    {project.name}
+                </h3>
+                <p className="text-slate-400 text-sm line-clamp-3 mb-6">
+                    {project.description || "A remarkable project built with modern web technologies."}
+                </p>
+            </div>
+
+            {/* Footer */}
+            <div className="relative z-10 mt-auto">
+                <div className="flex flex-wrap gap-2 mb-4">
+                    {project.language && (
+                        <span className="px-2 py-1 rounded-md bg-indigo-500/20 text-indigo-300 text-xs border border-indigo-500/30">
+                            {project.language}
+                        </span>
+                    )}
+                    {project.topics.slice(0, 2).map(topic => (
+                        <span key={topic} className="px-2 py-1 rounded-md bg-slate-800 text-slate-300 text-xs border border-white/5">
+                            {topic}
+                        </span>
+                    ))}
+                </div>
+
+                <div className="flex items-center gap-4 text-slate-500 text-xs font-mono border-t border-white/5 pt-4">
+                    <span className="flex items-center gap-1 hover:text-yellow-400 transition-colors">
+                        <Star size={12} /> {project.stargazers_count}
+                    </span>
+                    <span className="flex items-center gap-1 hover:text-blue-400 transition-colors">
+                        <GitFork size={12} /> {project.forks_count}
+                    </span>
+                </div>
+            </div>
+        </motion.div>
     );
-}
+};
 
 export default function FeaturedProjects() {
-    const { data, error } = useSWR<Project[]>(
+    const { data: projects } = useSWR<Project[]>(
         `https://api.github.com/users/${GITHUB_USERNAME}/repos?sort=pushed&per_page=100`,
         fetcher
     );
 
-    const [activeIndex, setActiveIndex] = useState(0);
-    const [isAutoPlaying, setIsAutoPlaying] = useState(true);
-    const containerRef = useRef<HTMLDivElement>(null);
-    const controls = useAnimation();
     const { isBlueprintMode } = useBlueprint();
 
-    const projects = Array.isArray(data)
-        ? data
-            .filter((repo) => repo.topics?.includes("featured"))
-            .slice(0, 7) // Increased limit for better carousel feel
+    // Filter and sort
+    const featured = projects && Array.isArray(projects)
+        ? projects
+            .filter(p => !p.fork) // Don't show forks usually
+            .sort((a, b) => b.stargazers_count - a.stargazers_count)
+            .slice(0, 5) // Take top 5 for the bento grid
         : [];
 
-    const displayProjects = projects.length > 0
-        ? projects
-        : (Array.isArray(data) ? [...data].sort((a, b) => b.stargazers_count - a.stargazers_count).slice(0, 7) : []);
-
-    const nextProject = () => {
-        setActiveIndex((prev) => (prev + 1) % displayProjects.length);
-    };
-
-    const prevProject = () => {
-        setActiveIndex((prev) => (prev - 1 + displayProjects.length) % displayProjects.length);
-    };
-
-    // Auto-rotation logic
-    useEffect(() => {
-        if (!isAutoPlaying || isBlueprintMode) return;
-        const interval = setInterval(nextProject, 5000);
-        return () => clearInterval(interval);
-    }, [isAutoPlaying, displayProjects.length, isBlueprintMode]);
-
-    if (error) return null;
-    if (displayProjects.length === 0) return null;
-
-    if (isBlueprintMode) {
-        return (
-            <section className="py-32 relative min-h-screen bg-[#0044cc]" id="featured">
-                <div className="container mx-auto px-4">
-                    <div className="mb-12 border-b-2 border-dashed border-white/30 pb-4">
-                        <h2 className="text-4xl font-mono font-bold text-white mb-2">&lt;SECTION: FEATURED_PROJECTS /&gt;</h2>
-                        <p className="text-yellow-300 font-mono text-sm">{"// This section dynamically fetches data from GitHub API and renders it."}</p>
-                        <p className="text-yellow-300 font-mono text-sm">{"// In standard mode, this uses a 3D carousel. Here, we see the raw grid structure."}</p>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        {displayProjects.map((project, index) => (
-                            <motion.div
-                                key={project.id}
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: index * 0.1 }}
-                                className="h-[400px]"
-                            >
-                                <ProjectCard project={project} isActive={true} index={index} />
-                            </motion.div>
-                        ))}
-                    </div>
-                </div>
-            </section>
-        );
-    }
+    if (!featured.length) return null;
 
     return (
-        <section className="py-32 relative overflow-hidden min-h-screen flex flex-col justify-center" id="featured">
-            {/* Dynamic Ambient Background */}
-            <div className="absolute inset-0 pointer-events-none transition-colors duration-1000 ease-in-out">
-                <div
-                    className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[600px] blur-[150px] rounded-full opacity-20 transition-all duration-1000"
-                    style={{
-                        background: `conic-gradient(from 0deg, ${getShadowColor(displayProjects[activeIndex]?.language || 'default')}, transparent, ${getShadowColor(displayProjects[activeIndex]?.language || 'default')})`
-                    }}
-                />
-            </div>
+        <section id="projects" className="relative py-32 bg-slate-950 overflow-hidden">
+            {/* Background elements */}
+            <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-indigo-900/50 to-transparent" />
 
-            <div className="container mx-auto px-4 relative z-10">
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    className="text-center mb-24"
-                >
-                    <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 mb-6 backdrop-blur-sm">
-                        <Zap size={16} className="text-yellow-400" />
-                        <span className="text-sm font-medium text-white/80">Interactive 3D Experience</span>
-                    </div>
-                    <h2 className="text-5xl md:text-7xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-b from-white via-white/90 to-white/40 tracking-tighter">
-                        Featured Work
-                    </h2>
-                    <p className="text-muted-foreground text-lg md:text-xl max-w-2xl mx-auto font-light">
-                        Swipe to explore a curated selection of my most ambitious projects.
-                    </p>
-                </motion.div>
-
-                <div
-                    className="relative h-[600px] w-full max-w-6xl mx-auto perspective-1000"
-                    onMouseEnter={() => setIsAutoPlaying(false)}
-                    onMouseLeave={() => setIsAutoPlaying(true)}
-                >
-                    <div className="absolute inset-0 flex items-center justify-center transform-style-3d">
-                        <AnimatePresence mode="popLayout">
-                            {displayProjects.map((project, index) => {
-                                // Calculate offset from active index
-                                let offset = index - activeIndex;
-                                // Handle wrap-around for infinite feel logic (visual only here)
-                                if (offset < -3) offset += displayProjects.length;
-                                if (offset > 3) offset -= displayProjects.length;
-
-                                // Only render visible cards (active + 3 neighbors)
-                                if (Math.abs(offset) > 3) return null;
-
-                                const isActive = offset === 0;
-
-                                return (
-                                    <motion.div
-                                        key={project.id}
-                                        layout
-                                        initial={{ opacity: 0, scale: 0.8, z: -200 }}
-                                        animate={{
-                                            opacity: isActive ? 1 : Math.max(0.2, 1 - Math.abs(offset) * 0.3),
-                                            scale: isActive ? 1 : Math.max(0.6, 1 - Math.abs(offset) * 0.15),
-                                            z: isActive ? 100 : -100 - Math.abs(offset) * 100,
-                                            x: `${offset * 55}%`,
-                                            rotateY: offset * -25,
-                                            zIndex: 100 - Math.abs(offset)
-                                        }}
-                                        exit={{ opacity: 0, scale: 0.8, z: -200 }}
-                                        transition={{
-                                            duration: 0.8,
-                                            type: "spring",
-                                            stiffness: 120,
-                                            damping: 20,
-                                            mass: 1.2
-                                        }}
-                                        className="absolute w-[340px] md:w-[420px] h-[550px] origin-center cursor-grab active:cursor-grabbing transform-style-3d"
-                                        drag="x"
-                                        dragConstraints={{ left: 0, right: 0 }}
-                                        onDragEnd={(e, { offset, velocity }) => {
-                                            const swipe = offset.x;
-                                            if (swipe < -50 || velocity.x < -500) {
-                                                nextProject();
-                                            } else if (swipe > 50 || velocity.x > 500) {
-                                                prevProject();
-                                            }
-                                        }}
-                                    >
-                                        <ProjectCard project={project} isActive={isActive} index={index} />
-                                    </motion.div>
-                                );
-                            })}
-                        </AnimatePresence>
-                    </div>
-
-                    {/* Navigation Controls */}
-                    <div className="absolute top-1/2 -translate-y-1/2 left-4 md:-left-16 z-50 pointer-events-none md:pointer-events-auto">
-                        <button
-                            onClick={prevProject}
-                            className="p-4 rounded-full bg-white/5 border border-white/10 text-white hover:bg-white/20 hover:scale-110 transition-all backdrop-blur-md shadow-2xl pointer-events-auto"
-                            aria-label="Previous Project"
+            <div className="container mx-auto px-4">
+                <BlueprintWrapper label="SECTION_PROJECTS" description="Featured Works Display" direction="left">
+                    <div className="mb-20">
+                        <motion.h2
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            className="text-5xl md:text-7xl font-bold font-heading text-white tracking-tighter mb-6"
                         >
-                            <ChevronLeft size={32} />
-                        </button>
+                            Selected <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-cyan-400">Works</span>
+                        </motion.h2>
+                        <p className="text-xl text-slate-400 max-w-2xl">
+                            A showcase of technical excellence and creative problem solving.
+                        </p>
                     </div>
-                    <div className="absolute top-1/2 -translate-y-1/2 right-4 md:-right-16 z-50 pointer-events-none md:pointer-events-auto">
-                        <button
-                            onClick={nextProject}
-                            className="p-4 rounded-full bg-white/5 border border-white/10 text-white hover:bg-white/20 hover:scale-110 transition-all backdrop-blur-md shadow-2xl pointer-events-auto"
-                            aria-label="Next Project"
-                        >
-                            <ChevronRight size={32} />
-                        </button>
-                    </div>
+                </BlueprintWrapper>
+
+                {/* Bento Grid layout */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[400px]">
+                    {/* Large Featured Card (First item) */}
+                    {featured[0] && (
+                        <div className="md:col-span-2 md:row-span-1">
+                            <BentoCard project={featured[0]} className="h-full bg-gradient-to-br from-indigo-900/20 to-slate-900/50" />
+                        </div>
+                    )}
+
+                    {/* Side Cards */}
+                    {featured[1] && <BentoCard project={featured[1]} />}
+                    {featured[2] && <BentoCard project={featured[2]} />}
+
+                    {/* Bottom Wide Card */}
+                    {featured[3] && (
+                        <div className="md:col-span-2">
+                            <BentoCard project={featured[3]} />
+                        </div>
+                    )}
+                    {featured[4] && <BentoCard project={featured[4]} />}
                 </div>
 
-                {/* Pagination Indicators */}
-                <div className="flex justify-center gap-3 mt-4">
-                    {displayProjects.map((_, idx) => (
-                        <button
-                            key={idx}
-                            onClick={() => setActiveIndex(idx)}
-                            className={`h-1.5 rounded-full transition-all duration-500 ${idx === activeIndex ? 'w-12 bg-white shadow-[0_0_10px_white]' : 'w-2 bg-white/20 hover:bg-white/40'
-                                }`}
-                            aria-label={`Go to project ${idx + 1}`}
-                        />
-                    ))}
+                <div className="mt-12 text-center">
+                    <a
+                        href={`https://github.com/${GITHUB_USERNAME}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white/5 border border-white/10 text-white hover:bg-white/10 transition-colors"
+                    >
+                        View all repositories <ExternalLink size={16} />
+                    </a>
                 </div>
             </div>
         </section>
-
     );
 }

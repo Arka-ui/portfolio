@@ -1,18 +1,27 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Outfit, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import RootContent from "@/components/RootContent";
+import ScrollManager from "@/components/ScrollManager";
 
-const inter = Inter({
+// Primary Heading Font
+const outfit = Outfit({
   subsets: ["latin"],
-  variable: "--font-inter",
+  variable: "--font-outfit",
+  display: "swap",
+});
+
+// Body Font
+const jakarta = Plus_Jakarta_Sans({
+  subsets: ["latin"],
+  variable: "--font-jakarta",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
   title: "Arka | Full Stack Developer",
-  description: "Portfolio of Arka, a passionate Full Stack Developer.",
+  description: "Creating premium digital experiences.",
 };
-
 
 export default function RootLayout({
   children,
@@ -21,7 +30,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="scroll-smooth">
-      <body className={`${inter.variable} antialiased bg-background text-foreground`}>
+      <body className={`${jakarta.variable} ${outfit.variable} antialiased bg-background text-foreground overflow-x-hidden`}>
+        <ScrollManager />
         <RootContent>{children}</RootContent>
       </body>
     </html>
