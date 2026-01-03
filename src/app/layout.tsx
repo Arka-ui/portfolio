@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
 import { Outfit, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
-import RootContent from "@/components/RootContent";
-import ScrollManager from "@/components/ScrollManager";
+import RootContent from "@/components/layout/RootContent";
+import ScrollManager from "@/components/layout/ScrollManager";
 import { WarpProvider } from "@/context/WarpContext";
 import { BlueprintProvider } from "@/context/BlueprintContext";
 import { LanguageProvider } from "@/context/LanguageContext";
 import KineticBlur from "@/components/ui/KineticBlur";
-import CommandPalette from "@/components/CommandPalette";
+import CommandPalette from "@/components/features/CommandPalette";
 
 // Primary Heading Font
 const outfit = Outfit({
@@ -24,8 +24,48 @@ const jakarta = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Arka | Full Stack Developer",
-  description: "Creating premium digital experiences.",
+  title: "Arka | Creative Full Stack Developer",
+  description: "Creative Developer specializing in building premium digital experiences, modern web applications, and immersive user interfaces.",
+  applicationName: "Arka Portfolio",
+  authors: [{ name: "Arka", url: "https://arka.is-a.dev" }],
+  keywords: ["Arka", "Portfolio", "Full Stack Developer", "Web Developer", "React", "Next.js", "Creative Developer", "UI/UX Design"],
+  creator: "Arka",
+  publisher: "Arka",
+  metadataBase: new URL("https://arka.is-a.dev"),
+  openGraph: {
+    title: "Arka | Creative Full Stack Developer",
+    description: "Creative Developer specializing in building premium digital experiences, modern web applications, and immersive user interfaces.",
+    url: "https://arka.is-a.dev",
+    siteName: "Arka Portfolio",
+    locale: "en_US",
+    type: "website",
+    images: [
+      {
+        url: "/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Arka Portfolio Preview",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Arka | Creative Full Stack Developer",
+    description: "Check out my portfolio featuring my latest full stack web projects.",
+    creator: "@arka_dev",
+    images: ["/og-image.jpg"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
 };
 
 export default function RootLayout({

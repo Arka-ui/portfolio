@@ -8,7 +8,7 @@ import { Home, User, Briefcase, Mail, Terminal, Menu, X, Cpu, Search, Command } 
 import { useBlueprint } from "@/context/BlueprintContext";
 import QuantumDock from "@/components/ui/QuantumDock";
 import SpectralBorder from "@/components/ui/SpectralBorder";
-import LanguageSelector from "@/components/LanguageSelector";
+import LanguageSelector from "@/components/features/LanguageSelector";
 import SystemTicker from "@/components/ui/SystemTicker"; // Import HUD
 import { cn } from "@/lib/utils";
 import { useLanyard } from "@/hooks/useLanyard";
