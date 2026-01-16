@@ -62,11 +62,11 @@ export default function ProjectCarousel({ projects }: { projects: Project[] }) {
                         animate={{ scale: 1, opacity: 1, y: 0, zIndex: 10 }}
                         exit={{ scale: 0.9, opacity: 0, y: -20, zIndex: 0 }}
                         transition={{ duration: 0.4 }}
-                        className="relative bg-slate-900/80 backdrop-blur-xl border border-white/10 rounded-3xl overflow-hidden shadow-2xl"
+                        className="relative bg-slate-900/90 backdrop-blur-md border border-white/10 rounded-3xl overflow-hidden shadow-xl will-change-transform"
                     >
                         {/* Card Header Image/Gradient */}
                         <div className="h-32 bg-gradient-to-br from-indigo-600/30 to-purple-600/30 relative overflow-hidden">
-                            <div className="absolute inset-0 bg-[url('/noise.png')] opacity-20 mix-blend-overlay" />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
                             <div className="absolute top-4 right-4 flex gap-3">
                                 <a
                                     href={activeProject.html_url}

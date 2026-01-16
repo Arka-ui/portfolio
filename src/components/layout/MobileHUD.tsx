@@ -34,14 +34,16 @@ export default function MobileHUD() {
             for (const section of sections) {
                 const el = document.getElementById(section);
                 if (el) {
-                    const offset = el.offsetTop;
-                    const height = el.offsetHeight;
-                    if (scrollPos >= offset && scrollPos < offset + height) {
+                    const rect = el.getBoundingClientRect();
+                    // Simple check if top of section is near middle of viewport
+                    if (rect.top <= window.innerHeight / 2 && rect.bottom >= window.innerHeight / 2) {
                         setActiveTab(section === "hero" ? "home" : section);
+                        break; // Stop after finding the first match
                     }
                 }
             }
         };
+        // Throttle could be added here, but break helps.
         window.addEventListener("scroll", handleSpy);
         return () => window.removeEventListener("scroll", handleSpy);
     }, []);
@@ -64,7 +66,7 @@ export default function MobileHUD() {
             initial={{ y: 100 }}
             animate={{ y: 0 }}
             transition={{ type: "spring", stiffness: 260, damping: 20, delay: 1 }}
-            className="fixed bottom-6 left-4 right-4 h-16 bg-slate-950/80 backdrop-blur-xl border border-white/10 rounded-2xl flex items-center justify-between px-2 shadow-2xl z-50 md:hidden"
+            className="fixed bottom-6 left-4 right-4 h-16 bg-slate-950/90 backdrop-blur-md border border-white/10 rounded-2xl flex items-center justify-between px-2 shadow-lg z-50 md:hidden will-change-transform"
         >
             {/* Glossy overlay */}
             <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-white/5 to-transparent pointer-events-none" />
