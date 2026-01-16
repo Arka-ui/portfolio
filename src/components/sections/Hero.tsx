@@ -38,7 +38,7 @@ export default function Hero() {
                         </div>
                     </BlueprintWrapper>
 
-                    <h1 className="font-heading font-black text-6xl md:text-8xl lg:text-9xl tracking-tighter mb-8 leading-[0.9]">
+                    <h1 className="font-heading font-black text-5xl md:text-8xl lg:text-9xl tracking-tighter mb-8 leading-[0.9]">
                         <div className="overflow-hidden">
                             <motion.span
                                 initial={{ y: 100 }}

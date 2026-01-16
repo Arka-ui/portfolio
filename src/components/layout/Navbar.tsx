@@ -240,7 +240,7 @@ export default function Navbar() {
             <div className="md:hidden fixed top-4 right-4 z-50">
                 <button
                     onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                    className="p-3 rounded-full bg-slate-900/80 backdrop-blur-xl border border-white/10 text-white shadow-lg active:scale-95 transition-transform"
+                    className="p-3 rounded-full bg-slate-900/80 backdrop-blur-md border border-white/10 text-white shadow-lg active:scale-95 transition-transform"
                 >
                     {mobileMenuOpen ? <X /> : <Menu />}
                 </button>
@@ -252,7 +252,7 @@ export default function Navbar() {
                         initial={{ opacity: 0, y: -20, scale: 0.95 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: -20, scale: 0.95 }}
-                        className="fixed inset-4 z-40 bg-slate-950/95 backdrop-blur-2xl border border-white/10 rounded-3xl p-6 flex flex-col justify-center gap-6 shadow-2xl md:hidden"
+                        className="fixed inset-4 z-40 bg-slate-950/95 backdrop-blur-md border border-white/10 rounded-3xl p-6 flex flex-col justify-center gap-6 shadow-2xl md:hidden"
                     >
                         {navItems.map((item) => (
                             <button

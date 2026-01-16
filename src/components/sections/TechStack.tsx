@@ -72,7 +72,7 @@ export default function TechStack() {
     const uniqueTools = Array.from(new Set(tools)).filter(tool => !languages.includes(tool as string));
 
     return (
-        <section className="py-32 container mx-auto px-4 relative" id="skills">
+        <section className="py-20 md:py-32 container mx-auto px-4 relative" id="skills">
             <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/5 to-transparent pointer-events-none" />
 
             <motion.div
@@ -89,7 +89,7 @@ export default function TechStack() {
                 </p>
             </motion.div>
 
-            <div className="grid md:grid-cols-2 gap-16 max-w-6xl mx-auto relative z-10">
+            <div className="grid md:grid-cols-2 gap-10 md:gap-16 max-w-6xl mx-auto relative z-10">
                 {/* Languages Section */}
                 <div>
                     <motion.div

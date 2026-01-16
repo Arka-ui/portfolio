@@ -37,7 +37,7 @@ export default function KineticBlur() {
 
     return (
         <motion.div
-            className="pointer-events-none fixed inset-0 z-[40]"
+            className="hidden md:block pointer-events-none fixed inset-0 z-[40]"
             style={{
                 backdropFilter: useTransform(smoothBlur, (v) => `blur(${v}px)`),
                 WebkitBackdropFilter: useTransform(smoothBlur, (v) => `blur(${v}px)`),
