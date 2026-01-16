@@ -11,6 +11,7 @@ import ChristmasTheme from "@/components/ChristmasTheme";
 import SystemFailure from "@/components/ui/SystemFailure";
 import Preloader from "@/components/ui/Preloader";
 import { useSystemTelemetry } from "@/lib/sys-core";
+import MobileHUD from "@/components/layout/MobileHUD";
 
 export default function RootContent({ children }: { children: React.ReactNode }) {
     const health = useSystemTelemetry();
@@ -28,7 +29,8 @@ export default function RootContent({ children }: { children: React.ReactNode })
             <BlueprintGrid />
             <InteractiveBackground />
             <Navbar />
-            <main className="min-h-screen pt-16">
+            <MobileHUD />
+            <main className="min-h-screen pt-16 pb-24 md:pb-0">
                 {children}
             </main>
             <Footer />

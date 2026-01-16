@@ -236,55 +236,18 @@ export default function Navbar() {
                 </div>
             </motion.div>
 
-            {/* Mobile Menu (Simplified) */}
+            {/* Mobile Menu Replaced by MobileHUD */}
+            <div className="md:hidden fixed top-4 right-4 z-50 pointer-events-none opacity-0">
+                {/* Kept mainly to not break layout if something relied on it, but effectively hidden */}
+                {/* Could also just add Language Selector here explicitly if needed */}
+            </div>
+            {/* Language Selector for Mobile (Top Right) */}
             <div className="md:hidden fixed top-4 right-4 z-50">
-                <button
-                    onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                    className="p-3 rounded-full bg-slate-900/80 backdrop-blur-md border border-white/10 text-white shadow-lg active:scale-95 transition-transform"
-                >
-                    {mobileMenuOpen ? <X /> : <Menu />}
-                </button>
+                <LanguageSelector />
             </div>
 
             <AnimatePresence>
-                {mobileMenuOpen && (
-                    <motion.div
-                        initial={{ opacity: 0, y: -20, scale: 0.95 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: -20, scale: 0.95 }}
-                        className="fixed inset-4 z-40 bg-slate-950/95 backdrop-blur-md border border-white/10 rounded-3xl p-6 flex flex-col justify-center gap-6 shadow-2xl md:hidden"
-                    >
-                        {navItems.map((item) => (
-                            <button
-                                key={item.title}
-                                onClick={() => {
-                                    setMobileMenuOpen(false);
-                                    warpTo(item.href);
-                                }}
-                                className="flex items-center gap-4 text-2xl font-medium text-slate-300 active:text-white"
-                            >
-                                <div className="p-3 rounded-xl bg-white/5">
-                                    {item.icon}
-                                </div>
-                                {item.title}
-                            </button>
-                        ))}
-                        <div className="h-px bg-white/10 w-full my-2" />
-                        <div className="flex justify-between items-center">
-                            <span className="text-sm text-slate-400">Settings</span>
-                            <button
-                                onClick={toggleBlueprintMode}
-                                className={cn(
-                                    "p-2 rounded-lg border",
-                                    isBlueprintMode ? "bg-amber-500/20 border-amber-500 text-amber-400" : "bg-white/5 border-transparent text-slate-300"
-                                )}
-                            >
-                                <Terminal size={20} />
-                            </button>
-                        </div>
-                        <LanguageSelector />
-                    </motion.div>
-                )}
+                {/* Mobile Menu Removed */}
             </AnimatePresence>
         </>
     );

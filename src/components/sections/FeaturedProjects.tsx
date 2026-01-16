@@ -5,6 +5,7 @@ import { ExternalLink, Github, Star, GitFork, ArrowUpRight } from "lucide-react"
 import useSWR from "swr";
 import BlueprintWrapper from "@/components/BlueprintWrapper";
 import { useLanguage } from "@/context/LanguageContext";
+import ProjectCarousel from "@/components/features/ProjectCarousel";
 
 const GITHUB_USERNAME = "Arka-ui";
 
@@ -131,8 +132,11 @@ export default function FeaturedProjects() {
                     </div>
                 </BlueprintWrapper>
 
-                {/* Bento Grid layout */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[400px]">
+                {/* Mobile: 3D Swipe Carousel */}
+                <ProjectCarousel projects={featured} />
+
+                {/* Desktop: Bento Grid layout */}
+                <div className="hidden md:grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[400px]">
                     {/* Large Featured Card (First item) */}
                     {featured[0] && (
                         <div className="md:col-span-2 md:row-span-1">

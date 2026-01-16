@@ -8,10 +8,12 @@ import BlueprintWrapper from "@/components/BlueprintWrapper";
 import MagneticButton from "@/components/ui/MagneticButton";
 import GlitchText from "@/components/ui/GlitchText";
 import { useLanguage } from "@/context/LanguageContext";
+import { useHaptics } from "@/hooks/useHaptics";
 
 export default function Hero() {
     const config = useOptimizationConfig();
     const { t } = useLanguage();
+    const { triggerHaptic } = useHaptics();
 
     return (
         <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20" id="hero">
@@ -69,6 +71,7 @@ export default function Hero() {
                         <MagneticButton>
                             <Link
                                 href="#projects"
+                                onClick={() => triggerHaptic("medium")}
                                 className="relative group px-8 py-4 bg-white text-black rounded-full font-bold text-lg transition-all hover:shadow-[0_0_40px_-5px_rgba(255,255,255,0.3)] flex items-center gap-2 overflow-hidden"
                             >
                                 <span className="relative z-10">{t("hero.cta_projects")}</span>
@@ -80,6 +83,7 @@ export default function Hero() {
                         <MagneticButton>
                             <Link
                                 href="#contact"
+                                onClick={() => triggerHaptic("light")}
                                 className="group px-8 py-4 bg-transparent border border-white/10 text-white rounded-full font-medium text-lg transition-all hover:bg-white/5 backdrop-blur-sm"
                             >
                                 {t("hero.cta_contact")}
