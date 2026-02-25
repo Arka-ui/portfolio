@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 const STATS = [
     { value: "3+", label: "Years building" },
     { value: "15+", label: "Projects shipped" },
-    { value: "iOS", label: "City Hall intern" },
+    { value: "OSS", label: "Open-source first" },
     { value: "4", label: "Languages spoken" },
 ];
 
@@ -40,14 +40,19 @@ export default function About() {
                     >
                         <div className="space-y-4">
                             <p className="text-[17px] text-white/60 leading-relaxed">
-                                I&apos;m Arka — a full-stack developer based in France. I build web applications,
-                                iOS apps, and digital products with a focus on clean code and interfaces
-                                that feel right.
+                                I&apos;m Arka — a full-stack developer based in France. I build web
+                                applications and digital products with a focus on clean code and
+                                interfaces that feel right.
                             </p>
                             <p className="text-[17px] text-white/60 leading-relaxed">
-                                Co-founder of EclozionMC. Interned as an iOS developer at Cambrai City Hall
-                                where I shipped a Swift news app. Self-taught since 2023, constantly
-                                learning and pushing forward.
+                                Co-founder of EclozionMC — and the one who actually cared about the project.
+                                I believe if a service can be free, it should be free and open-source for
+                                everyone. Software, tools, access — no paywalls. If you have to pay,
+                                you pay only for the infrastructure: servers, hosting, maintenance.
+                                Never for access itself.
+                            </p>
+                            <p className="text-[17px] text-white/60 leading-relaxed">
+                                Self-taught since 2023, always building, always pushing forward.
                             </p>
                         </div>
 

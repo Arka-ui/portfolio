@@ -33,7 +33,7 @@ export default function Footer() {
                             href="mailto:hello@arka.dev"
                             className="inline-flex items-center gap-2 mt-2 text-indigo-400 hover:text-indigo-300 transition-colors text-sm font-mono"
                         >
-                            hello@arka.dev â†’
+                            hello@arka.dev →
                         </a>
                     </div>
 
@@ -74,7 +74,7 @@ export default function Footer() {
 
                 <div className="flex flex-col md:flex-row items-center justify-between pt-8 border-t border-white/[0.06] gap-4">
                     <p className="text-xs text-white/20 font-mono">
-                        Â© {new Date().getFullYear()} Arka. All rights reserved.
+                        © {new Date().getFullYear()} Arka. All rights reserved.
                     </p>
 
                     <div className="flex items-center gap-4">

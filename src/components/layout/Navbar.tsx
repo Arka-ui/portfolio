@@ -1,131 +1,154 @@
 ﻿"use client";
 
-import { useState, useEffect, ReactNode } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Home, User, Briefcase, Mail, Search } from "lucide-react";
-import QuantumDock from "@/components/ui/QuantumDock";
-import SpectralBorder from "@/components/ui/SpectralBorder";
+import { Search, Menu, X } from "lucide-react";
 import LanguageSelector from "@/components/features/LanguageSelector";
 import { cn } from "@/lib/utils";
 import { useWarp } from "@/context/WarpContext";
-import { useLanguage } from "@/context/LanguageContext";
+
+const NAV_ITEMS = [
+    { label: "Home",     href: "#",           id: "hero"        },
+    { label: "About",    href: "#about-intro", id: "about-intro" },
+    { label: "Work",     href: "#projects",    id: "projects"    },
+    { label: "Contact",  href: "#contact",     id: "contact"     },
+];
 
 export default function Navbar() {
-    const { t } = useLanguage();
-
-    const navItems: { title: string; icon: ReactNode; href: string }[] = [
-        { title: t("nav.home"), icon: <Home className="w-5 h-5" />, href: "#" },
-        { title: t("nav.about"), icon: <User className="w-5 h-5" />, href: "#about" },
-        { title: t("nav.projects"), icon: <Briefcase className="w-5 h-5" />, href: "#projects" },
-        { title: t("nav.contact"), icon: <Mail className="w-5 h-5" />, href: "#contact" },
-    ];
-
-    const [scrolled, setScrolled] = useState(false);
-    const [mounted, setMounted] = useState(false);
+    const [scrolled, setScrolled]       = useState(false);
+    const [mounted, setMounted]         = useState(false);
+    const [mobileOpen, setMobileOpen]   = useState(false);
+    const [activeSection, setActiveSection] = useState("hero");
     const { warpTo } = useWarp();
-    const [activeSection, setActiveSection] = useState("Home");
 
     useEffect(() => {
         setMounted(true);
-        const handleScroll = () => setScrolled(window.scrollY > 50);
-        window.addEventListener("scroll", handleScroll);
-        return () => window.removeEventListener("scroll", handleScroll);
+        const onScroll = () => setScrolled(window.scrollY > 60);
+        window.addEventListener("scroll", onScroll, { passive: true });
+        return () => window.removeEventListener("scroll", onScroll);
     }, []);
 
-    // Scroll spy
     useEffect(() => {
-        const handleScroll = () => {
+        const onScroll = () => {
             const mid = window.innerHeight / 2;
-            const sections = document.querySelectorAll("section[id]");
-            let current = t("nav.home");
-            sections.forEach(sec => {
+            let current = "hero";
+            document.querySelectorAll("section[id]").forEach(sec => {
                 const rect = sec.getBoundingClientRect();
-                if (rect.top <= mid && rect.bottom >= mid) {
-                    const id = sec.id;
-                    if (id === "hero") current = t("nav.home");
-                    else if (id === "about" || id === "about-intro") current = t("nav.about");
-                    else if (id === "projects") current = t("nav.projects");
-                    else if (id === "contact") current = t("nav.contact");
-                }
+                if (rect.top <= mid && rect.bottom >= mid) current = sec.id;
             });
-            if (window.scrollY < 100) current = t("nav.home");
+            if (window.scrollY < 100) current = "hero";
             setActiveSection(current);
         };
-        window.addEventListener("scroll", handleScroll);
-        handleScroll();
-        return () => window.removeEventListener("scroll", handleScroll);
-    }, [t]);
+        window.addEventListener("scroll", onScroll, { passive: true });
+        onScroll();
+        return () => window.removeEventListener("scroll", onScroll);
+    }, []);
 
-    const openCommandPalette = () => {
+    const openCmdPalette = () =>
         document.dispatchEvent(new KeyboardEvent("keydown", { key: "k", metaKey: true }));
-    };
 
     if (!mounted) return null;
 
     return (
         <>
-            {/* Desktop dock */}
-            <motion.div
-                initial={{ y: -80, opacity: 0 }}
+            <motion.header
+                initial={{ y: -20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
-                transition={{ type: "spring", stiffness: 90, damping: 20, delay: 0.3 }}
-                className="fixed top-6 left-0 right-0 z-50 hidden md:flex justify-center pointer-events-none"
+                transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                className={cn(
+                    "fixed top-0 left-0 right-0 z-50 transition-all duration-500",
+                    scrolled
+                        ? "bg-[#080808]/90 backdrop-blur-xl border-b border-white/[0.06]"
+                        : "bg-transparent"
+                )}
             >
-                <div className="pointer-events-auto flex items-center gap-3">
+                <div className="container mx-auto px-6 md:px-12">
+                    <div className="flex items-center justify-between h-16 md:h-20">
 
-                    {/* Logo */}
-                    <button
-                        onClick={() => warpTo("#")}
-                        className={cn(
-                            "h-14 px-5 rounded-2xl bg-[#0e0e0e]/80 backdrop-blur-2xl border border-white/[0.07] flex items-center transition-all duration-300",
-                            scrolled ? "scale-90" : "scale-100"
-                        )}
-                    >
-                        <span className="font-heading font-black text-lg tracking-tighter text-white">
+                        {/* Logo */}
+                        <button
+                            onClick={() => warpTo("#")}
+                            className="font-heading font-black text-xl tracking-tighter text-white hover:text-indigo-300 transition-colors duration-200"
+                        >
                             Arka<span className="text-indigo-400">.</span>
-                        </span>
-                    </button>
+                        </button>
 
-                    {/* Main dock */}
-                    <SpectralBorder className="rounded-2xl">
-                        <QuantumDock
-                            items={navItems}
-                            activeTab={activeSection}
-                            onWarp={(href) => warpTo(href)}
-                            className={cn(
-                                "transition-all duration-300",
-                                scrolled ? "scale-90 bg-[#0e0e0e]/90" : "scale-100"
-                            )}
-                        />
-                    </SpectralBorder>
+                        {/* Desktop nav */}
+                        <nav className="hidden md:flex items-center gap-8">
+                            {NAV_ITEMS.map((item) => {
+                                const active = activeSection === item.id;
+                                return (
+                                    <button
+                                        key={item.href}
+                                        onClick={() => warpTo(item.href)}
+                                        className={cn(
+                                            "relative text-sm font-medium transition-colors duration-200 py-1",
+                                            active ? "text-white" : "text-white/40 hover:text-white/75"
+                                        )}
+                                    >
+                                        {item.label}
+                                        {active && (
+                                            <motion.span
+                                                layoutId="nav-underline"
+                                                className="absolute bottom-0 left-0 right-0 h-px bg-indigo-400"
+                                            />
+                                        )}
+                                    </button>
+                                );
+                            })}
+                        </nav>
 
-                    {/* âŒ˜K */}
-                    <button
-                        onClick={openCommandPalette}
-                        className={cn(
-                            "group flex items-center gap-2 h-14 px-4 rounded-2xl bg-[#0e0e0e]/80 backdrop-blur-2xl border border-white/[0.07] transition-all duration-300 hover:border-white/15 hover:bg-white/[0.06]",
-                            scrolled ? "scale-90" : "scale-100"
-                        )}
-                    >
-                        <Search className="w-4 h-4 text-white/40 group-hover:text-white/70 transition-colors" />
-                        <kbd className="hidden lg:flex items-center gap-0.5 text-[11px] font-mono text-white/25 group-hover:text-white/40 transition-colors">
-                            <span>âŒ˜</span>K
-                        </kbd>
-                    </button>
-
-                    {/* Language */}
-                    <div className={cn("transition-all duration-300", scrolled ? "scale-90" : "scale-100")}>
-                        <LanguageSelector />
+                        {/* Right actions */}
+                        <div className="flex items-center gap-2">
+                            <button
+                                onClick={openCmdPalette}
+                                aria-label="Open command palette"
+                                className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/[0.04] border border-white/[0.07] hover:bg-white/[0.08] hover:border-white/15 transition-all text-white/40 hover:text-white/70"
+                            >
+                                <Search className="w-3.5 h-3.5" />
+                                <kbd className="text-[11px] font-mono">⌘K</kbd>
+                            </button>
+                            <LanguageSelector />
+                            <button
+                                onClick={() => setMobileOpen(v => !v)}
+                                aria-label="Toggle menu"
+                                className="md:hidden p-2 text-white/50 hover:text-white transition-colors"
+                            >
+                                {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+                            </button>
+                        </div>
                     </div>
                 </div>
-            </motion.div>
+            </motion.header>
 
-            {/* Mobile: language selector top-right */}
-            <div className="md:hidden fixed top-4 right-4 z-50">
-                <LanguageSelector />
-            </div>
-
-            <AnimatePresence />
+            {/* Mobile dropdown */}
+            <AnimatePresence>
+                {mobileOpen && (
+                    <motion.div
+                        key="mobile-menu"
+                        initial={{ opacity: 0, y: -8 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -8 }}
+                        transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+                        className="fixed top-16 left-0 right-0 z-40 bg-[#0a0a0a]/96 backdrop-blur-xl border-b border-white/[0.06] md:hidden"
+                    >
+                        <nav className="container mx-auto px-6 py-6 flex flex-col gap-0">
+                            {NAV_ITEMS.map((item) => (
+                                <button
+                                    key={item.href}
+                                    onClick={() => { warpTo(item.href); setMobileOpen(false); }}
+                                    className={cn(
+                                        "text-left py-4 text-base font-medium transition-colors duration-200 border-b border-white/[0.04] last:border-0",
+                                        activeSection === item.id ? "text-white" : "text-white/40 hover:text-white/75"
+                                    )}
+                                >
+                                    {item.label}
+                                </button>
+                            ))}
+                        </nav>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </>
     );
 }

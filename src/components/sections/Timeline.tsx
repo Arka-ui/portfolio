@@ -17,17 +17,17 @@ const EXPERIENCE: ExperienceItem[] = [
         type: "work",
         title: "Owner & Co-founder",
         company: "EclozionMC",
-        period: "Oct 2025 â€” Present",
+        period: "Oct 2025 — Present",
         description: "Building a Minecraft server platform with my co-founder Nexos. Responsible for the website, infrastructure, and overall product direction.",
-        tag: "Java Â· Web",
+        tag: "Java · Web",
     },
     {
         type: "work",
-        title: "iOS App Developer",
-        company: "Cambrai City Hall â€” Internship",
+        title: "App Developer",
+        company: "Cambrai City Hall — Internship",
         period: "Jun 2025",
-        description: "Designed and shipped a native Swift news application for the city of Cambrai. Handled the full cycle from wireframes to App Store submission.",
-        tag: "Swift Â· iOS",
+        description: "Designed and shipped a native news application for the city of Cambrai. Handled the full development cycle from wireframes to final build.",
+        tag: "Java · Kotlin",
     },
     {
         type: "project",
@@ -51,7 +51,7 @@ const EXPERIENCE: ExperienceItem[] = [
         company: "Start of the journey",
         period: "Early 2023",
         description: "Started with HTML and CSS. Grew into TypeScript, React, Next.js and full-stack development through relentless building.",
-        tag: "HTML Â· CSS Â· JS",
+        tag: "HTML · CSS · JS",
     },
 ];
 

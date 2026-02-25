@@ -71,13 +71,13 @@ export default function Contact() {
                                 </div>
                                 <div>
                                     <span className="label-mono text-[10px] mb-0.5 block">Location</span>
-                                    <span className="text-sm text-white/70">France â€” available remotely</span>
+                                    <span className="text-sm text-white/70">France — available remotely</span>
                                 </div>
                             </div>
                         </div>
                     </motion.div>
 
-                    {/* Right â€” form */}
+                    {/* Right — form */}
                     <motion.div
                         initial={{ opacity: 0, y: 24 }}
                         whileInView={{ opacity: 1, y: 0 }}

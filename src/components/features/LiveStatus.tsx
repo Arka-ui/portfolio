@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { Music, Code, User, Monitor, Smartphone, Globe, ExternalLink, Gamepad2 } from "lucide-react";
@@ -219,149 +219,146 @@ export default function LiveStatus() {
                         What I&apos;m doing
                     </h2>
                 </div>
-            </div>
-            <div className="container mx-auto px-6 md:px-12 perspective-1000">
-            <motion.div
-                style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
-                onMouseMove={handleMouseMove}
-                onMouseLeave={handleMouseLeave}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                className="bg-white/[0.03] backdrop-blur-xl border border-white/[0.07] rounded-3xl p-8 w-full max-w-lg mx-auto relative overflow-hidden group shadow-2xl hover:shadow-indigo-500/10 transition-shadow duration-500"
-            >
-                {/* Iridescent Border Glow */}
-                <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-transparent to-accent/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
 
-                {/* Header */}
-                <div className="relative z-10 flex items-center gap-6 mb-8 transform-gpu translate-z-10">
-                    <div className="relative">
-                        <div className="relative w-24 h-24">
-                            {discord_user.avatar ? (
-                                <Image
-                                    src={`https://cdn.discordapp.com/avatars/${discord_user.id}/${discord_user.avatar}.png`}
-                                    alt="Avatar"
-                                    fill
-                                    className="rounded-full border-4 border-card shadow-lg"
-                                />
-                            ) : (
-                                <div className="w-full h-full rounded-full bg-muted flex items-center justify-center border-4 border-card">
-                                    <User className="w-10 h-10 text-muted-foreground" />
-                                </div>
-                            )}
-                            {/* Status Pulse */}
-                            <div className={`absolute bottom-1 right-1 w-6 h-6 rounded-full border-4 border-card ${statusColor} z-20`}>
-                                <div className={`absolute inset-0 rounded-full ${statusColor} animate-ping opacity-75`} />
-                            </div>
-                        </div>
-                    </div>
-                    <div>
-                        <h3 className="font-bold text-3xl text-white tracking-tight">{discord_user.global_name || discord_user.username}</h3>
-                        <p className="text-base text-muted-foreground font-medium">@{discord_user.username}</p>
-                        <div className="flex items-center gap-3 mt-2">
-                            <span className="text-xs px-3 py-1 rounded-full bg-white/5 capitalize border border-white/5 font-medium text-white/80">
-                                {discord_status}
-                            </span>
-                            <div className="flex gap-2 text-muted-foreground">
-                                {active_on_discord_desktop && <Monitor size={16} />}
-                                {active_on_discord_mobile && <Smartphone size={16} />}
-                                {active_on_discord_web && <Globe size={16} />}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Spotify Card */}
-                {spotify && (
-                    <a
-                        href={`https://open.spotify.com/track/${spotify.track_id}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="relative z-10 mb-6 bg-black/20 hover:bg-black/30 border border-white/5 hover:border-[#1DB954]/50 p-4 rounded-2xl flex items-center gap-5 transition-all duration-300 group/spotify transform-gpu translate-z-20"
+                <div style={{ perspective: "1000px" }}>
+                    <motion.div
+                        style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
+                        onMouseMove={handleMouseMove}
+                        onMouseLeave={handleMouseLeave}
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        className="w-full max-w-sm"
                     >
-                        <div className="relative w-16 h-16 rounded-xl overflow-hidden flex-shrink-0 shadow-lg group-hover/spotify:scale-105 transition-transform duration-300">
-                            <Image
-                                src={spotify.album_art_url}
-                                alt={spotify.album}
-                                fill
-                                className="object-cover"
-                            />
-                            <div className="absolute inset-0 bg-black/20 flex items-center justify-center opacity-0 group-hover/spotify:opacity-100 transition-opacity">
-                                <ExternalLink className="w-6 h-6 text-white" />
-                            </div>
-                        </div>
-                        <div className="flex-1 min-w-0 overflow-hidden">
-                            <div className="flex items-center justify-between mb-1">
-                                <p className="text-xs text-[#1DB954] font-bold uppercase tracking-wider">Listening to Spotify</p>
-                                <Music className="w-4 h-4 text-[#1DB954] animate-bounce" />
-                            </div>
-                            <p className="font-bold text-lg text-white truncate group-hover/spotify:text-[#1DB954] transition-colors">{spotify.song}</p>
-                            <p className="text-sm text-white/60 truncate">by {spotify.artist}</p>
+                        {/* Discord profile card */}
+                        <div className="relative bg-[#0e0e12] border border-white/[0.08] rounded-3xl overflow-hidden shadow-2xl">
+                            {/* Discord accent bar */}
+                            <div className="h-0.5 w-full bg-gradient-to-r from-[#5865F2] via-[#7c84f5]/50 to-transparent" />
+                            {/* Soft glow */}
+                            <div className="absolute top-0 right-0 w-52 h-52 bg-[#5865F2]/[0.05] rounded-full blur-3xl pointer-events-none" />
 
-                            {/* Progress Bar */}
-                            <div className="mt-3 h-1 bg-white/10 rounded-full overflow-hidden">
-                                <div
-                                    className="h-full bg-[#1DB954] rounded-full transition-all duration-1000 ease-linear"
-                                    style={{
-                                        width: `${Math.min(100, ((currentTime - spotify.timestamps.start) / (spotify.timestamps.end - spotify.timestamps.start)) * 100)}%`
-                                    }}
-                                />
-                            </div>
-                        </div>
-                    </a>
-                )}
-
-                {/* Activities List */}
-                <div className="space-y-3 relative z-10 transform-gpu translate-z-10">
-                    {sortedActivities.length > 0 ? (
-                        sortedActivities.map((activity, index) => {
-                            const isSpotify = activity.name === "Spotify";
-                            if (isSpotify) return null; // Skip Spotify in list as it has a dedicated card
-
-                            return (
-                                <div
-                                    key={index}
-                                    className="flex items-center gap-4 bg-white/5 p-4 rounded-xl border border-white/5 hover:bg-white/10 transition-colors"
-                                >
-                                    {activity.assets?.large_image ? (
-                                        <div className="relative w-12 h-12 rounded-lg overflow-hidden flex-shrink-0 shadow-sm">
+                            <div className="p-6 relative">
+                                {/* Identity row */}
+                                <div className="flex items-center gap-4 mb-5">
+                                    <div className="relative flex-shrink-0">
+                                        {discord_user.avatar ? (
                                             <Image
-                                                src={`https://cdn.discordapp.com/app-assets/${activity.id}/${activity.assets.large_image}.png`}
-                                                alt={activity.name}
-                                                fill
-                                                className="object-cover"
+                                                src={`https://cdn.discordapp.com/avatars/${discord_user.id}/${discord_user.avatar}.webp?size=128`}
+                                                alt="Avatar"
+                                                width={56}
+                                                height={56}
+                                                className="rounded-2xl"
                                             />
-                                        </div>
-                                    ) : (
-                                        <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
-                                            {activity.name.includes("Code") ? <Code size={24} /> : <Gamepad2 size={24} />}
-                                        </div>
-                                    )}
-
-                                    <div className="flex-1 min-w-0">
-                                        <p className="font-bold text-sm text-white truncate">{activity.name}</p>
-                                        <p className="text-xs text-white/60 truncate">{activity.details}</p>
-                                        <p className="text-xs text-white/40 truncate">{activity.state}</p>
+                                        ) : (
+                                            <div className="w-14 h-14 rounded-2xl bg-[#5865F2]/20 flex items-center justify-center">
+                                                <User className="w-7 h-7 text-[#5865F2]/50" />
+                                            </div>
+                                        )}
+                                        <span
+                                            className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-[2.5px] border-[#0e0e12]"
+                                            style={{
+                                                backgroundColor:
+                                                    discord_status === "online" ? "#22c55e" :
+                                                    discord_status === "idle"   ? "#f59e0b" :
+                                                    discord_status === "dnd"    ? "#ef4444" : "#6b7280"
+                                            }}
+                                        />
                                     </div>
-
-                                    {activity.timestamps && activity.timestamps.start && (
-                                        <div className="text-xs text-white/30 font-mono bg-black/20 px-2 py-1 rounded">
-                                            {(() => {
-                                                const elapsed = currentTime - activity.timestamps.start;
-                                                const hours = Math.floor(elapsed / 3600000);
-                                                const minutes = Math.floor((elapsed % 3600000) / 60000);
-                                                return `${hours > 0 ? `${hours}h ` : ""}${minutes}m`;
-                                            })()}
+                                    <div className="flex-1 min-w-0">
+                                        <p className="font-bold text-white text-base leading-tight truncate">
+                                            {discord_user.global_name || discord_user.username}
+                                        </p>
+                                        <p className="text-xs text-white/35 font-mono truncate mt-0.5">
+                                            @{discord_user.username}
+                                        </p>
+                                        <div className="flex items-center gap-2 mt-1.5">
+                                            <span
+                                                className="text-[10px] font-mono px-2 py-0.5 rounded-full border capitalize"
+                                                style={{
+                                                    color: discord_status === "online" ? "#4ade80" : discord_status === "idle" ? "#fbbf24" : discord_status === "dnd" ? "#f87171" : "#9ca3af",
+                                                    borderColor: discord_status === "online" ? "rgba(74,222,128,0.25)" : discord_status === "idle" ? "rgba(251,191,36,0.25)" : discord_status === "dnd" ? "rgba(248,113,113,0.25)" : "rgba(156,163,175,0.15)",
+                                                    backgroundColor: discord_status === "online" ? "rgba(74,222,128,0.07)" : discord_status === "idle" ? "rgba(251,191,36,0.07)" : discord_status === "dnd" ? "rgba(248,113,113,0.07)" : "rgba(156,163,175,0.04)",
+                                                }}
+                                            >
+                                                {discord_status}
+                                            </span>
+                                            <div className="flex gap-1.5 text-white/20">
+                                                {active_on_discord_desktop && <Monitor size={12} />}
+                                                {active_on_discord_mobile && <Smartphone size={12} />}
+                                                {active_on_discord_web && <Globe size={12} />}
+                                            </div>
                                         </div>
+                                    </div>
+                                </div>
+
+                                <div className="border-t border-white/[0.05] mb-4" />
+
+                                {/* Spotify now-playing */}
+                                {spotify && (
+                                    <a
+                                        href={`https://open.spotify.com/track/${spotify.track_id}`}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="group flex items-center gap-3 p-3 rounded-2xl bg-white/[0.03] border border-white/[0.06] hover:border-[#1DB954]/25 hover:bg-[#1DB954]/[0.04] transition-all duration-300 mb-3"
+                                    >
+                                        <div className="relative w-11 h-11 rounded-xl overflow-hidden flex-shrink-0">
+                                            <Image src={spotify.album_art_url} alt={spotify.album} fill className="object-cover" />
+                                        </div>
+                                        <div className="flex-1 min-w-0">
+                                            <div className="flex items-center gap-1.5 mb-0.5">
+                                                <Music className="w-3 h-3 text-[#1DB954] flex-shrink-0" />
+                                                <span className="text-[10px] font-mono text-[#1DB954] uppercase tracking-wider">Spotify</span>
+                                            </div>
+                                            <p className="text-white text-[13px] font-semibold truncate group-hover:text-[#1DB954] transition-colors">
+                                                {spotify.song}
+                                            </p>
+                                            <p className="text-white/35 text-[11px] truncate">{spotify.artist}</p>
+                                            <div className="mt-2 h-0.5 bg-white/[0.07] rounded-full overflow-hidden">
+                                                <div
+                                                    className="h-full bg-[#1DB954] rounded-full transition-all duration-1000 ease-linear"
+                                                    style={{
+                                                        width: `${Math.min(100, ((currentTime - spotify.timestamps.start) / (spotify.timestamps.end - spotify.timestamps.start)) * 100)}%`
+                                                    }}
+                                                />
+                                            </div>
+                                        </div>
+                                    </a>
+                                )}
+
+                                {/* Activity list */}
+                                <div className="space-y-2">
+                                    {sortedActivities.filter(a => a.name !== "Spotify").map((activity, i) => (
+                                        <div key={i} className="flex items-center gap-3 p-3 rounded-xl bg-white/[0.02] border border-white/[0.05]">
+                                            <div className="w-8 h-8 rounded-lg bg-white/[0.04] flex items-center justify-center flex-shrink-0">
+                                                {activity.name.toLowerCase().includes("code") || activity.name.toLowerCase().includes("visual studio")
+                                                    ? <Code size={14} className="text-indigo-400" />
+                                                    : <Gamepad2 size={14} className="text-white/30" />
+                                                }
+                                            </div>
+                                            <div className="flex-1 min-w-0">
+                                                <p className="text-white text-[12px] font-semibold truncate">{activity.name}</p>
+                                                <p className="text-white/30 text-[11px] truncate">{activity.details || activity.state || "Active"}</p>
+                                            </div>
+                                            {activity.timestamps?.start && (
+                                                <span className="text-[10px] font-mono text-white/20 flex-shrink-0">
+                                                    {(() => {
+                                                        const e = currentTime - activity.timestamps!.start;
+                                                        const h = Math.floor(e / 3600000);
+                                                        const m = Math.floor((e % 3600000) / 60000);
+                                                        return h > 0 ? `${h}h ${m}m` : `${m}m`;
+                                                    })()}
+                                                </span>
+                                            )}
+                                        </div>
+                                    ))}
+                                    {sortedActivities.filter(a => a.name !== "Spotify").length === 0 && !spotify && (
+                                        <p className="text-white/20 text-xs text-center py-3 font-mono">No activity right now</p>
                                     )}
                                 </div>
-                            );
-                        })
-                    ) : (
-                        !spotify && <p className="text-sm text-muted-foreground italic text-center py-4">No other activities currently.</p>
-                    )}
+                            </div>
+                        </div>
+                    </motion.div>
                 </div>
-            </motion.div>
             </div>
         </section>
     );

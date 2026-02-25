@@ -21,7 +21,6 @@ const TECH_LINKS: Record<string, string> = {
     "Tailwind CSS": "https://tailwindcss.com",
     "Python": "https://www.python.org",
     "Java": "https://www.java.com",
-    "Swift": "https://developer.apple.com/swift/",
     "Kotlin": "https://kotlinlang.org/",
     "Go": "https://go.dev/",
     "Rust": "https://www.rust-lang.org/",
@@ -41,8 +40,7 @@ const TOOLS = ["Docker", "Git", "Figma", "VS Code", "Prisma", "PostgreSQL", "Red
 
 const CATEGORIES = [
     { label: "Frontend", keys: ["React", "Next.js", "TypeScript", "Tailwind CSS", "HTML", "CSS"] },
-    { label: "Backend", keys: ["Node.js", "Python", "Java", "Go", "Rust"] },
-    { label: "Mobile", keys: ["Swift", "Kotlin"] },
+    { label: "Backend", keys: ["Node.js", "Python", "Java", "Kotlin", "Go", "Rust"] },
     { label: "Tools & Infra", keys: TOOLS },
 ];
 
