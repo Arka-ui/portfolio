@@ -1,25 +1,28 @@
 import type { Metadata } from "next";
-import { Outfit, Plus_Jakarta_Sans } from "next/font/google";
+import { Outfit, Plus_Jakarta_Sans, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import RootContent from "@/components/layout/RootContent";
 import ScrollManager from "@/components/layout/ScrollManager";
 import { WarpProvider } from "@/context/WarpContext";
 import { BlueprintProvider } from "@/context/BlueprintContext";
 import { LanguageProvider } from "@/context/LanguageContext";
-import KineticBlur from "@/components/ui/KineticBlur";
 import CommandPalette from "@/components/features/CommandPalette";
 
-// Primary Heading Font
 const outfit = Outfit({
   subsets: ["latin"],
   variable: "--font-outfit",
   display: "swap",
 });
 
-// Body Font
 const jakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
   variable: "--font-jakarta",
+  display: "swap",
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-geist-mono",
   display: "swap",
 });
 
@@ -75,12 +78,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="scroll-smooth">
-      <body className={`${jakarta.variable} ${outfit.variable} antialiased bg-background text-foreground overflow-x-hidden`}>
+      <body className={`${jakarta.variable} ${outfit.variable} ${jetbrainsMono.variable} antialiased bg-background text-foreground overflow-x-hidden`}>
         <WarpProvider>
           <LanguageProvider>
             <BlueprintProvider>
               <ScrollManager />
-              <KineticBlur />
               <CommandPalette />
               <RootContent>{children}</RootContent>
             </BlueprintProvider>

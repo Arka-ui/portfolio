@@ -1,10 +1,8 @@
-"use client";
+﻿"use client";
 
 import { motion } from "framer-motion";
-import { ExternalLink, Github, Star, GitFork, ArrowUpRight } from "lucide-react";
+import { Github, ArrowUpRight, Star, GitFork } from "lucide-react";
 import useSWR from "swr";
-import BlueprintWrapper from "@/components/BlueprintWrapper";
-import { useLanguage } from "@/context/LanguageContext";
 import ProjectCarousel from "@/components/features/ProjectCarousel";
 
 const GITHUB_USERNAME = "Arka-ui";
@@ -29,143 +27,147 @@ interface Project {
     fork: boolean;
 }
 
-const BentoCard = ({ project, className = "" }: { project: Project; className?: string }) => {
-    return (
-        <motion.div
-            whileHover={{ y: -5, scale: 1.02 }}
-            className={`group relative overflow-hidden rounded-3xl bg-slate-900/40 border border-white/10 backdrop-blur-md p-6 lg:p-8 flex flex-col justify-between ${className}`}
-        >
-            <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 via-purple-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-
-            {/* Content */}
-            <div className="relative z-10">
-                <div className="flex items-center justify-between mb-4">
-                    <div className="p-2 rounded-full bg-white/5 border border-white/10 text-indigo-400">
-                        <Github size={20} />
-                    </div>
-                    <div className="flex gap-2">
-                        {project.homepage && (
-                            <a
-                                href={project.homepage}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="p-2 rounded-full bg-white/5 hover:bg-white/20 transition-colors text-white"
-                            >
-                                <ArrowUpRight size={18} />
-                            </a>
-                        )}
-                    </div>
-                </div>
-
-                <h3 className="text-2xl font-bold text-white mb-2 group-hover:text-indigo-300 transition-colors">
-                    {project.name}
-                </h3>
-                <p className="text-slate-400 text-sm line-clamp-3 mb-6">
-                    {project.description || "A remarkable project built with modern web technologies."}
-                </p>
-            </div>
-
-            {/* Footer */}
-            <div className="relative z-10 mt-auto">
-                <div className="flex flex-wrap gap-2 mb-4">
-                    {project.language && (
-                        <span className="px-2 py-1 rounded-md bg-indigo-500/20 text-indigo-300 text-xs border border-indigo-500/30">
-                            {project.language}
-                        </span>
-                    )}
-                    {project.topics.slice(0, 2).map(topic => (
-                        <span key={topic} className="px-2 py-1 rounded-md bg-slate-800 text-slate-300 text-xs border border-white/5">
-                            {topic}
-                        </span>
-                    ))}
-                </div>
-
-                <div className="flex items-center gap-4 text-slate-500 text-xs font-mono border-t border-white/5 pt-4">
-                    <span className="flex items-center gap-1 hover:text-yellow-400 transition-colors">
-                        <Star size={12} /> {project.stargazers_count}
-                    </span>
-                    <span className="flex items-center gap-1 hover:text-blue-400 transition-colors">
-                        <GitFork size={12} /> {project.forks_count}
-                    </span>
-                </div>
-            </div>
-        </motion.div>
-    );
+const LANG_COLORS: Record<string, string> = {
+    TypeScript: "#3178c6",
+    JavaScript: "#f0db4f",
+    Python: "#3572a5",
+    Java: "#b07219",
+    Swift: "#f05138",
+    Kotlin: "#7f52ff",
+    Rust: "#dea584",
+    Go: "#00add8",
+    CSS: "#563d7c",
+    HTML: "#e34c26",
 };
 
+function ProjectCard({ project, index }: { project: Project; index: number }) {
+    const num = String(index + 1).padStart(2, "0");
+    const color = project.language ? LANG_COLORS[project.language] : "#6366f1";
+
+    return (
+        <motion.article
+            initial={{ opacity: 0, y: 28 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.15 }}
+            transition={{ duration: 0.65, delay: index * 0.08, ease: [0.16, 1, 0.3, 1] }}
+            className="group relative border-t border-white/[0.07] pt-8 pb-8 flex flex-col gap-5 hover:border-white/20 transition-colors duration-300"
+        >
+            {/* Top row */}
+            <div className="flex items-start justify-between gap-4">
+                <div className="flex items-start gap-5 flex-1 min-w-0">
+                    <span className="font-mono text-[11px] text-white/20 pt-1 shrink-0">{num}</span>
+                    <div className="flex-1 min-w-0">
+                        <h3 className="font-heading font-bold text-xl md:text-2xl text-white tracking-tight group-hover:text-indigo-300 transition-colors duration-300 truncate">
+                            {project.name}
+                        </h3>
+                        <p className="text-sm text-white/45 mt-2 line-clamp-2 leading-relaxed">
+                            {project.description || "A project built with modern technologies."}
+                        </p>
+                    </div>
+                </div>
+
+                {/* Links */}
+                <div className="flex gap-2 shrink-0">
+                    <a
+                        href={project.html_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="p-2.5 rounded-xl bg-white/[0.04] border border-white/[0.06] hover:bg-white/10 hover:border-white/15 transition-all text-white/50 hover:text-white"
+                    >
+                        <Github size={15} />
+                    </a>
+                    {project.homepage && (
+                        <a
+                            href={project.homepage}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="p-2.5 rounded-xl bg-white/[0.04] border border-white/[0.06] hover:bg-white/10 hover:border-white/15 transition-all text-white/50 hover:text-white"
+                        >
+                            <ArrowUpRight size={15} />
+                        </a>
+                    )}
+                </div>
+            </div>
+
+            {/* Bottom row */}
+            <div className="flex items-center gap-4 ml-9">
+                {project.language && (
+                    <span className="flex items-center gap-1.5 text-xs text-white/40">
+                        <span
+                            className="w-2.5 h-2.5 rounded-full shrink-0"
+                            style={{ backgroundColor: color }}
+                        />
+                        {project.language}
+                    </span>
+                )}
+                {project.topics.slice(0, 2).map(t => (
+                    <span key={t} className="badge-muted text-[11px]">{t}</span>
+                ))}
+                <div className="ml-auto flex items-center gap-3 text-[11px] text-white/25 font-mono">
+                    <span className="flex items-center gap-1">
+                        <Star size={11} /> {project.stargazers_count}
+                    </span>
+                    <span className="flex items-center gap-1">
+                        <GitFork size={11} /> {project.forks_count}
+                    </span>
+                </div>
+            </div>
+        </motion.article>
+    );
+}
+
 export default function FeaturedProjects() {
-    const { t } = useLanguage();
     const { data: projects } = useSWR<Project[]>(
         `https://api.github.com/users/${GITHUB_USERNAME}/repos?sort=pushed&per_page=100`,
         fetcher
     );
 
-
-    // Filter and sort
     const featured = projects && Array.isArray(projects)
         ? projects
-            .filter(p => !p.fork) // Don't show forks usually
+            .filter(p => !p.fork)
             .sort((a, b) => b.stargazers_count - a.stargazers_count)
-            .slice(0, 5) // Take top 5 for the bento grid
+            .slice(0, 6)
         : [];
 
     if (!featured.length) return null;
 
     return (
-        <section id="projects" className="relative py-20 md:py-32 bg-slate-950 overflow-hidden">
-            {/* Background elements */}
-            <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-indigo-900/50 to-transparent" />
+        <section id="projects" className="py-28 border-t border-white/[0.06]">
+            <div className="container mx-auto px-6 md:px-12">
 
-            <div className="container mx-auto px-4">
-                <BlueprintWrapper label="SECTION_PROJECTS" description="Featured Works Display" direction="left">
-                    <div className="mb-20">
+                {/* Section header */}
+                <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16">
+                    <div>
+                        <span className="label-mono mb-5 block">Work</span>
                         <motion.h2
                             initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
-                            className="text-5xl md:text-7xl font-bold font-heading text-white tracking-tighter mb-6"
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+                            className="font-heading font-black text-[clamp(36px,5vw,64px)] leading-[0.9] tracking-tighter text-white"
                         >
-                            {t("projects.title")}
+                            Featured projects
                         </motion.h2>
-                        <p className="text-xl text-slate-400 max-w-2xl">
-                            {t("projects.subtitle")}
-                        </p>
                     </div>
-                </BlueprintWrapper>
-
-                {/* Mobile: 3D Swipe Carousel */}
-                <ProjectCarousel projects={featured} />
-
-                {/* Desktop: Bento Grid layout */}
-                <div className="hidden md:grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[400px]">
-                    {/* Large Featured Card (First item) */}
-                    {featured[0] && (
-                        <div className="md:col-span-2 md:row-span-1">
-                            <BentoCard project={featured[0]} className="h-full bg-gradient-to-br from-indigo-900/20 to-slate-900/50" />
-                        </div>
-                    )}
-
-                    {/* Side Cards */}
-                    {featured[1] && <BentoCard project={featured[1]} />}
-                    {featured[2] && <BentoCard project={featured[2]} />}
-
-                    {/* Bottom Wide Card */}
-                    {featured[3] && (
-                        <div className="md:col-span-2">
-                            <BentoCard project={featured[3]} />
-                        </div>
-                    )}
-                    {featured[4] && <BentoCard project={featured[4]} />}
-                </div>
-
-                <div className="mt-12 text-center">
                     <a
                         href={`https://github.com/${GITHUB_USERNAME}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white/5 border border-white/10 text-white hover:bg-white/10 transition-colors"
+                        className="group inline-flex items-center gap-2 text-sm text-white/40 hover:text-white transition-colors shrink-0"
                     >
-                        View all repositories <ExternalLink size={16} />
+                        All repositories
+                        <ArrowUpRight size={14} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                     </a>
+                </div>
+
+                {/* Mobile: carousel */}
+                <ProjectCarousel projects={featured} />
+
+                {/* Desktop: numbered list grid */}
+                <div className="hidden md:grid md:grid-cols-2 gap-x-16">
+                    {featured.map((project, i) => (
+                        <ProjectCard key={project.id} project={project} index={i} />
+                    ))}
                 </div>
             </div>
         </section>

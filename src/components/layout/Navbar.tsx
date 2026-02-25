@@ -1,26 +1,18 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect, ReactNode } from "react";
-import { motion, AnimatePresence, useScroll, useMotionValue, useSpring } from "framer-motion";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { Home, User, Briefcase, Mail, Terminal, Menu, X, Cpu, Search, Command } from "lucide-react";
-import { useBlueprint } from "@/context/BlueprintContext";
+import { motion, AnimatePresence } from "framer-motion";
+import { Home, User, Briefcase, Mail, Search } from "lucide-react";
 import QuantumDock from "@/components/ui/QuantumDock";
 import SpectralBorder from "@/components/ui/SpectralBorder";
 import LanguageSelector from "@/components/features/LanguageSelector";
-import SystemTicker from "@/components/ui/SystemTicker"; // Import HUD
 import { cn } from "@/lib/utils";
-import { useLanyard } from "@/hooks/useLanyard";
 import { useWarp } from "@/context/WarpContext";
 import { useLanguage } from "@/context/LanguageContext";
-
-const DISCORD_ID = "871084043838566400"; // Ensure this matches everywhere
 
 export default function Navbar() {
     const { t } = useLanguage();
 
-    // Dynamic nav items based on language
     const navItems: { title: string; icon: ReactNode; href: string }[] = [
         { title: t("nav.home"), icon: <Home className="w-5 h-5" />, href: "#" },
         { title: t("nav.about"), icon: <User className="w-5 h-5" />, href: "#about" },
@@ -29,226 +21,111 @@ export default function Navbar() {
     ];
 
     const [scrolled, setScrolled] = useState(false);
-    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-    const { isBlueprintMode, toggleBlueprintMode } = useBlueprint();
-    const { data: lanyardData } = useLanyard(DISCORD_ID);
-    const pathname = usePathname();
     const [mounted, setMounted] = useState(false);
     const { warpTo } = useWarp();
-    const [isIdle, setIsIdle] = useState(false);
-
-    // Awareness Engine
-    useEffect(() => {
-        let timeout: NodeJS.Timeout;
-        const resetIdle = () => {
-            setIsIdle(false);
-            clearTimeout(timeout);
-            timeout = setTimeout(() => setIsIdle(true), 5000);
-        };
-        window.addEventListener("mousemove", resetIdle);
-        return () => {
-            window.removeEventListener("mousemove", resetIdle);
-            clearTimeout(timeout);
-        }
-    }, []);
+    const [activeSection, setActiveSection] = useState("Home");
 
     useEffect(() => {
         setMounted(true);
-        const handleScroll = () => {
-            setScrolled(window.scrollY > 50);
-        };
+        const handleScroll = () => setScrolled(window.scrollY > 50);
         window.addEventListener("scroll", handleScroll);
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
-    const [activeSection, setActiveSection] = useState("Home");
-
-    // Center-Point Scroll Spy
+    // Scroll spy
     useEffect(() => {
         const handleScroll = () => {
-            const viewportCenter = window.innerHeight / 2;
+            const mid = window.innerHeight / 2;
             const sections = document.querySelectorAll("section[id]");
-            let currentSection = t("nav.home"); // Default to Home
-
-            // Find section closest to center
-            sections.forEach(section => {
-                const rect = section.getBoundingClientRect();
-                // If section covers the center of the screen
-                if (rect.top <= viewportCenter && rect.bottom >= viewportCenter) {
-                    const id = section.id;
-                    // Map ID to Title
-                    if (id === "hero") currentSection = t("nav.home");
-                    else if (id === "about") currentSection = t("nav.about");
-                    else if (id === "projects") currentSection = t("nav.projects");
-                    else if (id === "contact") currentSection = t("nav.contact");
+            let current = t("nav.home");
+            sections.forEach(sec => {
+                const rect = sec.getBoundingClientRect();
+                if (rect.top <= mid && rect.bottom >= mid) {
+                    const id = sec.id;
+                    if (id === "hero") current = t("nav.home");
+                    else if (id === "about" || id === "about-intro") current = t("nav.about");
+                    else if (id === "projects") current = t("nav.projects");
+                    else if (id === "contact") current = t("nav.contact");
                 }
             });
-
-            // Special case for top of page (Hero might be too large)
-            if (window.scrollY < 100) currentSection = t("nav.home");
-
-            setActiveSection(currentSection);
+            if (window.scrollY < 100) current = t("nav.home");
+            setActiveSection(current);
         };
-
         window.addEventListener("scroll", handleScroll);
-
-        // Need to run on language change too
         handleScroll();
-
         return () => window.removeEventListener("scroll", handleScroll);
     }, [t]);
 
-    if (!mounted) return null;
-
-    // Trigger Command Palette with generic event if needed, but the Palette listens to keys.
-    // We can also trigger it by simulating keypress or exposing a state, 
-    // but for now let's just show the visual cue that it exists.
     const openCommandPalette = () => {
-        document.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', metaKey: true }));
+        document.dispatchEvent(new KeyboardEvent("keydown", { key: "k", metaKey: true }));
     };
+
+    if (!mounted) return null;
 
     return (
         <>
-            {/* Desktop Sentient Dock */}
-            {/* Materialization: Wait 1s then assemble */}
+            {/* Desktop dock */}
             <motion.div
-                initial={{ y: -100, opacity: 0, scaleX: 0.8 }}
-                animate={{ y: 0, opacity: 1, scaleX: 1 }}
-                transition={{
-                    type: "spring",
-                    stiffness: 100,
-                    damping: 20,
-                    delay: 0.5,
-                    opacity: { duration: 1.5 }, // Slow fade in for "Printing" feel
-                }}
+                initial={{ y: -80, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ type: "spring", stiffness: 90, damping: 20, delay: 0.3 }}
                 className="fixed top-6 left-0 right-0 z-50 hidden md:flex justify-center pointer-events-none"
             >
-                <div className="pointer-events-auto flex items-center gap-4">
+                <div className="pointer-events-auto flex items-center gap-3">
 
-                    {/* Command Module Button */}
+                    {/* Logo */}
                     <button
-                        onClick={openCommandPalette}
+                        onClick={() => warpTo("#")}
                         className={cn(
-                            "group flex items-center gap-2 px-4 h-16 rounded-2xl bg-slate-900/50 backdrop-blur-2xl border border-white/5 transition-all duration-500 hover:bg-white/10 hover:border-white/10",
+                            "h-14 px-5 rounded-2xl bg-[#0e0e0e]/80 backdrop-blur-2xl border border-white/[0.07] flex items-center transition-all duration-300",
                             scrolled ? "scale-90" : "scale-100"
                         )}
                     >
-                        <Search className="w-5 h-5 text-slate-400 group-hover:text-white transition-colors" />
-                        <span className="hidden lg:flex items-center gap-1 text-xs font-mono text-slate-500 group-hover:text-slate-300">
-                            <span className="text-xs">⌘</span>K
+                        <span className="font-heading font-black text-lg tracking-tighter text-white">
+                            Arka<span className="text-indigo-400">.</span>
                         </span>
                     </button>
 
-                    {/* Central Dock with Sentient Border */}
+                    {/* Main dock */}
                     <SpectralBorder className="rounded-2xl">
                         <QuantumDock
                             items={navItems}
                             activeTab={activeSection}
                             onWarp={(href) => warpTo(href)}
                             className={cn(
-                                "transition-all duration-500",
-                                scrolled ? "scale-90 bg-slate-900/80" : "scale-100"
+                                "transition-all duration-300",
+                                scrolled ? "scale-90 bg-[#0e0e0e]/90" : "scale-100"
                             )}
                         />
                     </SpectralBorder>
 
-                    {/* Live Telemetry / System Ticker */}
-                    <div className={cn(
-                        "h-16 px-4 rounded-2xl bg-slate-900/50 backdrop-blur-2xl border border-white/5 flex flex-col justify-center items-end transition-all duration-500 overflow-hidden",
-                        scrolled ? "scale-90" : "scale-100"
-                    )}>
-                        <SystemTicker />
-                    </div>
-                </div>
-
-                {/* Satellite Controls */}
-                <div className="absolute top-2 right-8 pointer-events-auto flex items-center gap-4">
-                    <div className="relative group">
-                        <button
-                            onClick={toggleBlueprintMode}
-                            className={cn(
-                                "p-3 rounded-full transition-all duration-300 backdrop-blur-md border",
-                                isBlueprintMode
-                                    ? "bg-amber-500/10 border-amber-500/50 text-amber-400 shadow-[0_0_15px_rgba(245,158,11,0.2)]"
-                                    : "bg-slate-900/50 border-white/5 text-slate-400 hover:text-white hover:bg-slate-800/80"
-                            )}
-                            title="Toggle Blueprint Mode"
-                        >
-                            <Terminal size={20} />
-                        </button>
-                        {isBlueprintMode && (
-                            <span className="absolute top-full mt-2 left-1/2 -translate-x-1/2 text-[10px] font-mono text-amber-500 bg-black/80 px-2 py-1 rounded border border-amber-500/30 whitespace-nowrap">
-                                DEBUG_MODE
-                            </span>
+                    {/* âŒ˜K */}
+                    <button
+                        onClick={openCommandPalette}
+                        className={cn(
+                            "group flex items-center gap-2 h-14 px-4 rounded-2xl bg-[#0e0e0e]/80 backdrop-blur-2xl border border-white/[0.07] transition-all duration-300 hover:border-white/15 hover:bg-white/[0.06]",
+                            scrolled ? "scale-90" : "scale-100"
                         )}
-                    </div>
+                    >
+                        <Search className="w-4 h-4 text-white/40 group-hover:text-white/70 transition-colors" />
+                        <kbd className="hidden lg:flex items-center gap-0.5 text-[11px] font-mono text-white/25 group-hover:text-white/40 transition-colors">
+                            <span>âŒ˜</span>K
+                        </kbd>
+                    </button>
 
-                    <div className="className">
+                    {/* Language */}
+                    <div className={cn("transition-all duration-300", scrolled ? "scale-90" : "scale-100")}>
                         <LanguageSelector />
                     </div>
                 </div>
-
-                {/* Sentient Eye (Logo) */}
-                <div className="absolute top-2 left-8 pointer-events-auto">
-                    <button onClick={() => warpTo("#")} className="group relative flex items-center gap-3">
-                        <div className={cn(
-                            "relative w-12 h-12 rounded-full bg-slate-900/50 border flex items-center justify-center overflow-hidden backdrop-blur-md transition-colors duration-500",
-                            isIdle ? "border-indigo-500/30 shadow-[0_0_20px_rgba(99,102,241,0.2)]" : "border-white/10"
-                        )}>
-                            <div className={cn(
-                                "absolute inset-0 blur-xl transition-all duration-1000",
-                                isIdle ? "bg-indigo-500/10" : "bg-cyan-500/0"
-                            )} />
-
-                            {/* The Eye */}
-                            <motion.div
-                                animate={isIdle ? "idle" : "active"}
-                                variants={{
-                                    idle: { scale: 0.9, rotate: 0, opacity: 0.5 },
-                                    active: { scale: 1.1, rotate: 180, opacity: 1 }
-                                }}
-                                transition={{ duration: 0.5 }}
-                            >
-                                <Cpu className={cn(
-                                    "w-6 h-6 transition-colors duration-500",
-                                    isIdle ? "text-indigo-500" : "text-cyan-400 group-hover:text-white"
-                                )} />
-                            </motion.div>
-
-                            {/* Music Pulse Ring */}
-                            {lanyardData?.spotify && (
-                                <div className="absolute inset-0 border-2 border-cyan-400/50 rounded-full animate-ping opacity-20" />
-                            )}
-                        </div>
-
-                        <div className="flex flex-col text-left">
-                            <span className="font-heading font-bold text-xl tracking-tighter text-white">
-                                Arka<span className="text-indigo-400">.dev</span>
-                            </span>
-                            <span className={cn(
-                                "text-[10px] font-mono tracking-widest uppercase transition-all duration-300",
-                                isIdle ? "text-indigo-500 opacity-100" : "text-slate-400 opacity-0 group-hover:opacity-100"
-                            )}>
-                                {isIdle ? "SLEEP MODE" : "ONLINE"}
-                            </span>
-                        </div>
-                    </button>
-                </div>
             </motion.div>
 
-            {/* Mobile Menu Replaced by MobileHUD */}
-            <div className="md:hidden fixed top-4 right-4 z-50 pointer-events-none opacity-0">
-                {/* Kept mainly to not break layout if something relied on it, but effectively hidden */}
-                {/* Could also just add Language Selector here explicitly if needed */}
-            </div>
-            {/* Language Selector for Mobile (Top Right) */}
+            {/* Mobile: language selector top-right */}
             <div className="md:hidden fixed top-4 right-4 z-50">
                 <LanguageSelector />
             </div>
 
-            <AnimatePresence>
-                {/* Mobile Menu Removed */}
-            </AnimatePresence>
+            <AnimatePresence />
         </>
     );
 }

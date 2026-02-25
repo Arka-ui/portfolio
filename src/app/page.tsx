@@ -1,27 +1,21 @@
 import Hero from "@/components/sections/Hero";
-import LiveStatus from "@/components/features/LiveStatus";
-import TechStack from "@/components/sections/TechStack";
-import GithubStats from "@/components/GithubStats";
-import Contact from "@/components/sections/Contact";
+import About from "@/components/sections/About";
 import FeaturedProjects from "@/components/sections/FeaturedProjects";
+import TechStack from "@/components/sections/TechStack";
 import Timeline from "@/components/sections/Timeline";
-import BlogPosts from "@/components/BlogPosts";
-import Background from "@/components/Background";
-import MusicPlayer from "@/components/features/MusicPlayer";
+import LiveStatus from "@/components/features/LiveStatus";
+import Contact from "@/components/sections/Contact";
 
 export default function Home() {
   return (
-    <div className="flex flex-col gap-10 pb-20 relative">
-      <Background />
+    <div className="flex flex-col pb-0 relative">
       <Hero />
-      <LiveStatus />
+      <About />
       <FeaturedProjects />
       <TechStack />
       <Timeline />
-      <GithubStats />
-      <BlogPosts />
+      <LiveStatus />
       <Contact />
-      <MusicPlayer />
     </div>
   );
 }

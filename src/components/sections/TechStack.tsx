@@ -1,188 +1,137 @@
-"use client";
+﻿"use client";
 
 import { motion } from "framer-motion";
+import { ExternalLink } from "lucide-react";
 import useSWR from "swr";
-import { Code2, Wrench, ExternalLink } from "lucide-react";
-import BlueprintWrapper from "@/components/BlueprintWrapper";
 
 const GITHUB_USERNAME = "Arka-ui";
-const RESUME_URL = "https://gist.githubusercontent.com/Arka-ui/raw/resume.json";
 
 const fetcher = async (url: string) => {
     const res = await fetch(url);
-    if (!res.ok) {
-        // If the resume doesn't exist, return null instead of throwing to avoid SWR retries spamming 400s
-        if (res.status === 400 || res.status === 404) return null;
-        throw new Error('An error occurred while fetching the data.');
-    }
+    if (!res.ok) return null;
     return res.json();
 };
 
-const techUrls: Record<string, string> = {
+const TECH_LINKS: Record<string, string> = {
     "React": "https://react.dev",
     "TypeScript": "https://www.typescriptlang.org",
+    "JavaScript": "https://developer.mozilla.org/en-US/docs/Web/JavaScript",
     "Node.js": "https://nodejs.org",
-    "Tailwind CSS": "https://tailwindcss.com",
     "Next.js": "https://nextjs.org",
-    "Docker": "https://www.docker.com",
-    "AWS": "https://aws.amazon.com",
-    "Figma": "https://www.figma.com",
-    "Git": "https://git-scm.com",
-    "Redis": "https://redis.io",
-    "Prisma": "https://www.prisma.io",
-    "PostgreSQL": "https://www.postgresql.org",
-    "VS Code": "https://code.visualstudio.com",
-    "Postman": "https://www.postman.com",
+    "Tailwind CSS": "https://tailwindcss.com",
     "Python": "https://www.python.org",
     "Java": "https://www.java.com",
-    "JavaScript": "https://developer.mozilla.org/en-US/docs/Web/JavaScript",
-    "HTML": "https://developer.mozilla.org/en-US/docs/Web/HTML",
-    "CSS": "https://developer.mozilla.org/en-US/docs/Web/CSS",
     "Swift": "https://developer.apple.com/swift/",
     "Kotlin": "https://kotlinlang.org/",
     "Go": "https://go.dev/",
     "Rust": "https://www.rust-lang.org/",
+    "HTML": "https://developer.mozilla.org/en-US/docs/Web/HTML",
+    "CSS": "https://developer.mozilla.org/en-US/docs/Web/CSS",
+    "PostgreSQL": "https://www.postgresql.org",
+    "Redis": "https://redis.io",
+    "Docker": "https://www.docker.com",
+    "Figma": "https://www.figma.com",
+    "Git": "https://git-scm.com",
+    "VS Code": "https://code.visualstudio.com",
+    "AWS": "https://aws.amazon.com",
+    "Prisma": "https://www.prisma.io",
 };
 
-const getTechUrl = (tech: string) => {
-    return techUrls[tech] || `https://www.google.com/search?q=${encodeURIComponent(tech + " programming")}`;
-};
+const TOOLS = ["Docker", "Git", "Figma", "VS Code", "Prisma", "PostgreSQL", "Redis"];
 
-const fallbackTools = [
-    "Docker", "Figma", "Git", "VS Code"
+const CATEGORIES = [
+    { label: "Frontend", keys: ["React", "Next.js", "TypeScript", "Tailwind CSS", "HTML", "CSS"] },
+    { label: "Backend", keys: ["Node.js", "Python", "Java", "Go", "Rust"] },
+    { label: "Mobile", keys: ["Swift", "Kotlin"] },
+    { label: "Tools & Infra", keys: TOOLS },
 ];
 
 export default function TechStack() {
     const { data: githubData } = useSWR(
-        `https://api.github.com/users/${GITHUB_USERNAME}/repos?sort=pushed&per_page=20`,
+        `https://api.github.com/users/${GITHUB_USERNAME}/repos?sort=pushed&per_page=30`,
         fetcher
     );
 
-    // const { data: resumeData } = useSWR(RESUME_URL, fetcher);
-    const resumeData: any = null; // Fallback to local data until valid Gist URL is provided
-
-    const languages = githubData
-        ? Array.from(new Set(githubData.map((repo: any) => repo.language).filter(Boolean))).slice(0, 10)
-        : ["React", "TypeScript", "Node.js", "Tailwind CSS", "Next.js"];
-
-    const tools = resumeData?.skills
-        ? resumeData.skills.flatMap((skill: any) => skill.keywords)
-        : fallbackTools;
-
-    const uniqueTools = Array.from(new Set(tools)).filter(tool => !languages.includes(tool as string));
+    const usedLanguages: Set<string> = new Set(
+        githubData ? githubData.map((r: { language: string | null }) => r.language).filter(Boolean) : []
+    );
 
     return (
-        <section className="py-20 md:py-32 container mx-auto px-4 relative" id="skills">
-            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/5 to-transparent pointer-events-none" />
+        <section id="skills" className="py-28 border-t border-white/[0.06]">
+            <div className="container mx-auto px-6 md:px-12">
 
-            <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: false, amount: 0.2 }}
-                className="text-center mb-20 relative z-10"
-            >
-                <h2 className="text-4xl md:text-5xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-white via-white/80 to-white/40">
-                    Tech Stack
-                </h2>
-                <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-                    The arsenal of tools I use to bring ideas to life.
+                {/* Header */}
+                <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16">
+                    <div>
+                        <span className="label-mono mb-5 block">Craft</span>
+                        <motion.h2
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+                            className="font-heading font-black text-[clamp(36px,5vw,64px)] leading-[0.9] tracking-tighter text-white"
+                        >
+                            Tech stack
+                        </motion.h2>
+                    </div>
+                    {usedLanguages.size > 0 && (
+                        <span className="text-xs font-mono text-white/25">
+                            {usedLanguages.size} languages detected on GitHub
+                        </span>
+                    )}
+                </div>
+
+                {/* Categories */}
+                <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-px border border-white/[0.06] rounded-2xl overflow-hidden">
+                    {CATEGORIES.map((cat, ci) => (
+                        <motion.div
+                            key={cat.label}
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true, amount: 0.2 }}
+                            transition={{ duration: 0.6, delay: ci * 0.08, ease: [0.16, 1, 0.3, 1] }}
+                            className="bg-white/[0.02] p-6 flex flex-col gap-5"
+                        >
+                            <span className="label-mono">{cat.label}</span>
+                            <div className="flex flex-col gap-1">
+                                {cat.keys.map((tech, ti) => {
+                                    const isActive = usedLanguages.has(tech);
+                                    const href = TECH_LINKS[tech] || `https://www.google.com/search?q=${encodeURIComponent(tech)}`;
+                                    return (
+                                        <motion.a
+                                            key={tech}
+                                            href={href}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            initial={{ opacity: 0 }}
+                                            whileInView={{ opacity: 1 }}
+                                            viewport={{ once: true }}
+                                            transition={{ delay: ci * 0.05 + ti * 0.04 }}
+                                            className="group flex items-center justify-between py-2.5 px-3 rounded-lg hover:bg-white/[0.05] transition-colors"
+                                        >
+                                            <span className={`text-sm font-medium transition-colors ${isActive ? "text-white" : "text-white/45"}`}>
+                                                {tech}
+                                            </span>
+                                            <div className="flex items-center gap-2">
+                                                {isActive && (
+                                                    <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 opacity-80" />
+                                                )}
+                                                <ExternalLink
+                                                    size={11}
+                                                    className="opacity-0 group-hover:opacity-30 transition-opacity text-white"
+                                                />
+                                            </div>
+                                        </motion.a>
+                                    );
+                                })}
+                            </div>
+                        </motion.div>
+                    ))}
+                </div>
+
+                <p className="text-xs font-mono text-white/20 mt-4 text-right">
+                    Purple dot = detected on GitHub activity
                 </p>
-            </motion.div>
-
-            <div className="grid md:grid-cols-2 gap-10 md:gap-16 max-w-6xl mx-auto relative z-10">
-                {/* Languages Section */}
-                <div>
-                    <motion.div
-                        initial={{ opacity: 0, x: -20 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        viewport={{ once: false, amount: 0.2 }}
-                        className="flex items-center gap-3 mb-10 justify-center md:justify-start"
-                    >
-                        <div className="p-3 rounded-xl bg-primary/10 border border-primary/20">
-                            <Code2 className="text-primary w-6 h-6" />
-                        </div>
-                        <BlueprintWrapper
-                            label="LANG_MATRIX"
-                            description="Core Programming Languages & Frameworks"
-                            direction="right"
-                            techSpecs={{
-                                "Source": "GitHub API",
-                                "Filter": "Top 10",
-                                "Update": "Auto"
-                            }}
-                        >
-                            <h3 className="text-2xl font-bold">Languages & Frameworks</h3>
-                        </BlueprintWrapper>
-                    </motion.div>
-                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                        {languages.map((tech: any, index) => (
-                            <motion.a
-                                key={tech}
-                                href={getTechUrl(tech)}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                initial={{ opacity: 0, scale: 0.9 }}
-                                whileInView={{ opacity: 1, scale: 1 }}
-                                viewport={{ once: false, amount: 0.2 }}
-                                transition={{ delay: index * 0.05 }}
-                                className="group relative bg-card/20 backdrop-blur-sm rounded-xl p-4 text-center overflow-hidden hover:bg-white/5 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-primary/10 cursor-pointer"
-                            >
-                                <div className="absolute inset-0 bg-gradient-to-r from-primary/10 to-accent/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                                <div className="relative z-10 flex items-center justify-center gap-2">
-                                    <span className="font-medium text-muted-foreground group-hover:text-white transition-colors">{tech}</span>
-                                    <ExternalLink className="w-3 h-3 opacity-0 group-hover:opacity-50 transition-opacity" />
-                                </div>
-                            </motion.a>
-                        ))}
-                    </div>
-                </div>
-
-                {/* Tools Section */}
-                <div>
-                    <motion.div
-                        initial={{ opacity: 0, x: 20 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        viewport={{ once: false, amount: 0.2 }}
-                        className="flex items-center gap-3 mb-10 justify-center md:justify-start"
-                    >
-                        <div className="p-3 rounded-xl bg-accent/10 border border-accent/20">
-                            <Wrench className="text-accent w-6 h-6" />
-                        </div>
-                        <BlueprintWrapper
-                            label="TOOL_BELT"
-                            description="Development & Infrastructure Tools"
-                            direction="left"
-                            techSpecs={{
-                                "Source": "Resume JSON",
-                                "Type": "Infrastructure",
-                                "Category": "DevOps/Utils"
-                            }}
-                        >
-                            <h3 className="text-2xl font-bold">My Tools</h3>
-                        </BlueprintWrapper>
-                    </motion.div>
-                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                        {uniqueTools.map((tool: any, index) => (
-                            <motion.a
-                                key={tool}
-                                href={getTechUrl(tool as string)}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                initial={{ opacity: 0, scale: 0.9 }}
-                                whileInView={{ opacity: 1, scale: 1 }}
-                                viewport={{ once: false, amount: 0.2 }}
-                                transition={{ delay: index * 0.05 }}
-                                className="group relative bg-card/20 backdrop-blur-sm rounded-xl p-4 text-center overflow-hidden hover:bg-white/5 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-accent/10 cursor-pointer"
-                            >
-                                <div className="absolute inset-0 bg-gradient-to-r from-accent/10 to-primary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                                <div className="relative z-10 flex items-center justify-center gap-2">
-                                    <span className="font-medium text-muted-foreground group-hover:text-white transition-colors">{tool}</span>
-                                    <ExternalLink className="w-3 h-3 opacity-0 group-hover:opacity-50 transition-opacity" />
-                                </div>
-                            </motion.a>
-                        ))}
-                    </div>
-                </div>
             </div>
         </section>
     );

@@ -1,97 +1,127 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, ArrowUpRight } from "lucide-react";
 import Link from "next/link";
-import { useOptimizationConfig } from "@/lib/optimization";
-import BlueprintWrapper from "@/components/BlueprintWrapper";
-import MagneticButton from "@/components/ui/MagneticButton";
-import GlitchText from "@/components/ui/GlitchText";
-import { useLanguage } from "@/context/LanguageContext";
-import { useHaptics } from "@/hooks/useHaptics";
+import { useWarp } from "@/context/WarpContext";
+
+const TECH_MARQUEE = [
+    "React", "Next.js", "TypeScript", "Node.js", "Swift", "Java", "Python",
+    "Tailwind CSS", "PostgreSQL", "Docker", "Figma", "Git",
+    "React", "Next.js", "TypeScript", "Node.js", "Swift", "Java", "Python",
+    "Tailwind CSS", "PostgreSQL", "Docker", "Figma", "Git",
+];
+
+const container = {
+    hidden: {},
+    show: { transition: { staggerChildren: 0.12 } },
+};
+
+const lineVariant = {
+    hidden: { y: "110%", opacity: 0 },
+    show: { y: "0%", opacity: 1, transition: { duration: 0.9, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] } },
+};
 
 export default function Hero() {
-    const config = useOptimizationConfig();
-    const { t } = useLanguage();
-    const { triggerHaptic } = useHaptics();
+    const { warpTo } = useWarp();
 
     return (
-        <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20" id="hero">
-            {/* Background Atmosphere */}
-            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-slate-950/50 to-slate-950 pointer-events-none" />
+        <section id="hero" className="relative min-h-screen flex flex-col justify-center pt-28 pb-0 overflow-hidden">
+            {/* Subtle gradient orb */}
+            <div className="absolute -top-40 -left-40 w-[700px] h-[700px] bg-indigo-600/[0.06] rounded-full blur-[140px] pointer-events-none" />
+            <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-violet-600/[0.04] rounded-full blur-[120px] pointer-events-none" />
 
-            <div className="container px-4 mx-auto relative z-10 text-center">
+            <div className="container mx-auto px-6 md:px-12 relative z-10">
+
+                {/* Available badge */}
                 <motion.div
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+                    initial={{ opacity: 0, y: 16 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                    className="mb-10"
                 >
-                    <BlueprintWrapper
-                        label="ROLE_ID"
-                        description="Professional Identity"
-                        direction="top"
-                    >
-                        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-indigo-500/30 bg-indigo-500/10 backdrop-blur-md text-indigo-300 text-xs font-mono mb-8 hover:bg-indigo-500/20 transition-colors">
-                            <span className="relative flex h-2 w-2">
-                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
-                                <span className="relative inline-flex rounded-full h-2 w-2 bg-indigo-500"></span>
-                            </span>
-                            {t("hero.role")}
-                        </div>
-                    </BlueprintWrapper>
+                    <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-indigo-500/25 bg-indigo-500/8 text-indigo-300 text-xs font-mono">
+                        <span className="relative flex h-2 w-2">
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-60" />
+                            <span className="relative inline-flex rounded-full h-2 w-2 bg-indigo-400" />
+                        </span>
+                        Available for work
+                    </span>
+                </motion.div>
 
-                    <h1 className="font-heading font-black text-5xl md:text-8xl lg:text-9xl tracking-tighter mb-8 leading-[0.9]">
-                        <div className="overflow-hidden">
-                            <motion.span
-                                initial={{ y: 100 }}
-                                animate={{ y: 0 }}
-                                transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
-                                className="block bg-clip-text text-transparent bg-gradient-to-b from-white via-white to-slate-500"
-                            >
-                                Creative
-                            </motion.span>
-                        </div>
-                        <div className="overflow-hidden">
-                            <motion.span
-                                initial={{ y: 100 }}
-                                animate={{ y: 0 }}
-                                transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
-                                className="block text-white"
-                            >
-                                <GlitchText text="Developer" />
-                            </motion.span>
-                        </div>
-                    </h1>
+                {/* Main heading — editorial, massive */}
+                <motion.h1
+                    variants={container}
+                    initial="hidden"
+                    animate="show"
+                    className="font-heading font-black leading-[0.88] tracking-tighter text-[clamp(52px,10.5vw,148px)] mb-14"
+                >
+                    <div className="overflow-hidden">
+                        <motion.span variants={lineVariant} className="block text-white">
+                            Building
+                        </motion.span>
+                    </div>
+                    <div className="overflow-hidden">
+                        <motion.span variants={lineVariant} className="block text-white/20">
+                            digital products
+                        </motion.span>
+                    </div>
+                    <div className="overflow-hidden">
+                        <motion.span variants={lineVariant} className="block text-white">
+                            people remember.
+                        </motion.span>
+                    </div>
+                </motion.h1>
 
-                    <p className="text-xl md:text-2xl text-slate-400 max-w-2xl mx-auto mb-12 leading-relaxed">
-                        {t("hero.description")}
+                {/* Bottom row: bio + CTAs */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.8, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                    className="flex flex-col md:flex-row md:items-end gap-10 md:gap-0 justify-between pb-24"
+                >
+                    <p className="text-[17px] text-white/50 max-w-sm leading-relaxed">
+                        Full-stack developer from France. I design and build web experiences,
+                        iOS apps, and everything in between — with attention to craft.
                     </p>
 
-                    <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
-                        <MagneticButton>
-                            <Link
-                                href="#projects"
-                                onClick={() => triggerHaptic("medium")}
-                                className="relative group px-8 py-4 bg-white text-black rounded-full font-bold text-lg transition-all hover:shadow-[0_0_40px_-5px_rgba(255,255,255,0.3)] flex items-center gap-2 overflow-hidden"
-                            >
-                                <span className="relative z-10">{t("hero.cta_projects")}</span>
-                                <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1 relative z-10" />
-                                <div className="absolute inset-0 bg-indigo-100 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
-                            </Link>
-                        </MagneticButton>
-
-                        <MagneticButton>
-                            <Link
-                                href="#contact"
-                                onClick={() => triggerHaptic("light")}
-                                className="group px-8 py-4 bg-transparent border border-white/10 text-white rounded-full font-medium text-lg transition-all hover:bg-white/5 backdrop-blur-sm"
-                            >
-                                {t("hero.cta_contact")}
-                            </Link>
-                        </MagneticButton>
+                    <div className="flex items-center gap-4">
+                        <button
+                            onClick={() => warpTo("#projects")}
+                            className="group inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-white text-black text-sm font-bold hover:bg-indigo-100 transition-colors"
+                        >
+                            View work
+                            <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
+                        </button>
+                        <button
+                            onClick={() => warpTo("#contact")}
+                            className="group inline-flex items-center gap-2 px-6 py-3.5 rounded-full border border-white/10 text-white text-sm font-medium hover:bg-white/5 transition-colors"
+                        >
+                            Get in touch
+                            <ArrowUpRight className="w-4 h-4 opacity-50 group-hover:opacity-100 transition-opacity" />
+                        </button>
                     </div>
                 </motion.div>
             </div>
+
+            {/* Tech marquee strip */}
+            <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 1, delay: 0.9 }}
+                className="border-t border-white/[0.06] py-5 overflow-hidden"
+            >
+                <div
+                    className="flex gap-12 w-max"
+                    style={{ animation: "marquee 30s linear infinite" }}
+                >
+                    {TECH_MARQUEE.map((tech, i) => (
+                        <span key={i} className="text-xs font-mono text-white/20 uppercase tracking-widest whitespace-nowrap">
+                            {tech}
+                        </span>
+                    ))}
+                </div>
+            </motion.div>
         </section>
     );
 }

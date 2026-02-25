@@ -70,15 +70,8 @@ export default function LiveStatus() {
         y.set(0);
     };
 
-    if (!lanyardData) {
-        return (
-            <div className="flex justify-center py-10">
-                <div className="bg-card/30 p-6 rounded-xl border border-white/5 text-center max-w-md mx-auto animate-pulse">
-                    <p className="text-muted-foreground">Connecting to Discord...</p>
-                </div>
-            </div>
-        );
-    }
+    // Don't render while loading
+    if (!lanyardData) return null;
 
     const { discord_status, activities, discord_user, spotify, active_on_discord_desktop, active_on_discord_mobile, active_on_discord_web } = lanyardData;
 
@@ -218,7 +211,16 @@ export default function LiveStatus() {
 
     // --- NORMAL MODE RENDER ---
     return (
-        <section className="py-20 container mx-auto px-4 perspective-1000">
+        <section className="py-28 border-t border-white/[0.06]">
+            <div className="container mx-auto px-6 md:px-12">
+                <div className="mb-12">
+                    <span className="label-mono mb-5 block">Live</span>
+                    <h2 className="font-heading font-black text-[clamp(36px,5vw,64px)] leading-[0.9] tracking-tighter text-white">
+                        What I&apos;m doing
+                    </h2>
+                </div>
+            </div>
+            <div className="container mx-auto px-6 md:px-12 perspective-1000">
             <motion.div
                 style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
                 onMouseMove={handleMouseMove}
@@ -226,7 +228,7 @@ export default function LiveStatus() {
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                className="bg-card/30 backdrop-blur-xl border border-white/10 rounded-3xl p-8 w-full max-w-lg mx-auto relative overflow-hidden group shadow-2xl hover:shadow-primary/20 transition-shadow duration-500"
+                className="bg-white/[0.03] backdrop-blur-xl border border-white/[0.07] rounded-3xl p-8 w-full max-w-lg mx-auto relative overflow-hidden group shadow-2xl hover:shadow-indigo-500/10 transition-shadow duration-500"
             >
                 {/* Iridescent Border Glow */}
                 <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-transparent to-accent/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
@@ -360,6 +362,7 @@ export default function LiveStatus() {
                     )}
                 </div>
             </motion.div>
+            </div>
         </section>
     );
 }

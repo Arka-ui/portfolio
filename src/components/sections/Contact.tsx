@@ -1,162 +1,155 @@
-"use client";
+﻿"use client";
 
 import { motion } from "framer-motion";
-import { Send, Mail, MapPin, Wifi } from "lucide-react";
+import { Send, Mail, MapPin, CheckCircle } from "lucide-react";
 import { useForm, ValidationError } from '@formspree/react';
-import BlueprintWrapper from "@/components/BlueprintWrapper";
-import { useLanguage } from "@/context/LanguageContext";
 
 export default function Contact() {
-    // Note: If you see a 403 Forbidden error, check your Formspree settings.
-    // Ensure the domain (localhost or production) is allowed in your Formspree dashboard.
     const [state, handleSubmit] = useForm("xblnyneb");
-    const { t } = useLanguage();
 
     if (state.succeeded) {
         return (
-            <section className="py-32 container mx-auto px-4 relative overflow-hidden" id="contact">
-                <div className="max-w-md mx-auto text-center border border-green-500/30 bg-green-500/10 p-12 rounded-2xl backdrop-blur-md">
+            <section id="contact" className="py-28 border-t border-white/[0.06]">
+                <div className="container mx-auto px-6 md:px-12">
                     <motion.div
-                        initial={{ scale: 0 }}
-                        animate={{ scale: 1 }}
-                        className="w-20 h-20 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-6 border border-green-500/50"
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        className="max-w-md mx-auto text-center py-20"
                     >
-                        <Wifi className="w-10 h-10 text-green-500" />
+                        <CheckCircle className="w-12 h-12 text-emerald-400 mx-auto mb-6" />
+                        <h2 className="font-heading font-bold text-2xl text-white mb-3">Message sent</h2>
+                        <p className="text-white/45 text-sm leading-relaxed">
+                            Thanks for reaching out. I&apos;ll get back to you as soon as possible.
+                        </p>
                     </motion.div>
-                    <h2 className="text-3xl font-bold mb-4 font-mono text-green-400">{t("contact.success_title")}</h2>
-                    <p className="text-green-300/80 font-mono">{t("contact.success_desc")}</p>
                 </div>
             </section>
         );
     }
 
     return (
-        <section className="py-32 relative overflow-hidden" id="contact">
-            {/* Background Decorations */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-indigo-500/5 rounded-full blur-[100px] -z-10" />
+        <section id="contact" className="py-28 border-t border-white/[0.06]">
+            <div className="container mx-auto px-6 md:px-12">
 
-            <div className="container mx-auto px-4">
-                <div className="grid lg:grid-cols-2 gap-12 lg:gap-24 items-start">
+                {/* Header */}
+                <div className="grid md:grid-cols-2 gap-16 md:gap-24 items-start">
 
-                    {/* Left Column: Status & Info */}
-                    <div className="space-y-12">
-                        <BlueprintWrapper label="COMM_HUB" description="Signal Status" direction="right">
-                            <div className="space-y-6">
-                                <motion.div
-                                    initial={{ opacity: 0, x: -20 }}
-                                    whileInView={{ opacity: 1, x: 0 }}
-                                    className="inline-flex items-center gap-3 px-4 py-2 rounded-full border border-green-500/30 bg-green-500/10 text-green-400 font-mono text-sm"
-                                >
-                                    <span className="relative flex h-2 w-2">
-                                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                                        <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-                                    </span>
-                                    SIGNAL_ONLINE
-                                </motion.div>
+                    {/* Left */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 24 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, amount: 0.3 }}
+                        transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+                        className="space-y-8"
+                    >
+                        <div>
+                            <span className="label-mono mb-5 block">Contact</span>
+                            <h2 className="font-heading font-black text-[clamp(36px,5vw,64px)] leading-[0.9] tracking-tighter text-white mb-6">
+                                Let&apos;s build<br />
+                                <span className="text-white/25">something</span><br />
+                                great.
+                            </h2>
+                            <p className="text-[16px] text-white/45 max-w-sm leading-relaxed">
+                                Open for freelance work, collaborations, and interesting projects.
+                                Don&apos;t hesitate to reach out.
+                            </p>
+                        </div>
 
-                                <h2 className="text-5xl md:text-6xl font-heading font-bold text-white tracking-tighter">
-                                    {t("contact.title")}
-                                </h2>
-                                <p className="text-slate-400 text-lg max-w-md">
-                                    {t("contact.subtitle")}
-                                </p>
-                            </div>
-                        </BlueprintWrapper>
-
-                        <div className="space-y-6 pt-8 border-t border-white/5">
-                            <div className="flex items-center gap-4 text-slate-300">
-                                <div className="p-3 rounded-lg bg-white/5 border border-white/10">
-                                    <Mail size={20} className="text-indigo-400" />
+                        <div className="space-y-4 pt-4 border-t border-white/[0.06]">
+                            <div className="flex items-center gap-4">
+                                <div className="w-10 h-10 rounded-xl bg-white/[0.04] border border-white/[0.06] flex items-center justify-center shrink-0">
+                                    <Mail size={16} className="text-white/40" />
                                 </div>
-                                <div className="font-mono text-sm">
-                                    <span className="block text-slate-500 text-xs mb-1">EMAIL_TARGET</span>
-                                    hello@arka.dev
+                                <div>
+                                    <span className="label-mono text-[10px] mb-0.5 block">Email</span>
+                                    <span className="text-sm text-white/70 font-mono">hello@arka.dev</span>
                                 </div>
                             </div>
-                            <div className="flex items-center gap-4 text-slate-300">
-                                <div className="p-3 rounded-lg bg-white/5 border border-white/10">
-                                    <MapPin size={20} className="text-cyan-400" />
+                            <div className="flex items-center gap-4">
+                                <div className="w-10 h-10 rounded-xl bg-white/[0.04] border border-white/[0.06] flex items-center justify-center shrink-0">
+                                    <MapPin size={16} className="text-white/40" />
                                 </div>
-                                <div className="font-mono text-sm">
-                                    <span className="block text-slate-500 text-xs mb-1">LOCATION_NODE</span>
-                                    Remote / Digital Space
+                                <div>
+                                    <span className="label-mono text-[10px] mb-0.5 block">Location</span>
+                                    <span className="text-sm text-white/70">France â€” available remotely</span>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </motion.div>
 
-                    {/* Right Column: Terminal Form */}
-                    <BlueprintWrapper label="INPUT_TERMINAL" description="Data Entry Point" direction="left">
-                        <div className="relative bg-slate-950/50 backdrop-blur-xl border border-white/10 p-8 rounded-3xl overflow-hidden">
-                            <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 via-transparent to-purple-500/5 pointer-events-none" />
-
-                            <form onSubmit={handleSubmit} className="space-y-6 relative z-10">
-                                <div className="grid md:grid-cols-2 gap-6">
-                                    <div className="space-y-2">
-                                        <label htmlFor="name" className="text-xs font-mono text-slate-500 uppercase tracking-wider">{t("contact.name")}</label>
-                                        <input
-                                            id="name"
-                                            type="text"
-                                            name="name"
-                                            className="w-full bg-slate-900/50 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-indigo-500/50 focus:bg-indigo-500/5 transition-all font-mono text-sm"
-                                            placeholder={t("contact.placeholder_name")}
-                                            required
-                                        />
-                                        <ValidationError prefix="Name" field="name" errors={state.errors} className="text-red-400 text-xs" />
-                                    </div>
-                                    <div className="space-y-2">
-                                        <label htmlFor="email" className="text-xs font-mono text-slate-500 uppercase tracking-wider">{t("contact.email")}</label>
-                                        <input
-                                            id="email"
-                                            type="email"
-                                            name="email"
-                                            className="w-full bg-slate-900/50 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-indigo-500/50 focus:bg-indigo-500/5 transition-all font-mono text-sm"
-                                            placeholder={t("contact.placeholder_email")}
-                                            required
-                                        />
-                                        <ValidationError prefix="Email" field="email" errors={state.errors} className="text-red-400 text-xs" />
-                                    </div>
-                                </div>
-
+                    {/* Right â€” form */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 24 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, amount: 0.2 }}
+                        transition={{ duration: 0.7, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+                    >
+                        <form onSubmit={handleSubmit} className="space-y-5">
+                            <div className="grid sm:grid-cols-2 gap-5">
                                 <div className="space-y-2">
-                                    <label htmlFor="subject" className="text-xs font-mono text-slate-500 uppercase tracking-wider">Subject</label>
+                                    <label htmlFor="name" className="label-mono text-[10px]">Name</label>
                                     <input
-                                        id="subject"
+                                        id="name"
                                         type="text"
-                                        name="subject"
-                                        className="w-full bg-slate-900/50 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-indigo-500/50 focus:bg-indigo-500/5 transition-all font-mono text-sm"
-                                        placeholder="Project Inquiry"
+                                        name="name"
                                         required
+                                        placeholder="Your name"
+                                        className="w-full bg-white/[0.03] border border-white/[0.08] rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-indigo-500/50 focus:bg-indigo-500/[0.04] transition-all placeholder-white/20"
                                     />
-                                    <ValidationError prefix="Subject" field="subject" errors={state.errors} className="text-red-400 text-xs" />
+                                    <ValidationError prefix="Name" field="name" errors={state.errors} className="text-red-400 text-xs" />
                                 </div>
-
                                 <div className="space-y-2">
-                                    <label htmlFor="message" className="text-xs font-mono text-slate-500 uppercase tracking-wider">{t("contact.message")}</label>
-                                    <textarea
-                                        id="message"
-                                        name="message"
-                                        rows={5}
-                                        className="w-full bg-slate-900/50 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-indigo-500/50 focus:bg-indigo-500/5 transition-all resize-none font-mono text-sm"
-                                        placeholder={t("contact.placeholder_message")}
+                                    <label htmlFor="email" className="label-mono text-[10px]">Email</label>
+                                    <input
+                                        id="email"
+                                        type="email"
+                                        name="email"
                                         required
+                                        placeholder="your@email.com"
+                                        className="w-full bg-white/[0.03] border border-white/[0.08] rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-indigo-500/50 focus:bg-indigo-500/[0.04] transition-all placeholder-white/20"
                                     />
-                                    <ValidationError prefix="Message" field="message" errors={state.errors} className="text-red-400 text-xs" />
+                                    <ValidationError prefix="Email" field="email" errors={state.errors} className="text-red-400 text-xs" />
                                 </div>
+                            </div>
 
-                                <button
-                                    type="submit"
-                                    disabled={state.submitting}
-                                    className="w-full group relative flex items-center justify-center gap-2 px-8 py-4 bg-white text-black rounded-lg font-bold text-sm uppercase tracking-wide transition-all hover:bg-indigo-50 disabled:opacity-50 disabled:cursor-not-allowed"
-                                >
-                                    <span className="relative flex items-center gap-2">
-                                        {state.submitting ? 'Transmitting...' : 'Execute Transmission'}
-                                        {!state.submitting && <Send className="w-4 h-4 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />}
-                                    </span>
-                                </button>
-                            </form>
-                        </div>
-                    </BlueprintWrapper>
+                            <div className="space-y-2">
+                                <label htmlFor="subject" className="label-mono text-[10px]">Subject</label>
+                                <input
+                                    id="subject"
+                                    type="text"
+                                    name="subject"
+                                    required
+                                    placeholder="What's this about?"
+                                    className="w-full bg-white/[0.03] border border-white/[0.08] rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-indigo-500/50 focus:bg-indigo-500/[0.04] transition-all placeholder-white/20"
+                                />
+                                <ValidationError prefix="Subject" field="subject" errors={state.errors} className="text-red-400 text-xs" />
+                            </div>
+
+                            <div className="space-y-2">
+                                <label htmlFor="message" className="label-mono text-[10px]">Message</label>
+                                <textarea
+                                    id="message"
+                                    name="message"
+                                    rows={5}
+                                    required
+                                    placeholder="Tell me about your project or idea..."
+                                    className="w-full bg-white/[0.03] border border-white/[0.08] rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-indigo-500/50 focus:bg-indigo-500/[0.04] transition-all resize-none placeholder-white/20"
+                                />
+                                <ValidationError prefix="Message" field="message" errors={state.errors} className="text-red-400 text-xs" />
+                            </div>
+
+                            <button
+                                type="submit"
+                                disabled={state.submitting}
+                                className="group w-full flex items-center justify-center gap-2.5 px-6 py-4 bg-white text-black rounded-xl font-bold text-sm hover:bg-indigo-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                            >
+                                {state.submitting ? "Sending..." : "Send message"}
+                                {!state.submitting && (
+                                    <Send size={14} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                                )}
+                            </button>
+                        </form>
+                    </motion.div>
                 </div>
             </div>
         </section>

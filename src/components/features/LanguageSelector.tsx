@@ -4,13 +4,11 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Check, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useChristmas } from "@/context/ChristmasContext";
 import { useLanguage, SUPPORTED_LANGUAGES, Language } from "@/context/LanguageContext";
 
 export default function LanguageSelector() {
     const [isOpen, setIsOpen] = useState(false);
     const [mounted, setMounted] = useState(false);
-    const { isChristmasTime } = useChristmas();
     const { language, setLanguage } = useLanguage();
 
     const handleLanguageChange = (lang: Language) => {
@@ -53,7 +51,7 @@ export default function LanguageSelector() {
             {/* Language selector button */}
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="flex items-center space-x-2 px-3 py-2 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 transition-all duration-300 backdrop-blur-md"
+                className="flex items-center gap-2 px-3 py-2.5 rounded-xl bg-[#0e0e0e]/80 border border-white/[0.07] hover:border-white/15 hover:bg-white/[0.06] transition-all backdrop-blur-xl"
             >
                 <span className="text-lg">{language.flag}</span>
                 <span className="text-sm font-medium text-gray-300 hidden sm:block">{language.name}</span>
@@ -71,7 +69,7 @@ export default function LanguageSelector() {
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: 10, scale: 0.95 }}
                         transition={{ duration: 0.2 }}
-                        className={`absolute right-0 mt-2 w-48 overflow-y-auto rounded-xl border border-white/10 bg-black/90 backdrop-blur-xl shadow-2xl p-2 scrollbar-hide ${isChristmasTime ? 'snow-cap' : ''}`}
+                        className="absolute right-0 mt-2 w-48 overflow-y-auto rounded-xl border border-white/[0.07] bg-[#111]/95 backdrop-blur-xl shadow-2xl p-2 scrollbar-hide"
                     >
                         {SUPPORTED_LANGUAGES.map(lang => (
                             <button
