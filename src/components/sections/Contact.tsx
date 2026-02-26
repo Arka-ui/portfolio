@@ -22,17 +22,36 @@ export default function Contact() {
         setStatus("loading");
         setErrMsg("");
 
+        const webhookUrl = process.env.NEXT_PUBLIC_DISCORD_WEBHOOK_URL;
+        if (!webhookUrl) {
+            setErrMsg("Contact form is not configured.");
+            setStatus("error");
+            return;
+        }
+
         try {
-            const res = await fetch("/api/contact", {
+            const res = await fetch(webhookUrl, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ name, email, subject, message }),
+                body: JSON.stringify({
+                    username: "Arka Portfolio",
+                    avatar_url: "https://arka.is-a.dev/favicon.ico",
+                    embeds: [{
+                        author: { name: "New contact from arka.is-a.dev", url: "https://arka.is-a.dev" },
+                        title: subject ? `📬 ${subject}` : "📬 New message",
+                        color: 6514417,
+                        fields: [
+                            { name: "👤 Name", value: name, inline: true },
+                            { name: "📧 Email", value: email, inline: true },
+                            { name: "💬 Message", value: message.length > 1024 ? message.slice(0, 1021) + "…" : message, inline: false },
+                        ],
+                        footer: { text: "arka.is-a.dev • Contact Form" },
+                        timestamp: new Date().toISOString(),
+                    }],
+                }),
             });
 
-            if (!res.ok) {
-                const data = await res.json().catch(() => ({}));
-                throw new Error(data.error || "Something went wrong");
-            }
+            if (!res.ok) throw new Error("Failed to send message");
 
             setStatus("success");
             setName(""); setEmail(""); setSubject(""); setMessage("");
