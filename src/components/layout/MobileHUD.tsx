@@ -1,58 +1,42 @@
 "use client";
 
-import { Home, User, Briefcase, Mail, Terminal, Sparkles } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { Home, User, Briefcase, Mail } from "lucide-react";
+import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 import { useWarp } from "@/context/WarpContext";
-import { useLanguage } from "@/context/LanguageContext";
 import { useHaptics } from "@/hooks/useHaptics";
 import { cn } from "@/lib/utils";
 
 export default function MobileHUD() {
     const { warpTo } = useWarp();
-    const { t } = useLanguage();
     const { triggerHaptic } = useHaptics();
     const [activeTab, setActiveTab] = useState("home");
-    const [scrolled, setScrolled] = useState(false);
 
-    // Detect scroll to hide/show or just change style
+    /* Section spy */
     useEffect(() => {
-        const handleScroll = () => {
-            // Simple logic: if scrolled down, maybe shrink it slightly? 
-            // For now we keep it constant for consistency.
-        };
-        window.addEventListener("scroll", handleScroll);
-        return () => window.removeEventListener("scroll", handleScroll);
-    }, []);
-
-    // Sync active tab with scroll position (simplified version of Navbar spy)
-    useEffect(() => {
-        const handleSpy = () => {
-            const sections = ["hero", "about", "projects", "contact"];
-            const scrollPos = window.scrollY + window.innerHeight / 2;
-
-            for (const section of sections) {
-                const el = document.getElementById(section);
+        const spy = () => {
+            const sections = ["hero", "about-intro", "projects", "contact"];
+            for (const id of sections) {
+                const el = document.getElementById(id);
                 if (el) {
                     const rect = el.getBoundingClientRect();
-                    // Simple check if top of section is near middle of viewport
                     if (rect.top <= window.innerHeight / 2 && rect.bottom >= window.innerHeight / 2) {
-                        setActiveTab(section === "hero" ? "home" : section);
-                        break; // Stop after finding the first match
+                        setActiveTab(id === "hero" ? "home" : id === "about-intro" ? "about" : id);
+                        break;
                     }
                 }
             }
         };
-        // Throttle could be added here, but break helps.
-        window.addEventListener("scroll", handleSpy);
-        return () => window.removeEventListener("scroll", handleSpy);
+        window.addEventListener("scroll", spy, { passive: true });
+        spy();
+        return () => window.removeEventListener("scroll", spy);
     }, []);
 
     const navItems = [
-        { id: "home", icon: Home, label: "Home", href: "#" },
-        { id: "about", icon: User, label: "About", href: "#about" },
-        { id: "projects", icon: Briefcase, label: "Projects", href: "#projects" },
-        { id: "contact", icon: Mail, label: "Contact", href: "#contact" },
+        { id: "home",     icon: Home,     label: "Home",     href: "#"           },
+        { id: "about",    icon: User,     label: "About",    href: "#about-intro" },
+        { id: "projects", icon: Briefcase,label: "Projects", href: "#projects"   },
+        { id: "contact",  icon: Mail,     label: "Contact",  href: "#contact"    },
     ];
 
     const handleNav = (id: string, href: string) => {
@@ -63,56 +47,75 @@ export default function MobileHUD() {
 
     return (
         <motion.div
-            initial={{ y: 100 }}
-            animate={{ y: 0 }}
-            transition={{ type: "spring", stiffness: 260, damping: 20, delay: 1 }}
-            className="fixed bottom-6 left-4 right-4 h-16 bg-slate-950/90 backdrop-blur-md border border-white/10 rounded-2xl flex items-center justify-between px-2 shadow-lg z-50 md:hidden will-change-transform"
+            initial={{ y: 120, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ type: "spring", stiffness: 240, damping: 24, delay: 1.2 }}
+            className="fixed bottom-5 left-4 right-4 h-[62px] md:hidden z-50 will-change-transform"
+            style={{ paddingBottom: "env(safe-area-inset-bottom, 0px)" }}
         >
-            {/* Glossy overlay */}
-            <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-white/5 to-transparent pointer-events-none" />
+            {/* Bar background */}
+            <div className="absolute inset-0 rounded-2xl bg-[#0d0d12]/85 backdrop-blur-2xl border border-white/[0.09] shadow-[0_8px_32px_rgba(0,0,0,0.5)] overflow-hidden">
+                {/* Top highlight line */}
+                <div className="absolute top-0 left-6 right-6 h-px bg-gradient-to-r from-transparent via-white/[0.12] to-transparent" />
+            </div>
 
-            {navItems.map((item) => {
-                const isActive = activeTab === item.id;
-                const Icon = item.icon;
+            {/* Nav buttons */}
+            <div className="relative h-full flex items-center px-2">
+                {navItems.map((item) => {
+                    const isActive = activeTab === item.id;
+                    const Icon = item.icon;
 
-                return (
-                    <button
-                        key={item.id}
-                        onClick={() => handleNav(item.id, item.href)}
-                        className="relative flex-1 h-full flex flex-col items-center justify-center gap-1 group"
-                    >
-                        {isActive && (
+                    return (
+                        <button
+                            key={item.id}
+                            onClick={() => handleNav(item.id, item.href)}
+                            className="relative flex-1 h-full flex flex-col items-center justify-center gap-[3px]"
+                        >
+                            {/* Active pill background */}
+                            {isActive && (
+                                <motion.div
+                                    layoutId="hud-pill"
+                                    className="absolute inset-x-1.5 inset-y-2 rounded-xl bg-indigo-500/[0.15] border border-indigo-500/20"
+                                    transition={{ type: "spring", bounce: 0.18, duration: 0.5 }}
+                                />
+                            )}
+
+                            {/* Icon */}
                             <motion.div
-                                layoutId="hud-active"
-                                className="absolute inset-0 bg-white/5 rounded-xl border border-white/5"
-                                transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
-                            />
-                        )}
+                                animate={isActive ? { y: -1, scale: 1.1 } : { y: 0, scale: 1 }}
+                                transition={{ type: "spring", stiffness: 300, damping: 22 }}
+                                className={cn(
+                                    "relative z-10 transition-colors duration-200",
+                                    isActive ? "text-indigo-300" : "text-white/30"
+                                )}
+                            >
+                                <Icon size={19} strokeWidth={isActive ? 2.2 : 1.8} />
+                            </motion.div>
 
-                        <div className={cn(
-                            "relative z-10 p-1 transition-all duration-300",
-                            isActive ? "text-cyan-400 -translate-y-1" : "text-slate-500"
-                        )}>
-                            <Icon size={20} />
-                        </div>
+                            {/* Label */}
+                            <motion.span
+                                animate={isActive ? { opacity: 1, y: 0 } : { opacity: 0, y: 4 }}
+                                transition={{ duration: 0.2 }}
+                                className={cn(
+                                    "relative z-10 text-[9px] font-mono tracking-wider",
+                                    isActive ? "text-indigo-300" : "text-white/25"
+                                )}
+                            >
+                                {item.label}
+                            </motion.span>
 
-                        <span className={cn(
-                            "relative z-10 text-[10px] font-medium transition-all duration-300",
-                            isActive ? "text-white opacity-100" : "text-slate-500 opacity-0 translate-y-2"
-                        )}>
-                            {item.label}
-                        </span>
-
-                        {/* Active Indicator Dot */}
-                        {isActive && (
-                            <motion.div
-                                layoutId="hud-dot"
-                                className="absolute bottom-1 w-1 h-1 bg-cyan-400 rounded-full shadow-[0_0_8px_rgba(34,211,238,0.8)]"
-                            />
-                        )}
-                    </button>
-                );
-            })}
+                            {/* Bottom glow pip */}
+                            {isActive && (
+                                <motion.div
+                                    layoutId="hud-pip"
+                                    className="absolute bottom-1.5 w-1 h-1 rounded-full bg-indigo-400 shadow-[0_0_8px_3px_rgba(99,102,241,0.55)]"
+                                    transition={{ type: "spring", bounce: 0.2, duration: 0.5 }}
+                                />
+                            )}
+                        </button>
+                    );
+                })}
+            </div>
         </motion.div>
     );
 }

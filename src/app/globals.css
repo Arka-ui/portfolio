@@ -57,6 +57,24 @@
     0%, 100% { opacity: 1; }
     50% { opacity: 0.3; }
   }
+
+  /* Scan-line shimmer — used in the About signature reveal */
+  @keyframes shimmer {
+    0%   { background-position: -200% center; }
+    100% { background-position: 200% center; }
+  }
+
+  /* Subtle breathing border glow for premium cards */
+  @keyframes breathe-glow {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(99,102,241,0); }
+    50%       { box-shadow: 0 0 24px 2px rgba(99,102,241,0.12); }
+  }
+
+  /* Count-up pop — applied to stats after count finishes */
+  @keyframes stat-settle {
+    0%   { transform: scale(1.06); color: rgba(167,139,250,1); }
+    100% { transform: scale(1);    color: inherit; }
+  }
 }
 
 @layer base {
@@ -123,6 +141,33 @@
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
     pointer-events: none;
     border-radius: inherit;
+  }
+
+  /* Breathing glow border (signature card treatment) */
+  .card-glow {
+    animation: breathe-glow 4s ease-in-out infinite;
+  }
+
+  /* Shimmer text — moving gradient highlight */
+  .shimmer-text {
+    background: linear-gradient(
+      90deg,
+      rgba(255,255,255,0.25) 0%,
+      rgba(167,139,250,0.85) 30%,
+      rgba(99,102,241,0.9) 50%,
+      rgba(167,139,250,0.85) 70%,
+      rgba(255,255,255,0.25) 100%
+    );
+    background-size: 200% auto;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shimmer 4s linear infinite;
+  }
+
+  /* Safe bottom padding — accommodates the mobile HUD */
+  .pb-mobile-hud {
+    padding-bottom: calc(5rem + env(safe-area-inset-bottom, 24px));
   }
 }
 

@@ -1,4 +1,5 @@
 import Hero from "@/components/sections/Hero";
+import TechSlider from "@/components/sections/TechSlider";
 import About from "@/components/sections/About";
 import FeaturedProjects from "@/components/sections/FeaturedProjects";
 import TechStack from "@/components/sections/TechStack";
@@ -10,6 +11,7 @@ export default function Home() {
   return (
     <div className="flex flex-col pb-0 relative">
       <Hero />
+      <TechSlider />
       <About />
       <FeaturedProjects />
       <TechStack />
