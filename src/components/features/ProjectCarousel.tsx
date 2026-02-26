@@ -46,8 +46,11 @@ export default function ProjectCarousel({ projects }: { projects: Project[] }) {
 
     return (
         <div className="relative w-full h-[450px] flex items-center justify-center md:hidden perspective-[1000px]">
-            {/* Background Glow */}
-            <div className="absolute inset-0 bg-gradient-to-b from-indigo-500/10 to-transparent blur-3xl opacity-30" />
+            {/* Background Glow — CSS gradient, no filter */}
+            <div
+                className="absolute inset-0 pointer-events-none"
+                style={{ background: "radial-gradient(ellipse 80% 50% at 50% 0%, rgba(99,102,241,0.1) 0%, transparent 70%)" }}
+            />
 
             <div className="relative w-full max-w-sm px-8">
                 <AnimatePresence mode="popLayout" custom={x.get()}>

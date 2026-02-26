@@ -13,39 +13,28 @@ export default function MobileHUD() {
     const { t } = useLanguage();
     const { triggerHaptic } = useHaptics();
     const [activeTab, setActiveTab] = useState("home");
-    const [scrolled, setScrolled] = useState(false);
 
-    // Detect scroll to hide/show or just change style
+    // Track active section via IntersectionObserver — zero scroll listener overhead
     useEffect(() => {
-        const handleScroll = () => {
-            // Simple logic: if scrolled down, maybe shrink it slightly? 
-            // For now we keep it constant for consistency.
-        };
-        window.addEventListener("scroll", handleScroll);
-        return () => window.removeEventListener("scroll", handleScroll);
-    }, []);
+        const sectionIds = ["hero", "about", "projects", "contact"];
+        const observers: IntersectionObserver[] = [];
 
-    // Sync active tab with scroll position (simplified version of Navbar spy)
-    useEffect(() => {
-        const handleSpy = () => {
-            const sections = ["hero", "about", "projects", "contact"];
-            const scrollPos = window.scrollY + window.innerHeight / 2;
-
-            for (const section of sections) {
-                const el = document.getElementById(section);
-                if (el) {
-                    const rect = el.getBoundingClientRect();
-                    // Simple check if top of section is near middle of viewport
-                    if (rect.top <= window.innerHeight / 2 && rect.bottom >= window.innerHeight / 2) {
-                        setActiveTab(section === "hero" ? "home" : section);
-                        break; // Stop after finding the first match
+        sectionIds.forEach((id) => {
+            const el = document.getElementById(id);
+            if (!el) return;
+            const observer = new IntersectionObserver(
+                ([entry]) => {
+                    if (entry.isIntersecting) {
+                        setActiveTab(id === "hero" ? "home" : id);
                     }
-                }
-            }
-        };
-        // Throttle could be added here, but break helps.
-        window.addEventListener("scroll", handleSpy);
-        return () => window.removeEventListener("scroll", handleSpy);
+                },
+                { rootMargin: "-40% 0px -55% 0px", threshold: 0 }
+            );
+            observer.observe(el);
+            observers.push(observer);
+        });
+
+        return () => observers.forEach((o) => o.disconnect());
     }, []);
 
     const navItems = [

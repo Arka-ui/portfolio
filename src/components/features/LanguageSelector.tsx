@@ -19,12 +19,12 @@ export default function LanguageSelector() {
     // Detect user location on first mount and auto-select a language
     useEffect(() => {
         setMounted(true);
-        const detectLanguage = async () => {
+        const detectLanguage = async (signal: AbortSignal) => {
             // Only run if language hasn't been set by user preference already (handled in Context)
             if (localStorage.getItem("language")) return;
 
             try {
-                const res = await fetch("https://ipapi.co/json/");
+                const res = await fetch("https://ipapi.co/json/", { signal });
                 const data = await res.json();
                 const country = data.country_code as string;
                 let langCode = "en";
@@ -37,11 +37,15 @@ export default function LanguageSelector() {
                 if (detected && detected.code !== "en") {
                     setLanguage(detected);
                 }
-            } catch (err) {
-                console.error("Location detection failed", err);
+            } catch (err: unknown) {
+                if (err instanceof Error && err.name !== "AbortError") {
+                    console.error("Location detection failed", err);
+                }
             }
         };
-        detectLanguage();
+        const controller = new AbortController();
+        detectLanguage(controller.signal);
+        return () => controller.abort();
     }, [setLanguage]);
 
     if (!mounted) return null;

@@ -129,7 +129,28 @@ export default function FeaturedProjects() {
             .slice(0, 6)
         : [];
 
-    if (!featured.length) return null;
+    if (!featured.length) {
+        // Show skeleton cards while GitHub data loads
+        return (
+            <section id="projects" className="py-28 border-t border-white/[0.06]">
+                <div className="container mx-auto px-6 md:px-12">
+                    <div className="mb-16">
+                        <span className="label-mono mb-5 block">Work</span>
+                        <div className="h-16 w-72 bg-white/[0.04] rounded-xl animate-pulse" />
+                    </div>
+                    <div className="hidden md:grid md:grid-cols-2 gap-x-16">
+                        {Array.from({ length: 4 }).map((_, i) => (
+                            <div key={i} className="border-t border-white/[0.07] pt-8 pb-8 space-y-3">
+                                <div className="h-6 w-48 bg-white/[0.04] rounded animate-pulse" />
+                                <div className="h-4 w-full bg-white/[0.03] rounded animate-pulse" />
+                                <div className="h-4 w-3/4 bg-white/[0.03] rounded animate-pulse" />
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+        );
+    }
 
     return (
         <section id="projects" className="py-28 border-t border-white/[0.06]">
