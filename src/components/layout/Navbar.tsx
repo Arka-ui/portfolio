@@ -29,18 +29,19 @@ export default function Navbar() {
     }, []);
 
     useEffect(() => {
-        const observers: IntersectionObserver[] = [];
-        NAV_ITEMS.forEach(({ id }) => {
-            const el = document.getElementById(id);
-            if (!el) return;
-            const observer = new IntersectionObserver(
-                ([entry]) => { if (entry.isIntersecting) setActiveSection(id); },
-                { rootMargin: "-40% 0px -55% 0px", threshold: 0 }
-            );
-            observer.observe(el);
-            observers.push(observer);
-        });
-        return () => observers.forEach((o) => o.disconnect());
+        const onScroll = () => {
+            const mid = window.innerHeight / 2;
+            let current = "hero";
+            document.querySelectorAll("section[id]").forEach(sec => {
+                const rect = sec.getBoundingClientRect();
+                if (rect.top <= mid && rect.bottom >= mid) current = sec.id;
+            });
+            if (window.scrollY < 100) current = "hero";
+            setActiveSection(current);
+        };
+        window.addEventListener("scroll", onScroll, { passive: true });
+        onScroll();
+        return () => window.removeEventListener("scroll", onScroll);
     }, []);
 
     const openCmdPalette = () =>

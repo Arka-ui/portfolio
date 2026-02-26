@@ -18,11 +18,8 @@ export default function Footer() {
 
     return (
         <footer className="relative border-t border-white/[0.06] pt-20 pb-10">
-            {/* Ambient gradient — no CSS filter */}
-            <div
-                className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-[200px] pointer-events-none"
-                style={{ background: "radial-gradient(ellipse 100% 100% at 50% 100%, rgba(99,102,241,0.05) 0%, transparent 70%)" }}
-            />
+            {/* Subtle orb */}
+            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-[200px] bg-indigo-600/[0.04] rounded-full blur-[80px] pointer-events-none" />
 
             <div className="container mx-auto px-6 md:px-12 relative z-10">
                 <div className="grid md:grid-cols-2 gap-10 items-end mb-16">

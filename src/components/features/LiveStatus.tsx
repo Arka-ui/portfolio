@@ -53,14 +53,14 @@ export default function LiveStatus() {
 
     if (!mounted) return null;
 
-    // Disable 3D tilt on touch devices to avoid mobile GPU overhead
-    const isTouch = typeof window !== "undefined" && ("ontouchstart" in window || navigator.maxTouchPoints > 0);
-
     const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-        if (isTouch) return;
         const rect = e.currentTarget.getBoundingClientRect();
-        const xPct = (e.clientX - rect.left) / rect.width - 0.5;
-        const yPct = (e.clientY - rect.top) / rect.height - 0.5;
+        const width = rect.width;
+        const height = rect.height;
+        const mouseXVal = e.clientX - rect.left;
+        const mouseYVal = e.clientY - rect.top;
+        const xPct = mouseXVal / width - 0.5;
+        const yPct = mouseYVal / height - 0.5;
         x.set(xPct);
         y.set(yPct);
     };
@@ -71,34 +71,7 @@ export default function LiveStatus() {
     };
 
     // Don't render while loading
-    if (!lanyardData) {
-        return (
-            <section className="py-28 border-t border-white/[0.06]">
-                <div className="container mx-auto px-6 md:px-12">
-                    <div className="mb-12">
-                        <span className="label-mono mb-5 block">Live</span>
-                        <div className="h-12 w-48 bg-white/[0.04] rounded-xl animate-pulse" />
-                    </div>
-                    <div className="w-full max-w-sm">
-                        <div className="bg-[#0e0e12] border border-white/[0.06] rounded-3xl overflow-hidden">
-                            <div className="h-0.5 w-full bg-white/[0.04]" />
-                            <div className="p-6 space-y-4">
-                                <div className="flex items-center gap-4">
-                                    <div className="w-14 h-14 rounded-2xl bg-white/[0.04] animate-pulse" />
-                                    <div className="space-y-2 flex-1">
-                                        <div className="h-4 w-32 bg-white/[0.04] rounded animate-pulse" />
-                                        <div className="h-3 w-24 bg-white/[0.03] rounded animate-pulse" />
-                                    </div>
-                                </div>
-                                <div className="h-px bg-white/[0.04]" />
-                                <div className="h-16 bg-white/[0.03] rounded-2xl animate-pulse" />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        );
-    }
+    if (!lanyardData) return null;
 
     const { discord_status, activities, discord_user, spotify, active_on_discord_desktop, active_on_discord_mobile, active_on_discord_web } = lanyardData;
 

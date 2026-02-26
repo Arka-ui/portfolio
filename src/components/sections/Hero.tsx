@@ -38,15 +38,9 @@ export default function Hero() {
 
     return (
         <section id="hero" className="relative min-h-screen flex flex-col justify-center pt-28 pb-0 overflow-hidden">
-            {/* Ambient gradient — no CSS filter, GPU-friendly */}
-            <div
-                className="absolute inset-0 pointer-events-none"
-                style={{
-                    background:
-                        "radial-gradient(ellipse 70% 55% at -5% -5%, rgba(99,102,241,0.09) 0%, transparent 60%), " +
-                        "radial-gradient(ellipse 60% 50% at 105% 105%, rgba(139,92,246,0.06) 0%, transparent 60%)",
-                }}
-            />
+            {/* Subtle gradient orb */}
+            <div className="absolute -top-40 -left-40 w-[700px] h-[700px] bg-indigo-600/[0.06] rounded-full blur-[140px] pointer-events-none" />
+            <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-violet-600/[0.04] rounded-full blur-[120px] pointer-events-none" />
 
             <div className="container mx-auto px-6 md:px-12 relative z-10">
 
@@ -133,7 +127,7 @@ export default function Hero() {
                 <div className="absolute inset-y-0 right-0 w-28 bg-gradient-to-l from-[#0a0a0a] to-transparent z-10 pointer-events-none" />
 
                 {/* Row 1 — scrolls left */}
-                <div className="flex gap-5 w-max mb-2.5" style={{ animation: "marquee 32s linear infinite", willChange: "transform", transform: "translateZ(0)" }}>
+                <div className="flex gap-5 w-max mb-2.5" style={{ animation: "marquee 32s linear infinite" }}>
                     {[...MARQUEE_ROW_1, ...MARQUEE_ROW_1].map((item, i) => (
                         <span
                             key={i}
@@ -149,7 +143,7 @@ export default function Hero() {
                 </div>
 
                 {/* Row 2 — scrolls right */}
-                <div className="flex gap-5 w-max" style={{ animation: "marquee 24s linear infinite reverse", willChange: "transform", transform: "translateZ(0)" }}>
+                <div className="flex gap-5 w-max" style={{ animation: "marquee 24s linear infinite reverse" }}>
                     {[...MARQUEE_ROW_2, ...MARQUEE_ROW_2].map((label, i) => (
                         <span
                             key={i}
