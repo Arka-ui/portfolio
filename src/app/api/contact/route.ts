@@ -7,6 +7,25 @@ import { NextRequest, NextResponse } from "next/server";
    lives only in .env.local / server environment — never in
    client code and never committed to git.
 ──────────────────────────────────────────────────────────── */
+
+// Accept OPTIONS for CORS preflight
+export async function OPTIONS() {
+    return new NextResponse(null, {
+        status: 204,
+        headers: {
+            "Allow": "POST, OPTIONS",
+        },
+    });
+}
+
+// Accept GET to return a helpful message instead of 405
+export async function GET() {
+    return NextResponse.json(
+        { error: "This endpoint only accepts POST requests with a JSON body." },
+        { status: 405, headers: { "Allow": "POST, OPTIONS" } }
+    );
+}
+
 export async function POST(request: NextRequest) {
     const webhookUrl = process.env.DISCORD_WEBHOOK_URL;
 

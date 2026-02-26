@@ -218,145 +218,225 @@ export default function LiveStatus() {
                     <h2 className="font-heading font-black text-[clamp(36px,5vw,64px)] leading-[0.9] tracking-tighter text-white">
                         What I&apos;m doing
                     </h2>
+                    <p className="text-white/35 text-sm mt-4 max-w-lg">
+                        Real-time data pulled from Discord via Lanyard. This section updates live —
+                        what you see is what&apos;s happening right now.
+                    </p>
                 </div>
 
-                <div style={{ perspective: "1000px" }}>
+                <div className="grid lg:grid-cols-2 gap-8 items-start">
+                    {/* Left: Discord card */}
+                    <div style={{ perspective: "1000px" }}>
+                        <motion.div
+                            style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
+                            onMouseMove={handleMouseMove}
+                            onMouseLeave={handleMouseLeave}
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            className="w-full max-w-sm"
+                        >
+                            {/* Discord profile card */}
+                            <div className="relative bg-[#0e0e12] border border-white/[0.08] rounded-3xl overflow-hidden shadow-2xl">
+                                {/* Discord accent bar */}
+                                <div className="h-0.5 w-full bg-gradient-to-r from-[#5865F2] via-[#7c84f5]/50 to-transparent" />
+                                {/* Soft glow */}
+                                <div className="absolute top-0 right-0 w-52 h-52 bg-[#5865F2]/[0.05] rounded-full blur-3xl pointer-events-none" />
+
+                                <div className="p-6 relative">
+                                    {/* Identity row */}
+                                    <div className="flex items-center gap-4 mb-5">
+                                        <div className="relative flex-shrink-0">
+                                            {discord_user.avatar ? (
+                                                <Image
+                                                    src={`https://cdn.discordapp.com/avatars/${discord_user.id}/${discord_user.avatar}.webp?size=128`}
+                                                    alt="Avatar"
+                                                    width={56}
+                                                    height={56}
+                                                    className="rounded-2xl"
+                                                />
+                                            ) : (
+                                                <div className="w-14 h-14 rounded-2xl bg-[#5865F2]/20 flex items-center justify-center">
+                                                    <User className="w-7 h-7 text-[#5865F2]/50" />
+                                                </div>
+                                            )}
+                                            <span
+                                                className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-[2.5px] border-[#0e0e12]"
+                                                style={{
+                                                    backgroundColor:
+                                                        discord_status === "online" ? "#22c55e" :
+                                                        discord_status === "idle"   ? "#f59e0b" :
+                                                        discord_status === "dnd"    ? "#ef4444" : "#6b7280"
+                                                }}
+                                            />
+                                        </div>
+                                        <div className="flex-1 min-w-0">
+                                            <p className="font-bold text-white text-base leading-tight truncate">
+                                                {discord_user.global_name || discord_user.username}
+                                            </p>
+                                            <p className="text-xs text-white/35 font-mono truncate mt-0.5">
+                                                @{discord_user.username}
+                                            </p>
+                                            <div className="flex items-center gap-2 mt-1.5">
+                                                <span
+                                                    className="text-[10px] font-mono px-2 py-0.5 rounded-full border capitalize"
+                                                    style={{
+                                                        color: discord_status === "online" ? "#4ade80" : discord_status === "idle" ? "#fbbf24" : discord_status === "dnd" ? "#f87171" : "#9ca3af",
+                                                        borderColor: discord_status === "online" ? "rgba(74,222,128,0.25)" : discord_status === "idle" ? "rgba(251,191,36,0.25)" : discord_status === "dnd" ? "rgba(248,113,113,0.25)" : "rgba(156,163,175,0.15)",
+                                                        backgroundColor: discord_status === "online" ? "rgba(74,222,128,0.07)" : discord_status === "idle" ? "rgba(251,191,36,0.07)" : discord_status === "dnd" ? "rgba(248,113,113,0.07)" : "rgba(156,163,175,0.04)",
+                                                    }}
+                                                >
+                                                    {discord_status}
+                                                </span>
+                                                <div className="flex gap-1.5 text-white/20">
+                                                    {active_on_discord_desktop && <Monitor size={12} />}
+                                                    {active_on_discord_mobile && <Smartphone size={12} />}
+                                                    {active_on_discord_web && <Globe size={12} />}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="border-t border-white/[0.05] mb-4" />
+
+                                    {/* Spotify now-playing */}
+                                    {spotify && (
+                                        <a
+                                            href={`https://open.spotify.com/track/${spotify.track_id}`}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="group flex items-center gap-3 p-3 rounded-2xl bg-white/[0.03] border border-white/[0.06] hover:border-[#1DB954]/25 hover:bg-[#1DB954]/[0.04] transition-all duration-300 mb-3"
+                                        >
+                                            <div className="relative w-11 h-11 rounded-xl overflow-hidden flex-shrink-0">
+                                                <Image src={spotify.album_art_url} alt={spotify.album} fill className="object-cover" />
+                                            </div>
+                                            <div className="flex-1 min-w-0">
+                                                <div className="flex items-center gap-1.5 mb-0.5">
+                                                    <Music className="w-3 h-3 text-[#1DB954] flex-shrink-0" />
+                                                    <span className="text-[10px] font-mono text-[#1DB954] uppercase tracking-wider">Spotify</span>
+                                                </div>
+                                                <p className="text-white text-[13px] font-semibold truncate group-hover:text-[#1DB954] transition-colors">
+                                                    {spotify.song}
+                                                </p>
+                                                <p className="text-white/35 text-[11px] truncate">{spotify.artist}</p>
+                                                <div className="mt-2 h-0.5 bg-white/[0.07] rounded-full overflow-hidden">
+                                                    <div
+                                                        className="h-full bg-[#1DB954] rounded-full transition-all duration-1000 ease-linear"
+                                                        style={{
+                                                            width: `${Math.min(100, ((currentTime - spotify.timestamps.start) / (spotify.timestamps.end - spotify.timestamps.start)) * 100)}%`
+                                                        }}
+                                                    />
+                                                </div>
+                                            </div>
+                                        </a>
+                                    )}
+
+                                    {/* Activity list */}
+                                    <div className="space-y-2">
+                                        {sortedActivities.filter(a => a.name !== "Spotify").map((activity, i) => (
+                                            <div key={i} className="flex items-center gap-3 p-3 rounded-xl bg-white/[0.02] border border-white/[0.05]">
+                                                <div className="w-8 h-8 rounded-lg bg-white/[0.04] flex items-center justify-center flex-shrink-0">
+                                                    {activity.name.toLowerCase().includes("code") || activity.name.toLowerCase().includes("visual studio")
+                                                        ? <Code size={14} className="text-indigo-400" />
+                                                        : <Gamepad2 size={14} className="text-white/30" />
+                                                    }
+                                                </div>
+                                                <div className="flex-1 min-w-0">
+                                                    <p className="text-white text-[12px] font-semibold truncate">{activity.name}</p>
+                                                    <p className="text-white/30 text-[11px] truncate">{activity.details || activity.state || "Active"}</p>
+                                                </div>
+                                                {activity.timestamps?.start && (
+                                                    <span className="text-[10px] font-mono text-white/20 flex-shrink-0">
+                                                        {(() => {
+                                                            const e = currentTime - activity.timestamps!.start;
+                                                            const h = Math.floor(e / 3600000);
+                                                            const m = Math.floor((e % 3600000) / 60000);
+                                                            return h > 0 ? `${h}h ${m}m` : `${m}m`;
+                                                        })()}
+                                                    </span>
+                                                )}
+                                            </div>
+                                        ))}
+                                        {sortedActivities.filter(a => a.name !== "Spotify").length === 0 && !spotify && (
+                                            <p className="text-white/20 text-xs text-center py-3 font-mono">No activity right now</p>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+                        </motion.div>
+                    </div>
+
+                    {/* Right: Status details & info panels */}
                     <motion.div
-                        style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
-                        onMouseMove={handleMouseMove}
-                        onMouseLeave={handleMouseLeave}
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        className="w-full max-w-sm"
+                        transition={{ duration: 0.7, delay: 0.15 }}
+                        className="space-y-5"
                     >
-                        {/* Discord profile card */}
-                        <div className="relative bg-[#0e0e12] border border-white/[0.08] rounded-3xl overflow-hidden shadow-2xl">
-                            {/* Discord accent bar */}
-                            <div className="h-0.5 w-full bg-gradient-to-r from-[#5865F2] via-[#7c84f5]/50 to-transparent" />
-                            {/* Soft glow */}
-                            <div className="absolute top-0 right-0 w-52 h-52 bg-[#5865F2]/[0.05] rounded-full blur-3xl pointer-events-none" />
+                        {/* Current timezone / local time */}
+                        <div className="p-5 rounded-2xl border border-white/[0.06] bg-white/[0.02]">
+                            <span className="label-mono text-[10px] block mb-3">Local time</span>
+                            <div className="flex items-baseline gap-3">
+                                <span className="font-heading font-black text-3xl text-white tracking-tight">
+                                    {new Date(currentTime).toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit", timeZone: "Europe/Paris" })}
+                                </span>
+                                <span className="text-xs font-mono text-white/25">CET — France</span>
+                            </div>
+                            <p className="text-[12px] text-white/25 mt-2">
+                                {new Date(currentTime).toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric", timeZone: "Europe/Paris" })}
+                            </p>
+                        </div>
 
-                            <div className="p-6 relative">
-                                {/* Identity row */}
-                                <div className="flex items-center gap-4 mb-5">
-                                    <div className="relative flex-shrink-0">
-                                        {discord_user.avatar ? (
-                                            <Image
-                                                src={`https://cdn.discordapp.com/avatars/${discord_user.id}/${discord_user.avatar}.webp?size=128`}
-                                                alt="Avatar"
-                                                width={56}
-                                                height={56}
-                                                className="rounded-2xl"
-                                            />
-                                        ) : (
-                                            <div className="w-14 h-14 rounded-2xl bg-[#5865F2]/20 flex items-center justify-center">
-                                                <User className="w-7 h-7 text-[#5865F2]/50" />
-                                            </div>
-                                        )}
-                                        <span
-                                            className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-[2.5px] border-[#0e0e12]"
-                                            style={{
-                                                backgroundColor:
-                                                    discord_status === "online" ? "#22c55e" :
-                                                    discord_status === "idle"   ? "#f59e0b" :
-                                                    discord_status === "dnd"    ? "#ef4444" : "#6b7280"
-                                            }}
-                                        />
-                                    </div>
-                                    <div className="flex-1 min-w-0">
-                                        <p className="font-bold text-white text-base leading-tight truncate">
-                                            {discord_user.global_name || discord_user.username}
-                                        </p>
-                                        <p className="text-xs text-white/35 font-mono truncate mt-0.5">
-                                            @{discord_user.username}
-                                        </p>
-                                        <div className="flex items-center gap-2 mt-1.5">
-                                            <span
-                                                className="text-[10px] font-mono px-2 py-0.5 rounded-full border capitalize"
-                                                style={{
-                                                    color: discord_status === "online" ? "#4ade80" : discord_status === "idle" ? "#fbbf24" : discord_status === "dnd" ? "#f87171" : "#9ca3af",
-                                                    borderColor: discord_status === "online" ? "rgba(74,222,128,0.25)" : discord_status === "idle" ? "rgba(251,191,36,0.25)" : discord_status === "dnd" ? "rgba(248,113,113,0.25)" : "rgba(156,163,175,0.15)",
-                                                    backgroundColor: discord_status === "online" ? "rgba(74,222,128,0.07)" : discord_status === "idle" ? "rgba(251,191,36,0.07)" : discord_status === "dnd" ? "rgba(248,113,113,0.07)" : "rgba(156,163,175,0.04)",
-                                                }}
-                                            >
-                                                {discord_status}
-                                            </span>
-                                            <div className="flex gap-1.5 text-white/20">
-                                                {active_on_discord_desktop && <Monitor size={12} />}
-                                                {active_on_discord_mobile && <Smartphone size={12} />}
-                                                {active_on_discord_web && <Globe size={12} />}
-                                            </div>
-                                        </div>
-                                    </div>
+                        {/* Quick availability info */}
+                        <div className="p-5 rounded-2xl border border-white/[0.06] bg-white/[0.02]">
+                            <span className="label-mono text-[10px] block mb-3">Availability</span>
+                            <div className="space-y-3">
+                                <div className="flex items-center justify-between">
+                                    <span className="text-sm text-white/50">Response time</span>
+                                    <span className="text-sm text-white/70 font-mono">&lt; 24h</span>
                                 </div>
-
-                                <div className="border-t border-white/[0.05] mb-4" />
-
-                                {/* Spotify now-playing */}
-                                {spotify && (
-                                    <a
-                                        href={`https://open.spotify.com/track/${spotify.track_id}`}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="group flex items-center gap-3 p-3 rounded-2xl bg-white/[0.03] border border-white/[0.06] hover:border-[#1DB954]/25 hover:bg-[#1DB954]/[0.04] transition-all duration-300 mb-3"
-                                    >
-                                        <div className="relative w-11 h-11 rounded-xl overflow-hidden flex-shrink-0">
-                                            <Image src={spotify.album_art_url} alt={spotify.album} fill className="object-cover" />
-                                        </div>
-                                        <div className="flex-1 min-w-0">
-                                            <div className="flex items-center gap-1.5 mb-0.5">
-                                                <Music className="w-3 h-3 text-[#1DB954] flex-shrink-0" />
-                                                <span className="text-[10px] font-mono text-[#1DB954] uppercase tracking-wider">Spotify</span>
-                                            </div>
-                                            <p className="text-white text-[13px] font-semibold truncate group-hover:text-[#1DB954] transition-colors">
-                                                {spotify.song}
-                                            </p>
-                                            <p className="text-white/35 text-[11px] truncate">{spotify.artist}</p>
-                                            <div className="mt-2 h-0.5 bg-white/[0.07] rounded-full overflow-hidden">
-                                                <div
-                                                    className="h-full bg-[#1DB954] rounded-full transition-all duration-1000 ease-linear"
-                                                    style={{
-                                                        width: `${Math.min(100, ((currentTime - spotify.timestamps.start) / (spotify.timestamps.end - spotify.timestamps.start)) * 100)}%`
-                                                    }}
-                                                />
-                                            </div>
-                                        </div>
-                                    </a>
-                                )}
-
-                                {/* Activity list */}
-                                <div className="space-y-2">
-                                    {sortedActivities.filter(a => a.name !== "Spotify").map((activity, i) => (
-                                        <div key={i} className="flex items-center gap-3 p-3 rounded-xl bg-white/[0.02] border border-white/[0.05]">
-                                            <div className="w-8 h-8 rounded-lg bg-white/[0.04] flex items-center justify-center flex-shrink-0">
-                                                {activity.name.toLowerCase().includes("code") || activity.name.toLowerCase().includes("visual studio")
-                                                    ? <Code size={14} className="text-indigo-400" />
-                                                    : <Gamepad2 size={14} className="text-white/30" />
-                                                }
-                                            </div>
-                                            <div className="flex-1 min-w-0">
-                                                <p className="text-white text-[12px] font-semibold truncate">{activity.name}</p>
-                                                <p className="text-white/30 text-[11px] truncate">{activity.details || activity.state || "Active"}</p>
-                                            </div>
-                                            {activity.timestamps?.start && (
-                                                <span className="text-[10px] font-mono text-white/20 flex-shrink-0">
-                                                    {(() => {
-                                                        const e = currentTime - activity.timestamps!.start;
-                                                        const h = Math.floor(e / 3600000);
-                                                        const m = Math.floor((e % 3600000) / 60000);
-                                                        return h > 0 ? `${h}h ${m}m` : `${m}m`;
-                                                    })()}
-                                                </span>
-                                            )}
-                                        </div>
-                                    ))}
-                                    {sortedActivities.filter(a => a.name !== "Spotify").length === 0 && !spotify && (
-                                        <p className="text-white/20 text-xs text-center py-3 font-mono">No activity right now</p>
-                                    )}
+                                <div className="flex items-center justify-between">
+                                    <span className="text-sm text-white/50">Timezone</span>
+                                    <span className="text-sm text-white/70 font-mono">UTC+1</span>
+                                </div>
+                                <div className="flex items-center justify-between">
+                                    <span className="text-sm text-white/50">Open for work</span>
+                                    <span className="flex items-center gap-1.5 text-sm text-emerald-400 font-medium">
+                                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                                        Yes
+                                    </span>
+                                </div>
+                                <div className="flex items-center justify-between">
+                                    <span className="text-sm text-white/50">Preferred contact</span>
+                                    <span className="text-sm text-white/70 font-mono">Discord</span>
+                                </div>
+                                <div className="mt-1 pt-3 border-t border-white/[0.04]">
+                                    <p className="text-[12px] text-white/25 italic leading-relaxed">
+                                        Or IRL with a good meal at the restaurant — best way to close a deal 🍽️
+                                    </p>
                                 </div>
                             </div>
                         </div>
+
+                        {/* Spotify profile link */}
+                        {spotify && (
+                            <a
+                                href={SPOTIFY_PROFILE_URL}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="group flex items-center gap-3 p-4 rounded-2xl border border-white/[0.06] bg-white/[0.02] hover:bg-[#1DB954]/[0.04] hover:border-[#1DB954]/20 transition-all duration-300"
+                            >
+                                <div className="w-10 h-10 rounded-xl bg-[#1DB954]/10 flex items-center justify-center shrink-0">
+                                    <Music className="w-5 h-5 text-[#1DB954]" />
+                                </div>
+                                <div className="flex-1 min-w-0">
+                                    <p className="text-sm text-white/60 group-hover:text-[#1DB954] transition-colors font-medium">Listening on Spotify</p>
+                                    <p className="text-[11px] text-white/25 truncate">{spotify.song} — {spotify.artist}</p>
+                                </div>
+                                <ExternalLink size={14} className="text-white/15 group-hover:text-[#1DB954]/50 transition-colors shrink-0" />
+                            </a>
+                        )}
                     </motion.div>
                 </div>
             </div>

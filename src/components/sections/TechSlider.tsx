@@ -1,15 +1,37 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useRef, useEffect, useCallback } from "react";
 
-/*
-  Infinite marquee approach:
-  – Triple every row in the DOM (3 copies).
-  – `marquee`       keyframe: 0% → −33.333% (scroll left).
-  – `marquee-right` keyframe: −33.333% → 0   (scroll right).
-  One copy is always fully visible, so there is never a gap,
-  regardless of screen size or badge count.
-*/
+const TECH_LINKS: Record<string, string> = {
+    "React": "https://react.dev",
+    "TypeScript": "https://www.typescriptlang.org",
+    "Next.js": "https://nextjs.org",
+    "Node.js": "https://nodejs.org",
+    "Tailwind CSS": "https://tailwindcss.com",
+    "Framer Motion": "https://www.framer.com/motion",
+    "Docker": "https://www.docker.com",
+    "PostgreSQL": "https://www.postgresql.org",
+    "Prisma": "https://www.prisma.io",
+    "JavaScript": "https://developer.mozilla.org/en-US/docs/Web/JavaScript",
+    "HTML / CSS": "https://developer.mozilla.org/en-US/docs/Web",
+    "GraphQL": "https://graphql.org",
+    "Vite": "https://vitejs.dev",
+    "Zustand": "https://zustand-demo.pmnd.rs",
+    "tRPC": "https://trpc.io",
+    "Python": "https://www.python.org",
+    "Rust": "https://www.rust-lang.org",
+    "Java": "https://www.java.com",
+    "Git": "https://git-scm.com",
+    "VS Code": "https://code.visualstudio.com",
+    "CI/CD": "https://github.com/features/actions",
+    "GitHub Actions": "https://github.com/features/actions",
+    "Nginx": "https://nginx.org",
+    "OpenAI": "https://openai.com",
+    "Markdown": "https://www.markdownguide.org",
+    "better-auth": "https://www.better-auth.com",
+    "Drizzle": "https://orm.drizzle.team",
+    "shadcn/ui": "https://ui.shadcn.com",
+};
 
 const ROW_1: { label: string; color: string }[] = [
     { label: "React",          color: "#61dafb" },
@@ -21,7 +43,6 @@ const ROW_1: { label: string; color: string }[] = [
     { label: "Docker",         color: "#2496ed" },
     { label: "PostgreSQL",     color: "#336791" },
     { label: "Prisma",         color: "#5a67d8" },
-    { label: "Redis",          color: "#dc382d" },
     { label: "JavaScript",     color: "#f0db4f" },
     { label: "HTML / CSS",     color: "#e34c26" },
     { label: "GraphQL",        color: "#e535ab" },
@@ -31,59 +52,134 @@ const ROW_1: { label: string; color: string }[] = [
 ];
 
 const ROW_2: { label: string; color: string }[] = [
-    { label: "Python",   color: "#3572a5" },
-    { label: "Go",       color: "#00add8" },
-    { label: "Rust",     color: "#dea584" },
-    { label: "Java",     color: "#b07219" },
-    { label: "Kotlin",   color: "#7f52ff" },
-    { label: "AWS",      color: "#ff9900" },
-    { label: "Git",      color: "#f14e32" },
-    { label: "Figma",    color: "#f24e1e" },
-    { label: "VS Code",  color: "#007acc" },
-    { label: "Linux",    color: "#fcc624" },
-    { label: "CI/CD",    color: "#6366f1" },
+    { label: "Python",         color: "#3572a5" },
+    { label: "Rust",           color: "#dea584" },
+    { label: "Java",           color: "#b07219" },
+    { label: "Git",            color: "#f14e32" },
+    { label: "VS Code",        color: "#007acc" },
+    { label: "CI/CD",          color: "#6366f1" },
     { label: "GitHub Actions", color: "#2088ff" },
-    { label: "Nginx",    color: "#009900" },
-    { label: "Vercel",   color: "#e2e8f0" },
-    { label: "OpenAI",   color: "#10a37f" },
-    { label: "Markdown", color: "#083fa1" },
+    { label: "Nginx",          color: "#009900" },
+    { label: "OpenAI",         color: "#10a37f" },
+    { label: "Markdown",       color: "#083fa1" },
+    { label: "better-auth",    color: "#2dd4bf" },
+    { label: "Drizzle",        color: "#c5f74f" },
+    { label: "shadcn/ui",      color: "#f4f4f5" },
 ];
 
 function TechBadge({ label, color }: { label: string; color: string }) {
+    const href = TECH_LINKS[label] || "#";
     return (
-        <span className="inline-flex items-center gap-2.5 px-4 py-2 rounded-lg border border-white/[0.07] bg-white/[0.025] text-[11px] font-mono tracking-widest text-white/40 whitespace-nowrap hover:text-white/70 hover:border-white/[0.14] transition-all duration-300 cursor-default select-none">
+        <a
+            href={href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group relative inline-flex items-center gap-3.5 px-6 py-4 rounded-2xl border border-white/[0.06] bg-white/[0.02] text-[14px] font-mono tracking-wider text-white/45 whitespace-nowrap hover:text-white hover:border-white/[0.2] hover:bg-white/[0.07] transition-all duration-400 cursor-pointer select-none overflow-hidden"
+        >
+            {/* Hover gradient flash */}
             <span
-                className="w-1.5 h-1.5 rounded-full shrink-0"
-                style={{ backgroundColor: color, boxShadow: `0 0 5px ${color}66` }}
+                className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+                style={{ background: `linear-gradient(135deg, ${color}08 0%, transparent 60%)` }}
             />
-            {label}
-        </span>
+            <span
+                className="relative w-2.5 h-2.5 rounded-full shrink-0 transition-all duration-300 group-hover:scale-125"
+                style={{
+                    backgroundColor: color,
+                    boxShadow: `0 0 8px ${color}55`,
+                }}
+            />
+            <span className="relative">{label}</span>
+            {/* Underline reveal on hover */}
+            <span
+                className="absolute bottom-3 left-6 right-6 h-px scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"
+                style={{ backgroundColor: `${color}40` }}
+            />
+        </a>
     );
 }
 
 function MarqueeRow({
     items,
     reverse = false,
-    duration = 35,
+    speed = 30,
 }: {
     items: { label: string; color: string }[];
     reverse?: boolean;
-    duration?: number;
+    speed?: number;
 }) {
-    // Three copies → animation only needs to move by -33.333%
+    const containerRef = useRef<HTMLDivElement>(null);
+    const offsetRef = useRef(0);
+    const requestRef = useRef<number>(0);
+    const lastTimeRef = useRef<number>(0);
+    const isPausedRef = useRef(false);
+    const singleWidthRef = useRef(0);
+
+    const measure = useCallback(() => {
+        const container = containerRef.current;
+        if (!container) return;
+        const itemCount = items.length;
+        let w = 0;
+        for (let i = 0; i < itemCount; i++) {
+            const child = container.children[i] as HTMLElement;
+            if (child) w += child.offsetWidth + 12;
+        }
+        singleWidthRef.current = w;
+        if (reverse) offsetRef.current = w;
+    }, [items.length, reverse]);
+
+    useEffect(() => {
+        measure();
+        // Small delay to ensure layout is computed
+        const t = setTimeout(measure, 100);
+        return () => clearTimeout(t);
+    }, [measure]);
+
+    useEffect(() => {
+        const animate = (time: number) => {
+            if (lastTimeRef.current === 0) lastTimeRef.current = time;
+            const delta = time - lastTimeRef.current;
+            lastTimeRef.current = time;
+
+            if (!isPausedRef.current && singleWidthRef.current > 0) {
+                const px = (speed * delta) / 1000;
+                if (reverse) {
+                    offsetRef.current -= px;
+                    if (offsetRef.current <= 0) offsetRef.current += singleWidthRef.current;
+                } else {
+                    offsetRef.current += px;
+                    if (offsetRef.current >= singleWidthRef.current) offsetRef.current -= singleWidthRef.current;
+                }
+
+                if (containerRef.current) {
+                    containerRef.current.style.transform = `translateX(${-offsetRef.current}px)`;
+                }
+            }
+
+            requestRef.current = requestAnimationFrame(animate);
+        };
+
+        requestRef.current = requestAnimationFrame(animate);
+        return () => cancelAnimationFrame(requestRef.current);
+    }, [speed, reverse]);
+
+    // Triple items for seamless loop
     const tripled = [...items, ...items, ...items];
+
     return (
         <div
-            className="flex gap-3"
-            style={{
-                width: "max-content",
-                willChange: "transform",
-                animation: `${reverse ? "marquee-right" : "marquee"} ${duration}s linear infinite`,
-            }}
+            className="overflow-hidden"
+            onMouseEnter={() => { isPausedRef.current = true; }}
+            onMouseLeave={() => { isPausedRef.current = false; }}
         >
-            {tripled.map((item, i) => (
-                <TechBadge key={i} label={item.label} color={item.color} />
-            ))}
+            <div
+                ref={containerRef}
+                className="flex gap-3"
+                style={{ width: "max-content", willChange: "transform" }}
+            >
+                {tripled.map((item, i) => (
+                    <TechBadge key={`${item.label}-${i}`} label={item.label} color={item.color} />
+                ))}
+            </div>
         </div>
     );
 }
@@ -92,15 +188,35 @@ export default function TechSlider() {
     return (
         <section
             aria-label="Technology stack"
-            className="relative overflow-hidden py-8 border-t border-white/[0.04] border-b border-white/[0.04]"
+            className="relative overflow-hidden py-16 border-t border-b border-white/[0.04]"
         >
-            {/* Edge fade masks */}
-            <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-[#0a0a0a] to-transparent z-10 pointer-events-none" />
-            <div className="absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-[#0a0a0a] to-transparent z-10 pointer-events-none" />
+            {/* Subtle top label */}
+            <div className="container mx-auto px-6 md:px-12 mb-6">
+                <div className="flex items-center gap-3">
+                    <div className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse" />
+                    <span className="text-[11px] font-mono text-white/25 uppercase tracking-widest">
+                        Technologies I work with
+                    </span>
+                    <div className="flex-1 h-px bg-gradient-to-r from-white/[0.06] to-transparent" />
+                </div>
+            </div>
 
-            <div className="flex flex-col gap-3">
-                <MarqueeRow items={ROW_1} duration={38} />
-                <MarqueeRow items={ROW_2} reverse duration={46} />
+            {/* Edge fade masks */}
+            <div className="absolute inset-y-0 left-0 w-48 bg-gradient-to-r from-[#0a0a0a] via-[#0a0a0a]/80 to-transparent z-10 pointer-events-none" />
+            <div className="absolute inset-y-0 right-0 w-48 bg-gradient-to-l from-[#0a0a0a] via-[#0a0a0a]/80 to-transparent z-10 pointer-events-none" />
+
+            <div className="flex flex-col gap-5">
+                <MarqueeRow items={ROW_1} speed={32} />
+                <MarqueeRow items={ROW_2} reverse speed={24} />
+            </div>
+
+            {/* Bottom count */}
+            <div className="container mx-auto px-6 md:px-12 mt-6">
+                <div className="flex items-center justify-end gap-2">
+                    <span className="text-[11px] font-mono text-white/15">
+                        {ROW_1.length + ROW_2.length} tools in the belt
+                    </span>
+                </div>
             </div>
         </section>
     );

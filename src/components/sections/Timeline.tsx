@@ -15,10 +15,10 @@ interface ExperienceItem {
 const EXPERIENCE: ExperienceItem[] = [
     {
         type: "work",
-        title: "Owner & Co-founder",
+        title: "Founder & Owner",
         company: "EclozionMC",
         period: "Oct 2025 — Present",
-        description: "Building a Minecraft server platform with my co-founder Nexos. Responsible for the website, infrastructure, and overall product direction.",
+        description: "Building a Minecraft server platform from the ground up. My former partner Nexos stepped away early on — the project was too demanding for him to continue. I now lead everything: website, infrastructure, plugin development, and product direction.",
         tag: "Java · Web",
     },
     {

@@ -133,7 +133,7 @@
 
   /* Mono label */
   .label-mono {
-    @apply text-xs font-mono uppercase tracking-widest text-white/40;
+    @apply text-sm font-mono uppercase tracking-widest text-white/50;
   }
 
   /* Noise overlay for depth */

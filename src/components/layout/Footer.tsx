@@ -17,45 +17,36 @@ export default function Footer() {
     ];
 
     return (
-        <footer className="relative border-t border-white/[0.06] pt-20 pb-10">
+        <footer className="relative border-t border-white/[0.06] pt-10 pb-10">
             {/* Subtle orb */}
             <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-[200px] bg-indigo-600/[0.04] rounded-full blur-[80px] pointer-events-none" />
 
             <div className="container mx-auto px-6 md:px-12 relative z-10">
-                <div className="grid md:grid-cols-2 gap-10 items-end mb-16">
-                    <div className="space-y-4">
-                        <p className="label-mono">Let&apos;s work together</p>
-                        <h2 className="font-heading font-black text-[clamp(32px,4.5vw,58px)] leading-[0.9] tracking-tighter text-white">
-                            Got a project?<br />
-                            <span className="text-white/25">Let&apos;s talk.</span>
-                        </h2>
-                        <a
-                            href="mailto:hello@arka.dev"
-                            className="inline-flex items-center gap-2 mt-2 text-indigo-400 hover:text-indigo-300 transition-colors text-sm font-mono"
-                        >
-                            hello@arka.dev →
-                        </a>
-                    </div>
-
-                    <div className="flex flex-wrap gap-3 md:justify-end items-end">
-                        {socialLinks.map((s) => (
-                            <motion.a
-                                key={s.label}
-                                href={s.href}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                whileHover={{ y: -2 }}
-                                whileTap={{ scale: 0.95 }}
-                                className="flex items-center gap-2.5 px-4 py-3 rounded-xl bg-white/[0.04] border border-white/[0.06] hover:bg-white/[0.08] hover:border-white/15 transition-all text-white/60 hover:text-white text-sm"
-                            >
-                                <s.icon size={16} strokeWidth={1.5} />
-                                <span>{s.label}</span>
-                            </motion.a>
-                        ))}
+                <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+                    {/* Left: branding + social */}
+                    <div className="flex items-center gap-4">
+                        <span className="font-heading font-bold text-white text-lg tracking-tight">Arka</span>
+                        <div className="w-px h-5 bg-white/10" />
+                        <div className="flex gap-2">
+                            {socialLinks.map((s) => (
+                                <motion.a
+                                    key={s.label}
+                                    href={s.href}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    whileHover={{ y: -2 }}
+                                    whileTap={{ scale: 0.95 }}
+                                    className="flex items-center gap-2 px-3 py-2 rounded-lg bg-white/[0.04] border border-white/[0.06] hover:bg-white/[0.08] hover:border-white/15 transition-all text-white/50 hover:text-white text-sm"
+                                >
+                                    <s.icon size={14} strokeWidth={1.5} />
+                                    <span className="text-xs">{s.label}</span>
+                                </motion.a>
+                            ))}
+                        </div>
 
                         {/* Live Discord status */}
                         {data && (
-                            <div className="flex items-center gap-2 px-4 py-3 rounded-xl bg-white/[0.02] border border-white/[0.05] text-xs font-mono text-white/30">
+                            <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-white/[0.02] border border-white/[0.05] text-xs font-mono text-white/30">
                                 <span
                                     className="w-2 h-2 rounded-full"
                                     style={{
@@ -70,14 +61,12 @@ export default function Footer() {
                             </div>
                         )}
                     </div>
-                </div>
 
-                <div className="flex flex-col md:flex-row items-center justify-between pt-8 border-t border-white/[0.06] gap-4">
-                    <p className="text-xs text-white/20 font-mono">
-                        © {new Date().getFullYear()} Arka. All rights reserved.
-                    </p>
-
+                    {/* Right: copyright + scroll top */}
                     <div className="flex items-center gap-4">
+                        <p className="text-xs text-white/20 font-mono">
+                            © {new Date().getFullYear()} Arka. All rights reserved.
+                        </p>
                         <span className="text-[11px] text-white/15 font-mono">v3.0.0</span>
                         <button
                             onClick={scrollToTop}
