@@ -8,10 +8,12 @@ import { cn } from "@/lib/utils";
 import { useWarp } from "@/context/WarpContext";
 
 const NAV_ITEMS = [
-    { label: "Home",     href: "#",           id: "hero"        },
-    { label: "About",    href: "#about-intro", id: "about-intro" },
-    { label: "Work",     href: "#projects",    id: "projects"    },
-    { label: "Contact",  href: "#contact",     id: "contact"     },
+    { label: "Home",    href: "#",            id: "hero"        },
+    { label: "About",   href: "#about-intro",  id: "about-intro" },
+    { label: "Work",    href: "#projects",     id: "projects"    },
+    { label: "Stack",   href: "#skills",       id: "skills"      },
+    { label: "Live",    href: "#live",          id: "live"        },
+    { label: "Contact", href: "#contact",      id: "contact"     },
 ];
 
 export default function Navbar() {
@@ -31,12 +33,13 @@ export default function Navbar() {
     useEffect(() => {
         const onScroll = () => {
             const mid = window.innerHeight / 2;
+            // Last section whose top is above the midpoint wins
             let current = "hero";
             document.querySelectorAll("section[id]").forEach(sec => {
                 const rect = sec.getBoundingClientRect();
-                if (rect.top <= mid && rect.bottom >= mid) current = sec.id;
+                if (rect.top <= mid) current = sec.id;
             });
-            if (window.scrollY < 100) current = "hero";
+            if (window.scrollY < 80) current = "hero";
             setActiveSection(current);
         };
         window.addEventListener("scroll", onScroll, { passive: true });
@@ -65,16 +68,35 @@ export default function Navbar() {
                 <div className="container mx-auto px-6 md:px-12">
                     <div className="flex items-center justify-between h-16 md:h-20">
 
-                        {/* Logo */}
-                        <button
-                            onClick={() => warpTo("#")}
-                            className="font-heading font-black text-xl tracking-tighter text-white hover:text-indigo-300 transition-colors duration-200"
-                        >
-                            Arka<span className="text-indigo-400">.</span>
-                        </button>
+                        {/* Logo + section breadcrumb */}
+                        <div className="flex items-center gap-3">
+                            <button
+                                onClick={() => warpTo("#")}
+                                className="font-heading font-black text-xl tracking-tighter text-white hover:text-indigo-300 transition-colors duration-200"
+                            >
+                                Arka<span className="text-indigo-400">.</span>
+                            </button>
+                            <AnimatePresence mode="wait">
+                                {scrolled && activeSection !== "hero" && (() => {
+                                    const activeItem = NAV_ITEMS.find(n => n.id === activeSection);
+                                    return activeItem ? (
+                                        <motion.span
+                                            key={activeItem.id}
+                                            initial={{ opacity: 0, x: -6 }}
+                                            animate={{ opacity: 1, x: 0 }}
+                                            exit={{ opacity: 0, x: 6 }}
+                                            transition={{ duration: 0.18 }}
+                                            className="hidden md:block text-[11px] font-mono text-white/30 tracking-widest uppercase select-none"
+                                        >
+                                            / {activeItem.label}
+                                        </motion.span>
+                                    ) : null;
+                                })()}
+                            </AnimatePresence>
+                        </div>
 
                         {/* Desktop nav */}
-                        <nav className="hidden md:flex items-center gap-8">
+                        <nav className="hidden md:flex items-center gap-0.5">
                             {NAV_ITEMS.map((item) => {
                                 const active = activeSection === item.id;
                                 return (
@@ -82,15 +104,17 @@ export default function Navbar() {
                                         key={item.href}
                                         onClick={() => warpTo(item.href)}
                                         className={cn(
-                                            "relative text-sm font-medium transition-colors duration-200 py-1",
-                                            active ? "text-white" : "text-white/40 hover:text-white/75"
+                                            "relative px-3 py-1.5 rounded-lg text-[13px] font-medium transition-all duration-200",
+                                            active
+                                                ? "text-white bg-white/[0.07]"
+                                                : "text-white/40 hover:text-white/75 hover:bg-white/[0.04]"
                                         )}
                                     >
                                         {item.label}
                                         {active && (
                                             <motion.span
-                                                layoutId="nav-underline"
-                                                className="absolute bottom-0 left-0 right-0 h-px bg-indigo-400"
+                                                layoutId="nav-dot"
+                                                className="absolute -bottom-0.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-indigo-400 shadow-[0_0_6px_2px_rgba(99,102,241,0.6)]"
                                             />
                                         )}
                                     </button>
@@ -138,11 +162,14 @@ export default function Navbar() {
                                     key={item.href}
                                     onClick={() => { warpTo(item.href); setMobileOpen(false); }}
                                     className={cn(
-                                        "text-left py-4 text-base font-medium transition-colors duration-200 border-b border-white/[0.04] last:border-0",
+                                        "text-left py-4 text-base font-medium transition-colors duration-200 border-b border-white/[0.04] last:border-0 flex items-center justify-between",
                                         activeSection === item.id ? "text-white" : "text-white/40 hover:text-white/75"
                                     )}
                                 >
                                     {item.label}
+                                    {activeSection === item.id && (
+                                        <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 shadow-[0_0_8px_2px_rgba(99,102,241,0.7)]" />
+                                    )}
                                 </button>
                             ))}
                         </nav>

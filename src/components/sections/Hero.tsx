@@ -2,26 +2,7 @@
 
 import { motion } from "framer-motion";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
-import Link from "next/link";
 import { useWarp } from "@/context/WarpContext";
-
-const MARQUEE_ROW_1 = [
-    { label: "React", accent: true },
-    { label: "TypeScript", accent: true },
-    { label: "Next.js", accent: true },
-    { label: "Node.js", accent: false },
-    { label: "Python", accent: false },
-    { label: "Java", accent: false },
-    { label: "Tailwind CSS", accent: false },
-    { label: "PostgreSQL", accent: false },
-    { label: "Framer Motion", accent: false },
-    { label: "Docker", accent: false },
-];
-
-const MARQUEE_ROW_2 = [
-    "Open Source", "Clean Code", "Git", "Figma", "Redis",
-    "Kotlin", "AWS", "Prisma", "API Design", "Performance", "CI/CD",
-];
 
 const container = {
     hidden: {},
@@ -138,45 +119,6 @@ export default function Hero() {
                 </motion.div>
             </div>
 
-            {/* Dual marquee strip */}
-            <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 1, delay: 0.9 }}
-                className="relative border-t border-white/[0.06] overflow-hidden py-5"
-            >
-                {/* Edge gradient fades */}
-                <div className="absolute inset-y-0 left-0 w-28 bg-gradient-to-r from-[#0a0a0a] to-transparent z-10 pointer-events-none" />
-                <div className="absolute inset-y-0 right-0 w-28 bg-gradient-to-l from-[#0a0a0a] to-transparent z-10 pointer-events-none" />
-
-                {/* Row 1 — scrolls left */}
-                <div className="flex gap-5 w-max mb-2.5" style={{ animation: "marquee 32s linear infinite" }}>
-                    {[...MARQUEE_ROW_1, ...MARQUEE_ROW_1].map((item, i) => (
-                        <span
-                            key={i}
-                            className={`inline-flex items-center px-3.5 py-1.5 rounded-full text-[11px] font-mono tracking-widest whitespace-nowrap border ${
-                                item.accent
-                                    ? "border-indigo-500/30 text-indigo-300/60 bg-indigo-500/[0.07]"
-                                    : "border-white/[0.06] text-white/25"
-                            }`}
-                        >
-                            {item.label}
-                        </span>
-                    ))}
-                </div>
-
-                {/* Row 2 — scrolls right */}
-                <div className="flex gap-5 w-max" style={{ animation: "marquee 24s linear infinite reverse" }}>
-                    {[...MARQUEE_ROW_2, ...MARQUEE_ROW_2].map((label, i) => (
-                        <span
-                            key={i}
-                            className="inline-flex items-center px-3.5 py-1.5 rounded-full text-[11px] font-mono tracking-widest whitespace-nowrap border border-white/[0.05] text-white/[0.18]"
-                        >
-                            {label}
-                        </span>
-                    ))}
-                </div>
-            </motion.div>
         </section>
     );
 }

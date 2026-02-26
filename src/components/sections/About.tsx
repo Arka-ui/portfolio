@@ -87,19 +87,45 @@ function CountUp({
    Stats data
 ───────────────────────────────────────────── */
 const STATS = [
-    { numeric: 3,  suffix: "+", label: "Years building" },
-    { numeric: 15, suffix: "+", label: "Projects shipped" },
+    { numeric: 3,    suffix: "+", label: "Years building"    },
+    { numeric: 15,   suffix: "+", label: "Projects shipped"  },
     { numeric: null, raw: "OSS",  label: "Open-source first" },
-    { numeric: 4,  suffix: "",  label: "Languages spoken" },
+    { numeric: 4,    suffix: "",  label: "Languages spoken"  },
+];
+
+const BELIEFS = [
+    {
+        tag: "00",
+        title: "Free by default",
+        body: "If a service can be free, it should be. You pay only for infrastructure — servers, hosting, maintenance — never for access itself.",
+    },
+    {
+        tag: "01",
+        title: "Craft over hype",
+        body: "Every interface I ship is tested edge-to-edge, on every viewport. I care about the 1-pixel detail that most people skip.",
+    },
+    {
+        tag: "02",
+        title: "Open source always",
+        body: "Code lives longer when it belongs to the community. Contributing and publishing openly is how I keep that promise.",
+    },
+];
+
+const TAGS = [
+    "React", "Next.js", "TypeScript", "Clean Code",
+    "Open Source", "UI / UX", "Performance",
+    "API Design", "DX", "Real-time",
 ];
 
 export default function About() {
     return (
         <section id="about-intro" className="py-24 md:py-28 border-t border-white/[0.06]">
             <div className="container mx-auto px-6 md:px-12">
-                <div className="grid md:grid-cols-2 gap-14 md:gap-24 items-start">
 
-                    {/* Left — label + scan-reveal headline */}
+                {/* ── Row 1: headline + bio ── */}
+                <div className="grid md:grid-cols-2 gap-14 md:gap-24 items-start mb-20">
+
+                    {/* Left — scan-reveal headline */}
                     <div>
                         <motion.span
                             initial={{ opacity: 0 }}
@@ -111,7 +137,6 @@ export default function About() {
                             About
                         </motion.span>
 
-                        {/* Signature scan-reveal per line */}
                         <h2 className="font-heading font-black text-[clamp(38px,5.5vw,80px)] leading-[0.92] tracking-tighter">
                             <ScanReveal delay={0.1} className="mb-1">
                                 <span className="text-white">Developer,</span>
@@ -124,12 +149,29 @@ export default function About() {
                             </ScanReveal>
                         </h2>
 
-                        {/* Subtle signature mark */}
+                        {/* Tag pills */}
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            whileInView={{ opacity: 1 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.6, delay: 1.5 }}
+                            className="mt-8 flex flex-wrap gap-2"
+                        >
+                            {TAGS.map((tag) => (
+                                <span
+                                    key={tag}
+                                    className="px-3 py-1 rounded-full border border-white/[0.07] bg-white/[0.02] text-[11px] font-mono text-white/35 tracking-wide hover:text-white/60 hover:border-white/[0.12] transition-all duration-200 cursor-default"
+                                >
+                                    {tag}
+                                </span>
+                            ))}
+                        </motion.div>
+
                         <motion.p
                             initial={{ opacity: 0 }}
                             whileInView={{ opacity: 1 }}
                             viewport={{ once: true }}
-                            transition={{ duration: 0.6, delay: 1.3 }}
+                            transition={{ duration: 0.5, delay: 1.7 }}
                             className="mt-6 text-[11px] font-mono text-white/15 tracking-widest select-none"
                         >
                             — arka.is-a.dev
@@ -146,19 +188,20 @@ export default function About() {
                     >
                         <div className="space-y-4">
                             <p className="text-[17px] text-white/60 leading-relaxed">
-                                I&apos;m Arka — a full-stack developer based in France. I build web
-                                applications and digital products with a focus on clean code and
-                                interfaces that feel right.
+                                I&apos;m Arka — a self-taught full-stack developer from France,
+                                building since 2023. I focus on clean code, thoughtful interfaces,
+                                and shipping things that actually work.
                             </p>
                             <p className="text-[17px] text-white/60 leading-relaxed">
-                                Co-founder of EclozionMC — and the one who actually cared about the
-                                project. I believe if a service can be free, it should be free and
-                                open-source for everyone. Software, tools, access — no paywalls.
-                                You pay only for infrastructure: servers, hosting, maintenance.
-                                Never for access itself.
+                                Co-founder of <span className="text-white/80 font-medium">EclozionMC</span> —
+                                the Minecraft server I actually cared about. Beyond that, I build
+                                open-source tools, experiment with new stacks, and try to make
+                                software feel less annoying for everyone who uses it.
                             </p>
                             <p className="text-[17px] text-white/60 leading-relaxed">
-                                Self-taught since 2023, always building, always pushing forward.
+                                I write French, English, and code — in that order of confidence. Currently
+                                deep into systems architecture, developer tooling, and anything
+                                that involves real-time data.
                             </p>
                         </div>
 
@@ -180,14 +223,51 @@ export default function About() {
                                             stat.raw
                                         )}
                                     </span>
-                                    <span className="text-xs text-white/35 leading-tight">
-                                        {stat.label}
-                                    </span>
+                                    <span className="text-xs text-white/35 leading-tight">{stat.label}</span>
                                 </motion.div>
                             ))}
                         </div>
                     </motion.div>
                 </div>
+
+                {/* ── Row 2: What I believe in ── */}
+                <div className="border-t border-white/[0.06] pt-16">
+                    <motion.span
+                        initial={{ opacity: 0 }}
+                        whileInView={{ opacity: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.5 }}
+                        className="label-mono mb-10 block"
+                    >
+                        What I believe in
+                    </motion.span>
+
+                    <div className="grid md:grid-cols-3 gap-px border border-white/[0.06] rounded-2xl overflow-hidden">
+                        {BELIEFS.map((b, i) => (
+                            <motion.div
+                                key={b.tag}
+                                initial={{ opacity: 0, y: 16 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true, amount: 0.3 }}
+                                transition={{ duration: 0.6, delay: i * 0.09, ease: [0.16, 1, 0.3, 1] }}
+                                className="group relative bg-white/[0.02] hover:bg-white/[0.04] transition-colors duration-300 p-7 flex flex-col gap-4 overflow-hidden"
+                            >
+                                {/* Hover glow */}
+                                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none bg-gradient-to-br from-indigo-500/[0.05] to-transparent" />
+
+                                <span className="font-mono text-[11px] text-indigo-400/50 tracking-widest">{b.tag}</span>
+                                <h3 className="font-heading font-bold text-lg text-white tracking-tight leading-snug">
+                                    {b.title}
+                                </h3>
+                                <p className="text-[14px] text-white/45 leading-relaxed">{b.body}</p>
+
+                                {/* Bottom accent on hover */}
+                                <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-indigo-500/0 to-transparent group-hover:via-indigo-500/30 transition-all duration-500" />
+                            </motion.div>
+                        ))}
+                    </div>
+                </div>
+
             </div>
         </section>
     );

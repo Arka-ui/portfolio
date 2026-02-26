@@ -50,7 +50,13 @@
 
   @keyframes marquee {
     from { transform: translateX(0); }
-    to { transform: translateX(-50%); }
+    to   { transform: translateX(-33.333%); }
+  }
+
+  /* Right-scrolling marquee — used by TechSlider row 2 */
+  @keyframes marquee-right {
+    from { transform: translateX(-33.333%); }
+    to   { transform: translateX(0); }
   }
 
   @keyframes pulse-dot {

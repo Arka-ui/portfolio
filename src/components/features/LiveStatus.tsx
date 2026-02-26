@@ -211,7 +211,7 @@ export default function LiveStatus() {
 
     // --- NORMAL MODE RENDER ---
     return (
-        <section className="py-28 border-t border-white/[0.06]">
+        <section id="live" className="py-28 border-t border-white/[0.06]">
             <div className="container mx-auto px-6 md:px-12">
                 <div className="mb-12">
                     <span className="label-mono mb-5 block">Live</span>
