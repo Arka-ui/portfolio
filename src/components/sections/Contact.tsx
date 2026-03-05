@@ -35,9 +35,9 @@ export default function Contact() {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     username: "Arka Portfolio",
-                    avatar_url: "https://arka.is-a.dev/favicon.ico",
+                    avatar_url: "https://arka-ui.github.io/portfolio/favicon.ico",
                     embeds: [{
-                        author: { name: "New contact from arka.is-a.dev", url: "https://arka.is-a.dev" },
+                        author: { name: "New contact from portfolio", url: "https://arka-ui.github.io/portfolio/" },
                         title: subject ? `📬 ${subject}` : "📬 New message",
                         color: 6514417,
                         fields: [
@@ -45,7 +45,7 @@ export default function Contact() {
                             { name: "📧 Email", value: email, inline: true },
                             { name: "💬 Message", value: message.length > 1024 ? message.slice(0, 1021) + "…" : message, inline: false },
                         ],
-                        footer: { text: "arka.is-a.dev • Contact Form" },
+                        footer: { text: "Arka Portfolio • Contact Form" },
                         timestamp: new Date().toISOString(),
                     }],
                 }),

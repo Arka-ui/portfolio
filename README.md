@@ -1,14 +1,12 @@
 <div align="center">
 
-<img src="https://raw.githubusercontent.com/Arka-ui/portfolio/main/public/favicon.ico" alt="logo" width="60" />
-
-# ✦ arka.is-a.dev
+# ✦ Arka — Portfolio
 
 ### Personal portfolio — crafted with obsessive attention to detail.
 
 <br/>
 
-[![Live Site](https://img.shields.io/badge/%E2%9C%A6%20Live-arka.is--a.dev-6366f1?style=for-the-badge&labelColor=0d1117)](https://arka.is-a.dev/portfolio/)
+[![Live Site](https://img.shields.io/badge/%E2%9C%A6%20Live-Portfolio-6366f1?style=for-the-badge&labelColor=0d1117)](https://arka-ui.github.io/portfolio/)
 [![GitHub Repo](https://img.shields.io/badge/GitHub-Repo-181717?style=for-the-badge&logo=github&logoColor=white&labelColor=0d1117)](https://github.com/Arka-ui/portfolio)
 
 <br/>
@@ -22,7 +20,7 @@
 
 <br/>
 
-<a href="https://arka.is-a.dev/portfolio/">
+<a href="https://arka-ui.github.io/portfolio/">
   <img src="https://img.shields.io/badge/→%20Visit%20the%20Portfolio-6366f1?style=for-the-badge&labelColor=6366f1" alt="Visit Portfolio" />
 </a>
 
@@ -223,7 +221,7 @@ This project is **NOT open-source**. See the [LICENSE](LICENSE) for full details
 
 <div align="center">
 
-**[✦ Visit the live portfolio →](https://arka.is-a.dev/portfolio/)**
+**[✦ Visit the live portfolio →](https://arka-ui.github.io/portfolio/)**
 
 Made with 💜 by [Arka](https://github.com/Arka-ui)
 

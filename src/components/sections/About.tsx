@@ -194,7 +194,7 @@ export default function About() {
                             transition={{ duration: 0.5, delay: 0.8 }}
                             className="mt-6 text-xs font-mono text-white/25 tracking-widest select-none"
                         >
-                            — arka.is-a.dev
+                            — arka
                         </motion.p>
 
                         {/* Quick facts */}

@@ -1,10 +1,10 @@
 {
-  "name": "arka.is-a.dev",
+  "name": "arka-portfolio",
   "version": "3.0.0",
   "description": "Personal portfolio — dark-themed, single-page site built with Next.js 16, React 19, Tailwind CSS 4 & Framer Motion.",
-  "author": "Arka <hello@arka.dev> (https://arka.is-a.dev)",
+  "author": "Arka <hello@arka.dev> (https://arka-ui.github.io/portfolio/)",
   "license": "SEE LICENSE IN LICENSE",
-  "homepage": "https://arka.is-a.dev/portfolio/",
+  "homepage": "https://arka-ui.github.io/portfolio/",
   "repository": {
     "type": "git",
     "url": "https://github.com/Arka-ui/portfolio.git"
