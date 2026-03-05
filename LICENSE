@@ -1,0 +1,50 @@
+Copyright (c) 2024-2026 Arka. All rights reserved.
+
+CUSTOM LICENSE — PERSONAL PORTFOLIO
+
+This repository and its contents ("the Software") are the intellectual
+property of Arka. By accessing this repository, you agree to the following
+terms:
+
+1. NO COPYING OR CLONING FOR REUSE
+   You may NOT copy, fork, clone, redistribute, or deploy this repository
+   — or any substantial portion of it — as your own portfolio, website, or
+   project. This includes, but is not limited to, copying the codebase and
+   making superficial changes such as replacing names, text, images, colors,
+   or configuration values.
+
+2. NO REDISTRIBUTION
+   You may NOT redistribute, republish, sell, sublicense, or host the
+   Software or any modified version of it, whether publicly or privately,
+   for personal or commercial use.
+
+3. INSPIRATION IS WELCOME
+   You ARE welcome to study the source code, learn from the techniques,
+   patterns, and architecture used, and apply those ideas in your own
+   original work built from scratch. Building something inspired by this
+   portfolio is encouraged — copying it is not.
+
+4. WHAT COUNTS AS A VIOLATION
+   A violation includes, but is not limited to:
+   - Forking or downloading this repo and deploying it with minor edits
+   - Using the layout, structure, and design of this site with only cosmetic
+     changes (e.g., swapping names, colors, or images)
+   - Presenting a derivative of this work as your own original creation
+
+5. ATTRIBUTION
+   If you reference this project in a blog post, video, or educational
+   content, credit is appreciated but not required for such purposes.
+
+6. CODE SNIPPETS
+   You may reuse small, isolated code snippets (under ~30 lines) in your
+   own projects, provided you do not replicate the overall design, structure,
+   or user experience of this portfolio.
+
+7. NO WARRANTY
+   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+   OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+   IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+   LIABILITY ARISING FROM THE USE OF THE SOFTWARE.
+
+For questions or permission requests, contact: hello@arka.dev

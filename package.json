@@ -1,6 +1,26 @@
 {
   "name": "arka.is-a.dev",
-  "version": "0.1.0",
+  "version": "3.0.0",
+  "description": "Personal portfolio — dark-themed, single-page site built with Next.js 16, React 19, Tailwind CSS 4 & Framer Motion.",
+  "author": "Arka <hello@arka.dev> (https://arka.is-a.dev)",
+  "license": "SEE LICENSE IN LICENSE",
+  "homepage": "https://arka.is-a.dev/portfolio/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Arka-ui/portfolio.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Arka-ui/portfolio/issues"
+  },
+  "keywords": [
+    "portfolio",
+    "nextjs",
+    "react",
+    "tailwindcss",
+    "framer-motion",
+    "typescript",
+    "github-pages"
+  ],
   "private": true,
   "scripts": {
     "dev": "next dev -p 3001",
