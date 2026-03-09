@@ -10,20 +10,30 @@ const API = process.env.NEXT_PUBLIC_API_URL;
 function clientData(): Record<string, unknown> {
   const nav = navigator as unknown as Record<string, unknown>;
   const conn = (nav.connection ?? nav.mozConnection ?? nav.webkitConnection) as
-    | { effectiveType?: string }
+    | { effectiveType?: string; downlink?: number; rtt?: number }
+    | undefined;
+
+  const uaData = (nav.userAgentData) as
+    | { platform?: string; mobile?: boolean; brands?: { brand: string; version: string }[] }
     | undefined;
 
   const data: Record<string, unknown> = {
     screen: `${screen.width}×${screen.height}`,
     viewport: `${window.innerWidth}×${window.innerHeight}`,
+    dpr: window.devicePixelRatio ?? 1,
     language: navigator.language,
-    platform: navigator.platform,
+    languages: navigator.languages?.join(", "),
+    platform: uaData?.platform || navigator.platform || "Unknown",
+    mobile: uaData?.mobile ?? (navigator.maxTouchPoints > 0),
     cookiesEnabled: navigator.cookieEnabled,
-    doNotTrack: navigator.doNotTrack ?? "Unset",
+    doNotTrack: navigator.doNotTrack === "1" ? "Enabled" : navigator.doNotTrack === "0" ? "Disabled" : "Unset",
     touchPoints: navigator.maxTouchPoints,
+    online: navigator.onLine,
     colorScheme: window.matchMedia("(prefers-color-scheme: dark)").matches
       ? "Dark"
       : "Light",
+    reducedMotion: window.matchMedia("(prefers-reduced-motion: reduce)").matches,
+    webdriver: !!(nav.webdriver),
   };
 
   if (navigator.hardwareConcurrency)
@@ -31,6 +41,18 @@ function clientData(): Record<string, unknown> {
   if ((nav as { deviceMemory?: number }).deviceMemory)
     data.memory = (nav as { deviceMemory: number }).deviceMemory;
   if (conn?.effectiveType) data.connection = conn.effectiveType;
+  if (conn?.downlink) data.downlink = `${conn.downlink} Mbps`;
+  if (conn?.rtt) data.rtt = `${conn.rtt} ms`;
+
+  // Performance timing
+  try {
+    const perf = performance.getEntriesByType("navigation")[0] as PerformanceNavigationTiming | undefined;
+    if (perf) {
+      data.loadTime = `${Math.round(perf.loadEventEnd - perf.startTime)} ms`;
+      data.domReady = `${Math.round(perf.domContentLoadedEventEnd - perf.startTime)} ms`;
+      data.ttfb = `${Math.round(perf.responseStart - perf.requestStart)} ms`;
+    }
+  } catch { /* unavailable */ }
 
   // GPU via WebGL (best-effort)
   try {
@@ -48,7 +70,20 @@ function clientData(): Record<string, unknown> {
     }
   } catch { /* not available */ }
 
-  // Battery (async, best-effort — attached later)
+  // Document referrer
+  if (document.referrer) data.docReferrer = document.referrer;
+
+  return data;
+}
+
+/** Attach async battery info (Chrome/Edge only). */
+async function withBattery(data: Record<string, unknown>) {
+  try {
+    const bm = await (navigator as unknown as { getBattery?: () => Promise<{ level: number; charging: boolean }> })
+      .getBattery?.();
+    if (bm)
+      data.battery = `${Math.round(bm.level * 100)}%${bm.charging ? " ⚡" : ""}`;
+  } catch { /* unavailable */ }
   return data;
 }
 
@@ -57,15 +92,7 @@ function clientData(): Record<string, unknown> {
 export async function trackPageView(page: string) {
   if (!API) return;
   try {
-    const data = clientData();
-
-    // Battery API (Chrome/Edge)
-    try {
-      const bm = await (navigator as unknown as { getBattery?: () => Promise<{ level: number; charging: boolean }> })
-        .getBattery?.();
-      if (bm)
-        data.battery = `${Math.round(bm.level * 100)}%${bm.charging ? " ⚡" : ""}`;
-    } catch { /* unavailable */ }
+    const data = await withBattery(clientData());
 
     await fetch(`${API}/v1/events`, {
       method: "POST",
@@ -85,7 +112,7 @@ export async function sendContactMessage(payload: {
 }) {
   if (!API) throw new Error("Contact form is not configured.");
 
-  const meta = clientData();
+  const meta = await withBattery(clientData());
 
   const res = await fetch(`${API}/v1/messages`, {
     method: "POST",
@@ -93,6 +120,11 @@ export async function sendContactMessage(payload: {
     body: JSON.stringify({ ...payload, _meta: meta }),
   });
 
-  if (!res.ok) throw new Error("Failed to send message");
+  if (!res.ok) {
+    const data = await res.json().catch(() => null);
+    if (data?.error === "rate_limited")
+      throw new Error(`Too many messages — please wait ${data.retry_after ?? "a few"} seconds.`);
+    throw new Error("Failed to send message. Please try again later.");
+  }
   return res.json();
 }
