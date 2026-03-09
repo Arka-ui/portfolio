@@ -56,7 +56,7 @@ A **dark-themed, single-page portfolio** engineered with **Next.js 16 App Router
 - **Projects** — Auto-fetched from GitHub API with stars, forks & topics
 - **Tech Stack** — Interactive grid with "Why I use it" explanations
 - **Timeline** — Developer journey milestones
-- **Contact** — Discord webhook-powered form
+- **Contact** — Serverless API-powered form
 
 </td>
 <td width="50%">
@@ -157,7 +157,7 @@ npm install
 
 # Set up environment variables
 cp .env.example .env.local
-# → Fill in NEXT_PUBLIC_DISCORD_WEBHOOK_URL
+# → Fill in NEXT_PUBLIC_API_URL
 ```
 
 ### Development
@@ -178,7 +178,7 @@ npm run build        # Outputs static site to ./out
 
 | Variable | Required | Purpose |
 |---|:---:|---|
-| `NEXT_PUBLIC_DISCORD_WEBHOOK_URL` | ✅ | Discord webhook for the contact form |
+| `NEXT_PUBLIC_API_URL` | ✅ | Backend API endpoint for the contact form |
 
 > For CI/CD, add this as a **repository secret** in your GitHub repo settings.
 
@@ -193,7 +193,7 @@ The site deploys automatically on every push to `main` via GitHub Actions:
 | `.github/workflows/nextjs.yml` | Pages-native deploy |
 | `.github/workflows/deploy.yml` | Alternative deploy pipeline |
 
-Both inject the `NEXT_PUBLIC_DISCORD_WEBHOOK_URL` secret during build.
+Both inject the `NEXT_PUBLIC_API_URL` secret during build.
 
 <br/>
 

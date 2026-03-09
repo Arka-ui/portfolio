@@ -3,6 +3,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { Send, Mail, MapPin, CheckCircle, AlertCircle, Loader2 } from "lucide-react";
 import { useState } from "react";
+import { sendContactMessage } from "@/lib/telemetry";
 
 type Status = "idle" | "loading" | "success" | "error";
 
@@ -22,37 +23,8 @@ export default function Contact() {
         setStatus("loading");
         setErrMsg("");
 
-        const webhookUrl = process.env.NEXT_PUBLIC_DISCORD_WEBHOOK_URL;
-        if (!webhookUrl) {
-            setErrMsg("Contact form is not configured.");
-            setStatus("error");
-            return;
-        }
-
         try {
-            const res = await fetch(webhookUrl, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    username: "Arka Portfolio",
-                    avatar_url: "https://arka-ui.github.io/portfolio/favicon.ico",
-                    embeds: [{
-                        author: { name: "New contact from portfolio", url: "https://arka-ui.github.io/portfolio/" },
-                        title: subject ? `📬 ${subject}` : "📬 New message",
-                        color: 6514417,
-                        fields: [
-                            { name: "👤 Name", value: name, inline: true },
-                            { name: "📧 Email", value: email, inline: true },
-                            { name: "💬 Message", value: message.length > 1024 ? message.slice(0, 1021) + "…" : message, inline: false },
-                        ],
-                        footer: { text: "Arka Portfolio • Contact Form" },
-                        timestamp: new Date().toISOString(),
-                    }],
-                }),
-            });
-
-            if (!res.ok) throw new Error("Failed to send message");
-
+            await sendContactMessage({ name, email, subject, message });
             setStatus("success");
             setName(""); setEmail(""); setSubject(""); setMessage("");
         } catch (err: unknown) {

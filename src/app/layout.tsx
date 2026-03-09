@@ -7,6 +7,7 @@ import { WarpProvider } from "@/context/WarpContext";
 import { BlueprintProvider } from "@/context/BlueprintContext";
 import { LanguageProvider } from "@/context/LanguageContext";
 import CommandPalette from "@/components/features/CommandPalette";
+import Telemetry from "@/components/Telemetry";
 
 const outfit = Outfit({
   subsets: ["latin"],
@@ -84,6 +85,7 @@ export default function RootLayout({
             <BlueprintProvider>
               <ScrollManager />
               <CommandPalette />
+              <Telemetry />
               <RootContent>{children}</RootContent>
             </BlueprintProvider>
           </LanguageProvider>
