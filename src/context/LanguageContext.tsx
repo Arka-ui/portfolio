@@ -1,11 +1,18 @@
 "use client";
 
-import { createContext, useContext, useState, useEffect, ReactNode } from "react";
-import { createTranslator, createPluralTranslator, transNodes, type TranslationParams } from "@/i18n/engine";
+import { createContext, useContext, useState, useEffect, useMemo, ReactNode } from "react";
+import {
+    createTranslator,
+    createPluralTranslator,
+    transNodes,
+    type LanguageCode,
+    type TranslationParams,
+} from "@/i18n/engine";
+
+// ─── Re-export LanguageCode so callers can import it from here ────────────────
+export type { LanguageCode };
 
 // ─── Types ───────────────────────────────────────────────────────────────────
-
-export type LanguageCode = "en" | "fr" | "es" | "de";
 
 export interface Language {
     code: LanguageCode;
@@ -20,16 +27,11 @@ export const SUPPORTED_LANGUAGES: Language[] = [
     { code: "de", name: "Deutsch",  flag: "🇩🇪" },
 ];
 
-// ─── Context type ─────────────────────────────────────────────────────────────
-
 interface LanguageContextType {
     language: Language;
     setLanguage: (lang: Language) => void;
-    /** Translate a dotted key. Optionally interpolate {variable} params. */
     t: (key: string, params?: TranslationParams) => string;
-    /** Plural-aware translate. Uses pipe-separated variants in the JSON value. */
     tp: (key: string, count: number, extra?: TranslationParams) => string;
-    /** For JSX slot injection inside translated strings (links, bold nodes, etc.). */
     transNodes: typeof transNodes;
 }
 
@@ -40,7 +42,6 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 export function LanguageProvider({ children }: { children: ReactNode }) {
     const [language, setLanguageState] = useState<Language>(SUPPORTED_LANGUAGES[0]);
 
-    // Restore saved language on mount
     useEffect(() => {
         const saved = localStorage.getItem("language") as LanguageCode | null;
         if (saved) {
@@ -55,11 +56,17 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
         document.documentElement.lang = lang.code;
     };
 
-    const t   = createTranslator(language.code);
-    const tp  = createPluralTranslator(language.code);
+    // Memoize translators so consumers only re-render when language actually changes
+    const t  = useMemo(() => createTranslator(language.code),       [language.code]);
+    const tp = useMemo(() => createPluralTranslator(language.code), [language.code]);
+
+    const value = useMemo(
+        () => ({ language, setLanguage, t, tp, transNodes }),
+        [language, t, tp]
+    );
 
     return (
-        <LanguageContext.Provider value={{ language, setLanguage, t, tp, transNodes }}>
+        <LanguageContext.Provider value={value}>
             {children}
         </LanguageContext.Provider>
     );

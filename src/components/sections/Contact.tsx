@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Send, Mail, MapPin, CheckCircle, AlertCircle, Loader2 } from "lucide-react";
 import { useState } from "react";
 import { sendContactMessage } from "@/lib/telemetry";
+import { useLanguage } from "@/context/LanguageContext";
 
 type Status = "idle" | "loading" | "success" | "error";
 
@@ -11,6 +12,7 @@ const INPUT_CLASS =
     "w-full bg-white/[0.03] border border-white/[0.08] rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-indigo-500/50 focus:bg-indigo-500/[0.04] transition-all placeholder-white/20";
 
 export default function Contact() {
+    const { t } = useLanguage();
     const [name,    setName]    = useState("");
     const [email,   setEmail]   = useState("");
     const [subject, setSubject] = useState("");
@@ -34,9 +36,9 @@ export default function Contact() {
     };
 
     return (
-        <section id="contact" className="py-28 border-t border-white/[0.06]">
+        <section id="contact" className="py-14 md:py-28 border-t border-white/[0.06]">
             <div className="container mx-auto px-6 md:px-12">
-                <div className="grid md:grid-cols-2 gap-16 md:gap-24 items-start">
+                <div className="grid md:grid-cols-2 gap-10 md:gap-24 items-start">
 
                     {/* Left */}
                     <motion.div
@@ -47,15 +49,14 @@ export default function Contact() {
                         className="space-y-8"
                     >
                         <div>
-                            <span className="label-mono mb-5 block">Contact</span>
+                            <span className="label-mono mb-5 block">{t("contact.label")}</span>
                             <h2 className="font-heading font-black text-[clamp(36px,5vw,64px)] leading-[0.9] tracking-tighter text-white mb-6">
                                 Let&apos;s build<br />
                                 <span className="text-white/25">something</span><br />
                                 great.
                             </h2>
                             <p className="text-[16px] text-white/45 max-w-sm leading-relaxed">
-                                Open for freelance work, collaborations, and interesting projects.
-                                Don&apos;t hesitate to reach out — I reply fast.
+                                {t("contact.open_for")}
                             </p>
                         </div>
 
@@ -65,7 +66,7 @@ export default function Contact() {
                                     <Mail size={16} className="text-white/40" />
                                 </div>
                                 <div>
-                                    <span className="label-mono text-[10px] mb-0.5 block">Email</span>
+                                    <span className="label-mono text-[10px] mb-0.5 block">{t("contact.email")}</span>
                                     <span className="text-sm text-white/70 font-mono">hello@arka.dev</span>
                                 </div>
                             </div>
@@ -75,7 +76,7 @@ export default function Contact() {
                                 </div>
                                 <div>
                                     <span className="label-mono text-[10px] mb-0.5 block">Location</span>
-                                    <span className="text-sm text-white/70">France — available remotely</span>
+                                    <span className="text-sm text-white/70">{t("contact.location")}</span>
                                 </div>
                             </div>
                         </div>
@@ -102,16 +103,16 @@ export default function Contact() {
                                         <CheckCircle className="w-7 h-7 text-emerald-400" />
                                     </div>
                                     <div>
-                                        <h3 className="font-heading font-bold text-xl text-white mb-2">Message sent!</h3>
+                                        <h3 className="font-heading font-bold text-xl text-white mb-2">{t("contact.success_title")}</h3>
                                         <p className="text-white/40 text-sm leading-relaxed max-w-xs">
-                                            Thanks for reaching out. I&apos;ll get back to you as soon as possible.
+                                            {t("contact.success_desc")}
                                         </p>
                                     </div>
                                     <button
                                         onClick={() => setStatus("idle")}
                                         className="text-xs font-mono text-white/30 hover:text-white/60 transition-colors"
                                     >
-                                        Send another →
+                                        {t("contact.send_another")}
                                     </button>
                                 </motion.div>
                             ) : (
@@ -126,12 +127,12 @@ export default function Contact() {
                                 >
                                     <div className="grid sm:grid-cols-2 gap-5">
                                         <div className="space-y-2">
-                                            <label htmlFor="name" className="label-mono text-[10px]">Name</label>
+                                            <label htmlFor="name" className="label-mono text-[10px]">{t("contact.name")}</label>
                                             <input
                                                 id="name"
                                                 type="text"
                                                 required
-                                                placeholder="Your name"
+                                                placeholder={t("contact.placeholder_name")}
                                                 value={name}
                                                 onChange={e => setName(e.target.value)}
                                                 autoComplete="name"
@@ -141,12 +142,12 @@ export default function Contact() {
                                             />
                                         </div>
                                         <div className="space-y-2">
-                                            <label htmlFor="email" className="label-mono text-[10px]">Email</label>
+                                            <label htmlFor="email" className="label-mono text-[10px]">{t("contact.email")}</label>
                                             <input
                                                 id="email"
                                                 type="email"
                                                 required
-                                                placeholder="your@email.com"
+                                                placeholder={t("contact.placeholder_email")}
                                                 value={email}
                                                 onChange={e => setEmail(e.target.value)}
                                                 autoComplete="email"
@@ -158,12 +159,12 @@ export default function Contact() {
                                     </div>
 
                                     <div className="space-y-2">
-                                        <label htmlFor="subject" className="label-mono text-[10px]">Subject</label>
+                                        <label htmlFor="subject" className="label-mono text-[10px]">{t("contact.subject")}</label>
                                         <input
                                             id="subject"
                                             type="text"
                                             required
-                                            placeholder="What's this about?"
+                                            placeholder={t("contact.placeholder_subject")}
                                             value={subject}
                                             onChange={e => setSubject(e.target.value)}
                                             autoComplete="off"
@@ -174,12 +175,12 @@ export default function Contact() {
                                     </div>
 
                                     <div className="space-y-2">
-                                        <label htmlFor="message" className="label-mono text-[10px]">Message</label>
+                                        <label htmlFor="message" className="label-mono text-[10px]">{t("contact.message")}</label>
                                         <textarea
                                             id="message"
                                             rows={5}
                                             required
-                                            placeholder="Tell me about your project or idea..."
+                                            placeholder={t("contact.placeholder_message")}
                                             value={message}
                                             onChange={e => setMessage(e.target.value)}
                                             autoComplete="off"
@@ -208,11 +209,11 @@ export default function Contact() {
                                         {status === "loading" ? (
                                             <>
                                                 <Loader2 size={14} className="animate-spin" />
-                                                Sending…
+                                                {t("contact.sending")}
                                             </>
                                         ) : (
                                             <>
-                                                Send message
+                                                {t("contact.send")}
                                                 <Send size={14} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                                             </>
                                         )}

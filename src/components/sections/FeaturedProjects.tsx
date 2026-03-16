@@ -145,11 +145,11 @@ export default function FeaturedProjects() {
     if (!featured.length) return null;
 
     return (
-        <section id="projects" className="py-28 border-t border-white/[0.06]">
+        <section id="projects" className="py-14 md:py-28 border-t border-white/[0.06]">
             <div className="container mx-auto px-6 md:px-12">
 
                 {/* Section header */}
-                <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16">
+                <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10 md:mb-16">
                     <div>
                         <span className="label-mono mb-5 block">Work</span>
                         <motion.h2

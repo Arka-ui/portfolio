@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { useWarp } from "@/context/WarpContext";
+import { useLanguage } from "@/context/LanguageContext";
 
 const container = {
     hidden: {},
@@ -22,9 +23,10 @@ const lineVariant = {
 
 export default function Hero() {
     const { warpTo } = useWarp();
+    const { t } = useLanguage();
 
     return (
-        <section id="hero" className="relative min-h-screen flex flex-col justify-center pt-28 pb-0 overflow-hidden">
+        <section id="hero" className="relative min-h-screen flex flex-col justify-center pt-20 md:pt-28 pb-0 overflow-hidden">
             {/* CSS @property animated mesh gradient — zero JS cost, GPU composited */}
             <div className="absolute inset-0 mesh-gradient pointer-events-none" aria-hidden />
 
@@ -56,7 +58,7 @@ export default function Hero() {
                             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-55" />
                             <span className="relative inline-flex rounded-full h-2 w-2 bg-indigo-400 shadow-[0_0_8px_2px_rgba(99,102,241,0.7)]" />
                         </span>
-                        Available for work
+                        {t("hero.available")}
                     </span>
                 </motion.div>
 
@@ -89,7 +91,7 @@ export default function Hero() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                    className="flex flex-col md:flex-row md:items-end gap-10 md:gap-0 justify-between pb-24"
+                    className="flex flex-col md:flex-row md:items-end gap-8 md:gap-0 justify-between pb-12 md:pb-24"
                 >
                     <p className="text-[17px] text-white/50 max-w-sm leading-relaxed">
                         Full-stack developer from France. I build web experiences
@@ -101,14 +103,14 @@ export default function Hero() {
                             onClick={() => warpTo("#projects")}
                             className="group relative overflow-hidden inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-white text-black text-sm font-bold transition-all duration-300 hover:shadow-[0_0_28px_4px_rgba(99,102,241,0.28)] hover:bg-indigo-50 active:scale-[0.97]"
                         >
-                            View work
+                            {t("hero.cta_projects")}
                             <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
                         </button>
                         <button
                             onClick={() => warpTo("#contact")}
                             className="group inline-flex items-center gap-2 px-6 py-3.5 rounded-full border border-white/[0.12] text-white/70 text-sm font-medium hover:text-white hover:bg-white/[0.06] hover:border-white/20 transition-all duration-300 active:scale-[0.97]"
                         >
-                            Get in touch
+                            {t("hero.cta_contact")}
                             <ArrowUpRight className="w-4 h-4 opacity-40 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-200" />
                         </button>
                     </div>

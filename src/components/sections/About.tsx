@@ -134,7 +134,7 @@ export default function About() {
     const spotlight = useSpotlight();
 
     return (
-        <section id="about-intro" className="py-20 md:py-24 border-t border-white/[0.06]">
+        <section id="about-intro" className="py-14 md:py-24 border-t border-white/[0.06]">
             <div className="container mx-auto px-6 md:px-12">
 
                 {/* ── Row 1: headline + bio ── */}

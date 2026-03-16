@@ -3,11 +3,13 @@
 import { ArrowUp, Github, Mail } from "lucide-react";
 import { motion } from "framer-motion";
 import { useLanyard } from "@/hooks/useLanyard";
+import { useLanguage } from "@/context/LanguageContext";
 
 const DISCORD_ID = "871084043838566400";
 
 export default function Footer() {
     const { data } = useLanyard(DISCORD_ID);
+    const { t } = useLanguage();
 
     const scrollToTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
 
@@ -65,7 +67,7 @@ export default function Footer() {
                     {/* Right: copyright + scroll top */}
                     <div className="flex items-center gap-4">
                         <p className="text-xs text-white/20 font-mono">
-                            © {new Date().getFullYear()} Arka. All rights reserved.
+                            © {new Date().getFullYear()} Arka. {t("footer.rights")}
                         </p>
                         <span className="text-[11px] text-white/15 font-mono">v3.0.0</span>
                         <button

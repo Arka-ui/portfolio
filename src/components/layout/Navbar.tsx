@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -6,22 +6,24 @@ import { Search, Menu, X } from "lucide-react";
 import LanguageSelector from "@/components/features/LanguageSelector";
 import { cn } from "@/lib/utils";
 import { useWarp } from "@/context/WarpContext";
-
-const NAV_ITEMS = [
-    { label: "Home",    href: "#",            id: "hero"        },
-    { label: "About",   href: "#about-intro",  id: "about-intro" },
-    { label: "Work",    href: "#projects",     id: "projects"    },
-    { label: "Stack",   href: "#skills",       id: "skills"      },
-    { label: "Live",    href: "#live",          id: "live"        },
-    { label: "Contact", href: "#contact",      id: "contact"     },
-];
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function Navbar() {
-    const [scrolled, setScrolled]       = useState(false);
-    const [mounted, setMounted]         = useState(false);
-    const [mobileOpen, setMobileOpen]   = useState(false);
+    const [scrolled, setScrolled]           = useState(false);
+    const [mounted, setMounted]             = useState(false);
+    const [mobileOpen, setMobileOpen]       = useState(false);
     const [activeSection, setActiveSection] = useState("hero");
-    const { warpTo } = useWarp();
+    const { warpTo }  = useWarp();
+    const { t }       = useLanguage();
+
+    const NAV_ITEMS = [
+        { label: t("nav.home"),    href: "#",            id: "hero"        },
+        { label: t("nav.about"),   href: "#about-intro",  id: "about-intro" },
+        { label: "Work",           href: "#projects",     id: "projects"    },
+        { label: "Stack",          href: "#skills",       id: "skills"      },
+        { label: "Live",           href: "#live",          id: "live"        },
+        { label: t("nav.contact"), href: "#contact",      id: "contact"     },
+    ];
 
     useEffect(() => {
         setMounted(true);
@@ -33,7 +35,6 @@ export default function Navbar() {
     useEffect(() => {
         const onScroll = () => {
             const mid = window.innerHeight / 2;
-            // Last section whose top is above the midpoint wins
             let current = "hero";
             document.querySelectorAll("section[id]").forEach(sec => {
                 const rect = sec.getBoundingClientRect();

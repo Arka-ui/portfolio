@@ -189,6 +189,7 @@ export default function TechSlider() {
         <section
             aria-label="Technology stack"
             className="relative overflow-hidden py-16 border-t border-b border-white/[0.04]"
+            style={{ maxWidth: "100vw" }}
         >
             {/* Subtle top label */}
             <div className="container mx-auto px-6 md:px-12 mb-6">
@@ -201,9 +202,9 @@ export default function TechSlider() {
                 </div>
             </div>
 
-            {/* Edge fade masks */}
-            <div className="absolute inset-y-0 left-0 w-48 bg-gradient-to-r from-[#0a0a0a] via-[#0a0a0a]/80 to-transparent z-10 pointer-events-none" />
-            <div className="absolute inset-y-0 right-0 w-48 bg-gradient-to-l from-[#0a0a0a] via-[#0a0a0a]/80 to-transparent z-10 pointer-events-none" />
+            {/* Edge fade masks — narrow on mobile so badges are visible, wide on desktop */}
+            <div className="absolute inset-y-0 left-0 w-8 sm:w-20 md:w-48 bg-gradient-to-r from-[#0a0a0a] via-[#0a0a0a]/80 to-transparent z-10 pointer-events-none" />
+            <div className="absolute inset-y-0 right-0 w-8 sm:w-20 md:w-48 bg-gradient-to-l from-[#0a0a0a] via-[#0a0a0a]/80 to-transparent z-10 pointer-events-none" />
 
             <div className="flex flex-col gap-5">
                 <MarqueeRow items={ROW_1} speed={32} />

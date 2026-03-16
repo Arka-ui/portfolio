@@ -106,6 +106,10 @@
 }
 
 @layer base {
+  html {
+    overflow-x: hidden;
+  }
+
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
@@ -260,6 +264,24 @@
   33%  { --mesh-x: 50%; --mesh-y: 10%; --mesh-x2: 55%; --mesh-y2: 70%; }
   66%  { --mesh-x: 20%; --mesh-y: 50%; --mesh-x2: 80%; --mesh-y2: 40%; }
   100% { --mesh-x: 40%; --mesh-y: 30%; --mesh-x2: 65%; --mesh-y2: 75%; }
+}
+
+/* ── Mobile-only polish ────────────────────────────────────────────────────── */
+@media (max-width: 767px) {
+  /* Remove tap highlight rectangle (replaced by our own active states) */
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Tighter heading tracking on very small screens */
+  h1, h2, h3 {
+    letter-spacing: -0.025em;
+  }
+
+  /* Smooth momentum scrolling on scrollable containers */
+  [data-scroll], .overflow-y-auto, .overflow-x-auto {
+    -webkit-overflow-scrolling: touch;
+  }
 }
 
 /* Scrollbar */
