@@ -5,19 +5,20 @@ import { Command } from "cmdk";
 import {
     Search, Home, Code, User, Mail, Copy, Check, ExternalLink,
     Layers, Radio, Clock, Github, Music2, MessageCircle,
-    Share2, ArrowUpRight, Zap, Sparkles, Link2,
+    Share2, ArrowUpRight, Zap, Sparkles, Link2, Languages, Globe,
 } from "lucide-react";
 import { useWarp } from "@/context/WarpContext";
+import { useLanguage, SUPPORTED_LANGUAGES } from "@/context/LanguageContext";
 
 /* ── Section data ── */
 const SECTIONS = [
-    { icon: Home,    label: "Home",     desc: "Back to the top",              href: "#" },
-    { icon: User,    label: "About",    desc: "Who I am & what I believe in", href: "#about-intro" },
-    { icon: Code,    label: "Projects", desc: "Featured work & case studies", href: "#projects" },
-    { icon: Layers,  label: "Stack",    desc: "Technologies & tools I use",   href: "#skills" },
-    { icon: Clock,   label: "Timeline", desc: "My developer journey so far",  href: "#about" },
-    { icon: Radio,   label: "Live",     desc: "Discord status & availability",href: "#live" },
-    { icon: Mail,    label: "Contact",  desc: "Get in touch with me",         href: "#contact" },
+    { icon: Home,    label: "Home",     desc: "Back to the top",               href: "#" },
+    { icon: User,    label: "About",    desc: "Who I am & what I believe in",  href: "#about-intro" },
+    { icon: Code,    label: "Projects", desc: "Featured work & case studies",  href: "#projects" },
+    { icon: Layers,  label: "Stack",    desc: "Technologies & tools I use",    href: "#skills" },
+    { icon: Clock,   label: "Timeline", desc: "My developer journey so far",   href: "#about" },
+    { icon: Radio,   label: "Live",     desc: "Discord status & availability", href: "#live" },
+    { icon: Mail,    label: "Contact",  desc: "Get in touch with me",          href: "#contact" },
 ];
 
 const SOCIALS = [
@@ -27,10 +28,14 @@ const SOCIALS = [
 ];
 
 export default function CommandPalette() {
-    const [open, setOpen] = useState(false);
-    const { warpTo } = useWarp();
+    const [open, setOpen]   = useState(false);
+    const { warpTo }        = useWarp();
+    const { language, setLanguage, t } = useLanguage();
     const [copied, setCopied] = useState<"email" | "link" | null>(null);
     const [search, setSearch] = useState("");
+
+    // Mobile: open via bottom-sheet slide-up on small screens
+    const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
 
     useEffect(() => {
         const down = (e: KeyboardEvent) => {
@@ -69,34 +74,40 @@ export default function CommandPalette() {
 
     if (!open) return null;
 
+    // On mobile: position as a bottom sheet; on desktop: centered modal
+    const containerClass = isMobile
+        ? "fixed inset-0 z-[60] flex items-end"
+        : "fixed inset-0 z-[60] flex items-start justify-center pt-[12vh] sm:pt-[16vh] px-4";
+
+    const paletteClass = isMobile
+        ? "relative w-full bg-[#0f0f11]/98 border-t border-white/[0.08] rounded-t-2xl shadow-[0_-16px_80px_rgba(0,0,0,0.9)] overflow-hidden backdrop-blur-xl animate-in slide-in-from-bottom-4 fade-in duration-200 pb-[env(safe-area-inset-bottom,0px)]"
+        : "relative w-full max-w-lg bg-[#0f0f11]/95 border border-white/[0.08] rounded-2xl shadow-[0_16px_80px_rgba(0,0,0,0.9),0_0_0_1px_rgba(99,102,241,0.08)] overflow-hidden backdrop-blur-xl animate-in slide-in-from-top-4 fade-in duration-200";
+
     return (
-        <div
-            className="fixed inset-0 z-[60] flex items-start justify-center pt-[12vh] sm:pt-[16vh] px-4"
-            onWheel={(e) => {
-                // If the scroll target is inside the palette list, let it scroll naturally.
-                // Otherwise prevent wheel from reaching the page.
-                const list = (e.currentTarget as HTMLElement).querySelector("[cmdk-list-sizer]")?.parentElement;
-                if (list && list.contains(e.target as Node)) return;
-                e.preventDefault();
-            }}
-        >
+        <div className={containerClass}>
             {/* Backdrop */}
             <div
                 className="absolute inset-0 bg-black/60 backdrop-blur-md animate-in fade-in duration-150"
                 onClick={() => setOpen(false)}
             />
 
-            {/* Palette */}
-            <div className="relative w-full max-w-lg bg-[#0f0f11]/95 border border-white/[0.08] rounded-2xl shadow-[0_16px_80px_rgba(0,0,0,0.9),0_0_0_1px_rgba(99,102,241,0.08)] overflow-hidden backdrop-blur-xl animate-in slide-in-from-top-4 fade-in duration-200">
+            <div className={paletteClass}>
+                {/* Mobile drag indicator */}
+                {isMobile && (
+                    <div className="flex justify-center pt-3 pb-1">
+                        <div className="w-10 h-1 rounded-full bg-white/15" />
+                    </div>
+                )}
+
                 <Command className="w-full" shouldFilter>
                     {/* Search input */}
                     <div className="flex items-center border-b border-white/[0.06] px-5">
                         <Search className="w-4 h-4 text-indigo-400/50 mr-3 shrink-0" />
                         <Command.Input
-                            autoFocus
+                            autoFocus={!isMobile}
                             value={search}
                             onValueChange={setSearch}
-                            placeholder="Search sections, actions, socials..."
+                            placeholder={t("nav.cmd_placeholder")}
                             className="w-full bg-transparent py-4 text-[15px] text-white placeholder-white/20 focus:outline-none"
                         />
                         <kbd className="hidden sm:inline-flex text-[10px] font-mono text-white/15 border border-white/[0.06] rounded-md px-1.5 py-0.5 ml-2 shrink-0 bg-white/[0.02]">
@@ -104,7 +115,7 @@ export default function CommandPalette() {
                         </kbd>
                     </div>
 
-                    <div className="max-h-[380px] overflow-y-auto p-2 scrollbar-thin scrollbar-thumb-white/5">
+                    <div className="max-h-[380px] overflow-y-auto p-2">
                         <Command.List>
                             <Command.Empty className="py-12 text-center">
                                 <Sparkles className="w-5 h-5 text-white/15 mx-auto mb-3" />
@@ -132,6 +143,7 @@ export default function CommandPalette() {
                                     icon={copied === "email" ? <Check size={15} className="text-emerald-400" /> : <Copy size={15} />}
                                     desc="hello@arka.dev"
                                     onSelect={() => run(() => handleCopy("email"))}
+                                    kbd="C"
                                 >
                                     {copied === "email" ? "Copied!" : "Copy email"}
                                 </CmdItem>
@@ -156,6 +168,24 @@ export default function CommandPalette() {
                                 >
                                     Scroll to top
                                 </CmdItem>
+                            </Command.Group>
+
+                            {/* Language */}
+                            <Command.Group heading="Language" className={GROUP_STYLE}>
+                                {SUPPORTED_LANGUAGES.map((lang) => (
+                                    <CmdItem
+                                        key={lang.code}
+                                        icon={<Globe size={15} />}
+                                        desc={lang.code === language.code ? "Currently active" : `Switch to ${lang.name}`}
+                                        suffix={lang.code === language.code
+                                            ? <Check size={12} className="text-indigo-400" />
+                                            : undefined
+                                        }
+                                        onSelect={() => run(() => setLanguage(lang))}
+                                    >
+                                        {lang.flag} {lang.name}
+                                    </CmdItem>
+                                ))}
                             </Command.Group>
 
                             {/* Socials */}
@@ -202,11 +232,12 @@ export default function CommandPalette() {
 const GROUP_STYLE = "[&_[cmdk-group-heading]]:text-[10px] [&_[cmdk-group-heading]]:font-mono [&_[cmdk-group-heading]]:text-white/20 [&_[cmdk-group-heading]]:px-3 [&_[cmdk-group-heading]]:py-2.5 [&_[cmdk-group-heading]]:uppercase [&_[cmdk-group-heading]]:tracking-[0.15em] mt-1";
 
 /* ── Command item component ── */
-function CmdItem({ children, icon, desc, suffix, onSelect }: {
+function CmdItem({ children, icon, desc, suffix, kbd: kbdHint, onSelect }: {
     children: React.ReactNode;
     icon: React.ReactNode;
     desc?: string;
     suffix?: React.ReactNode;
+    kbd?: string;
     onSelect: () => void;
 }) {
     return (
@@ -221,6 +252,11 @@ function CmdItem({ children, icon, desc, suffix, onSelect }: {
                 <span className="block truncate font-medium">{children}</span>
                 {desc && <span className="block text-[11px] text-white/20 truncate group-aria-selected:text-white/30 transition-colors">{desc}</span>}
             </div>
+            {kbdHint && (
+                <kbd className="hidden sm:inline-flex shrink-0 ml-auto text-[10px] font-mono text-white/15 border border-white/[0.06] rounded px-1.5 py-0.5 bg-white/[0.02]">
+                    {kbdHint}
+                </kbd>
+            )}
             {suffix && <span className="shrink-0 ml-auto">{suffix}</span>}
         </Command.Item>
     );

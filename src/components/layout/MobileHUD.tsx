@@ -7,36 +7,55 @@ import { useWarp } from "@/context/WarpContext";
 import { useHaptics } from "@/hooks/useHaptics";
 import { cn } from "@/lib/utils";
 
+const SECTION_MAP: Record<string, string> = {
+    "hero":        "home",
+    "about-intro": "about",
+    "projects":    "projects",
+    "contact":     "contact",
+};
+
 export default function MobileHUD() {
     const { warpTo } = useWarp();
     const { triggerHaptic } = useHaptics();
     const [activeTab, setActiveTab] = useState("home");
 
-    /* Section spy */
+    // Single IntersectionObserver replaces per-scroll event listener
+    // This fires only when section boundaries cross the viewport — much cheaper
     useEffect(() => {
-        const spy = () => {
-            const sections = ["hero", "about-intro", "projects", "contact"];
-            for (const id of sections) {
-                const el = document.getElementById(id);
-                if (el) {
-                    const rect = el.getBoundingClientRect();
-                    if (rect.top <= window.innerHeight / 2 && rect.bottom >= window.innerHeight / 2) {
-                        setActiveTab(id === "hero" ? "home" : id === "about-intro" ? "about" : id);
-                        break;
-                    }
+        const sections = Object.keys(SECTION_MAP)
+            .map(id => document.getElementById(id))
+            .filter(Boolean) as HTMLElement[];
+
+        if (!sections.length) return;
+
+        const observer = new IntersectionObserver(
+            (entries) => {
+                // Find the entry that is most visible (highest intersectionRatio)
+                const visible = entries
+                    .filter(e => e.isIntersecting)
+                    .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+
+                if (visible) {
+                    const tab = SECTION_MAP[visible.target.id];
+                    if (tab) setActiveTab(tab);
                 }
+            },
+            {
+                // Trigger when the center-ish of the section is in view
+                rootMargin: "-40% 0px -40% 0px",
+                threshold: [0, 0.1, 0.5, 1],
             }
-        };
-        window.addEventListener("scroll", spy, { passive: true });
-        spy();
-        return () => window.removeEventListener("scroll", spy);
+        );
+
+        sections.forEach(s => observer.observe(s));
+        return () => observer.disconnect();
     }, []);
 
     const navItems = [
-        { id: "home",     icon: Home,     label: "Home",     href: "#"           },
-        { id: "about",    icon: User,     label: "About",    href: "#about-intro" },
-        { id: "projects", icon: Briefcase,label: "Projects", href: "#projects"   },
-        { id: "contact",  icon: Mail,     label: "Contact",  href: "#contact"    },
+        { id: "home",     icon: Home,     label: "Home",    href: "#"            },
+        { id: "about",    icon: User,     label: "About",   href: "#about-intro" },
+        { id: "projects", icon: Briefcase,label: "Projects",href: "#projects"    },
+        { id: "contact",  icon: Mail,     label: "Contact", href: "#contact"     },
     ];
 
     const handleNav = (id: string, href: string) => {
@@ -50,12 +69,16 @@ export default function MobileHUD() {
             initial={{ y: 120, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ type: "spring", stiffness: 240, damping: 24, delay: 1.2 }}
-            className="fixed bottom-5 left-4 right-4 h-[62px] md:hidden z-50 will-change-transform"
-            style={{ paddingBottom: "env(safe-area-inset-bottom, 0px)" }}
+            className="fixed md:hidden z-50 will-change-transform"
+            style={{
+                bottom: "max(1.25rem, env(safe-area-inset-bottom, 20px))",
+                left: "1rem",
+                right: "1rem",
+                height: "62px",
+            }}
         >
             {/* Bar background */}
             <div className="absolute inset-0 rounded-2xl bg-[#0d0d12]/85 backdrop-blur-2xl border border-white/[0.09] shadow-[0_8px_32px_rgba(0,0,0,0.5)] overflow-hidden">
-                {/* Top highlight line */}
                 <div className="absolute top-0 left-6 right-6 h-px bg-gradient-to-r from-transparent via-white/[0.12] to-transparent" />
             </div>
 
@@ -69,7 +92,10 @@ export default function MobileHUD() {
                         <button
                             key={item.id}
                             onClick={() => handleNav(item.id, item.href)}
-                            className="relative flex-1 h-full flex flex-col items-center justify-center gap-[3px]"
+                            // Minimum 44px touch target per WCAG 2.5.5
+                            className="relative flex-1 h-full flex flex-col items-center justify-center gap-[3px] min-w-[44px]"
+                            aria-label={item.label}
+                            aria-current={isActive ? "page" : undefined}
                         >
                             {/* Active pill background */}
                             {isActive && (

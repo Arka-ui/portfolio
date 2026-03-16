@@ -1,0 +1,77 @@
+{
+  "nav": {
+    "home": "Startseite",
+    "about": "Über mich",
+    "projects": "Projekte",
+    "contact": "Kontakt",
+    "cmd_placeholder": "Befehl eingeben oder suchen...",
+    "cmd_alliance": "ALLIANZ-PROTOKOLL AKTIVIERT..."
+  },
+  "hero": {
+    "role": "Full Stack Entwickler",
+    "description": "Ich entwickle pixelgenaue, ansprechende und barrierefreie digitale Erlebnisse.",
+    "cta_projects": "Projekte ansehen",
+    "cta_contact": "Kontaktieren",
+    "available": "Offen für Projekte"
+  },
+  "about": {
+    "title": "Erfahrung & Ausbildung",
+    "subtitle": "Mein beruflicher Werdegang und akademischer Hintergrund.",
+    "work": "Arbeit",
+    "education": "Ausbildung",
+    "project": "Projekt",
+    "label": "Über mich",
+    "beliefs_label": "Was ich glaube",
+    "approach_label": "Wie ich arbeite"
+  },
+  "projects": {
+    "title": "Ausgewählte Projekte",
+    "subtitle": "Eine Auswahl an Projekten, auf die ich stolz bin.",
+    "view_project": "Projekt ansehen",
+    "source_code": "Quellcode",
+    "label": "Arbeit",
+    "all_repos": "Alle Repositories",
+    "count_one": "{count} Projekt",
+    "count_other": "{count} Projekte"
+  },
+  "contact": {
+    "title": "Kontakt aufnehmen",
+    "subtitle": "Hast du ein Projekt im Sinn oder möchtest einfach Hallo sagen?",
+    "name": "Name",
+    "email": "E-Mail",
+    "message": "Nachricht",
+    "subject": "Betreff",
+    "send": "Senden",
+    "sending": "Senden...",
+    "placeholder_name": "Max Mustermann",
+    "placeholder_email": "max@beispiel.de",
+    "placeholder_message": "Deine Nachricht hier...",
+    "placeholder_subject": "Worum geht es?",
+    "success_title": "Nachricht Gesendet!",
+    "success_desc": "Ich werde mich so schnell wie möglich bei dir melden.",
+    "send_another": "Weitere senden →",
+    "label": "Kontakt",
+    "location": "Frankreich — remote verfügbar",
+    "open_for": "Offen für Freelance-Arbeit, Kooperationen und interessante Projekte. Zögere nicht — ich antworte schnell."
+  },
+  "footer": {
+    "rights": "Alle Rechte vorbehalten.",
+    "built_with": "Erstellt mit Next.js, Tailwind & Framer Motion"
+  },
+  "cmd": {
+    "navigate": "Navigation",
+    "actions": "Aktionen",
+    "go_home": "Zur Startseite",
+    "go_about": "Zu Über mich",
+    "go_projects": "Zu Projekten",
+    "go_contact": "Zum Kontakt",
+    "copy_email": "E-Mail-Adresse kopieren",
+    "open_github": "GitHub öffnen",
+    "change_lang": "Sprache ändern",
+    "lang_en": "Zu Englisch wechseln",
+    "lang_fr": "Zu Französisch wechseln",
+    "lang_es": "Zu Spanisch wechseln",
+    "lang_de": "Zu Deutsch wechseln",
+    "copied": "Kopiert!"
+  }
+}

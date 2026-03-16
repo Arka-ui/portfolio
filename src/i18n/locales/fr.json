@@ -1,0 +1,77 @@
+{
+  "nav": {
+    "home": "Accueil",
+    "about": "À propos",
+    "projects": "Projets",
+    "contact": "Contact",
+    "cmd_placeholder": "Tapez une commande ou cherchez...",
+    "cmd_alliance": "PROTOCOLE ALLIANCE ACTIVÉ..."
+  },
+  "hero": {
+    "role": "Développeur Full Stack",
+    "description": "Je conçois des expériences numériques parfaites, engageantes et accessibles.",
+    "cta_projects": "Voir mes projets",
+    "cta_contact": "Me contacter",
+    "available": "Disponible pour des projets"
+  },
+  "about": {
+    "title": "Expérience & Formation",
+    "subtitle": "Mon parcours professionnel et académique.",
+    "work": "Expérience",
+    "education": "Formation",
+    "project": "Projet",
+    "label": "À propos",
+    "beliefs_label": "Ce en quoi je crois",
+    "approach_label": "Comment je travaille"
+  },
+  "projects": {
+    "title": "Projets à la Une",
+    "subtitle": "Une sélection de projets dont je suis fier.",
+    "view_project": "Voir le projet",
+    "source_code": "Code Source",
+    "label": "Travaux",
+    "all_repos": "Tous les dépôts",
+    "count_one": "{count} projet",
+    "count_other": "{count} projets"
+  },
+  "contact": {
+    "title": "Me Contacter",
+    "subtitle": "Vous avez un projet en tête ou voulez simplement dire bonjour ?",
+    "name": "Nom",
+    "email": "Email",
+    "message": "Message",
+    "subject": "Sujet",
+    "send": "Envoyer",
+    "sending": "Envoi...",
+    "placeholder_name": "Jean Dupont",
+    "placeholder_email": "jean@exemple.com",
+    "placeholder_message": "Votre message ici...",
+    "placeholder_subject": "De quoi s'agit-il ?",
+    "success_title": "Message Envoyé !",
+    "success_desc": "Je vous répondrai dès que possible.",
+    "send_another": "Envoyer un autre →",
+    "label": "Contact",
+    "location": "France — disponible à distance",
+    "open_for": "Disponible pour des missions freelance, des collaborations et des projets intéressants. N'hésitez pas — je réponds vite."
+  },
+  "footer": {
+    "rights": "Tous droits réservés.",
+    "built_with": "Conçu avec Next.js, Tailwind & Framer Motion"
+  },
+  "cmd": {
+    "navigate": "Navigation",
+    "actions": "Actions",
+    "go_home": "Accueil",
+    "go_about": "Aller à À propos",
+    "go_projects": "Aller aux Projets",
+    "go_contact": "Aller au Contact",
+    "copy_email": "Copier l'adresse email",
+    "open_github": "Ouvrir GitHub",
+    "change_lang": "Changer de langue",
+    "lang_en": "Passer en anglais",
+    "lang_fr": "Passer en français",
+    "lang_es": "Passer en espagnol",
+    "lang_de": "Passer en allemand",
+    "copied": "Copié !"
+  }
+}

@@ -134,6 +134,9 @@ export default function Contact() {
                                                 placeholder="Your name"
                                                 value={name}
                                                 onChange={e => setName(e.target.value)}
+                                                autoComplete="name"
+                                                inputMode="text"
+                                                enterKeyHint="next"
                                                 className={INPUT_CLASS}
                                             />
                                         </div>
@@ -146,6 +149,9 @@ export default function Contact() {
                                                 placeholder="your@email.com"
                                                 value={email}
                                                 onChange={e => setEmail(e.target.value)}
+                                                autoComplete="email"
+                                                inputMode="email"
+                                                enterKeyHint="next"
                                                 className={INPUT_CLASS}
                                             />
                                         </div>
@@ -160,6 +166,9 @@ export default function Contact() {
                                             placeholder="What's this about?"
                                             value={subject}
                                             onChange={e => setSubject(e.target.value)}
+                                            autoComplete="off"
+                                            inputMode="text"
+                                            enterKeyHint="next"
                                             className={INPUT_CLASS}
                                         />
                                     </div>
@@ -173,6 +182,8 @@ export default function Contact() {
                                             placeholder="Tell me about your project or idea..."
                                             value={message}
                                             onChange={e => setMessage(e.target.value)}
+                                            autoComplete="off"
+                                            enterKeyHint="send"
                                             className={`${INPUT_CLASS} resize-none`}
                                         />
                                     </div>

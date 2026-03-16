@@ -3,7 +3,18 @@
 import { motion } from "framer-motion";
 import { Github, ArrowUpRight, Star, GitFork } from "lucide-react";
 import useSWR from "swr";
+import { useCallback } from "react";
 import ProjectCarousel from "@/components/features/ProjectCarousel";
+
+function useSpotlight() {
+    return useCallback((e: React.PointerEvent<HTMLElement>) => {
+        const rect = e.currentTarget.getBoundingClientRect();
+        const x = ((e.clientX - rect.left) / rect.width) * 100;
+        const y = ((e.clientY - rect.top) / rect.height) * 100;
+        e.currentTarget.style.setProperty("--spotlight-x", `${x}%`);
+        e.currentTarget.style.setProperty("--spotlight-y", `${y}%`);
+    }, []);
+}
 
 const GITHUB_USERNAME = "Arka-ui";
 
@@ -43,6 +54,7 @@ const LANG_COLORS: Record<string, string> = {
 function ProjectCard({ project, index }: { project: Project; index: number }) {
     const num = String(index + 1).padStart(2, "0");
     const color = project.language ? LANG_COLORS[project.language] : "#6366f1";
+    const spotlight = useSpotlight();
 
     return (
         <motion.article
@@ -50,7 +62,8 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.15 }}
             transition={{ duration: 0.65, delay: index * 0.08, ease: [0.16, 1, 0.3, 1] }}
-            className="group relative border-t border-white/[0.07] pt-8 pb-8 flex flex-col gap-5 hover:border-white/20 transition-colors duration-300"
+            onPointerMove={spotlight}
+            className="group relative border-t border-white/[0.07] pt-8 pb-8 flex flex-col gap-5 hover:border-white/20 transition-colors duration-300 card-spotlight"
         >
             {/* Top row */}
             <div className="flex items-start justify-between gap-4">

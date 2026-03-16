@@ -11,7 +11,13 @@ export default function InteractiveBackground() {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
 
+    // On mobile (<768px) skip the canvas entirely — use CSS gradient only
+    const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
+
     useEffect(() => {
+        // Mobile: no canvas animation — static gradient is enough
+        if (window.innerWidth < 768) return;
+
         const canvas = canvasRef.current;
         const container = containerRef.current;
         if (!canvas || !container) return;
@@ -23,24 +29,20 @@ export default function InteractiveBackground() {
         let particles: Particle[] = [];
         let width = 0;
         let height = 0;
+        let paused = false;
         const mouse = { x: -1000, y: -1000 };
 
-        // Premium Colors
         const COLORS = {
-            particle: isBlueprintMode ? "rgba(255, 255, 255, 0.9)" : "rgba(99, 102, 241, 0.6)", // Indigo
-            particleGlow: isBlueprintMode ? "rgba(0, 100, 255, 0.4)" : "rgba(34, 211, 238, 0.4)", // Cyan
-            line: isBlueprintMode ? "rgba(0, 100, 255, 0.15)" : "rgba(99, 102, 241, 0.1)",
+            particle:     isBlueprintMode ? "rgba(255, 255, 255, 0.9)" : "rgba(99, 102, 241, 0.6)",
+            particleGlow: isBlueprintMode ? "rgba(0, 100, 255, 0.4)"  : "rgba(34, 211, 238, 0.4)",
+            line:         isBlueprintMode ? "rgba(0, 100, 255, 0.15)" : "rgba(99, 102, 241, 0.1)",
         };
 
         class Particle {
-            x: number;
-            y: number;
-            vx: number;
-            vy: number;
-            size: number;
-            baseSize: number;
-            angle: number;
-            spin: number;
+            x: number; y: number;
+            vx: number; vy: number;
+            size: number; baseSize: number;
+            angle: number; spin: number;
             brightness: number;
 
             constructor() {
@@ -59,7 +61,6 @@ export default function InteractiveBackground() {
                 this.x += this.vx;
                 this.y += this.vy;
 
-                // Mouse influence
                 const dx = mouse.x - this.x;
                 const dy = mouse.y - this.y;
                 const distance = Math.sqrt(dx * dx + dy * dy);
@@ -77,7 +78,6 @@ export default function InteractiveBackground() {
                     this.brightness += (Math.random() * 0.5 - this.brightness) * 0.01;
                 }
 
-                // Warp edges
                 if (this.x < 0) this.x = width;
                 if (this.x > width) this.x = 0;
                 if (this.y < 0) this.y = height;
@@ -89,7 +89,6 @@ export default function InteractiveBackground() {
                 ctx.translate(this.x, this.y);
                 ctx.globalAlpha = 0.4 + this.brightness * 0.4;
 
-                // Glow effect
                 if (!isBlueprintMode) {
                     const gradient = ctx.createRadialGradient(0, 0, 0, 0, 0, this.size * 3);
                     gradient.addColorStop(0, COLORS.particleGlow);
@@ -113,16 +112,14 @@ export default function InteractiveBackground() {
             height = window.innerHeight;
             canvas.width = width;
             canvas.height = height;
-
-            const count = width < 768 ? 40 : 100;
-            particles = Array.from({ length: count }, () => new Particle());
+            particles = Array.from({ length: 100 }, () => new Particle());
         };
 
         const animate = () => {
+            if (paused) return;
             if (!ctx) return;
             ctx.clearRect(0, 0, width, height);
 
-            // Draw connections
             ctx.strokeStyle = COLORS.line;
             ctx.lineWidth = 1;
 
@@ -150,6 +147,14 @@ export default function InteractiveBackground() {
             animationFrameId = requestAnimationFrame(animate);
         };
 
+        // Pause RAF when tab is hidden — saves ~100% GPU on background tab
+        const handleVisibility = () => {
+            paused = document.hidden;
+            if (!paused) {
+                animationFrameId = requestAnimationFrame(animate);
+            }
+        };
+
         const handleMouseMove = (e: MouseEvent) => {
             mouse.x = e.clientX;
             mouse.y = e.clientY;
@@ -157,6 +162,7 @@ export default function InteractiveBackground() {
 
         window.addEventListener("resize", resize);
         window.addEventListener("mousemove", handleMouseMove);
+        document.addEventListener("visibilitychange", handleVisibility);
 
         resize();
         animate();
@@ -164,15 +170,17 @@ export default function InteractiveBackground() {
         return () => {
             window.removeEventListener("resize", resize);
             window.removeEventListener("mousemove", handleMouseMove);
+            document.removeEventListener("visibilitychange", handleVisibility);
             cancelAnimationFrame(animationFrameId);
         };
     }, [isBlueprintMode]);
 
-    if (health.status === 'critical') return <SystemFailure />;
+    if (health.status === "critical") return <SystemFailure />;
 
     return (
         <div ref={containerRef} className="fixed inset-0 -z-10 bg-slate-950">
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-indigo-950/20 via-slate-950/50 to-slate-950 pointer-events-none" />
+            {/* Canvas only rendered on desktop via the useEffect guard */}
             <canvas ref={canvasRef} className="absolute inset-0 block w-full h-full" />
         </div>
     );

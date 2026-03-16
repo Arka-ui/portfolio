@@ -25,25 +25,21 @@ export default function Hero() {
 
     return (
         <section id="hero" className="relative min-h-screen flex flex-col justify-center pt-28 pb-0 overflow-hidden">
-            {/* Ambient gradient orbs — entrance animated */}
+            {/* CSS @property animated mesh gradient — zero JS cost, GPU composited */}
+            <div className="absolute inset-0 mesh-gradient pointer-events-none" aria-hidden />
+
+            {/* Ambient blobs for additional depth — only on desktop */}
             <motion.div
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 2.5, ease: "easeOut" }}
-                className="absolute -top-40 -left-40 w-[800px] h-[800px] bg-indigo-600/[0.065] rounded-full blur-[160px] pointer-events-none"
+                className="absolute -top-40 -left-40 w-[800px] h-[800px] bg-indigo-600/[0.06] rounded-full blur-[160px] pointer-events-none hidden md:block"
             />
             <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 3, delay: 0.4, ease: "easeOut" }}
-                className="absolute bottom-0 right-0 w-[600px] h-[600px] bg-violet-600/[0.045] rounded-full blur-[140px] pointer-events-none"
-            />
-            {/* Subtle mid-page accent */}
-            <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 2, delay: 1, ease: "easeOut" }}
-                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[200px] bg-indigo-500/[0.025] rounded-full blur-[100px] pointer-events-none"
+                className="absolute bottom-0 right-0 w-[600px] h-[600px] bg-violet-600/[0.04] rounded-full blur-[140px] pointer-events-none hidden md:block"
             />
 
             <div className="container mx-auto px-6 md:px-12 relative z-10">
@@ -69,7 +65,7 @@ export default function Hero() {
                     variants={container}
                     initial="hidden"
                     animate="show"
-                    className="font-heading font-black leading-[0.88] tracking-tighter text-[clamp(52px,10.5vw,148px)] mb-14"
+                    className="font-heading font-black leading-[0.9] tracking-tighter text-[clamp(42px,10.5vw,148px)] mb-14"
                 >
                     <div className="overflow-hidden">
                         <motion.span variants={lineVariant} className="block text-white">

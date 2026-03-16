@@ -1,0 +1,77 @@
+{
+  "nav": {
+    "home": "Inicio",
+    "about": "Sobre mí",
+    "projects": "Proyectos",
+    "contact": "Contacto",
+    "cmd_placeholder": "Escribe un comando o busca...",
+    "cmd_alliance": "PROTOCOLO ALIANZA ACTIVADO..."
+  },
+  "hero": {
+    "role": "Desarrollador Full Stack",
+    "description": "Creo experiencias digitales perfectas, atractivas y accesibles.",
+    "cta_projects": "Ver Proyectos",
+    "cta_contact": "Contactar",
+    "available": "Disponible para proyectos"
+  },
+  "about": {
+    "title": "Experiencia y Educación",
+    "subtitle": "Mi trayectoria profesional y académica.",
+    "work": "Trabajo",
+    "education": "Educación",
+    "project": "Proyecto",
+    "label": "Sobre mí",
+    "beliefs_label": "Lo que creo",
+    "approach_label": "Cómo trabajo"
+  },
+  "projects": {
+    "title": "Proyectos Destacados",
+    "subtitle": "Una selección de proyectos de los que estoy orgulloso.",
+    "view_project": "Ver Proyecto",
+    "source_code": "Código Fuente",
+    "label": "Trabajo",
+    "all_repos": "Todos los repositorios",
+    "count_one": "{count} proyecto",
+    "count_other": "{count} proyectos"
+  },
+  "contact": {
+    "title": "Contáctame",
+    "subtitle": "¿Tienes un proyecto en mente o solo quieres saludar?",
+    "name": "Nombre",
+    "email": "Correo",
+    "message": "Mensaje",
+    "subject": "Asunto",
+    "send": "Enviar",
+    "sending": "Enviando...",
+    "placeholder_name": "Juan Pérez",
+    "placeholder_email": "juan@ejemplo.com",
+    "placeholder_message": "Tu mensaje aquí...",
+    "placeholder_subject": "¿De qué se trata?",
+    "success_title": "¡Mensaje Enviado!",
+    "success_desc": "Te responderé lo antes posible.",
+    "send_another": "Enviar otro →",
+    "label": "Contacto",
+    "location": "Francia — disponible remotamente",
+    "open_for": "Disponible para trabajo freelance, colaboraciones y proyectos interesantes. No dudes en escribir — respondo rápido."
+  },
+  "footer": {
+    "rights": "Todos los derechos reservados.",
+    "built_with": "Construido con Next.js, Tailwind & Framer Motion"
+  },
+  "cmd": {
+    "navigate": "Navegar",
+    "actions": "Acciones",
+    "go_home": "Ir al Inicio",
+    "go_about": "Ir a Sobre mí",
+    "go_projects": "Ir a Proyectos",
+    "go_contact": "Ir a Contacto",
+    "copy_email": "Copiar dirección de email",
+    "open_github": "Abrir GitHub",
+    "change_lang": "Cambiar idioma",
+    "lang_en": "Cambiar a inglés",
+    "lang_fr": "Cambiar a francés",
+    "lang_es": "Cambiar a español",
+    "lang_de": "Cambiar a alemán",
+    "copied": "¡Copiado!"
+  }
+}

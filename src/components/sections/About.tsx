@@ -1,7 +1,18 @@
 "use client";
 
 import { motion, useInView } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
+
+// Spotlight pointer handler — updates CSS vars so the radial gradient follows cursor
+function useSpotlight() {
+    return useCallback((e: React.PointerEvent<HTMLElement>) => {
+        const rect = e.currentTarget.getBoundingClientRect();
+        const x = ((e.clientX - rect.left) / rect.width) * 100;
+        const y = ((e.clientY - rect.top) / rect.height) * 100;
+        e.currentTarget.style.setProperty("--spotlight-x", `${x}%`);
+        e.currentTarget.style.setProperty("--spotlight-y", `${y}%`);
+    }, []);
+}
 
 /* ─────────────────────────────────────────────
    Count-up number — animates 0 → target
@@ -120,6 +131,8 @@ const QUICK_FACTS = [
 ];
 
 export default function About() {
+    const spotlight = useSpotlight();
+
     return (
         <section id="about-intro" className="py-20 md:py-24 border-t border-white/[0.06]">
             <div className="container mx-auto px-6 md:px-12">
@@ -290,7 +303,8 @@ export default function About() {
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true, amount: 0.3 }}
                                 transition={{ duration: 0.6, delay: i * 0.09, ease: [0.16, 1, 0.3, 1] }}
-                                className="group relative bg-white/[0.02] hover:bg-white/[0.04] transition-colors duration-300 p-7 flex flex-col gap-4 overflow-hidden"
+                                onPointerMove={spotlight}
+                                className="group relative bg-white/[0.02] hover:bg-white/[0.04] transition-colors duration-300 p-7 flex flex-col gap-4 overflow-hidden card-spotlight"
                             >
                                 {/* Hover glow */}
                                 <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none bg-gradient-to-br from-indigo-500/[0.05] to-transparent" />
@@ -331,7 +345,8 @@ export default function About() {
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true, amount: 0.3 }}
                                 transition={{ duration: 0.6, delay: i * 0.1, ease: [0.16, 1, 0.3, 1] }}
-                                className="group relative p-6 rounded-2xl border border-white/[0.06] bg-white/[0.02] hover:bg-white/[0.04] transition-colors duration-300"
+                                onPointerMove={spotlight}
+                                className="group relative p-6 rounded-2xl border border-white/[0.06] bg-white/[0.02] hover:bg-white/[0.04] transition-colors duration-300 card-spotlight"
                             >
                                 {/* Step number with connecting line */}
                                 <div className="flex items-center gap-3 mb-4">

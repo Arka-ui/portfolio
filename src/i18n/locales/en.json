@@ -1,0 +1,77 @@
+{
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "projects": "Projects",
+    "contact": "Contact",
+    "cmd_placeholder": "Type a command or search...",
+    "cmd_alliance": "ALLIANCE PROTOCOL ENGAGED..."
+  },
+  "hero": {
+    "role": "Full Stack Developer",
+    "description": "I build pixel-perfect, engaging, and accessible digital experiences.",
+    "cta_projects": "View Projects",
+    "cta_contact": "Contact Me",
+    "available": "Available for work"
+  },
+  "about": {
+    "title": "Experience & Education",
+    "subtitle": "My professional journey and academic background.",
+    "work": "Work",
+    "education": "Education",
+    "project": "Project",
+    "label": "About",
+    "beliefs_label": "What I believe in",
+    "approach_label": "How I work"
+  },
+  "projects": {
+    "title": "Featured Projects",
+    "subtitle": "A selection of projects that I'm proud of.",
+    "view_project": "View Project",
+    "source_code": "Source Code",
+    "label": "Work",
+    "all_repos": "All repositories",
+    "count_one": "{count} project",
+    "count_other": "{count} projects"
+  },
+  "contact": {
+    "title": "Get in Touch",
+    "subtitle": "Have a project in mind or just want to say hi?",
+    "name": "Name",
+    "email": "Email",
+    "message": "Message",
+    "subject": "Subject",
+    "send": "Send Message",
+    "sending": "Sending...",
+    "placeholder_name": "John Doe",
+    "placeholder_email": "john@example.com",
+    "placeholder_message": "Your message here...",
+    "placeholder_subject": "What's this about?",
+    "success_title": "Message Sent!",
+    "success_desc": "I'll get back to you as soon as possible.",
+    "send_another": "Send another →",
+    "label": "Contact",
+    "location": "France — available remotely",
+    "open_for": "Open for freelance work, collaborations, and interesting projects. Don't hesitate to reach out — I reply fast."
+  },
+  "footer": {
+    "rights": "All rights reserved.",
+    "built_with": "Built with Next.js, Tailwind & Framer Motion"
+  },
+  "cmd": {
+    "navigate": "Navigate",
+    "actions": "Actions",
+    "go_home": "Go Home",
+    "go_about": "Go to About",
+    "go_projects": "Go to Projects",
+    "go_contact": "Go to Contact",
+    "copy_email": "Copy Email Address",
+    "open_github": "Open GitHub",
+    "change_lang": "Change Language",
+    "lang_en": "Switch to English",
+    "lang_fr": "Switch to French",
+    "lang_es": "Switch to Spanish",
+    "lang_de": "Switch to German",
+    "copied": "Copied!"
+  }
+}

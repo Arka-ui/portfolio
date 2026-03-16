@@ -1,5 +1,27 @@
 @import "tailwindcss";
 
+/* ─── CSS Custom Properties for animated mesh gradient (Phase 4) ─── */
+@property --mesh-x {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 30%;
+}
+@property --mesh-y {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 20%;
+}
+@property --mesh-x2 {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 70%;
+}
+@property --mesh-y2 {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 80%;
+}
+
 @theme {
   /* Fonts */
   --font-sans: var(--font-jakarta);
@@ -89,6 +111,8 @@
     color: var(--color-foreground);
     font-family: var(--font-sans);
     overflow-x: hidden;
+    /* Prevent pull-to-refresh from firing mid-scroll on mobile */
+    overscroll-behavior-y: contain;
     @apply antialiased selection:bg-indigo-500/30 selection:text-indigo-200;
   }
 
@@ -175,6 +199,67 @@
   .pb-mobile-hud {
     padding-bottom: calc(5rem + env(safe-area-inset-bottom, 24px));
   }
+
+  /* ── Mesh gradient hero background ──
+     Uses @property animated CSS custom properties for a GPU-composited,
+     zero-JS animated gradient. Transition-animates --mesh-* on .mesh-animate. */
+  .mesh-gradient {
+    background:
+      radial-gradient(ellipse 60% 50% at var(--mesh-x) var(--mesh-y), rgba(99,102,241,0.07) 0%, transparent 70%),
+      radial-gradient(ellipse 50% 60% at var(--mesh-x2) var(--mesh-y2), rgba(139,92,246,0.05) 0%, transparent 70%);
+    animation: mesh-drift 12s ease-in-out infinite alternate;
+  }
+
+  /* ── Card spotlight effect ──
+     Requires the component to set --spotlight-x and --spotlight-y via JS
+     on pointermove. The gradient follows the cursor inside the card. */
+  .card-spotlight {
+    background: radial-gradient(
+      600px circle at var(--spotlight-x, 50%) var(--spotlight-y, 50%),
+      rgba(99,102,241,0.04),
+      transparent 40%
+    );
+  }
+
+  /* ── Clip-path section reveal ──
+     Apply to section headings. Use .reveal-ready on mount, then toggle
+     .reveal-in via whileInView or IntersectionObserver. */
+  .clip-reveal {
+    clip-path: inset(0 100% 0 0);
+    transition: clip-path 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .clip-reveal.revealed {
+    clip-path: inset(0 0% 0 0);
+  }
+
+  /* ── Custom cursor dot ─── */
+  .cursor-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: white;
+    mix-blend-mode: difference;
+    pointer-events: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.08s ease, width 0.15s ease, height 0.15s ease;
+    will-change: transform;
+  }
+
+  /* ── Marquee will-change only during active scroll ── */
+  .marquee-track {
+    will-change: transform;
+  }
+}
+
+@keyframes mesh-drift {
+  0%   { --mesh-x: 30%; --mesh-y: 20%; --mesh-x2: 70%; --mesh-y2: 80%; }
+  33%  { --mesh-x: 50%; --mesh-y: 10%; --mesh-x2: 55%; --mesh-y2: 70%; }
+  66%  { --mesh-x: 20%; --mesh-y: 50%; --mesh-x2: 80%; --mesh-y2: 40%; }
+  100% { --mesh-x: 40%; --mesh-y: 30%; --mesh-x2: 65%; --mesh-y2: 75%; }
 }
 
 /* Scrollbar */
