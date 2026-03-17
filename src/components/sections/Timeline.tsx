@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Briefcase, FolderGit2, GraduationCap } from "lucide-react";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface ExperienceItem {
     type: "work" | "project" | "education";
@@ -62,13 +63,14 @@ const TYPE_CONFIG = {
 };
 
 export default function Timeline() {
+    const { t } = useLanguage();
     return (
         <section id="about" className="py-14 md:py-28 border-t border-white/[0.06]">
             <div className="container mx-auto px-6 md:px-12">
 
                 {/* Header */}
                 <div className="mb-16">
-                    <span className="label-mono mb-5 block">Experience</span>
+                    <span className="label-mono mb-5 block">{t("timeline.label")}</span>
                     <motion.h2
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
@@ -76,7 +78,7 @@ export default function Timeline() {
                         transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
                         className="font-heading font-black text-[clamp(36px,5vw,64px)] leading-[0.9] tracking-tighter text-white"
                     >
-                        What I&apos;ve built
+                        {t("timeline.heading")}
                     </motion.h2>
                 </div>
 

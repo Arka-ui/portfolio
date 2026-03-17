@@ -7,6 +7,7 @@ import { useLanyard } from "@/hooks/useLanyard";
 import { useBlueprint } from "@/context/BlueprintContext";
 import BlueprintWrapper from "@/components/BlueprintWrapper";
 import { useEffect, useState } from "react";
+import { useLanguage } from "@/context/LanguageContext";
 
 // Placeholder ID - User needs to replace this
 const DISCORD_ID = "871084043838566400";
@@ -34,6 +35,7 @@ const getActivityPriority = (act: LanyardActivity) => {
 export default function LiveStatus() {
     const { data: lanyardData } = useLanyard(DISCORD_ID);
     const { isBlueprintMode } = useBlueprint();
+    const { t } = useLanguage();
     const [currentTime, setCurrentTime] = useState(Date.now());
     const [mounted, setMounted] = useState(false);
 
@@ -214,13 +216,12 @@ export default function LiveStatus() {
         <section id="live" className="py-14 md:py-28 border-t border-white/[0.06]">
             <div className="container mx-auto px-6 md:px-12">
                 <div className="mb-12">
-                    <span className="label-mono mb-5 block">Live</span>
+                    <span className="label-mono mb-5 block">{t("live.label")}</span>
                     <h2 className="font-heading font-black text-[clamp(36px,5vw,64px)] leading-[0.9] tracking-tighter text-white">
-                        What I&apos;m doing
+                        {t("live.heading")}
                     </h2>
                     <p className="text-white/35 text-sm mt-4 max-w-lg">
-                        Real-time data pulled from Discord via Lanyard. This section updates live —
-                        what you see is what&apos;s happening right now.
+                        {t("live.subtitle")}
                     </p>
                 </div>
 
@@ -358,7 +359,7 @@ export default function LiveStatus() {
                                             </div>
                                         ))}
                                         {sortedActivities.filter(a => a.name !== "Spotify").length === 0 && !spotify && (
-                                            <p className="text-white/20 text-xs text-center py-3 font-mono">No activity right now</p>
+                                            <p className="text-white/20 text-xs text-center py-3 font-mono">{t("live.no_activity")}</p>
                                         )}
                                     </div>
                                 </div>
@@ -376,7 +377,7 @@ export default function LiveStatus() {
                     >
                         {/* Current timezone / local time */}
                         <div className="p-5 rounded-2xl border border-white/[0.06] bg-white/[0.02]">
-                            <span className="label-mono text-[10px] block mb-3">Local time</span>
+                            <span className="label-mono text-[10px] block mb-3">{t("live.local_time")}</span>
                             <div className="flex items-baseline gap-3">
                                 <span className="font-heading font-black text-3xl text-white tracking-tight">
                                     {new Date(currentTime).toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit", timeZone: "Europe/Paris" })}
@@ -390,30 +391,30 @@ export default function LiveStatus() {
 
                         {/* Quick availability info */}
                         <div className="p-5 rounded-2xl border border-white/[0.06] bg-white/[0.02]">
-                            <span className="label-mono text-[10px] block mb-3">Availability</span>
+                            <span className="label-mono text-[10px] block mb-3">{t("live.availability")}</span>
                             <div className="space-y-3">
                                 <div className="flex items-center justify-between">
-                                    <span className="text-sm text-white/50">Response time</span>
+                                    <span className="text-sm text-white/50">{t("live.response_time")}</span>
                                     <span className="text-sm text-white/70 font-mono">&lt; 24h</span>
                                 </div>
                                 <div className="flex items-center justify-between">
-                                    <span className="text-sm text-white/50">Timezone</span>
+                                    <span className="text-sm text-white/50">{t("live.timezone")}</span>
                                     <span className="text-sm text-white/70 font-mono">UTC+1</span>
                                 </div>
                                 <div className="flex items-center justify-between">
-                                    <span className="text-sm text-white/50">Open for work</span>
+                                    <span className="text-sm text-white/50">{t("live.open_for_work")}</span>
                                     <span className="flex items-center gap-1.5 text-sm text-emerald-400 font-medium">
                                         <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                                        Yes
+                                        {t("live.yes")}
                                     </span>
                                 </div>
                                 <div className="flex items-center justify-between">
-                                    <span className="text-sm text-white/50">Preferred contact</span>
+                                    <span className="text-sm text-white/50">{t("live.preferred_contact")}</span>
                                     <span className="text-sm text-white/70 font-mono">Discord</span>
                                 </div>
                                 <div className="mt-1 pt-3 border-t border-white/[0.04]">
                                     <p className="text-[12px] text-white/25 italic leading-relaxed">
-                                        Or IRL with a good meal at the restaurant — best way to close a deal 🍽️
+                                        {t("live.irl_note")}
                                     </p>
                                 </div>
                             </div>
@@ -431,7 +432,7 @@ export default function LiveStatus() {
                                     <Music className="w-5 h-5 text-[#1DB954]" />
                                 </div>
                                 <div className="flex-1 min-w-0">
-                                    <p className="text-sm text-white/60 group-hover:text-[#1DB954] transition-colors font-medium">Listening on Spotify</p>
+                                    <p className="text-sm text-white/60 group-hover:text-[#1DB954] transition-colors font-medium">{t("live.listening")}</p>
                                     <p className="text-[11px] text-white/25 truncate">{spotify.song} — {spotify.artist}</p>
                                 </div>
                                 <ExternalLink size={14} className="text-white/15 group-hover:text-[#1DB954]/50 transition-colors shrink-0" />

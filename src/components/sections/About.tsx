@@ -2,6 +2,7 @@
 
 import { motion, useInView } from "framer-motion";
 import { useEffect, useRef, useState, useCallback } from "react";
+import { useLanguage } from "@/context/LanguageContext";
 
 // Spotlight pointer handler — updates CSS vars so the radial gradient follows cursor
 function useSpotlight() {
@@ -53,15 +54,15 @@ function CountUp({
 }
 
 /* ─────────────────────────────────────────────
-   Stats data
+   Stats data (labels resolved at render time)
 ───────────────────────────────────────────── */
-const STATS = [
-    { numeric: 3,    suffix: "+", label: "Years building"    },
-    { numeric: 15,   suffix: "+", label: "Projects shipped"  },
-    { numeric: null, raw: "OSS",  label: "Open-source first" },
-    { numeric: 4,    suffix: "",  label: "Languages spoken"  },
-    { numeric: 10,   suffix: "k+", label: "Lines of code"   },
-    { numeric: 99,   suffix: "%", label: "Self-taught"       },
+const STAT_DEFS = [
+    { numeric: 3,    suffix: "+",  labelKey: "about.stat_years"     },
+    { numeric: 15,   suffix: "+",  labelKey: "about.stat_projects"  },
+    { numeric: null, raw: "OSS",   labelKey: "about.stat_oss_label" },
+    { numeric: 4,    suffix: "",   labelKey: "about.stat_languages" },
+    { numeric: 10,   suffix: "k+", labelKey: "about.stat_lines"     },
+    { numeric: 99,   suffix: "%",  labelKey: "about.stat_self_taught"},
 ];
 
 const BELIEFS = [
@@ -132,6 +133,8 @@ const QUICK_FACTS = [
 
 export default function About() {
     const spotlight = useSpotlight();
+    const { t } = useLanguage();
+    const STATS = STAT_DEFS.map(s => ({ ...s, label: t(s.labelKey) }));
 
     return (
         <section id="about-intro" className="py-14 md:py-24 border-t border-white/[0.06]">
@@ -149,7 +152,7 @@ export default function About() {
                             transition={{ duration: 0.5 }}
                             className="label-mono mb-5 block"
                         >
-                            About
+                            {t("about.label")}
                         </motion.span>
 
                         <h2 className="font-heading font-black text-[clamp(38px,5.5vw,80px)] leading-[0.92] tracking-tighter">
@@ -292,7 +295,7 @@ export default function About() {
                         transition={{ duration: 0.5 }}
                         className="label-mono mb-10 block"
                     >
-                        What I believe in
+                        {t("about.beliefs_label")}
                     </motion.span>
 
                     <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-px border border-white/[0.06] rounded-2xl overflow-hidden">
@@ -334,7 +337,7 @@ export default function About() {
                         transition={{ duration: 0.5 }}
                         className="label-mono mb-10 block"
                     >
-                        How I work
+                        {t("about.approach_label")}
                     </motion.span>
 
                     <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">

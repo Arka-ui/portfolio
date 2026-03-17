@@ -19,9 +19,9 @@ export default function Navbar() {
     const NAV_ITEMS = [
         { label: t("nav.home"),    href: "#",            id: "hero"        },
         { label: t("nav.about"),   href: "#about-intro",  id: "about-intro" },
-        { label: "Work",           href: "#projects",     id: "projects"    },
-        { label: "Stack",          href: "#skills",       id: "skills"      },
-        { label: "Live",           href: "#live",          id: "live"        },
+        { label: t("nav.work"),    href: "#projects",     id: "projects"    },
+        { label: t("nav.stack"),   href: "#skills",       id: "skills"      },
+        { label: t("nav.live"),    href: "#live",          id: "live"        },
         { label: t("nav.contact"), href: "#contact",      id: "contact"     },
     ];
 

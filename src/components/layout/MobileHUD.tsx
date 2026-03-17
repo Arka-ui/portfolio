@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 import { useWarp } from "@/context/WarpContext";
 import { useHaptics } from "@/hooks/useHaptics";
+import { useLanguage } from "@/context/LanguageContext";
 import { cn } from "@/lib/utils";
 
 const SECTION_MAP: Record<string, string> = {
@@ -17,6 +18,7 @@ const SECTION_MAP: Record<string, string> = {
 export default function MobileHUD() {
     const { warpTo } = useWarp();
     const { triggerHaptic } = useHaptics();
+    const { t } = useLanguage();
     const [activeTab, setActiveTab] = useState("home");
 
     // Single IntersectionObserver replaces per-scroll event listener
@@ -52,10 +54,10 @@ export default function MobileHUD() {
     }, []);
 
     const navItems = [
-        { id: "home",     icon: Home,     label: "Home",    href: "#"            },
-        { id: "about",    icon: User,     label: "About",   href: "#about-intro" },
-        { id: "projects", icon: Briefcase,label: "Projects",href: "#projects"    },
-        { id: "contact",  icon: Mail,     label: "Contact", href: "#contact"     },
+        { id: "home",     icon: Home,     label: t("nav.home"),     href: "#"            },
+        { id: "about",    icon: User,     label: t("nav.about"),    href: "#about-intro" },
+        { id: "projects", icon: Briefcase,label: t("nav.projects"), href: "#projects"    },
+        { id: "contact",  icon: Mail,     label: t("nav.contact"),  href: "#contact"     },
     ];
 
     const handleNav = (id: string, href: string) => {

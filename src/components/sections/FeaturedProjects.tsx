@@ -5,6 +5,7 @@ import { Github, ArrowUpRight, Star, GitFork } from "lucide-react";
 import useSWR from "swr";
 import { useCallback } from "react";
 import ProjectCarousel from "@/components/features/ProjectCarousel";
+import { useLanguage } from "@/context/LanguageContext";
 
 function useSpotlight() {
     return useCallback((e: React.PointerEvent<HTMLElement>) => {
@@ -55,6 +56,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
     const num = String(index + 1).padStart(2, "0");
     const color = project.language ? LANG_COLORS[project.language] : "#6366f1";
     const spotlight = useSpotlight();
+    const { t } = useLanguage();
 
     return (
         <motion.article
@@ -74,7 +76,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
                             {project.name}
                         </h3>
                         <p className="text-sm text-white/45 mt-2 line-clamp-2 leading-relaxed">
-                            {project.description || "A project built with modern technologies."}
+                            {project.description || t("projects.default_desc")}
                         </p>
                     </div>
                 </div>
@@ -130,6 +132,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
 }
 
 export default function FeaturedProjects() {
+    const { t } = useLanguage();
     const { data: projects } = useSWR<Project[]>(
         `https://api.github.com/users/${GITHUB_USERNAME}/repos?sort=pushed&per_page=100`,
         fetcher
@@ -151,7 +154,7 @@ export default function FeaturedProjects() {
                 {/* Section header */}
                 <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10 md:mb-16">
                     <div>
-                        <span className="label-mono mb-5 block">Work</span>
+                        <span className="label-mono mb-5 block">{t("projects.label")}</span>
                         <motion.h2
                             initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
@@ -159,7 +162,7 @@ export default function FeaturedProjects() {
                             transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
                             className="font-heading font-black text-[clamp(36px,5vw,64px)] leading-[0.9] tracking-tighter text-white"
                         >
-                            Featured projects
+                            {t("projects.featured_heading")}
                         </motion.h2>
                     </div>
                     <a
@@ -168,7 +171,7 @@ export default function FeaturedProjects() {
                         rel="noopener noreferrer"
                         className="group inline-flex items-center gap-2 text-sm text-white/40 hover:text-white transition-colors shrink-0"
                     >
-                        All repositories
+                        {t("projects.all_repos")}
                         <ArrowUpRight size={14} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                     </a>
                 </div>
