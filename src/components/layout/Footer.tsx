@@ -1,6 +1,7 @@
 ﻿"use client";
 
-import { ArrowUp, Github, Lock } from "lucide-react";
+import { ArrowUp, Github } from "lucide-react";
+import SessionIcon from "@/components/ui/SessionIcon";
 import { motion } from "framer-motion";
 import { useLanyard } from "@/hooks/useLanyard";
 import { useLanguage } from "@/context/LanguageContext";
@@ -15,7 +16,7 @@ export default function Footer() {
 
     const socialLinks = [
         { icon: Github, href: "https://github.com/arka-ui", label: "GitHub" },
-        { icon: Lock, href: "#", label: "Session" },
+        { icon: () => <SessionIcon size={14} />, href: "#", label: "Session" },
     ];
 
     return (

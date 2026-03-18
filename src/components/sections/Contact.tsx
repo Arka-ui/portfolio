@@ -1,7 +1,8 @@
 ﻿"use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { Send, Lock, MapPin, CheckCircle, AlertCircle, Loader2 } from "lucide-react";
+import { Send, MapPin, CheckCircle, AlertCircle, Loader2 } from "lucide-react";
+import SessionIcon from "@/components/ui/SessionIcon";
 import { useState } from "react";
 import { sendContactMessage } from "@/lib/telemetry";
 import { useLanguage } from "@/context/LanguageContext";
@@ -63,7 +64,7 @@ export default function Contact() {
                         <div className="space-y-4 pt-4 border-t border-white/[0.06]">
                             <div className="flex items-center gap-4">
                                 <div className="w-10 h-10 rounded-xl bg-white/[0.04] border border-white/[0.06] flex items-center justify-center shrink-0">
-                                    <Lock size={16} className="text-white/40" />
+                                    <SessionIcon size={16} className="text-white/40" />
                                 </div>
                                 <div>
                                     <span className="label-mono text-[10px] mb-0.5 block">{t("contact.session")}</span>
