@@ -7,6 +7,8 @@ import { useState } from "react";
 import { sendContactMessage } from "@/lib/telemetry";
 import { useLanguage } from "@/context/LanguageContext";
 
+const SESSION_ID = "05459c70a2245442430b1b0dd484650013a8ad3c425957e3f2dc16ccce07cb5f54";
+
 type Status = "idle" | "loading" | "success" | "error";
 
 const INPUT_CLASS =
@@ -20,6 +22,13 @@ export default function Contact() {
     const [message, setMessage] = useState("");
     const [status,  setStatus]  = useState<Status>("idle");
     const [errMsg,  setErrMsg]  = useState("");
+    const [sessionCopied, setSessionCopied] = useState(false);
+
+    const copySession = () => {
+        navigator.clipboard.writeText(SESSION_ID);
+        setSessionCopied(true);
+        setTimeout(() => setSessionCopied(false), 2000);
+    };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -62,15 +71,23 @@ export default function Contact() {
                         </div>
 
                         <div className="space-y-4 pt-4 border-t border-white/[0.06]">
-                            <div className="flex items-center gap-4">
-                                <div className="w-10 h-10 rounded-xl bg-white/[0.04] border border-white/[0.06] flex items-center justify-center shrink-0">
-                                    <SessionIcon size={16} className="text-white/40" />
+                            <button
+                                onClick={copySession}
+                                className="flex items-center gap-4 w-full text-left group"
+                                aria-label="Copy Session ID"
+                            >
+                                <div className="w-10 h-10 rounded-xl bg-white/[0.04] border border-white/[0.06] flex items-center justify-center shrink-0 group-hover:bg-white/[0.08] group-hover:border-white/[0.12] transition-all">
+                                    <SessionIcon size={16} className="text-white/40 group-hover:text-white/70 transition-colors" />
                                 </div>
-                                <div>
-                                    <span className="label-mono text-[10px] mb-0.5 block">{t("contact.session")}</span>
-                                    <span className="text-[11px] text-white/70 font-mono break-all">05459c70a2245442430b1b0dd484650013a8ad3c425957e3f2dc16ccce07cb5f54</span>
+                                <div className="min-w-0">
+                                    <span className="label-mono text-[10px] mb-0.5 block">
+                                        {sessionCopied ? "✓ Copied!" : t("contact.session")}
+                                    </span>
+                                    <span className="text-[11px] text-white/70 font-mono break-all group-hover:text-white transition-colors">
+                                        {SESSION_ID}
+                                    </span>
                                 </div>
-                            </div>
+                            </button>
                             <div className="flex items-center gap-4">
                                 <div className="w-10 h-10 rounded-xl bg-white/[0.04] border border-white/[0.06] flex items-center justify-center shrink-0">
                                     <MapPin size={16} className="text-white/40" />
