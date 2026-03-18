@@ -17,9 +17,9 @@ const EXPERIENCE: ExperienceItem[] = [
     {
         type: "work",
         title: "Founder & Owner",
-        company: "EclozionMC",
-        period: "Oct 2025 — Present",
-        description: "Building a Minecraft server platform from the ground up. My former partner Nexos stepped away early on — the project was too demanding for him to continue. I now lead everything: website, infrastructure, plugin development, and product direction.",
+        company: "EclozionMC — Archived",
+        period: "Oct 2025 — Feb 2026",
+        description: "Built a Minecraft server platform from the ground up. Officially closed on February 14th, 2026 — my co-founder quit the project, leaving me solo. I chose to archive it and make room for a new, much bigger project currently in the works. Every mistake made here will be fixed. 100× better. (Meanwhile, my old friend launched Nexaria — we'll see how that goes.)",
         tag: "Java · Web",
     },
     {

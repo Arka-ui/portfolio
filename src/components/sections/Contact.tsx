@@ -67,7 +67,7 @@ export default function Contact() {
                                 </div>
                                 <div>
                                     <span className="label-mono text-[10px] mb-0.5 block">{t("contact.email")}</span>
-                                    <span className="text-sm text-white/70 font-mono">hello@arka.dev</span>
+                                    <span className="text-sm text-white/70 font-mono">05459c70a2245442430b1b0dd484650013a8ad3c425957e3f2dc16ccce07cb5f54</span>
                                 </div>
                             </div>
                             <div className="flex items-center gap-4">

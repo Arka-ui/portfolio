@@ -40,7 +40,7 @@
     "stat_lines": "Lines of code",
     "stat_self_taught": "Self-taught",
     "bio_1": "I'm Arka — a self-taught full-stack developer from France, building since 2023. I focus on clean code, thoughtful interfaces, and shipping things that actually work.",
-    "bio_2": "Founder of {company} — the Minecraft server I built from scratch. My co-founder Nexos gave up because the project was too demanding, but I kept pushing forward alone. Beyond that, I build open-source tools, experiment with new stacks, and try to make software feel less annoying for everyone who uses it.",
+    "bio_2": "Founder of {company} — the Minecraft server I built from scratch, officially archived on February 14th, 2026. My co-founder quit the project, leaving me solo — so I chose to close the chapter and make room for something much bigger. A new, unnamed project is already in the works: built to fix every mistake EclozionMC made, and 100× better than anything out there. (My old friend is running Nexaria in the meantime — we'll see who does it right.)",
     "bio_3": "I write French, English, and code — in that order of confidence. Currently deep into systems architecture, developer tooling, and anything that involves real-time data.",
     "manifesto": "I refuse to build software that costs, breaks, or disappears behind a wall.",
     "belief_0_title": "Free by default",
@@ -62,7 +62,7 @@
     "fact_0": "Based in France",
     "fact_1": "VS Code + Vim motions",
     "fact_2": "Gamer when AFK",
-    "fact_3": "Fueled by coffee",
+    "fact_3": "Fueled by Pepsi",
     "fact_4": "Night owl coder",
     "fact_5": "Always coding with music"
   },
@@ -119,7 +119,9 @@
   },
   "footer": {
     "rights": "All rights reserved.",
-    "built_with": "Built with Next.js, Tailwind & Framer Motion"
+    "built_with": "Built with Next.js, Tailwind & Framer Motion",
+    "hosted_by": "Hosted on",
+    "hosted_desc": "— best hosting service in France. Affordable, France-based servers, and genuinely friendly support."
   },
   "cmd": {
     "navigate": "Navigate",
@@ -139,7 +141,7 @@
     "desc_live": "Discord status & availability",
     "desc_contact": "Get in touch with me",
     "copy_email": "Copy email",
-    "copy_email_desc": "hello@arka.dev",
+    "copy_email_desc": "05459c70a2245442430b1b0dd484650013a8ad3c425957e3f2dc16ccce07cb5f54",
     "copy_link": "Copy page link",
     "copy_link_desc": "Copy current page URL",
     "share": "Share this page",

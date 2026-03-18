@@ -40,7 +40,7 @@
     "stat_lines": "Líneas de código",
     "stat_self_taught": "Autodidacta",
     "bio_1": "Soy Arka — un desarrollador full-stack autodidacta de Francia, construyendo desde 2023. Me enfoco en código limpio, interfaces bien pensadas y en entregar cosas que realmente funcionan.",
-    "bio_2": "Fundador de {company} — el servidor de Minecraft que construí desde cero. Mi co-fundador Nexos se rindió porque el proyecto era demasiado exigente, pero seguí solo. Más allá de eso, construyo herramientas open-source, experimento con nuevas stacks e intento hacer el software menos molesto para todos los que lo usan.",
+    "bio_2": "Fundador de {company} — el servidor de Minecraft que construí desde cero, oficialmente archivado el 14 de febrero de 2026. Mi co-fundador abandonó el proyecto, dejándome solo — decidí cerrar ese capítulo para dar paso a algo mucho más grande. Un nuevo proyecto, sin nombre por ahora, ya está en marcha: diseñado para corregir cada error de EclozionMC, y 100× mejor. (Mi viejo amigo lanzó Nexaria mientras tanto — veremos quién lo hace bien.)",
     "bio_3": "Escribo en francés, inglés y código — en ese orden de confianza. Actualmente profundizando en arquitectura de sistemas, herramientas para desarrolladores y todo lo que implica datos en tiempo real.",
     "manifesto": "Me niego a construir software que cueste, se rompa o desaparezca detrás de un muro.",
     "belief_0_title": "Gratis por defecto",
@@ -62,7 +62,7 @@
     "fact_0": "Basado en Francia",
     "fact_1": "VS Code + movimientos Vim",
     "fact_2": "Gamer cuando AFK",
-    "fact_3": "Impulsado por el café",
+    "fact_3": "Impulsado por Pepsi",
     "fact_4": "Programador nocturno",
     "fact_5": "Siempre codificando con música"
   },
@@ -119,7 +119,9 @@
   },
   "footer": {
     "rights": "Todos los derechos reservados.",
-    "built_with": "Construido con Next.js, Tailwind & Framer Motion"
+    "built_with": "Construido con Next.js, Tailwind & Framer Motion",
+    "hosted_by": "Alojado en",
+    "hosted_desc": "— el mejor servicio de hosting de Francia. Servidores basados en Francia, precios asequibles y soporte cercano."
   },
   "cmd": {
     "navigate": "Navegar",
@@ -139,7 +141,7 @@
     "desc_live": "Estado de Discord y disponibilidad",
     "desc_contact": "Ponerse en contacto",
     "copy_email": "Copiar email",
-    "copy_email_desc": "hello@arka.dev",
+    "copy_email_desc": "05459c70a2245442430b1b0dd484650013a8ad3c425957e3f2dc16ccce07cb5f54",
     "copy_link": "Copiar enlace",
     "copy_link_desc": "Copiar URL de la página",
     "share": "Compartir esta página",

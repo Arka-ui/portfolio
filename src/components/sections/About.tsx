@@ -70,7 +70,7 @@ const BELIEF_TAGS  = ["00", "01", "02", "03"];
 
 const APPROACH_STEPS = ["01", "02", "03", "04"];
 
-const QUICK_FACT_EMOJIS = ["🇫🇷", "⌨️", "🎮", "☕", "🌙", "🎵"];
+const QUICK_FACT_EMOJIS = ["🇫🇷", "⌨️", "🎮", "🥤", "🌙", "🎵"];
 
 const TAGS = [
     "React", "Next.js", "TypeScript", "Clean Code",

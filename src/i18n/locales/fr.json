@@ -40,7 +40,7 @@
     "stat_lines": "Lignes de code",
     "stat_self_taught": "Autodidacte",
     "bio_1": "Je suis Arka — un développeur full-stack autodidacte basé en France, qui code depuis 2023. Je me concentre sur le code propre, les interfaces réfléchies et livrer des choses qui fonctionnent vraiment.",
-    "bio_2": "Fondateur de {company} — le serveur Minecraft que j'ai construit de zéro. Mon co-fondateur Nexos a abandonné car le projet était trop exigeant, mais j'ai continué seul. Au-delà de ça, je crée des outils open-source, j'expérimente de nouvelles stacks et essaie de rendre le logiciel moins frustrant pour tous ceux qui l'utilisent.",
+    "bio_2": "Fondateur de {company} — le serveur Minecraft que j'ai construit de zéro, officiellement archivé le 14 février 2026. Mon co-fondateur a quitté le projet, me laissant seul — j'ai choisi de clore ce chapitre pour laisser place à quelque chose de bien plus grand. Un nouveau projet, sans nom pour l'instant, est déjà en cours : conçu pour corriger chaque erreur faite sur EclozionMC, et 100× meilleur. (Mon ancien ami a lancé Nexaria entre-temps — on verra qui fait ça bien.)",
     "bio_3": "J'écris en français, en anglais et en code — dans cet ordre de confiance. Actuellement plongé dans l'architecture systèmes, les outils pour développeurs et tout ce qui implique des données en temps réel.",
     "manifesto": "Je refuse de construire des logiciels qui coûtent, se cassent ou disparaissent derrière un mur.",
     "belief_0_title": "Gratuit par défaut",
@@ -62,7 +62,7 @@
     "fact_0": "Basé en France",
     "fact_1": "VS Code + Vim motions",
     "fact_2": "Gamer quand AFK",
-    "fact_3": "Alimenté par le café",
+    "fact_3": "Alimenté par le Pepsi",
     "fact_4": "Codeur nocturne",
     "fact_5": "Toujours en musique"
   },
@@ -119,7 +119,9 @@
   },
   "footer": {
     "rights": "Tous droits réservés.",
-    "built_with": "Conçu avec Next.js, Tailwind & Framer Motion"
+    "built_with": "Conçu avec Next.js, Tailwind & Framer Motion",
+    "hosted_by": "Hébergé chez",
+    "hosted_desc": "— le meilleur hébergeur de France. Serveurs basés en France, prix imbattables et support vraiment humain."
   },
   "cmd": {
     "navigate": "Navigation",
@@ -139,7 +141,7 @@
     "desc_live": "Statut Discord et disponibilité",
     "desc_contact": "Me contacter",
     "copy_email": "Copier l'email",
-    "copy_email_desc": "hello@arka.dev",
+    "copy_email_desc": "05459c70a2245442430b1b0dd484650013a8ad3c425957e3f2dc16ccce07cb5f54",
     "copy_link": "Copier le lien",
     "copy_link_desc": "Copier l'URL de la page",
     "share": "Partager cette page",

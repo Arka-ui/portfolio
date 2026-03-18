@@ -15,7 +15,7 @@ export default function Footer() {
 
     const socialLinks = [
         { icon: Github, href: "https://github.com/arka-ui", label: "GitHub" },
-        { icon: Mail, href: "mailto:hello@arka.dev", label: "Email" },
+        { icon: Mail, href: "#", label: "05459c70a2245442430b1b0dd484650013a8ad3c425957e3f2dc16ccce07cb5f54" },
     ];
 
     return (
@@ -24,6 +24,19 @@ export default function Footer() {
             <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-[200px] bg-indigo-600/[0.04] rounded-full blur-[80px] pointer-events-none" />
 
             <div className="container mx-auto px-6 md:px-12 relative z-10">
+                {/* Hosting credit */}
+                <div className="mb-6 text-center text-[11px] text-white/20 font-mono">
+                    {t("footer.hosted_by")}{" "}
+                    <a
+                        href="https://nemesius.fr"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-indigo-400/60 hover:text-indigo-400 transition-colors"
+                    >
+                        Nemesius
+                    </a>{" "}
+                    {t("footer.hosted_desc")}
+                </div>
                 <div className="flex flex-col md:flex-row items-center justify-between gap-6">
                     {/* Left: branding + social */}
                     <div className="flex items-center gap-4">
