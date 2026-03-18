@@ -42,6 +42,7 @@
     "bio_1": "Soy Arka — un desarrollador full-stack autodidacta de Francia, construyendo desde 2023. Me enfoco en código limpio, interfaces bien pensadas y en entregar cosas que realmente funcionan.",
     "bio_2": "Fundador de {company} — el servidor de Minecraft que construí desde cero, oficialmente archivado el 14 de febrero de 2026. Mi co-fundador abandonó el proyecto, dejándome solo — decidí cerrar ese capítulo para dar paso a algo mucho más grande. Un nuevo proyecto, sin nombre por ahora, ya está en marcha: diseñado para corregir cada error de EclozionMC, y 100× mejor. (Mi viejo amigo lanzó Nexaria mientras tanto — veremos quién lo hace bien.)",
     "bio_3": "Escribo en francés, inglés y código — en ese orden de confianza. Actualmente profundizando en arquitectura de sistemas, herramientas para desarrolladores y todo lo que implica datos en tiempo real.",
+    "bio_4": "Todos mis proyectos corren en servidores de {host} — el mejor servicio de hosting de Francia. Servidores basados en Francia a precios asequibles, y un host que de verdad se preocupa por sus clientes. El único que uso y recomiendo.",
     "manifesto": "Me niego a construir software que cueste, se rompa o desaparezca detrás de un muro.",
     "belief_0_title": "Gratis por defecto",
     "belief_0_body": "Si un servicio puede ser gratuito, debería serlo. Solo pagas por la infraestructura — servidores, hosting, mantenimiento — nunca por el acceso.",
@@ -114,14 +115,15 @@
     "success_desc": "Te responderé lo antes posible.",
     "send_another": "Enviar otro →",
     "label": "Contacto",
+    "session": "Session ID",
     "location": "Francia — disponible remotamente",
     "open_for": "Disponible para trabajo freelance, colaboraciones y proyectos interesantes. No dudes en escribir — respondo rápido."
   },
   "footer": {
     "rights": "Todos los derechos reservados.",
     "built_with": "Construido con Next.js, Tailwind & Framer Motion",
-    "hosted_by": "Alojado en",
-    "hosted_desc": "— el mejor servicio de hosting de Francia. Servidores basados en Francia, precios asequibles y soporte cercano."
+    "hosted_by": "Muchas gracias a",
+    "hosted_desc": "— el único host en el que confío. El mejor de Francia: servidores basados en Francia, precios asequibles y un equipo genuinamente cercano."
   },
   "cmd": {
     "navigate": "Navegar",
@@ -140,7 +142,7 @@
     "desc_timeline": "Mi trayectoria como desarrollador",
     "desc_live": "Estado de Discord y disponibilidad",
     "desc_contact": "Ponerse en contacto",
-    "copy_email": "Copiar email",
+    "copy_email": "Copiar Session ID",
     "copy_email_desc": "05459c70a2245442430b1b0dd484650013a8ad3c425957e3f2dc16ccce07cb5f54",
     "copy_link": "Copiar enlace",
     "copy_link_desc": "Copiar URL de la página",

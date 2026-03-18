@@ -216,6 +216,20 @@ export default function About() {
                             <p className="text-lg text-white/75 leading-relaxed">
                                 {t("about.bio_3")}
                             </p>
+                            <p className="text-lg text-white/75 leading-relaxed">
+                                {transNodes(t("about.bio_4"), {
+                                    host: (
+                                        <a
+                                            href="https://nemesius.fr"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="text-white font-semibold hover:text-indigo-300 transition-colors"
+                                        >
+                                            Nemesius
+                                        </a>
+                                    ),
+                                })}
+                            </p>
                         </div>
 
                         {/* Stats grid with count-up */}

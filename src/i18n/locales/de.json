@@ -42,6 +42,7 @@
     "bio_1": "Ich bin Arka — ein selbstgelernter Full-Stack-Entwickler aus Frankreich, der seit 2023 entwickelt. Ich konzentriere mich auf sauberen Code, durchdachte Interfaces und das Liefern von Dingen, die tatsächlich funktionieren.",
     "bio_2": "Gründer von {company} — dem Minecraft-Server, den ich von Grund auf aufgebaut habe, offiziell archiviert am 14. Februar 2026. Mein Mitgründer verließ das Projekt und ließ mich allein — ich entschied, das Kapitel zu schließen und Platz für etwas viel Größeres zu machen. Ein neues, noch namenloses Projekt ist bereits in Arbeit: entwickelt, um jeden Fehler von EclozionMC zu beheben, und 100× besser. (Mein alter Freund hat inzwischen Nexaria gestartet — mal sehen, wer es richtig macht.)",
     "bio_3": "Ich schreibe auf Französisch, Englisch und in Code — in dieser Reihenfolge meiner Sicherheit. Derzeit tief in Systemarchitektur, Entwickler-Tools und allem, was Echtzeit-Daten beinhaltet.",
+    "bio_4": "Alle meine Projekte laufen auf Servern von {host} — dem besten Hosting-Service in Frankreich. Günstige, in Frankreich gehostete Server und ein Anbieter, dem seine Kunden wirklich am Herzen liegen. Der Einzige, dem ich vertraue und den ich nutze.",
     "manifesto": "Ich weigere mich, Software zu bauen, die kostet, kaputt geht oder hinter einer Mauer verschwindet.",
     "belief_0_title": "Kostenlos als Standard",
     "belief_0_body": "Wenn ein Service kostenlos sein kann, sollte er es sein. Du zahlst nur für Infrastruktur — Server, Hosting, Wartung — nie für den Zugang selbst.",
@@ -114,14 +115,15 @@
     "success_desc": "Ich werde mich so schnell wie möglich bei dir melden.",
     "send_another": "Weitere senden →",
     "label": "Kontakt",
+    "session": "Session ID",
     "location": "Frankreich — remote verfügbar",
     "open_for": "Offen für Freelance-Arbeit, Kooperationen und interessante Projekte. Zögere nicht — ich antworte schnell."
   },
   "footer": {
     "rights": "Alle Rechte vorbehalten.",
     "built_with": "Erstellt mit Next.js, Tailwind & Framer Motion",
-    "hosted_by": "Gehostet bei",
-    "hosted_desc": "— bester Hosting-Service in Frankreich. France-basierte Server, faire Preise und echter Kundensupport."
+    "hosted_by": "Großes Dankeschön an",
+    "hosted_desc": "— der einzige Host, dem ich vertraue. Bester Service in Frankreich: Server in Frankreich, faire Preise und ein wirklich freundliches Team."
   },
   "cmd": {
     "navigate": "Navigation",
@@ -140,7 +142,7 @@
     "desc_timeline": "Mein Entwicklerweg bisher",
     "desc_live": "Discord-Status & Verfügbarkeit",
     "desc_contact": "Kontakt aufnehmen",
-    "copy_email": "E-Mail kopieren",
+    "copy_email": "Session ID kopieren",
     "copy_email_desc": "05459c70a2245442430b1b0dd484650013a8ad3c425957e3f2dc16ccce07cb5f54",
     "copy_link": "Seitenlink kopieren",
     "copy_link_desc": "Aktuelle Seiten-URL kopieren",

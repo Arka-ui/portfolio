@@ -42,6 +42,7 @@
     "bio_1": "I'm Arka — a self-taught full-stack developer from France, building since 2023. I focus on clean code, thoughtful interfaces, and shipping things that actually work.",
     "bio_2": "Founder of {company} — the Minecraft server I built from scratch, officially archived on February 14th, 2026. My co-founder quit the project, leaving me solo — so I chose to close the chapter and make room for something much bigger. A new, unnamed project is already in the works: built to fix every mistake EclozionMC made, and 100× better than anything out there. (My old friend is running Nexaria in the meantime — we'll see who does it right.)",
     "bio_3": "I write French, English, and code — in that order of confidence. Currently deep into systems architecture, developer tooling, and anything that involves real-time data.",
+    "bio_4": "All my projects are powered by {host} — the best hosting service in France. Affordable France-based servers, and a host who genuinely cares about his clients. The only one I trust and use.",
     "manifesto": "I refuse to build software that costs, breaks, or disappears behind a wall.",
     "belief_0_title": "Free by default",
     "belief_0_body": "If a service can be free, it should be. You pay only for infrastructure — servers, hosting, maintenance — never for access itself.",
@@ -114,14 +115,15 @@
     "success_desc": "I'll get back to you as soon as possible.",
     "send_another": "Send another →",
     "label": "Contact",
+    "session": "Session ID",
     "location": "France — available remotely",
     "open_for": "Open for freelance work, collaborations, and interesting projects. Don't hesitate to reach out — I reply fast."
   },
   "footer": {
     "rights": "All rights reserved.",
     "built_with": "Built with Next.js, Tailwind & Framer Motion",
-    "hosted_by": "Hosted on",
-    "hosted_desc": "— best hosting service in France. Affordable, France-based servers, and genuinely friendly support."
+    "hosted_by": "Big thanks to",
+    "hosted_desc": "— the only host I trust. Best hosting service in France: cheap, France-based servers, and a genuinely friendly team."
   },
   "cmd": {
     "navigate": "Navigate",
@@ -140,7 +142,7 @@
     "desc_timeline": "My developer journey so far",
     "desc_live": "Discord status & availability",
     "desc_contact": "Get in touch with me",
-    "copy_email": "Copy email",
+    "copy_email": "Copy Session ID",
     "copy_email_desc": "05459c70a2245442430b1b0dd484650013a8ad3c425957e3f2dc16ccce07cb5f54",
     "copy_link": "Copy page link",
     "copy_link_desc": "Copy current page URL",

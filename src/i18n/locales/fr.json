@@ -42,6 +42,7 @@
     "bio_1": "Je suis Arka — un développeur full-stack autodidacte basé en France, qui code depuis 2023. Je me concentre sur le code propre, les interfaces réfléchies et livrer des choses qui fonctionnent vraiment.",
     "bio_2": "Fondateur de {company} — le serveur Minecraft que j'ai construit de zéro, officiellement archivé le 14 février 2026. Mon co-fondateur a quitté le projet, me laissant seul — j'ai choisi de clore ce chapitre pour laisser place à quelque chose de bien plus grand. Un nouveau projet, sans nom pour l'instant, est déjà en cours : conçu pour corriger chaque erreur faite sur EclozionMC, et 100× meilleur. (Mon ancien ami a lancé Nexaria entre-temps — on verra qui fait ça bien.)",
     "bio_3": "J'écris en français, en anglais et en code — dans cet ordre de confiance. Actuellement plongé dans l'architecture systèmes, les outils pour développeurs et tout ce qui implique des données en temps réel.",
+    "bio_4": "Tous mes projets tournent sur les serveurs de {host} — le meilleur hébergeur de France. Des serveurs basés en France à prix imbattables, et un hôte qui se soucie vraiment de ses clients. Le seul que j'utilise et recommande.",
     "manifesto": "Je refuse de construire des logiciels qui coûtent, se cassent ou disparaissent derrière un mur.",
     "belief_0_title": "Gratuit par défaut",
     "belief_0_body": "Si un service peut être gratuit, il doit l'être. Vous ne payez que pour l'infrastructure — serveurs, hébergement, maintenance — jamais pour l'accès lui-même.",
@@ -114,14 +115,15 @@
     "success_desc": "Je vous répondrai dès que possible.",
     "send_another": "Envoyer un autre →",
     "label": "Contact",
+    "session": "Session ID",
     "location": "France — disponible à distance",
     "open_for": "Disponible pour des missions freelance, des collaborations et des projets intéressants. N'hésitez pas — je réponds vite."
   },
   "footer": {
     "rights": "Tous droits réservés.",
     "built_with": "Conçu avec Next.js, Tailwind & Framer Motion",
-    "hosted_by": "Hébergé chez",
-    "hosted_desc": "— le meilleur hébergeur de France. Serveurs basés en France, prix imbattables et support vraiment humain."
+    "hosted_by": "Un grand merci à",
+    "hosted_desc": "— le seul hébergeur en qui j'ai confiance. Le meilleur de France : serveurs basés en France, prix imbattables et équipe vraiment à l'écoute."
   },
   "cmd": {
     "navigate": "Navigation",
@@ -140,7 +142,7 @@
     "desc_timeline": "Mon parcours de développeur",
     "desc_live": "Statut Discord et disponibilité",
     "desc_contact": "Me contacter",
-    "copy_email": "Copier l'email",
+    "copy_email": "Copier le Session ID",
     "copy_email_desc": "05459c70a2245442430b1b0dd484650013a8ad3c425957e3f2dc16ccce07cb5f54",
     "copy_link": "Copier le lien",
     "copy_link_desc": "Copier l'URL de la page",

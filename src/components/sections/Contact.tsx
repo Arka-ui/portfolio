@@ -1,7 +1,7 @@
 ﻿"use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { Send, Mail, MapPin, CheckCircle, AlertCircle, Loader2 } from "lucide-react";
+import { Send, Lock, MapPin, CheckCircle, AlertCircle, Loader2 } from "lucide-react";
 import { useState } from "react";
 import { sendContactMessage } from "@/lib/telemetry";
 import { useLanguage } from "@/context/LanguageContext";
@@ -63,11 +63,11 @@ export default function Contact() {
                         <div className="space-y-4 pt-4 border-t border-white/[0.06]">
                             <div className="flex items-center gap-4">
                                 <div className="w-10 h-10 rounded-xl bg-white/[0.04] border border-white/[0.06] flex items-center justify-center shrink-0">
-                                    <Mail size={16} className="text-white/40" />
+                                    <Lock size={16} className="text-white/40" />
                                 </div>
                                 <div>
-                                    <span className="label-mono text-[10px] mb-0.5 block">{t("contact.email")}</span>
-                                    <span className="text-sm text-white/70 font-mono">05459c70a2245442430b1b0dd484650013a8ad3c425957e3f2dc16ccce07cb5f54</span>
+                                    <span className="label-mono text-[10px] mb-0.5 block">{t("contact.session")}</span>
+                                    <span className="text-[11px] text-white/70 font-mono break-all">05459c70a2245442430b1b0dd484650013a8ad3c425957e3f2dc16ccce07cb5f54</span>
                                 </div>
                             </div>
                             <div className="flex items-center gap-4">
