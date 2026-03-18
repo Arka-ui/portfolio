@@ -71,17 +71,17 @@ export default function Hero() {
                 >
                     <div className="overflow-hidden">
                         <motion.span variants={lineVariant} className="block text-white">
-                            Building
+                            {t("hero.line_1")}
                         </motion.span>
                     </div>
                     <div className="overflow-hidden">
                         <motion.span variants={lineVariant} className="block text-white/20">
-                            digital products
+                            {t("hero.line_2")}
                         </motion.span>
                     </div>
                     <div className="overflow-hidden">
                         <motion.span variants={lineVariant} className="block text-white">
-                            people remember.
+                            {t("hero.line_3")}
                         </motion.span>
                     </div>
                 </motion.h1>
@@ -94,8 +94,7 @@ export default function Hero() {
                     className="flex flex-col md:flex-row md:items-end gap-8 md:gap-0 justify-between pb-12 md:pb-24"
                 >
                     <p className="text-[17px] text-white/50 max-w-sm leading-relaxed">
-                        Full-stack developer from France. I build web experiences
-                        and digital products — with attention to craft.
+                        {t("hero.bio")}
                     </p>
 
                     <div className="flex items-center gap-3">

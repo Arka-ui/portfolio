@@ -65,32 +65,12 @@ const STAT_DEFS = [
     { numeric: 99,   suffix: "%",  labelKey: "about.stat_self_taught"},
 ];
 
-const BELIEFS = [
-    {
-        tag: "00",
-        title: "Free by default",
-        body: "If a service can be free, it should be. You pay only for infrastructure — servers, hosting, maintenance — never for access itself.",
-        icon: "◆",
-    },
-    {
-        tag: "01",
-        title: "Craft over hype",
-        body: "Every interface I ship is tested edge-to-edge, on every viewport. I care about the 1-pixel detail that most people skip.",
-        icon: "◇",
-    },
-    {
-        tag: "02",
-        title: "Open source always",
-        body: "Code lives longer when it belongs to the community. Contributing and publishing openly is how I keep that promise.",
-        icon: "△",
-    },
-    {
-        tag: "03",
-        title: "User-first design",
-        body: "The best software disappears. It doesn't make you think, it doesn't slow you down — it just works, beautifully and silently.",
-        icon: "○",
-    },
-];
+const BELIEF_ICONS = ["◆", "◇", "△", "○"];
+const BELIEF_TAGS  = ["00", "01", "02", "03"];
+
+const APPROACH_STEPS = ["01", "02", "03", "04"];
+
+const QUICK_FACT_EMOJIS = ["🇫🇷", "⌨️", "🎮", "☕", "🌙", "🎵"];
 
 const TAGS = [
     "React", "Next.js", "TypeScript", "Clean Code",
@@ -99,42 +79,25 @@ const TAGS = [
     "Full-Stack", "DevOps", "Automation",
 ];
 
-const APPROACH = [
-    {
-        step: "01",
-        title: "Understand",
-        body: "I start by deeply understanding the problem. No code until the goal is clear — who is this for, and why does it matter?",
-    },
-    {
-        step: "02",
-        title: "Design",
-        body: "I wireframe, prototype, and iterate fast. Every pixel is intentional — from spacing to micro-interactions.",
-    },
-    {
-        step: "03",
-        title: "Build",
-        body: "Clean architecture, typed everything, tested thoroughly. I write code that future-me (and teammates) can actually read.",
-    },
-    {
-        step: "04",
-        title: "Ship & Improve",
-        body: "Launch early, measure real usage, then refine. Software is never finished — it evolves with its users.",
-    },
-];
-
-const QUICK_FACTS = [
-    { emoji: "🇫🇷", text: "Based in France" },
-    { emoji: "⌨️", text: "VS Code + Vim motions" },
-    { emoji: "🎮", text: "Gamer when AFK" },
-    { emoji: "☕", text: "Fueled by coffee" },
-    { emoji: "🌙", text: "Night owl coder" },
-    { emoji: "🎵", text: "Always coding with music" },
-];
-
 export default function About() {
     const spotlight = useSpotlight();
-    const { t } = useLanguage();
+    const { t, transNodes } = useLanguage();
     const STATS = STAT_DEFS.map(s => ({ ...s, label: t(s.labelKey) }));
+    const BELIEFS = BELIEF_TAGS.map((tag, i) => ({
+        tag,
+        icon: BELIEF_ICONS[i],
+        title: t(`about.belief_${i}_title`),
+        body:  t(`about.belief_${i}_body`),
+    }));
+    const APPROACH = APPROACH_STEPS.map((step, i) => ({
+        step,
+        title: t(`about.approach_${i}_title`),
+        body:  t(`about.approach_${i}_body`),
+    }));
+    const QUICK_FACTS = QUICK_FACT_EMOJIS.map((emoji, i) => ({
+        emoji,
+        text: t(`about.fact_${i}`),
+    }));
 
     return (
         <section id="about-intro" className="py-14 md:py-24 border-t border-white/[0.06]">
@@ -243,21 +206,15 @@ export default function About() {
                     >
                         <div className="space-y-5">
                             <p className="text-lg text-white/75 leading-relaxed">
-                                I&apos;m Arka — a self-taught full-stack developer from France,
-                                building since 2023. I focus on clean code, thoughtful interfaces,
-                                and shipping things that actually work.
+                                {t("about.bio_1")}
                             </p>
                             <p className="text-lg text-white/75 leading-relaxed">
-                                Founder of <span className="text-white font-semibold">EclozionMC</span> —
-                                the Minecraft server I built from scratch. My co-founder Nexos gave up because
-                                the project was too demanding, but I kept pushing forward alone. Beyond that, I build
-                                open-source tools, experiment with new stacks, and try to make
-                                software feel less annoying for everyone who uses it.
+                                {transNodes(t("about.bio_2"), {
+                                    company: <span className="text-white font-semibold">EclozionMC</span>,
+                                })}
                             </p>
                             <p className="text-lg text-white/75 leading-relaxed">
-                                I write French, English, and code — in that order of confidence. Currently
-                                deep into systems architecture, developer tooling, and anything
-                                that involves real-time data.
+                                {t("about.bio_3")}
                             </p>
                         </div>
 
@@ -376,7 +333,7 @@ export default function About() {
                 >
                     <span className="text-indigo-400/20 text-6xl font-heading block mb-6">&ldquo;</span>
                     <p className="font-heading text-3xl md:text-5xl lg:text-6xl text-white/90 leading-[1.1] tracking-tight mb-8 font-bold">
-                        "I refuse to build software that costs, breaks, or disappears behind a wall."
+                        &ldquo;{t("about.manifesto")}&rdquo;
                     </p>
                     <span className="text-sm font-mono text-white/30 tracking-wider">— Arka</span>
                 </motion.div>
