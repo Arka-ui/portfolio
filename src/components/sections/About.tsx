@@ -126,7 +126,7 @@ export default function About() {
                                 transition={{ duration: 0.6, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
                                 className="block mb-1 text-white"
                             >
-                                Developer,
+                                {t("about.headline_1")}
                             </motion.span>
                             <motion.span
                                 initial={{ opacity: 0, y: 16 }}
@@ -135,7 +135,7 @@ export default function About() {
                                 transition={{ duration: 0.6, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
                                 className="block mb-1 text-white/25"
                             >
-                                builder,
+                                {t("about.headline_2")}
                             </motion.span>
                             <motion.span
                                 initial={{ opacity: 0, y: 16 }}
@@ -144,7 +144,7 @@ export default function About() {
                                 transition={{ duration: 0.6, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
                                 className="block text-white"
                             >
-                                problem solver.
+                                {t("about.headline_3")}
                             </motion.span>
                         </h2>
 

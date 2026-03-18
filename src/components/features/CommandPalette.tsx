@@ -10,17 +10,6 @@ import {
 import { useWarp } from "@/context/WarpContext";
 import { useLanguage, SUPPORTED_LANGUAGES } from "@/context/LanguageContext";
 
-/* ── Section data ── */
-const SECTIONS = [
-    { icon: Home,    label: "Home",     desc: "Back to the top",               href: "#" },
-    { icon: User,    label: "About",    desc: "Who I am & what I believe in",  href: "#about-intro" },
-    { icon: Code,    label: "Projects", desc: "Featured work & case studies",  href: "#projects" },
-    { icon: Layers,  label: "Stack",    desc: "Technologies & tools I use",    href: "#skills" },
-    { icon: Clock,   label: "Timeline", desc: "My developer journey so far",   href: "#about" },
-    { icon: Radio,   label: "Live",     desc: "Discord status & availability", href: "#live" },
-    { icon: Mail,    label: "Contact",  desc: "Get in touch with me",          href: "#contact" },
-];
-
 const SOCIALS = [
     { icon: Github,        label: "GitHub",  url: "https://github.com/arka-ui" },
     { icon: MessageCircle, label: "Discord", url: "https://discord.com/users/871084043838566400" },
@@ -31,6 +20,16 @@ export default function CommandPalette() {
     const [open, setOpen]   = useState(false);
     const { warpTo }        = useWarp();
     const { language, setLanguage, t } = useLanguage();
+
+    const SECTIONS = [
+        { icon: Home,    label: t("nav.home"),     desc: t("cmd.desc_home"),     href: "#" },
+        { icon: User,    label: t("nav.about"),    desc: t("cmd.desc_about"),    href: "#about-intro" },
+        { icon: Code,    label: t("nav.projects"), desc: t("cmd.desc_projects"), href: "#projects" },
+        { icon: Layers,  label: t("cmd.go_stack"), desc: t("cmd.desc_stack"),    href: "#skills" },
+        { icon: Clock,   label: t("cmd.go_timeline"), desc: t("cmd.desc_timeline"), href: "#about" },
+        { icon: Radio,   label: t("nav.live"),     desc: t("cmd.desc_live"),     href: "#live" },
+        { icon: Mail,    label: t("nav.contact"),  desc: t("cmd.desc_contact"),  href: "#contact" },
+    ];
     const [copied, setCopied] = useState<"email" | "link" | null>(null);
     const [search, setSearch] = useState("");
 
@@ -119,12 +118,12 @@ export default function CommandPalette() {
                         <Command.List>
                             <Command.Empty className="py-12 text-center">
                                 <Sparkles className="w-5 h-5 text-white/15 mx-auto mb-3" />
-                                <p className="text-sm text-white/30">No results found.</p>
-                                <p className="text-xs text-white/15 mt-1">Try a different keyword</p>
+                                <p className="text-sm text-white/30">{t("cmd.no_results")}</p>
+                                <p className="text-xs text-white/15 mt-1">{t("cmd.no_results_hint")}</p>
                             </Command.Empty>
 
                             {/* Navigate */}
-                            <Command.Group heading="Navigate" className={GROUP_STYLE}>
+                            <Command.Group heading={t("cmd.navigate")} className={GROUP_STYLE}>
                                 {SECTIONS.map((s) => (
                                     <CmdItem
                                         key={s.href}
@@ -138,45 +137,48 @@ export default function CommandPalette() {
                             </Command.Group>
 
                             {/* Actions */}
-                            <Command.Group heading="Actions" className={GROUP_STYLE}>
+                            <Command.Group heading={t("cmd.actions")} className={GROUP_STYLE}>
                                 <CmdItem
                                     icon={copied === "email" ? <Check size={15} className="text-emerald-400" /> : <Copy size={15} />}
-                                    desc="hello@arka.dev"
+                                    desc={t("cmd.copy_email_desc")}
                                     onSelect={() => run(() => handleCopy("email"))}
                                     kbd="C"
                                 >
-                                    {copied === "email" ? "Copied!" : "Copy email"}
+                                    {copied === "email" ? t("cmd.copied") : t("cmd.copy_email")}
                                 </CmdItem>
                                 <CmdItem
                                     icon={copied === "link" ? <Check size={15} className="text-emerald-400" /> : <Link2 size={15} />}
-                                    desc="Copy current page URL"
+                                    desc={t("cmd.copy_link_desc")}
                                     onSelect={() => run(() => handleCopy("link"))}
                                 >
-                                    {copied === "link" ? "Copied!" : "Copy page link"}
+                                    {copied === "link" ? t("cmd.copied") : t("cmd.copy_link")}
                                 </CmdItem>
                                 <CmdItem
                                     icon={<Share2 size={15} />}
-                                    desc="Share via native sharing"
+                                    desc={t("cmd.share_desc")}
                                     onSelect={() => run(handleShare)}
                                 >
-                                    Share this page
+                                    {t("cmd.share")}
                                 </CmdItem>
                                 <CmdItem
                                     icon={<Zap size={15} />}
-                                    desc="Jump to the top instantly"
+                                    desc={t("cmd.scroll_top_desc")}
                                     onSelect={() => run(() => window.scrollTo({ top: 0, behavior: "smooth" }))}
                                 >
-                                    Scroll to top
+                                    {t("cmd.scroll_top")}
                                 </CmdItem>
                             </Command.Group>
 
                             {/* Language */}
-                            <Command.Group heading="Language" className={GROUP_STYLE}>
+                            <Command.Group heading={t("cmd.lang_group")} className={GROUP_STYLE}>
                                 {SUPPORTED_LANGUAGES.map((lang) => (
                                     <CmdItem
                                         key={lang.code}
                                         icon={<Globe size={15} />}
-                                        desc={lang.code === language.code ? "Currently active" : `Switch to ${lang.name}`}
+                                        desc={lang.code === language.code
+                                            ? t("cmd.lang_active")
+                                            : t("cmd.lang_switch", { name: lang.name })
+                                        }
                                         suffix={lang.code === language.code
                                             ? <Check size={12} className="text-indigo-400" />
                                             : undefined
@@ -189,13 +191,13 @@ export default function CommandPalette() {
                             </Command.Group>
 
                             {/* Socials */}
-                            <Command.Group heading="Socials" className={GROUP_STYLE}>
+                            <Command.Group heading={t("cmd.socials")} className={GROUP_STYLE}>
                                 {SOCIALS.map((s) => (
                                     <CmdItem
                                         key={s.label}
                                         icon={<s.icon size={15} />}
                                         suffix={<ArrowUpRight size={12} className="text-white/15" />}
-                                        desc={`Open ${s.label}`}
+                                        desc={t("cmd.open_social", { label: s.label })}
                                         onSelect={() => run(() => window.open(s.url, "_blank"))}
                                     >
                                         {s.label}
@@ -209,16 +211,16 @@ export default function CommandPalette() {
                     <div className="border-t border-white/[0.05] px-5 py-2.5 flex items-center justify-between">
                         <div className="flex items-center gap-1.5 text-[10px] font-mono text-white/15">
                             <kbd className="border border-white/[0.06] rounded px-1 py-0.5 bg-white/[0.02]">↑↓</kbd>
-                            <span>navigate</span>
+                            <span>{t("cmd.hint_navigate")}</span>
                         </div>
                         <div className="flex items-center gap-3 text-[10px] font-mono text-white/15">
                             <span className="flex items-center gap-1.5">
                                 <kbd className="border border-white/[0.06] rounded px-1 py-0.5 bg-white/[0.02]">↵</kbd>
-                                select
+                                {t("cmd.hint_select")}
                             </span>
                             <span className="flex items-center gap-1.5">
                                 <kbd className="border border-white/[0.06] rounded px-1 py-0.5 bg-white/[0.02]">esc</kbd>
-                                close
+                                {t("cmd.hint_close")}
                             </span>
                         </div>
                     </div>
