@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-/* ─── CSS Custom Properties for animated mesh gradient (Phase 4) ─── */
+/* ─── Animated mesh gradient properties ─── */
 @property --mesh-x {
   syntax: "<percentage>";
   inherits: false;
@@ -21,87 +21,76 @@
   inherits: false;
   initial-value: 80%;
 }
+@property --orb-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
 
 @theme {
-  /* Fonts */
   --font-sans: var(--font-jakarta);
   --font-heading: var(--font-outfit);
   --font-mono: var(--font-geist-mono);
 
-  /* ─── Design System: Editorial Dark ─── */
-  --color-background: #0a0a0a;
-  --color-foreground: #ededed;
+  /* ─── Molten Forge palette ─── */
+  --color-background: #09090b;
+  --color-foreground: #e4e0d9;
 
-  --color-primary: #6366f1;
-  --color-primary-foreground: #ffffff;
+  --color-primary: #f59e0b;
+  --color-primary-foreground: #09090b;
 
-  --color-secondary: #161616;
-  --color-secondary-foreground: #ededed;
+  --color-secondary: #0f0f12;
+  --color-secondary-foreground: #e4e0d9;
 
-  --color-muted: #888;
-  --color-muted-foreground: #aaa;
+  --color-muted: #6b6560;
+  --color-muted-foreground: #a8a29e;
 
-  --color-accent: #6366f1;
-  --color-accent-foreground: #ffffff;
+  --color-accent: #14b8a6;
+  --color-accent-foreground: #09090b;
 
-  --color-card: rgba(255, 255, 255, 0.03);
-  --color-card-foreground: #ededed;
+  --color-card: rgba(255, 255, 255, 0.02);
+  --color-card-foreground: #e4e0d9;
 
-  --color-border: rgba(255, 255, 255, 0.08);
+  --color-border: rgba(255, 255, 255, 0.06);
 
-  /* Animations */
   --animate-fade-in: fade-in 0.6s cubic-bezier(0.16, 1, 0.3, 1);
   --animate-slide-up: slide-up 0.7s cubic-bezier(0.16, 1, 0.3, 1);
-  --animate-float: float 6s ease-in-out infinite;
-  --animate-marquee: marquee 28s linear infinite;
 
   @keyframes fade-in {
     0% { opacity: 0; }
     100% { opacity: 1; }
   }
-
   @keyframes slide-up {
     0% { transform: translateY(24px); opacity: 0; }
     100% { transform: translateY(0); opacity: 1; }
   }
-
   @keyframes float {
     0%, 100% { transform: translateY(0); }
     50% { transform: translateY(-10px); }
   }
-
-  @keyframes marquee {
-    from { transform: translateX(0); }
-    to   { transform: translateX(-33.333%); }
-  }
-
-  /* Right-scrolling marquee — used by TechSlider row 2 */
-  @keyframes marquee-right {
-    from { transform: translateX(-33.333%); }
-    to   { transform: translateX(0); }
-  }
-
-  @keyframes pulse-dot {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.3; }
-  }
-
-  /* Scan-line shimmer — used in the About signature reveal */
   @keyframes shimmer {
     0%   { background-position: -200% center; }
     100% { background-position: 200% center; }
   }
-
-  /* Subtle breathing border glow for premium cards */
   @keyframes breathe-glow {
-    0%, 100% { box-shadow: 0 0 0 0 rgba(99,102,241,0); }
-    50%       { box-shadow: 0 0 24px 2px rgba(99,102,241,0.12); }
+    0%, 100% { box-shadow: 0 0 0 0 rgba(245,158,11,0); }
+    50%       { box-shadow: 0 0 30px 4px rgba(245,158,11,0.10); }
   }
-
-  /* Count-up pop — applied to stats after count finishes */
   @keyframes stat-settle {
-    0%   { transform: scale(1.06); color: rgba(167,139,250,1); }
+    0%   { transform: scale(1.06); color: rgba(245,158,11,1); }
     100% { transform: scale(1);    color: inherit; }
+  }
+  @keyframes orb-spin {
+    0%   { --orb-angle: 0deg; }
+    100% { --orb-angle: 360deg; }
+  }
+  @keyframes grain {
+    0%, 100% { transform: translate(0, 0); }
+    10% { transform: translate(-5%, -10%); }
+    30% { transform: translate(3%, -15%); }
+    50% { transform: translate(12%, 9%); }
+    70% { transform: translate(9%, 4%); }
+    90% { transform: translate(-1%, 7%); }
   }
 }
 
@@ -109,134 +98,131 @@
   html {
     overflow-x: hidden;
   }
-
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
     font-family: var(--font-sans);
     overflow-x: hidden;
-    /* Prevent pull-to-refresh from firing mid-scroll on mobile */
     overscroll-behavior-y: contain;
-    @apply antialiased selection:bg-indigo-500/30 selection:text-indigo-200;
+    @apply antialiased selection:bg-amber-500/25 selection:text-amber-100;
   }
-
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-heading);
-    letter-spacing: -0.03em;
+    letter-spacing: -0.04em;
   }
 }
 
 @layer utilities {
-  /* Surface cards */
   .card-surface {
-    @apply bg-white/[0.03] border border-white/[0.06] rounded-2xl;
+    @apply bg-white/[0.02] border border-white/[0.06] rounded-2xl;
   }
-
   .card-surface-hover {
-    @apply bg-white/[0.03] border border-white/[0.06] rounded-2xl hover:bg-white/[0.06] hover:border-white/10 transition-colors duration-300;
+    @apply bg-white/[0.02] border border-white/[0.06] rounded-2xl hover:bg-white/[0.05] hover:border-white/10 transition-all duration-300;
   }
-
-  /* Section dividers */
   .section-divider {
     @apply border-t border-white/[0.06];
   }
-
-  /* Tag / badge */
-  .badge {
-    @apply inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono border;
-  }
-
   .badge-primary {
-    @apply inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono border border-indigo-500/30 bg-indigo-500/10 text-indigo-300;
+    @apply inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono border border-amber-500/30 bg-amber-500/10 text-amber-300;
   }
-
   .badge-muted {
     @apply inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono border border-white/10 bg-white/5 text-white/50;
   }
 
   /* Gradient text */
   .text-gradient {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-violet-400;
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-amber-300 via-orange-400 to-rose-400;
+  }
+  .text-gradient-cool {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-teal-300 via-cyan-400 to-sky-400;
   }
 
-  /* Mono label */
   .label-mono {
-    @apply text-sm font-mono uppercase tracking-widest text-white/50;
+    @apply text-[11px] font-mono uppercase tracking-[0.2em] text-white/35;
   }
 
-  /* Noise overlay for depth */
-  .noise {
-    position: relative;
-  }
-  .noise::after {
+  /* Film grain overlay */
+  .grain::before {
     content: '';
-    position: absolute;
-    inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    position: fixed;
+    inset: -50%;
+    width: 200%;
+    height: 200%;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
     pointer-events: none;
-    border-radius: inherit;
+    z-index: 9998;
+    animation: grain 8s steps(10) infinite;
   }
 
-  /* Breathing glow border (signature card treatment) */
   .card-glow {
     animation: breathe-glow 4s ease-in-out infinite;
   }
 
-  /* Shimmer text — moving gradient highlight */
   .shimmer-text {
     background: linear-gradient(
       90deg,
-      rgba(255,255,255,0.25) 0%,
-      rgba(167,139,250,0.85) 30%,
-      rgba(99,102,241,0.9) 50%,
-      rgba(167,139,250,0.85) 70%,
-      rgba(255,255,255,0.25) 100%
+      rgba(255,255,255,0.15) 0%,
+      rgba(245,158,11,0.9) 30%,
+      rgba(234,88,12,0.9) 50%,
+      rgba(20,184,166,0.8) 70%,
+      rgba(255,255,255,0.15) 100%
     );
     background-size: 200% auto;
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    animation: shimmer 4s linear infinite;
+    animation: shimmer 5s linear infinite;
   }
 
-  /* Safe bottom padding — accommodates the mobile HUD */
   .pb-mobile-hud {
     padding-bottom: calc(5rem + env(safe-area-inset-bottom, 24px));
   }
 
-  /* ── Mesh gradient hero background ──
-     Uses @property animated CSS custom properties for a GPU-composited,
-     zero-JS animated gradient. Transition-animates --mesh-* on .mesh-animate. */
-  .mesh-gradient {
-    background:
-      radial-gradient(ellipse 60% 50% at var(--mesh-x) var(--mesh-y), rgba(99,102,241,0.07) 0%, transparent 70%),
-      radial-gradient(ellipse 50% 60% at var(--mesh-x2) var(--mesh-y2), rgba(139,92,246,0.05) 0%, transparent 70%);
-    animation: mesh-drift 12s ease-in-out infinite alternate;
+  /* Floating orb */
+  .hero-orb {
+    background: conic-gradient(
+      from var(--orb-angle),
+      #f59e0b 0%,
+      #ea580c 25%,
+      #14b8a6 50%,
+      #0ea5e9 75%,
+      #f59e0b 100%
+    );
+    animation: orb-spin 8s linear infinite;
+    filter: blur(60px);
   }
 
-  /* ── Card spotlight effect ──
-     Requires the component to set --spotlight-x and --spotlight-y via JS
-     on pointermove. The gradient follows the cursor inside the card. */
+  /* Mesh gradient */
+  .mesh-gradient {
+    background:
+      radial-gradient(ellipse 55% 45% at var(--mesh-x) var(--mesh-y), rgba(245,158,11,0.07) 0%, transparent 70%),
+      radial-gradient(ellipse 45% 55% at var(--mesh-x2) var(--mesh-y2), rgba(20,184,166,0.05) 0%, transparent 70%);
+    animation: mesh-drift 14s ease-in-out infinite alternate;
+  }
+
+  /* Card spotlight */
   .card-spotlight {
     background: radial-gradient(
       600px circle at var(--spotlight-x, 50%) var(--spotlight-y, 50%),
-      rgba(99,102,241,0.04),
+      rgba(245,158,11,0.035),
       transparent 40%
     );
   }
 
-  /* ── Clip-path section reveal ──
-     Apply to section headings. Use .reveal-ready on mount, then toggle
-     .reveal-in via whileInView or IntersectionObserver. */
-  .clip-reveal {
-    clip-path: inset(0 100% 0 0);
-    transition: clip-path 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+  /* Bento glass card */
+  .bento-card {
+    @apply relative bg-white/[0.02] border border-white/[0.06] rounded-3xl overflow-hidden;
+    backdrop-filter: blur(12px);
   }
-  .clip-reveal.revealed {
-    clip-path: inset(0 0% 0 0);
+  .bento-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(135deg, rgba(255,255,255,0.03) 0%, transparent 50%);
+    pointer-events: none;
   }
 
-  /* ── Custom cursor dot ─── */
   .cursor-dot {
     width: 10px;
     height: 10px;
@@ -252,45 +238,31 @@
     transition: transform 0.08s ease, width 0.15s ease, height 0.15s ease;
     will-change: transform;
   }
-
-  /* ── Marquee will-change only during active scroll ── */
-  .marquee-track {
-    will-change: transform;
-  }
 }
 
 @keyframes mesh-drift {
   0%   { --mesh-x: 30%; --mesh-y: 20%; --mesh-x2: 70%; --mesh-y2: 80%; }
-  33%  { --mesh-x: 50%; --mesh-y: 10%; --mesh-x2: 55%; --mesh-y2: 70%; }
-  66%  { --mesh-x: 20%; --mesh-y: 50%; --mesh-x2: 80%; --mesh-y2: 40%; }
-  100% { --mesh-x: 40%; --mesh-y: 30%; --mesh-x2: 65%; --mesh-y2: 75%; }
+  33%  { --mesh-x: 55%; --mesh-y: 15%; --mesh-x2: 50%; --mesh-y2: 65%; }
+  66%  { --mesh-x: 20%; --mesh-y: 45%; --mesh-x2: 80%; --mesh-y2: 35%; }
+  100% { --mesh-x: 45%; --mesh-y: 25%; --mesh-x2: 60%; --mesh-y2: 75%; }
 }
 
-/* ── Mobile-only polish ────────────────────────────────────────────────────── */
+/* ── Mobile polish ── */
 @media (max-width: 767px) {
-  /* Remove tap highlight rectangle (replaced by our own active states) */
-  * {
-    -webkit-tap-highlight-color: transparent;
-  }
-
-  /* Tighter heading tracking on very small screens */
-  h1, h2, h3 {
-    letter-spacing: -0.025em;
-  }
-
-  /* Smooth momentum scrolling on scrollable containers */
+  * { -webkit-tap-highlight-color: transparent; }
+  h1, h2, h3 { letter-spacing: -0.03em; }
   [data-scroll], .overflow-y-auto, .overflow-x-auto {
     -webkit-overflow-scrolling: touch;
   }
 }
 
 /* Scrollbar */
-::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar { width: 5px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: #222; border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: #333; }
+::-webkit-scrollbar-thumb { background: rgba(245,158,11,0.15); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(245,158,11,0.3); }
 
-/* Lenis smooth scroll */
+/* Lenis */
 html.lenis, html.lenis body { height: auto; }
 .lenis.lenis-smooth { scroll-behavior: auto !important; }
 .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }

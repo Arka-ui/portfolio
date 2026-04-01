@@ -1,9 +1,9 @@
-﻿"use client";
+"use client";
 
 import { motion, AnimatePresence } from "framer-motion";
 import useSWR from "swr";
 import { useState } from "react";
-import { X } from "lucide-react";
+import { X, ChevronRight } from "lucide-react";
 
 const GITHUB_USERNAME = "Arka-ui";
 
@@ -13,59 +13,54 @@ const fetcher = async (url: string) => {
     return res.json();
 };
 
-const TECH_LINKS: Record<string, string> = {
-    "React": "https://react.dev",
-    "TypeScript": "https://www.typescriptlang.org",
-    "JavaScript": "https://developer.mozilla.org/en-US/docs/Web/JavaScript",
-    "Node.js": "https://nodejs.org",
-    "Next.js": "https://nextjs.org",
-    "Tailwind CSS": "https://tailwindcss.com",
-    "Python": "https://www.python.org",
-    "Java": "https://www.java.com",
-    "Rust": "https://www.rust-lang.org/",
-    "HTML": "https://developer.mozilla.org/en-US/docs/Web/HTML",
-    "CSS": "https://developer.mozilla.org/en-US/docs/Web/CSS",
-    "PostgreSQL": "https://www.postgresql.org",
-    "Docker": "https://www.docker.com",
-    "Git": "https://git-scm.com",
-    "VS Code": "https://code.visualstudio.com",
-    "Prisma": "https://www.prisma.io",
-    "GitHub Actions": "https://github.com/features/actions",
-    "Nginx": "https://nginx.org",
-    "better-auth": "https://www.better-auth.com",
-    "Drizzle": "https://orm.drizzle.team",
-    "shadcn/ui": "https://ui.shadcn.com",
-};
-
-/* ─── Why I use each tech — plain-language explanations ─── */
 const TECH_EXPLANATIONS: Record<string, string> = {
-    "React": "React lets me build interactive websites by splitting the page into small, reusable pieces. Like building with LEGO — each block works on its own but snaps together to create something bigger. It makes the website feel fast and alive instead of reloading every time you click something.",
-    "Next.js": "Next.js is like React with superpowers. It makes websites load faster by preparing pages in advance, handles navigation smoothly, and takes care of a lot of the boring but important behind-the-scenes work. It's my go-to for every serious project.",
-    "TypeScript": "TypeScript is JavaScript with safety rails. It catches mistakes before they happen — like a spell-checker for code. It saves hours of debugging and makes the code much easier to understand and maintain over time.",
-    "Tailwind CSS": "Tailwind CSS lets me design directly in the code without jumping between files. Instead of writing complex style sheets, I use simple keywords to control colors, spacing, and layout. It keeps everything consistent and speeds up the design process a lot.",
-    "HTML": "HTML is the skeleton of every website. It defines the structure — headings, paragraphs, images, links. Every website you've ever visited is built on HTML. It's fundamental, and getting it right means better accessibility and search engine rankings.",
-    "CSS": "CSS is what makes websites look good — colors, fonts, layouts, animations. Without CSS, every website would look like a plain text document. I use it to create the polished visual experience you see here.",
-    "Node.js": "Node.js lets me use the same language (JavaScript) for both the website you see and the server behind it. It handles things like sending emails, processing forms, and managing data — the invisible work that makes everything function.",
-    "Python": "Python is incredibly versatile — I use it for automation, data processing, and building quick tools. Its clean syntax makes it perfect for solving problems fast, from web scrapers to complex algorithms.",
-    "Java": "Java powers Android apps and large-scale systems. It's reliable, fast, and runs on almost anything. I used it extensively for Minecraft plugin development and the Cambrai city app.",
-    "Rust": "Rust gives you maximum performance with maximum safety — no crashes, no memory leaks. I use it when speed really matters, like in system tools or performance-critical applications.",
-    "PostgreSQL": "PostgreSQL is a powerful database that stores and organizes all the data an app needs — user accounts, messages, products, etc. It's reliable, free, and handles complex queries better than almost anything else.",
-    "Docker": "Docker packages an entire app and its environment into a neat box (called a container). This means \"it works on my computer\" becomes \"it works everywhere\" — no more setup headaches when deploying.",
-    "Git": "Git tracks every change I make to the code, like a detailed history of the project. If something breaks, I can go back to a working version instantly. It also makes collaborating with others seamless.",
-    "VS Code": "VS Code is my code editor — where I write every line. It's packed with extensions, intelligent autocomplete, and debugging tools that make coding faster and more enjoyable.",
-    "Prisma": "Prisma acts as a translator between my code and the database. Instead of writing complex database queries by hand, I describe what I want in plain TypeScript and Prisma handles the rest. Fewer bugs, faster development.",
-    "GitHub Actions": "GitHub Actions automates repetitive tasks — running tests, checking for errors, and deploying code every time I push an update. It's like having a robot assistant that handles quality control 24/7.",
-    "Nginx": "Nginx is a web server that handles incoming traffic. It decides where to send requests, serves files efficiently, and keeps everything running smoothly even when thousands of people visit at the same time.",
-    "better-auth": "better-auth handles authentication the right way — sign-up, login, sessions, OAuth, all with a clean API. No wrestling with complex auth flows; it just works out of the box with TypeScript and any framework.",
-    "Drizzle": "Drizzle is a lightweight TypeScript ORM that feels like writing SQL but with full type-safety. Fast, generates clean queries, and doesn't add unnecessary abstraction. Perfect when I need more control than Prisma.",
-    "shadcn/ui": "shadcn/ui gives me beautifully designed, accessible components I copy directly into my project. No dependency lock-in — I own every line. Integrates perfectly with Tailwind and is my go-to for polished interfaces.",
+    "React": "React lets me build interactive websites by splitting the page into small, reusable pieces. Like building with LEGO — each block works on its own but snaps together to create something bigger.",
+    "Next.js": "Next.js is like React with superpowers. It makes websites load faster by preparing pages in advance, handles navigation smoothly, and takes care of behind-the-scenes work.",
+    "TypeScript": "TypeScript is JavaScript with safety rails. It catches mistakes before they happen — like a spell-checker for code.",
+    "Tailwind CSS": "Tailwind CSS lets me design directly in the code. Simple keywords control colors, spacing, and layout — consistent and fast.",
+    "HTML": "HTML is the skeleton of every website — headings, paragraphs, images, links. Fundamental for accessibility and SEO.",
+    "CSS": "CSS is what makes websites look good — colors, fonts, layouts, animations. The polished visual experience you see here.",
+    "Node.js": "Node.js lets me use JavaScript for both frontend and backend. Handles emails, forms, and data management.",
+    "Python": "Python is incredibly versatile — automation, data processing, quick tools. Clean syntax for solving problems fast.",
+    "Java": "Java powers Android apps and large-scale systems. Reliable, fast, runs anywhere. Used for Minecraft plugins and the Cambrai city app.",
+    "Rust": "Rust gives maximum performance with maximum safety — no crashes, no memory leaks. For when speed really matters.",
+    "PostgreSQL": "PostgreSQL stores and organizes all app data. Reliable, free, handles complex queries better than almost anything else.",
+    "Docker": "Docker packages apps into containers. 'Works on my computer' becomes 'works everywhere.'",
+    "Git": "Git tracks every code change. If something breaks, I can go back instantly. Makes collaboration seamless.",
+    "VS Code": "VS Code is my code editor — extensions, intelligent autocomplete, and debugging tools that make coding faster.",
+    "Prisma": "Prisma translates between code and database. Describe what you want in TypeScript, Prisma handles the rest.",
+    "GitHub Actions": "GitHub Actions automates tests, error checking, and deployment on every push. Quality control 24/7.",
+    "Nginx": "Nginx handles incoming traffic, serves files efficiently, keeps everything running smoothly at scale.",
+    "better-auth": "better-auth handles authentication the right way — sign-up, login, sessions, OAuth, all with a clean API.",
+    "Drizzle": "Drizzle is a lightweight TypeScript ORM — feels like writing SQL but with full type-safety.",
+    "shadcn/ui": "shadcn/ui gives beautifully designed, accessible components I copy directly into my project. No dependency lock-in.",
 };
 
 const CATEGORIES = [
-    { label: "Frontend", keys: ["React", "Next.js", "TypeScript", "Tailwind CSS", "HTML", "CSS", "shadcn/ui"] },
-    { label: "Backend", keys: ["Node.js", "Python", "Java", "Rust", "better-auth", "Drizzle"] },
-    { label: "Tools & Infra", keys: ["Docker", "Git", "VS Code", "Prisma", "PostgreSQL", "GitHub Actions", "Nginx"] },
+    {
+        label: "Frontend",
+        color: "amber",
+        keys: ["React", "Next.js", "TypeScript", "Tailwind CSS", "HTML", "CSS", "shadcn/ui"],
+    },
+    {
+        label: "Backend",
+        color: "teal",
+        keys: ["Node.js", "Python", "Java", "Rust", "better-auth", "Drizzle"],
+    },
+    {
+        label: "Tools & Infra",
+        color: "orange",
+        keys: ["Docker", "Git", "VS Code", "Prisma", "PostgreSQL", "GitHub Actions", "Nginx"],
+    },
 ];
+
+const fadeUp = {
+    hidden: { y: 30, opacity: 0 },
+    show: (i: number) => ({
+        y: 0, opacity: 1,
+        transition: { duration: 0.7, delay: i * 0.1, ease: [0.16, 1, 0.3, 1] as const },
+    }),
+};
 
 export default function TechStack() {
     const { data: githubData } = useSWR(
@@ -79,16 +74,21 @@ export default function TechStack() {
         githubData ? githubData.map((r: { language: string | null }) => r.language).filter(Boolean) : []
     );
 
-    return (
-        <section id="skills" className="py-28 border-t border-white/[0.06]">
-            <div className="container mx-auto px-6 md:px-12">
+    const colorMap: Record<string, { dot: string; border: string; bg: string; text: string }> = {
+        amber: { dot: "bg-amber-400", border: "border-amber-500/15", bg: "bg-amber-500/[0.06]", text: "text-amber-400" },
+        teal: { dot: "bg-teal-400", border: "border-teal-500/15", bg: "bg-teal-500/[0.06]", text: "text-teal-400" },
+        orange: { dot: "bg-orange-400", border: "border-orange-500/15", bg: "bg-orange-500/[0.06]", text: "text-orange-400" },
+    };
 
+    return (
+        <section id="skills" className="py-20 md:py-32 border-t border-white/[0.04]">
+            <div className="container mx-auto px-6 md:px-12">
                 {/* Header */}
-                <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16">
+                <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 md:mb-16">
                     <div>
-                        <span className="label-mono mb-5 block">Craft</span>
+                        <span className="label-mono mb-4 block">Craft</span>
                         <motion.h2
-                            initial={{ opacity: 0, y: 20 }}
+                            initial={{ opacity: 0, y: 24 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
@@ -97,101 +97,90 @@ export default function TechStack() {
                             Tech stack
                         </motion.h2>
                     </div>
-                    <div className="flex flex-col items-end gap-1">
-                        {usedLanguages.size > 0 && (
-                            <span className="text-xs font-mono text-white/25">
-                                {usedLanguages.size} languages detected on GitHub
-                            </span>
-                        )}
-                        <span className="text-[11px] font-mono text-white/15">
-                            Click any tech to learn why I use it
-                        </span>
-                    </div>
+                    <span className="text-[11px] font-mono text-white/20">
+                        {usedLanguages.size > 0 ? `${usedLanguages.size} languages on GitHub` : "Click any tech for details"}
+                    </span>
                 </div>
 
-                {/* Categories */}
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-px border border-white/[0.06] rounded-2xl overflow-hidden">
-                    {CATEGORIES.map((cat, ci) => (
-                        <motion.div
-                            key={cat.label}
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true, amount: 0.2 }}
-                            transition={{ duration: 0.6, delay: ci * 0.08, ease: [0.16, 1, 0.3, 1] }}
-                            className="bg-white/[0.02] p-6 flex flex-col gap-5"
-                        >
-                            <span className="label-mono">{cat.label}</span>
-                            <div className="flex flex-col gap-1">
-                                {cat.keys.map((tech, ti) => {
-                                    const isActive = usedLanguages.has(tech);
-                                    const isExpanded = expandedTech === tech;
-                                    return (
-                                        <div key={tech}>
-                                            <motion.button
-                                                initial={{ opacity: 0 }}
-                                                whileInView={{ opacity: 1 }}
-                                                viewport={{ once: true }}
-                                                transition={{ delay: ci * 0.05 + ti * 0.04 }}
-                                                onClick={() => setExpandedTech(isExpanded ? null : tech)}
-                                                className={`group flex items-center justify-between w-full py-2.5 px-3 rounded-lg hover:bg-white/[0.05] transition-all duration-200 text-left ${isExpanded ? "bg-white/[0.05] border border-white/[0.08]" : ""}`}
-                                            >
-                                                <span className={`text-sm font-medium transition-colors ${isActive ? "text-white" : "text-white/45"} ${isExpanded ? "text-indigo-300" : ""}`}>
-                                                    {tech}
-                                                </span>
-                                                <div className="flex items-center gap-2">
-                                                    {isActive && (
-                                                        <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 opacity-80" />
-                                                    )}
-                                                    <motion.span
-                                                        animate={{ rotate: isExpanded ? 45 : 0 }}
-                                                        transition={{ duration: 0.2 }}
-                                                        className="text-white/20 text-xs font-mono"
-                                                    >
-                                                        +
-                                                    </motion.span>
-                                                </div>
-                                            </motion.button>
+                {/* Category cards */}
+                <div className="grid md:grid-cols-3 gap-5">
+                    {CATEGORIES.map((cat, ci) => {
+                        const c = colorMap[cat.color];
+                        return (
+                            <motion.div
+                                key={cat.label}
+                                custom={ci}
+                                variants={fadeUp}
+                                initial="hidden"
+                                whileInView="show"
+                                viewport={{ once: true, amount: 0.2 }}
+                                className="bento-card p-6 md:p-8 flex flex-col gap-6"
+                            >
+                                {/* Category header */}
+                                <div className="flex items-center gap-3">
+                                    <span className={`w-2 h-2 rounded-full ${c.dot}`} />
+                                    <span className="label-mono tracking-[0.15em]">{cat.label}</span>
+                                </div>
 
-                                            {/* Expandable explanation */}
-                                            <AnimatePresence>
-                                                {isExpanded && TECH_EXPLANATIONS[tech] && (
-                                                    <motion.div
-                                                        initial={{ height: 0, opacity: 0 }}
-                                                        animate={{ height: "auto", opacity: 1 }}
-                                                        exit={{ height: 0, opacity: 0 }}
-                                                        transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-                                                        className="overflow-hidden"
-                                                    >
-                                                        <div className="mx-3 mb-2 p-4 rounded-xl bg-indigo-500/[0.06] border border-indigo-500/[0.12]">
-                                                            <div className="flex items-start justify-between gap-3 mb-2">
-                                                                <span className="text-[11px] font-mono text-indigo-400/70 uppercase tracking-wider">
-                                                                    Why I use {tech}
-                                                                </span>
-                                                                <button
-                                                                    onClick={(e) => { e.stopPropagation(); setExpandedTech(null); }}
-                                                                    className="text-white/20 hover:text-white/50 transition-colors shrink-0"
-                                                                >
-                                                                    <X size={12} />
-                                                                </button>
+                                {/* Tech list */}
+                                <div className="flex flex-col gap-0.5">
+                                    {cat.keys.map((tech) => {
+                                        const isActive = usedLanguages.has(tech);
+                                        const isExpanded = expandedTech === tech;
+                                        return (
+                                            <div key={tech}>
+                                                <button
+                                                    onClick={() => setExpandedTech(isExpanded ? null : tech)}
+                                                    className={`group flex items-center justify-between w-full py-2.5 px-3 rounded-xl hover:bg-white/[0.04] transition-all duration-200 text-left ${isExpanded ? `bg-white/[0.04] ${c.border} border` : ""}`}
+                                                >
+                                                    <span className={`text-sm font-medium transition-colors ${isActive ? "text-white/80" : "text-white/40"} ${isExpanded ? c.text : ""}`}>
+                                                        {tech}
+                                                    </span>
+                                                    <div className="flex items-center gap-2">
+                                                        {isActive && <span className={`w-1.5 h-1.5 rounded-full ${c.dot} opacity-70`} />}
+                                                        <ChevronRight
+                                                            size={12}
+                                                            className={`text-white/15 transition-transform duration-200 ${isExpanded ? "rotate-90" : ""}`}
+                                                        />
+                                                    </div>
+                                                </button>
+
+                                                <AnimatePresence>
+                                                    {isExpanded && TECH_EXPLANATIONS[tech] && (
+                                                        <motion.div
+                                                            initial={{ height: 0, opacity: 0 }}
+                                                            animate={{ height: "auto", opacity: 1 }}
+                                                            exit={{ height: 0, opacity: 0 }}
+                                                            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                                                            className="overflow-hidden"
+                                                        >
+                                                            <div className={`mx-3 mb-2 p-4 rounded-xl ${c.bg} ${c.border} border`}>
+                                                                <div className="flex items-start justify-between gap-3 mb-2">
+                                                                    <span className={`text-[10px] font-mono ${c.text} opacity-70 uppercase tracking-wider`}>
+                                                                        Why {tech}
+                                                                    </span>
+                                                                    <button
+                                                                        onClick={(e) => { e.stopPropagation(); setExpandedTech(null); }}
+                                                                        className="text-white/20 hover:text-white/50 transition-colors shrink-0"
+                                                                    >
+                                                                        <X size={11} />
+                                                                    </button>
+                                                                </div>
+                                                                <p className="text-[13px] text-white/45 leading-relaxed">
+                                                                    {TECH_EXPLANATIONS[tech]}
+                                                                </p>
                                                             </div>
-                                                            <p className="text-[13px] text-white/50 leading-relaxed">
-                                                                {TECH_EXPLANATIONS[tech]}
-                                                            </p>
-                                                        </div>
-                                                    </motion.div>
-                                                )}
-                                            </AnimatePresence>
-                                        </div>
-                                    );
-                                })}
-                            </div>
-                        </motion.div>
-                    ))}
+                                                        </motion.div>
+                                                    )}
+                                                </AnimatePresence>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            </motion.div>
+                        );
+                    })}
                 </div>
-
-                <p className="text-xs font-mono text-white/20 mt-4 text-right">
-                    Purple dot = detected on GitHub activity
-                </p>
             </div>
         </section>
     );

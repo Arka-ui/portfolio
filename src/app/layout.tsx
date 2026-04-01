@@ -79,7 +79,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="scroll-smooth">
-      <body className={`${jakarta.variable} ${outfit.variable} ${jetbrainsMono.variable} antialiased bg-background text-foreground overflow-x-hidden`}>
+      <body className={`${jakarta.variable} ${outfit.variable} ${jetbrainsMono.variable} antialiased bg-background text-foreground overflow-x-hidden grain`}>
         <WarpProvider>
           <LanguageProvider>
             <BlueprintProvider>

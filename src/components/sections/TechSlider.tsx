@@ -47,7 +47,7 @@ const ROW_1: { label: string; color: string }[] = [
     { label: "HTML / CSS",     color: "#e34c26" },
     { label: "GraphQL",        color: "#e535ab" },
     { label: "Vite",           color: "#646cff" },
-    { label: "Zustand",        color: "#6366f1" },
+    { label: "Zustand",        color: "#e8712a" },
     { label: "tRPC",           color: "#398ccb" },
 ];
 
@@ -57,7 +57,7 @@ const ROW_2: { label: string; color: string }[] = [
     { label: "Java",           color: "#b07219" },
     { label: "Git",            color: "#f14e32" },
     { label: "VS Code",        color: "#007acc" },
-    { label: "CI/CD",          color: "#6366f1" },
+    { label: "CI/CD",          color: "#e8712a" },
     { label: "GitHub Actions", color: "#2088ff" },
     { label: "Nginx",          color: "#009900" },
     { label: "OpenAI",         color: "#10a37f" },
@@ -74,7 +74,7 @@ function TechBadge({ label, color }: { label: string; color: string }) {
             href={href}
             target="_blank"
             rel="noopener noreferrer"
-            className="group relative inline-flex items-center gap-3.5 px-6 py-4 rounded-2xl border border-white/[0.06] bg-white/[0.02] text-[14px] font-mono tracking-wider text-white/45 whitespace-nowrap hover:text-white hover:border-white/[0.2] hover:bg-white/[0.07] transition-all duration-400 cursor-pointer select-none overflow-hidden"
+            className="group relative inline-flex items-center gap-3.5 px-6 py-4 rounded-2xl border border-white/[0.06] bg-white/[0.02] text-[14px] font-mono tracking-wider text-white/45 whitespace-nowrap hover:text-white hover:border-white/[0.2] hover:bg-white/[0.06] transition-all duration-400 cursor-pointer select-none overflow-hidden"
         >
             {/* Hover gradient flash */}
             <span
@@ -129,7 +129,6 @@ function MarqueeRow({
 
     useEffect(() => {
         measure();
-        // Small delay to ensure layout is computed
         const t = setTimeout(measure, 100);
         return () => clearTimeout(t);
     }, [measure]);
@@ -162,7 +161,6 @@ function MarqueeRow({
         return () => cancelAnimationFrame(requestRef.current);
     }, [speed, reverse]);
 
-    // Triple items for seamless loop
     const tripled = [...items, ...items, ...items];
 
     return (
@@ -194,7 +192,7 @@ export default function TechSlider() {
             {/* Subtle top label */}
             <div className="container mx-auto px-6 md:px-12 mb-6">
                 <div className="flex items-center gap-3">
-                    <div className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse" />
+                    <div className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
                     <span className="text-[11px] font-mono text-white/25 uppercase tracking-widest">
                         Technologies I work with
                     </span>
@@ -202,9 +200,9 @@ export default function TechSlider() {
                 </div>
             </div>
 
-            {/* Edge fade masks — narrow on mobile so badges are visible, wide on desktop */}
-            <div className="absolute inset-y-0 left-0 w-8 sm:w-20 md:w-48 bg-gradient-to-r from-[#0a0a0a] via-[#0a0a0a]/80 to-transparent z-10 pointer-events-none" />
-            <div className="absolute inset-y-0 right-0 w-8 sm:w-20 md:w-48 bg-gradient-to-l from-[#0a0a0a] via-[#0a0a0a]/80 to-transparent z-10 pointer-events-none" />
+            {/* Edge fade masks */}
+            <div className="absolute inset-y-0 left-0 w-8 sm:w-20 md:w-48 bg-gradient-to-r from-[#09090b] via-[#09090b]/80 to-transparent z-10 pointer-events-none" />
+            <div className="absolute inset-y-0 right-0 w-8 sm:w-20 md:w-48 bg-gradient-to-l from-[#09090b] via-[#09090b]/80 to-transparent z-10 pointer-events-none" />
 
             <div className="flex flex-col gap-5">
                 <MarqueeRow items={ROW_1} speed={32} />

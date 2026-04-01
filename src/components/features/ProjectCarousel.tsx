@@ -17,13 +17,24 @@ interface Project {
     forks_count: number;
 }
 
+const LANG_COLORS: Record<string, string> = {
+    TypeScript: "#f59e0b",
+    JavaScript: "#f0db4f",
+    Python: "#3572a5",
+    Rust: "#dea584",
+    Java: "#b07219",
+    HTML: "#e34c26",
+    CSS: "#563d7c",
+    Go: "#00ADD8",
+    Shell: "#89e051",
+};
+
 export default function ProjectCarousel({ projects }: { projects: Project[] }) {
     const visibleProjects = projects.slice(0, 5);
     const scrollRef = useRef<HTMLDivElement>(null);
     const [activeIndex, setActiveIndex] = useState(0);
     const { triggerHaptic } = useHaptics();
 
-    // Track the active snap item via IntersectionObserver on the cards
     useEffect(() => {
         const container = scrollRef.current;
         if (!container) return;
@@ -53,7 +64,6 @@ export default function ProjectCarousel({ projects }: { projects: Project[] }) {
 
     return (
         <div className="relative w-full md:hidden">
-            {/* Native CSS scroll snap — no JS drag needed on mobile */}
             <div
                 ref={scrollRef}
                 className="flex gap-4 overflow-x-auto pb-4 px-1"
@@ -64,79 +74,90 @@ export default function ProjectCarousel({ projects }: { projects: Project[] }) {
                     msOverflowStyle: "none",
                 }}
             >
-                {visibleProjects.map((project, i) => (
-                    <div
-                        key={project.id}
-                        data-card
-                        className="shrink-0 w-[calc(100%-2rem)] rounded-3xl overflow-hidden border border-white/10 bg-slate-900/90 backdrop-blur-md shadow-xl"
-                        style={{ scrollSnapAlign: "center" }}
-                    >
-                        {/* Card header gradient */}
-                        <div className="h-28 bg-gradient-to-br from-indigo-600/30 to-purple-600/30 relative overflow-hidden">
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
-                            <div className="absolute top-4 right-4 flex gap-2">
-                                <a
-                                    href={project.html_url}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="p-2 rounded-full bg-black/30 backdrop-blur-md text-white border border-white/10"
-                                >
-                                    <Github size={16} />
-                                </a>
-                                {project.homepage && (
+                {visibleProjects.map((project) => {
+                    const langColor = LANG_COLORS[project.language || ""] || "#f59e0b";
+
+                    return (
+                        <div
+                            key={project.id}
+                            data-card
+                            className="shrink-0 w-[calc(100%-2rem)] rounded-3xl overflow-hidden border border-white/[0.07] bg-white/[0.02] backdrop-blur-md shadow-xl"
+                            style={{ scrollSnapAlign: "center" }}
+                        >
+                            {/* Card header gradient */}
+                            <div className="h-28 relative overflow-hidden" style={{ background: `linear-gradient(135deg, ${langColor}15 0%, rgba(245,158,11,0.08) 50%, transparent 100%)` }}>
+                                <div className="absolute inset-0 bg-gradient-to-t from-[#09090b]/80 to-transparent" />
+                                <div className="absolute top-4 right-4 flex gap-2">
                                     <a
-                                        href={project.homepage}
+                                        href={project.html_url}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="p-2 rounded-full bg-white/10 backdrop-blur-md text-white border border-white/10"
+                                        className="p-2 rounded-xl bg-black/30 backdrop-blur-md text-white/60 border border-white/[0.08] hover:text-white transition-colors"
                                     >
-                                        <ArrowUpRight size={16} />
+                                        <Github size={16} />
                                     </a>
-                                )}
-                            </div>
-                        </div>
-
-                        {/* Content */}
-                        <div className="p-5">
-                            <div className="flex items-center justify-between mb-2">
-                                <span className="text-xs font-mono text-cyan-400 px-2 py-1 rounded bg-cyan-950/30 border border-cyan-500/20">
-                                    {project.language || "Code"}
-                                </span>
-                                <div className="flex items-center gap-3 text-slate-400 text-xs">
-                                    <span className="flex items-center gap-1">
-                                        <Star size={11} /> {project.stargazers_count}
-                                    </span>
-                                    <span className="flex items-center gap-1">
-                                        <GitFork size={11} /> {project.forks_count}
-                                    </span>
+                                    {project.homepage && (
+                                        <a
+                                            href={project.homepage}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="p-2 rounded-xl bg-white/[0.06] backdrop-blur-md text-white/60 border border-white/[0.08] hover:text-white transition-colors"
+                                        >
+                                            <ArrowUpRight size={16} />
+                                        </a>
+                                    )}
                                 </div>
                             </div>
 
-                            <h3 className="text-xl font-bold text-white mb-1.5 leading-tight">
-                                {project.name}
-                            </h3>
-                            <p className="text-slate-400 text-sm leading-relaxed mb-4 line-clamp-3">
-                                {project.description || "Experimental project."}
-                            </p>
-
-                            <div className="flex flex-wrap gap-2">
-                                {project.topics.slice(0, 3).map(topic => (
+                            {/* Content */}
+                            <div className="p-5">
+                                <div className="flex items-center justify-between mb-2">
                                     <span
-                                        key={topic}
-                                        className="px-2 py-1 text-[10px] rounded-md bg-white/5 text-slate-300 border border-white/5"
+                                        className="text-xs font-mono px-2 py-1 rounded-lg border"
+                                        style={{
+                                            color: langColor,
+                                            borderColor: `${langColor}30`,
+                                            backgroundColor: `${langColor}10`,
+                                        }}
                                     >
-                                        #{topic}
+                                        {project.language || "Code"}
                                     </span>
-                                ))}
+                                    <div className="flex items-center gap-3 text-white/30 text-xs">
+                                        <span className="flex items-center gap-1">
+                                            <Star size={11} /> {project.stargazers_count}
+                                        </span>
+                                        <span className="flex items-center gap-1">
+                                            <GitFork size={11} /> {project.forks_count}
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <h3 className="text-xl font-bold text-white mb-1.5 leading-tight">
+                                    {project.name}
+                                </h3>
+                                <p className="text-white/35 text-sm leading-relaxed mb-4 line-clamp-3">
+                                    {project.description || "Experimental project."}
+                                </p>
+
+                                <div className="flex flex-wrap gap-2">
+                                    {project.topics.slice(0, 3).map(topic => (
+                                        <span
+                                            key={topic}
+                                            className="px-2 py-1 text-[10px] rounded-lg bg-white/[0.04] text-white/40 border border-white/[0.06]"
+                                        >
+                                            #{topic}
+                                        </span>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* Drag hint bar */}
+                            <div className="pb-5 flex justify-center">
+                                <div className="w-12 h-1 bg-white/[0.08] rounded-full" />
                             </div>
                         </div>
-
-                        {/* Drag hint bar */}
-                        <div className="pb-5 flex justify-center">
-                            <div className="w-12 h-1 bg-white/10 rounded-full" />
-                        </div>
-                    </div>
-                ))}
+                    );
+                })}
             </div>
 
             {/* Pagination dots */}
@@ -146,7 +167,7 @@ export default function ProjectCarousel({ projects }: { projects: Project[] }) {
                         key={i}
                         className={cn(
                             "h-1.5 rounded-full transition-all duration-300",
-                            i === activeIndex ? "w-6 bg-indigo-500" : "w-1.5 bg-white/15"
+                            i === activeIndex ? "w-6 bg-amber-500" : "w-1.5 bg-white/15"
                         )}
                     />
                 ))}

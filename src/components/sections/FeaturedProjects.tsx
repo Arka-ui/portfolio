@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { motion } from "framer-motion";
 import { Github, ArrowUpRight, Star, GitFork } from "lucide-react";
@@ -40,91 +40,89 @@ interface Project {
 }
 
 const LANG_COLORS: Record<string, string> = {
-    TypeScript: "#3178c6",
-    JavaScript: "#f0db4f",
-    Python: "#3572a5",
-    Java: "#b07219",
-    Swift: "#f05138",
-    Kotlin: "#7f52ff",
-    Rust: "#dea584",
-    Go: "#00add8",
-    CSS: "#563d7c",
-    HTML: "#e34c26",
+    TypeScript: "#3178c6", JavaScript: "#f0db4f", Python: "#3572a5",
+    Java: "#b07219", Swift: "#f05138", Kotlin: "#7f52ff",
+    Rust: "#dea584", Go: "#00add8", CSS: "#563d7c", HTML: "#e34c26",
+};
+
+const fadeUp = {
+    hidden: { y: 30, opacity: 0 },
+    show: (i: number) => ({
+        y: 0, opacity: 1,
+        transition: { duration: 0.7, delay: i * 0.1, ease: [0.16, 1, 0.3, 1] as const },
+    }),
 };
 
 function ProjectCard({ project, index }: { project: Project; index: number }) {
-    const num = String(index + 1).padStart(2, "0");
-    const color = project.language ? LANG_COLORS[project.language] : "#6366f1";
+    const color = project.language ? LANG_COLORS[project.language] : "#f59e0b";
     const spotlight = useSpotlight();
     const { t } = useLanguage();
 
     return (
         <motion.article
-            initial={{ opacity: 0, y: 28 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            custom={index}
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="show"
             viewport={{ once: true, amount: 0.15 }}
-            transition={{ duration: 0.65, delay: index * 0.08, ease: [0.16, 1, 0.3, 1] }}
             onPointerMove={spotlight}
-            className="group relative border-t border-white/[0.07] pt-8 pb-8 flex flex-col gap-5 hover:border-white/20 transition-colors duration-300 card-spotlight"
+            className="group bento-card p-6 md:p-8 flex flex-col gap-5 hover:border-amber-500/15 transition-all duration-500 card-spotlight"
         >
-            {/* Top row */}
-            <div className="flex items-start justify-between gap-4">
-                <div className="flex items-start gap-5 flex-1 min-w-0">
-                    <span className="font-mono text-[11px] text-white/20 pt-1 shrink-0">{num}</span>
-                    <div className="flex-1 min-w-0">
-                        <h3 className="font-heading font-bold text-xl md:text-2xl text-white tracking-tight group-hover:text-indigo-300 transition-colors duration-300 truncate">
-                            {project.name}
-                        </h3>
-                        <p className="text-sm text-white/45 mt-2 line-clamp-2 leading-relaxed">
-                            {project.description || t("projects.default_desc")}
-                        </p>
-                    </div>
+            {/* Top row: language dot + links */}
+            <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                    {project.language && (
+                        <span className="flex items-center gap-2 text-xs text-white/40 font-mono">
+                            <span className="w-3 h-3 rounded-full shrink-0 ring-2 ring-white/5" style={{ backgroundColor: color }} />
+                            {project.language}
+                        </span>
+                    )}
+                    <span className="text-[10px] font-mono text-white/15">#{String(index + 1).padStart(2, "0")}</span>
                 </div>
-
-                {/* Links */}
-                <div className="flex gap-2 shrink-0">
+                <div className="flex gap-2">
                     <a
                         href={project.html_url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="p-2.5 rounded-xl bg-white/[0.04] border border-white/[0.06] hover:bg-white/10 hover:border-white/15 transition-all text-white/50 hover:text-white"
+                        className="p-2 rounded-xl bg-white/[0.03] border border-white/[0.06] hover:bg-white/[0.08] hover:border-amber-500/20 transition-all text-white/40 hover:text-white"
                     >
-                        <Github size={15} />
+                        <Github size={14} />
                     </a>
                     {project.homepage && (
                         <a
                             href={project.homepage}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="p-2.5 rounded-xl bg-white/[0.04] border border-white/[0.06] hover:bg-white/10 hover:border-white/15 transition-all text-white/50 hover:text-white"
+                            className="p-2 rounded-xl bg-white/[0.03] border border-white/[0.06] hover:bg-white/[0.08] hover:border-teal-500/20 transition-all text-white/40 hover:text-white"
                         >
-                            <ArrowUpRight size={15} />
+                            <ArrowUpRight size={14} />
                         </a>
                     )}
                 </div>
             </div>
 
-            {/* Bottom row */}
-            <div className="flex items-center gap-4 ml-9">
-                {project.language && (
-                    <span className="flex items-center gap-1.5 text-xs text-white/40">
-                        <span
-                            className="w-2.5 h-2.5 rounded-full shrink-0"
-                            style={{ backgroundColor: color }}
-                        />
-                        {project.language}
-                    </span>
-                )}
-                {project.topics.slice(0, 2).map(t => (
-                    <span key={t} className="badge-muted text-[11px]">{t}</span>
-                ))}
-                <div className="ml-auto flex items-center gap-3 text-[11px] text-white/25 font-mono">
-                    <span className="flex items-center gap-1">
-                        <Star size={11} /> {project.stargazers_count}
-                    </span>
-                    <span className="flex items-center gap-1">
-                        <GitFork size={11} /> {project.forks_count}
-                    </span>
+            {/* Title + description */}
+            <div className="flex-1">
+                <h3 className="font-heading font-bold text-xl md:text-2xl text-white tracking-tight group-hover:text-gradient transition-all duration-300 mb-2">
+                    {project.name}
+                </h3>
+                <p className="text-sm text-white/40 line-clamp-2 leading-relaxed">
+                    {project.description || t("projects.default_desc")}
+                </p>
+            </div>
+
+            {/* Bottom: topics + stats */}
+            <div className="flex items-center justify-between pt-4 border-t border-white/[0.05]">
+                <div className="flex gap-2">
+                    {project.topics.slice(0, 3).map(topic => (
+                        <span key={topic} className="px-2.5 py-1 rounded-lg bg-white/[0.03] border border-white/[0.05] text-[10px] font-mono text-white/35">
+                            {topic}
+                        </span>
+                    ))}
+                </div>
+                <div className="flex items-center gap-3 text-[11px] text-white/20 font-mono">
+                    <span className="flex items-center gap-1"><Star size={11} /> {project.stargazers_count}</span>
+                    <span className="flex items-center gap-1"><GitFork size={11} /> {project.forks_count}</span>
                 </div>
             </div>
         </motion.article>
@@ -139,24 +137,20 @@ export default function FeaturedProjects() {
     );
 
     const featured = projects && Array.isArray(projects)
-        ? projects
-            .filter(p => !p.fork)
-            .sort((a, b) => b.stargazers_count - a.stargazers_count)
-            .slice(0, 6)
+        ? projects.filter(p => !p.fork).sort((a, b) => b.stargazers_count - a.stargazers_count).slice(0, 6)
         : [];
 
     if (!featured.length) return null;
 
     return (
-        <section id="projects" className="py-14 md:py-28 border-t border-white/[0.06]">
+        <section id="projects" className="py-20 md:py-32 border-t border-white/[0.04]">
             <div className="container mx-auto px-6 md:px-12">
-
-                {/* Section header */}
-                <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10 md:mb-16">
+                {/* Header */}
+                <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-12 md:mb-16">
                     <div>
-                        <span className="label-mono mb-5 block">{t("projects.label")}</span>
+                        <span className="label-mono mb-4 block">{t("projects.label")}</span>
                         <motion.h2
-                            initial={{ opacity: 0, y: 20 }}
+                            initial={{ opacity: 0, y: 24 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
@@ -169,18 +163,18 @@ export default function FeaturedProjects() {
                         href={`https://github.com/${GITHUB_USERNAME}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="group inline-flex items-center gap-2 text-sm text-white/40 hover:text-white transition-colors shrink-0"
+                        className="group inline-flex items-center gap-2 text-sm text-white/35 hover:text-amber-300 transition-colors shrink-0"
                     >
                         {t("projects.all_repos")}
                         <ArrowUpRight size={14} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                     </a>
                 </div>
 
-                {/* Mobile: carousel */}
+                {/* Mobile carousel */}
                 <ProjectCarousel projects={featured} />
 
-                {/* Desktop: numbered list grid */}
-                <div className="hidden md:grid md:grid-cols-2 gap-x-16">
+                {/* Desktop: 3-col card grid */}
+                <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-5">
                     {featured.map((project, i) => (
                         <ProjectCard key={project.id} project={project} index={i} />
                     ))}

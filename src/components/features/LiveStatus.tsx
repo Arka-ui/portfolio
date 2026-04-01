@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { Music, Code, User, Monitor, Smartphone, Globe, ExternalLink, Gamepad2 } from "lucide-react";
@@ -9,11 +9,9 @@ import BlueprintWrapper from "@/components/BlueprintWrapper";
 import { useEffect, useState } from "react";
 import { useLanguage } from "@/context/LanguageContext";
 
-// Placeholder ID - User needs to replace this
 const DISCORD_ID = "871084043838566400";
-const SPOTIFY_PROFILE_URL = "https://open.spotify.com/user/YOUR_SPOTIFY_USER_ID"; // Replace with actual profile
+const SPOTIFY_PROFILE_URL = "https://open.spotify.com/user/YOUR_SPOTIFY_USER_ID";
 
-// Define Interfaces
 interface LanyardActivity {
     name: string;
     type: number;
@@ -24,8 +22,6 @@ interface LanyardActivity {
     id?: string;
 }
 
-
-// Helper for sorting activities
 const getActivityPriority = (act: LanyardActivity) => {
     if (act.name === "Visual Studio Code" || act.name.includes("Code") || act.name.includes("Terminal")) return 0;
     if (act.name === "Spotify" || act.name === "Apple Music") return 1;
@@ -39,7 +35,6 @@ export default function LiveStatus() {
     const [currentTime, setCurrentTime] = useState(Date.now());
     const [mounted, setMounted] = useState(false);
 
-    // 3D Tilt Effect
     const x = useMotionValue(0);
     const y = useMotionValue(0);
     const mouseX = useSpring(x, { stiffness: 500, damping: 50 });
@@ -72,7 +67,6 @@ export default function LiveStatus() {
         y.set(0);
     };
 
-    // Don't render while loading
     if (!lanyardData) return null;
 
     const { discord_status, activities, discord_user, spotify, active_on_discord_desktop, active_on_discord_mobile, active_on_discord_web } = lanyardData;
@@ -89,7 +83,6 @@ export default function LiveStatus() {
 
     const statusColor = getStatusColor(discord_status);
 
-    // Sort activities: Dev > Music > Games > Other
     const sortedActivities = [...activities].sort((a: LanyardActivity, b: LanyardActivity) => {
         return getActivityPriority(a) - getActivityPriority(b);
     });
@@ -99,8 +92,6 @@ export default function LiveStatus() {
         return (
             <section className="py-20 container mx-auto px-4">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
-
-                    {/* Module 1: Identity Core */}
                     <BlueprintWrapper
                         label="IDENTITY_CORE"
                         description="User Identification Module"
@@ -137,7 +128,6 @@ export default function LiveStatus() {
                         </div>
                     </BlueprintWrapper>
 
-                    {/* Module 2: Media Processor (Spotify) */}
                     {spotify && (
                         <BlueprintWrapper
                             label="MEDIA_GATE"
@@ -165,7 +155,6 @@ export default function LiveStatus() {
                                         <p className="font-mono text-xs text-cyan-600 truncate">{spotify.artist}</p>
                                     </div>
                                 </div>
-                                {/* Progress Bar Simulation */}
                                 <div className="mt-4 h-1 bg-cyan-900/30 w-full">
                                     <div
                                         className="h-full bg-cyan-500/50 relative"
@@ -180,7 +169,6 @@ export default function LiveStatus() {
                         </BlueprintWrapper>
                     )}
 
-                    {/* Module 3: Activity Stream */}
                     <div className="lg:col-span-2">
                         <BlueprintWrapper
                             label="ACT_STREAM"
@@ -237,12 +225,11 @@ export default function LiveStatus() {
                             viewport={{ once: true }}
                             className="w-full max-w-sm"
                         >
-                            {/* Discord profile card */}
-                            <div className="relative bg-[#0e0e12] border border-white/[0.08] rounded-3xl overflow-hidden shadow-2xl">
-                                {/* Discord accent bar */}
-                                <div className="h-0.5 w-full bg-gradient-to-r from-[#5865F2] via-[#7c84f5]/50 to-transparent" />
+                            <div className="relative bg-[#09090b] border border-white/[0.07] rounded-3xl overflow-hidden shadow-2xl">
+                                {/* Gradient accent bar — ember to arctic */}
+                                <div className="h-0.5 w-full bg-gradient-to-r from-amber-500 via-orange-400/50 to-teal-500" />
                                 {/* Soft glow */}
-                                <div className="absolute top-0 right-0 w-52 h-52 bg-[#5865F2]/[0.05] rounded-full blur-3xl pointer-events-none" />
+                                <div className="absolute top-0 right-0 w-52 h-52 bg-amber-500/[0.04] rounded-full blur-3xl pointer-events-none" />
 
                                 <div className="p-6 relative">
                                     {/* Identity row */}
@@ -257,12 +244,12 @@ export default function LiveStatus() {
                                                     className="rounded-2xl"
                                                 />
                                             ) : (
-                                                <div className="w-14 h-14 rounded-2xl bg-[#5865F2]/20 flex items-center justify-center">
-                                                    <User className="w-7 h-7 text-[#5865F2]/50" />
+                                                <div className="w-14 h-14 rounded-2xl bg-amber-500/20 flex items-center justify-center">
+                                                    <User className="w-7 h-7 text-amber-500/50" />
                                                 </div>
                                             )}
                                             <span
-                                                className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-[2.5px] border-[#0e0e12]"
+                                                className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-[2.5px] border-[#09090b]"
                                                 style={{
                                                     backgroundColor:
                                                         discord_status === "online" ? "#22c55e" :
@@ -338,7 +325,7 @@ export default function LiveStatus() {
                                             <div key={i} className="flex items-center gap-3 p-3 rounded-xl bg-white/[0.02] border border-white/[0.05]">
                                                 <div className="w-8 h-8 rounded-lg bg-white/[0.04] flex items-center justify-center flex-shrink-0">
                                                     {activity.name.toLowerCase().includes("code") || activity.name.toLowerCase().includes("visual studio")
-                                                        ? <Code size={14} className="text-indigo-400" />
+                                                        ? <Code size={14} className="text-amber-400" />
                                                         : <Gamepad2 size={14} className="text-white/30" />
                                                     }
                                                 </div>
@@ -367,7 +354,7 @@ export default function LiveStatus() {
                         </motion.div>
                     </div>
 
-                    {/* Right: Status details & info panels */}
+                    {/* Right: Status details */}
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
@@ -403,8 +390,8 @@ export default function LiveStatus() {
                                 </div>
                                 <div className="flex items-center justify-between">
                                     <span className="text-sm text-white/50">{t("live.open_for_work")}</span>
-                                    <span className="flex items-center gap-1.5 text-sm text-emerald-400 font-medium">
-                                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                                    <span className="flex items-center gap-1.5 text-sm text-teal-400 font-medium">
+                                        <span className="w-1.5 h-1.5 rounded-full bg-teal-400 animate-pulse" />
                                         {t("live.yes")}
                                     </span>
                                 </div>

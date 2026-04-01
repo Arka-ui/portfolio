@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { ArrowUp, Github } from "lucide-react";
 import SessionIcon from "@/components/ui/SessionIcon";
@@ -23,51 +23,42 @@ export default function Footer() {
         setTimeout(() => setSessionCopied(false), 2000);
     };
 
-    const socialLinks = [
-        { icon: Github, href: "https://github.com/arka-ui", label: "GitHub" },
-    ];
-
     return (
-        <footer className="relative border-t border-white/[0.06] pt-10 pb-10">
-            {/* Subtle orb */}
-            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-[200px] bg-indigo-600/[0.04] rounded-full blur-[80px] pointer-events-none" />
+        <footer className="relative border-t border-white/[0.04] pt-12 pb-12">
+            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[500px] h-[150px] bg-amber-500/[0.03] rounded-full blur-[80px] pointer-events-none" />
 
             <div className="container mx-auto px-6 md:px-12 relative z-10">
                 <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-                    {/* Left: branding + social */}
-                    <div className="flex items-center gap-4">
-                        <span className="font-heading font-bold text-white text-lg tracking-tight">Arka</span>
-                        <div className="w-px h-5 bg-white/10" />
+                    {/* Left */}
+                    <div className="flex items-center gap-4 flex-wrap justify-center md:justify-start">
+                        <span className="font-heading font-black text-lg tracking-tighter text-white">Arka<span className="text-amber-500">.</span></span>
+                        <div className="w-px h-5 bg-white/[0.08]" />
                         <div className="flex gap-2">
-                            {socialLinks.map((s) => (
-                                <motion.a
-                                    key={s.label}
-                                    href={s.href}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    whileHover={{ y: -2 }}
-                                    whileTap={{ scale: 0.95 }}
-                                    className="flex items-center gap-2 px-3 py-2 rounded-lg bg-white/[0.04] border border-white/[0.06] hover:bg-white/[0.08] hover:border-white/15 transition-all text-white/50 hover:text-white text-sm"
-                                >
-                                    <s.icon size={14} strokeWidth={1.5} />
-                                    <span className="text-xs">{s.label}</span>
-                                </motion.a>
-                            ))}
+                            <motion.a
+                                href="https://github.com/arka-ui"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                whileHover={{ y: -2 }}
+                                whileTap={{ scale: 0.95 }}
+                                className="flex items-center gap-2 px-3 py-2 rounded-xl bg-white/[0.03] border border-white/[0.05] hover:bg-white/[0.06] hover:border-amber-500/15 transition-all text-white/40 hover:text-white text-sm"
+                            >
+                                <Github size={13} strokeWidth={1.5} />
+                                <span className="text-xs">GitHub</span>
+                            </motion.a>
                             <motion.button
                                 onClick={copySession}
                                 whileHover={{ y: -2 }}
                                 whileTap={{ scale: 0.95 }}
-                                className="flex items-center gap-2 px-3 py-2 rounded-lg bg-white/[0.04] border border-white/[0.06] hover:bg-white/[0.08] hover:border-white/15 transition-all text-white/50 hover:text-white text-sm"
+                                className="flex items-center gap-2 px-3 py-2 rounded-xl bg-white/[0.03] border border-white/[0.05] hover:bg-white/[0.06] hover:border-amber-500/15 transition-all text-white/40 hover:text-white text-sm"
                                 aria-label="Copy Session ID"
                             >
-                                <SessionIcon size={14} />
+                                <SessionIcon size={13} />
                                 <span className="text-xs">{sessionCopied ? "Copied!" : "Session"}</span>
                             </motion.button>
                         </div>
 
-                        {/* Live Discord status */}
                         {data && (
-                            <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-white/[0.02] border border-white/[0.05] text-xs font-mono text-white/30">
+                            <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-white/[0.02] border border-white/[0.04] text-xs font-mono text-white/25">
                                 <span
                                     className="w-2 h-2 rounded-full"
                                     style={{
@@ -75,7 +66,7 @@ export default function Footer() {
                                             data.discord_status === "online" ? "#22c55e"
                                             : data.discord_status === "idle" ? "#f59e0b"
                                             : data.discord_status === "dnd" ? "#ef4444"
-                                            : "#6b7280",
+                                            : "#4b5563",
                                     }}
                                 />
                                 {data.discord_status ?? "offline"}
@@ -83,18 +74,17 @@ export default function Footer() {
                         )}
                     </div>
 
-                    {/* Right: copyright + scroll top */}
+                    {/* Right */}
                     <div className="flex items-center gap-4">
-                        <p className="text-xs text-white/20 font-mono">
-                            © {new Date().getFullYear()} Arka. {t("footer.rights")}
+                        <p className="text-[11px] text-white/15 font-mono">
+                            © {new Date().getFullYear()} Arka · {t("footer.rights")}
                         </p>
-                        <span className="text-[11px] text-white/15 font-mono">v3.0.0</span>
                         <button
                             onClick={scrollToTop}
-                            className="p-2.5 rounded-full bg-white/[0.05] hover:bg-white/10 transition-colors group"
+                            className="p-2.5 rounded-xl bg-white/[0.03] border border-white/[0.05] hover:bg-amber-500/[0.08] hover:border-amber-500/15 transition-all group"
                             aria-label="Scroll to top"
                         >
-                            <ArrowUp size={14} className="text-white/40 group-hover:text-white transition-colors" />
+                            <ArrowUp size={14} className="text-white/30 group-hover:text-amber-300 transition-colors" />
                         </button>
                     </div>
                 </div>

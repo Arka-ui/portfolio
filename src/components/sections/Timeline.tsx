@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { motion } from "framer-motion";
 import { Briefcase, FolderGit2, GraduationCap } from "lucide-react";
@@ -16,26 +16,26 @@ interface ExperienceItem {
 const EXPERIENCE: ExperienceItem[] = [
     {
         type: "work",
-        title: "Founder & Owner",
-        company: "EclozionMC — Archived",
-        period: "Oct 2025 — Feb 2026",
-        description: "Built a Minecraft server platform from the ground up. Officially closed on February 14th, 2026 — my co-founder quit the project, leaving me solo. I chose to archive it and make room for a new, much bigger project currently in the works. Every mistake made here will be fixed. 100× better. (Meanwhile, my old friend launched Nexaria — we'll see how that goes.)",
-        tag: "Java · Web",
-    },
-    {
-        type: "work",
         title: "App Developer",
         company: "Cambrai City Hall — Internship",
         period: "Jun 2025",
-        description: "Designed and shipped a native news application for the city of Cambrai. Handled the full development cycle from wireframes to final build.",
+        description: "Designed and shipped a native news application for the city of Cambrai. Full dev cycle from wireframes to final build.",
         tag: "Java · Kotlin",
     },
     {
+        type: "work",
+        title: "Founder",
+        company: "EclozionMC — Archived",
+        period: "Oct 2025 — Feb 2026",
+        description: "Built a Minecraft server platform from scratch. Archived Feb 2026 — lessons learned, bigger things ahead.",
+        tag: "Java · Web",
+    },
+    {
         type: "project",
-        title: "Minecraft Plugin Developer",
+        title: "Minecraft Plugins",
         company: "Personal Projects",
         period: "Oct 2025",
-        description: "Developed custom Java plugins for Minecraft servers, including gameplay mechanics, economy systems, and admin tooling.",
+        description: "Custom Java plugins — gameplay mechanics, economy systems, and admin tooling.",
         tag: "Java",
     },
     {
@@ -43,36 +43,42 @@ const EXPERIENCE: ExperienceItem[] = [
         title: "Python Projects",
         company: "Personal",
         period: "2023",
-        description: "Explored automation, scripting, and data tools. Built bots, scrapers, and small utilities that solved real problems.",
+        description: "Automation, scripting, data tools. Bots, scrapers, and utilities that solved real problems.",
         tag: "Python",
     },
     {
         type: "education",
-        title: "Self-taught Web Development",
+        title: "Self-taught Dev",
         company: "Start of the journey",
         period: "Early 2023",
-        description: "Started with HTML and CSS. Grew into TypeScript, React, Next.js and full-stack development through relentless building.",
+        description: "HTML/CSS → TypeScript → React → Next.js. Full-stack through relentless building.",
         tag: "HTML · CSS · JS",
     },
 ];
 
 const TYPE_CONFIG = {
-    work: { icon: Briefcase, color: "text-indigo-400", dot: "bg-indigo-400" },
-    project: { icon: FolderGit2, color: "text-emerald-400", dot: "bg-emerald-400" },
-    education: { icon: GraduationCap, color: "text-amber-400", dot: "bg-amber-400" },
+    work: { icon: Briefcase, accent: "amber" as const },
+    project: { icon: FolderGit2, accent: "teal" as const },
+    education: { icon: GraduationCap, accent: "orange" as const },
+};
+
+const accentColors = {
+    amber: { bg: "bg-amber-500/10", border: "border-amber-500/20", text: "text-amber-400", dot: "bg-amber-400" },
+    teal: { bg: "bg-teal-500/10", border: "border-teal-500/20", text: "text-teal-400", dot: "bg-teal-400" },
+    orange: { bg: "bg-orange-500/10", border: "border-orange-500/20", text: "text-orange-300", dot: "bg-orange-300" },
 };
 
 export default function Timeline() {
     const { t } = useLanguage();
-    return (
-        <section id="about" className="py-14 md:py-28 border-t border-white/[0.06]">
-            <div className="container mx-auto px-6 md:px-12">
 
+    return (
+        <section id="about" className="py-20 md:py-32 border-t border-white/[0.04]">
+            <div className="container mx-auto px-6 md:px-12">
                 {/* Header */}
-                <div className="mb-16">
-                    <span className="label-mono mb-5 block">{t("timeline.label")}</span>
+                <div className="mb-12 md:mb-16">
+                    <span className="label-mono mb-4 block">{t("timeline.label")}</span>
                     <motion.h2
-                        initial={{ opacity: 0, y: 20 }}
+                        initial={{ opacity: 0, y: 24 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
@@ -82,47 +88,75 @@ export default function Timeline() {
                     </motion.h2>
                 </div>
 
-                {/* Timeline */}
-                <div className="max-w-3xl">
+                {/* Horizontal scroll on mobile, grid on desktop */}
+                <div className="md:hidden overflow-x-auto pb-4 -mx-6 px-6" style={{ scrollSnapType: "x mandatory", scrollbarWidth: "none" }}>
+                    <div className="flex gap-4" style={{ width: "max-content" }}>
+                        {EXPERIENCE.map((item, i) => {
+                            const cfg = TYPE_CONFIG[item.type];
+                            const Icon = cfg.icon;
+                            const colors = accentColors[cfg.accent];
+                            return (
+                                <div
+                                    key={i}
+                                    className="w-[280px] shrink-0 bento-card p-6 flex flex-col gap-4"
+                                    style={{ scrollSnapAlign: "start" }}
+                                >
+                                    <div className="flex items-center justify-between">
+                                        <div className={`w-8 h-8 rounded-lg ${colors.bg} ${colors.border} border flex items-center justify-center ${colors.text}`}>
+                                            <Icon size={14} />
+                                        </div>
+                                        <span className="font-mono text-[10px] text-white/25">{item.period}</span>
+                                    </div>
+                                    <div>
+                                        <h3 className="font-heading font-bold text-base text-white tracking-tight">{item.title}</h3>
+                                        <p className="text-xs text-white/40 mt-0.5">{item.company}</p>
+                                    </div>
+                                    <p className="text-xs text-white/45 leading-relaxed flex-1">{item.description}</p>
+                                    {item.tag && <span className="badge-muted text-[10px] self-start">{item.tag}</span>}
+                                </div>
+                            );
+                        })}
+                    </div>
+                </div>
+
+                {/* Desktop: vertical timeline with connecting line */}
+                <div className="hidden md:block max-w-3xl relative">
+                    {/* Vertical line */}
+                    <div className="absolute left-[15px] top-4 bottom-4 w-px bg-gradient-to-b from-amber-500/20 via-white/[0.06] to-transparent" />
+
                     {EXPERIENCE.map((item, i) => {
                         const cfg = TYPE_CONFIG[item.type];
                         const Icon = cfg.icon;
+                        const colors = accentColors[cfg.accent];
                         return (
                             <motion.div
                                 key={i}
-                                initial={{ opacity: 0, y: 24 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true, amount: 0.2 }}
-                                transition={{ duration: 0.65, delay: i * 0.07, ease: [0.16, 1, 0.3, 1] }}
-                                className="relative flex gap-8 pb-12 last:pb-0"
+                                initial={{ opacity: 0, x: -20 }}
+                                whileInView={{ opacity: 1, x: 0 }}
+                                viewport={{ once: true, amount: 0.3 }}
+                                transition={{ duration: 0.6, delay: i * 0.08, ease: [0.16, 1, 0.3, 1] }}
+                                className="relative flex gap-8 pb-10 last:pb-0 group"
                             >
-                                {/* Left: dot + line */}
-                                <div className="flex flex-col items-center shrink-0 pt-1">
-                                    <div className={`w-8 h-8 rounded-full flex items-center justify-center bg-white/[0.04] border border-white/[0.08] shrink-0 ${cfg.color}`}>
+                                {/* Dot */}
+                                <div className="relative z-10 shrink-0">
+                                    <div className={`w-8 h-8 rounded-lg ${colors.bg} ${colors.border} border flex items-center justify-center ${colors.text} group-hover:scale-110 transition-transform duration-300`}>
                                         <Icon size={14} />
                                     </div>
-                                    {i < EXPERIENCE.length - 1 && (
-                                        <div className="w-px flex-1 mt-3 bg-gradient-to-b from-white/10 to-transparent" />
-                                    )}
                                 </div>
 
-                                {/* Right: content */}
-                                <div className="flex-1 min-w-0 pb-2">
+                                {/* Content */}
+                                <div className="flex-1 min-w-0 bento-card p-6 group-hover:border-white/[0.1] transition-all duration-300">
                                     <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-3">
                                         <div>
-                                            <h3 className="font-heading font-bold text-lg text-white tracking-tight">
-                                                {item.title}
-                                            </h3>
-                                            <p className="text-sm text-white/45 mt-0.5">{item.company}</p>
+                                            <h3 className="font-heading font-bold text-lg text-white tracking-tight">{item.title}</h3>
+                                            <p className="text-sm text-white/40 mt-0.5">{item.company}</p>
                                         </div>
                                         <div className="flex flex-col sm:items-end gap-2 shrink-0">
-                                            <span className="font-mono text-xs text-white/30">{item.period}</span>
-                                            {item.tag && (
-                                                <span className="badge-muted text-[11px]">{item.tag}</span>
-                                            )}
+                                            <span className="font-mono text-xs text-white/25">{item.period}</span>
+                                            {item.tag && <span className="badge-muted text-[10px]">{item.tag}</span>}
                                         </div>
                                     </div>
-                                    <p className="text-sm text-white/50 leading-relaxed">{item.description}</p>
+                                    <p className="text-sm text-white/45 leading-relaxed">{item.description}</p>
                                 </div>
                             </motion.div>
                         );

@@ -40,7 +40,7 @@
     "stat_lines": "Lines of code",
     "stat_self_taught": "Self-taught",
     "bio_1": "I'm Arka — a self-taught full-stack developer from France, building since 2023. I focus on clean code, thoughtful interfaces, and shipping things that actually work.",
-    "bio_2": "Founder of {company} — the Minecraft server I built from scratch, officially archived on February 14th, 2026. My co-founder quit the project, leaving me solo — so I chose to close the chapter and make room for something much bigger. A new, unnamed project is already in the works: built to fix every mistake EclozionMC made, and 100× better than anything out there. (My old friend is running Nexaria in the meantime — we'll see who does it right.)",
+    "bio_2": "Previously built {company}, a Minecraft server platform — archived in early 2026. Lessons learned, chapter closed. Now focused on something much bigger.",
     "bio_3": "I write French, English, and code — in that order of confidence. Currently deep into systems architecture, developer tooling, and anything that involves real-time data.",
     "bio_4": "All my projects are powered by {host} — the best hosting service in France. Affordable France-based servers, and a host who genuinely cares about his clients. The only one I trust and use.",
     "manifesto": "I refuse to build software that costs, breaks, or disappears behind a wall.",

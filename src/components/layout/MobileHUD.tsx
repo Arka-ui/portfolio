@@ -21,8 +21,6 @@ export default function MobileHUD() {
     const { t } = useLanguage();
     const [activeTab, setActiveTab] = useState("home");
 
-    // Single IntersectionObserver replaces per-scroll event listener
-    // This fires only when section boundaries cross the viewport — much cheaper
     useEffect(() => {
         const sections = Object.keys(SECTION_MAP)
             .map(id => document.getElementById(id))
@@ -32,7 +30,6 @@ export default function MobileHUD() {
 
         const observer = new IntersectionObserver(
             (entries) => {
-                // Find the entry that is most visible (highest intersectionRatio)
                 const visible = entries
                     .filter(e => e.isIntersecting)
                     .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
@@ -42,11 +39,7 @@ export default function MobileHUD() {
                     if (tab) setActiveTab(tab);
                 }
             },
-            {
-                // Trigger when the center-ish of the section is in view
-                rootMargin: "-40% 0px -40% 0px",
-                threshold: [0, 0.1, 0.5, 1],
-            }
+            { rootMargin: "-40% 0px -40% 0px", threshold: [0, 0.1, 0.5, 1] }
         );
 
         sections.forEach(s => observer.observe(s));
@@ -79,12 +72,10 @@ export default function MobileHUD() {
                 height: "62px",
             }}
         >
-            {/* Bar background */}
-            <div className="absolute inset-0 rounded-2xl bg-[#0d0d12]/85 backdrop-blur-2xl border border-white/[0.09] shadow-[0_8px_32px_rgba(0,0,0,0.5)] overflow-hidden">
-                <div className="absolute top-0 left-6 right-6 h-px bg-gradient-to-r from-transparent via-white/[0.12] to-transparent" />
+            <div className="absolute inset-0 rounded-2xl bg-[#09090b]/85 backdrop-blur-2xl border border-white/[0.07] shadow-[0_8px_40px_rgba(0,0,0,0.6)] overflow-hidden">
+                <div className="absolute top-0 left-6 right-6 h-px bg-gradient-to-r from-transparent via-amber-500/20 to-transparent" />
             </div>
 
-            {/* Nav buttons */}
             <div className="relative h-full flex items-center px-2">
                 {navItems.map((item) => {
                     const isActive = activeTab === item.id;
@@ -94,49 +85,44 @@ export default function MobileHUD() {
                         <button
                             key={item.id}
                             onClick={() => handleNav(item.id, item.href)}
-                            // Minimum 44px touch target per WCAG 2.5.5
                             className="relative flex-1 h-full flex flex-col items-center justify-center gap-[3px] min-w-[44px]"
                             aria-label={item.label}
                             aria-current={isActive ? "page" : undefined}
                         >
-                            {/* Active pill background */}
                             {isActive && (
                                 <motion.div
                                     layoutId="hud-pill"
-                                    className="absolute inset-x-1.5 inset-y-2 rounded-xl bg-indigo-500/[0.15] border border-indigo-500/20"
+                                    className="absolute inset-x-1.5 inset-y-2 rounded-xl bg-amber-500/[0.1] border border-amber-500/15"
                                     transition={{ type: "spring", bounce: 0.18, duration: 0.5 }}
                                 />
                             )}
 
-                            {/* Icon */}
                             <motion.div
                                 animate={isActive ? { y: -1, scale: 1.1 } : { y: 0, scale: 1 }}
                                 transition={{ type: "spring", stiffness: 300, damping: 22 }}
                                 className={cn(
                                     "relative z-10 transition-colors duration-200",
-                                    isActive ? "text-indigo-300" : "text-white/30"
+                                    isActive ? "text-amber-300" : "text-white/25"
                                 )}
                             >
                                 <Icon size={19} strokeWidth={isActive ? 2.2 : 1.8} />
                             </motion.div>
 
-                            {/* Label */}
                             <motion.span
                                 animate={isActive ? { opacity: 1, y: 0 } : { opacity: 0, y: 4 }}
                                 transition={{ duration: 0.2 }}
                                 className={cn(
                                     "relative z-10 text-[9px] font-mono tracking-wider",
-                                    isActive ? "text-indigo-300" : "text-white/25"
+                                    isActive ? "text-amber-300" : "text-white/20"
                                 )}
                             >
                                 {item.label}
                             </motion.span>
 
-                            {/* Bottom glow pip */}
                             {isActive && (
                                 <motion.div
                                     layoutId="hud-pip"
-                                    className="absolute bottom-1.5 w-1 h-1 rounded-full bg-indigo-400 shadow-[0_0_8px_3px_rgba(99,102,241,0.55)]"
+                                    className="absolute bottom-1.5 w-1 h-1 rounded-full bg-amber-400 shadow-[0_0_6px_2px_rgba(245,158,11,0.5)]"
                                     transition={{ type: "spring", bounce: 0.2, duration: 0.5 }}
                                 />
                             )}

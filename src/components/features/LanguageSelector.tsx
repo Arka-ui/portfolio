@@ -16,11 +16,9 @@ export default function LanguageSelector() {
         setIsOpen(false);
     };
 
-    // Detect user location on first mount and auto-select a language
     useEffect(() => {
         setMounted(true);
         const detectLanguage = async () => {
-            // Only run if language hasn't been set by user preference already (handled in Context)
             if (localStorage.getItem("language")) return;
 
             try {
@@ -48,43 +46,43 @@ export default function LanguageSelector() {
 
     return (
         <div className="relative z-50">
-            {/* Language selector button */}
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="flex items-center gap-2 px-3 py-2.5 rounded-xl bg-[#0e0e0e]/80 border border-white/[0.07] hover:border-white/15 hover:bg-white/[0.06] transition-all backdrop-blur-xl"
+                className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white/[0.03] border border-white/[0.05] hover:bg-white/[0.06] hover:border-amber-500/15 transition-all backdrop-blur-xl text-white/35 hover:text-white/60"
             >
-                <span className="text-lg">{language.flag}</span>
-                <span className="text-sm font-medium text-gray-300 hidden sm:block">{language.name}</span>
+                <span className="text-base">{language.flag}</span>
+                <span className="text-[12px] font-medium hidden sm:block">{language.name}</span>
                 <ChevronDown
-                    size={14}
-                    className={cn("text-gray-400 transition-transform duration-300", isOpen && "rotate-180")}
+                    size={12}
+                    className={cn("text-white/25 transition-transform duration-300", isOpen && "rotate-180")}
                 />
             </button>
 
-            {/* Dropdown list */}
             <AnimatePresence>
                 {isOpen && (
                     <motion.div
-                        initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                        initial={{ opacity: 0, y: 8, scale: 0.96 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                        transition={{ duration: 0.2 }}
-                        className="absolute right-0 mt-2 w-48 overflow-y-auto rounded-xl border border-white/[0.07] bg-[#111]/95 backdrop-blur-xl shadow-2xl p-2 scrollbar-hide"
+                        exit={{ opacity: 0, y: 8, scale: 0.96 }}
+                        transition={{ duration: 0.15 }}
+                        className="absolute right-0 mt-2 w-48 overflow-y-auto rounded-2xl border border-white/[0.07] bg-[#0c0c0f]/95 backdrop-blur-2xl shadow-[0_16px_48px_rgba(0,0,0,0.6)] p-1.5 scrollbar-hide"
                     >
                         {SUPPORTED_LANGUAGES.map(lang => (
                             <button
                                 key={lang.code}
                                 onClick={() => handleLanguageChange(lang)}
                                 className={cn(
-                                    "w-full flex items-center justify-between px-3 py-2 rounded-lg transition-colors text-sm",
-                                    language.code === lang.code ? "bg-primary/20 text-primary" : "text-gray-300 hover:bg-white/10 hover:text-white"
+                                    "w-full flex items-center justify-between px-3 py-2.5 rounded-xl transition-all duration-150 text-sm",
+                                    language.code === lang.code
+                                        ? "bg-amber-500/[0.08] text-amber-300 border border-amber-500/[0.12]"
+                                        : "text-white/40 hover:bg-white/[0.04] hover:text-white border border-transparent"
                                 )}
                             >
-                                <div className="flex items-center space-x-3">
-                                    <span className="text-lg">{lang.flag}</span>
-                                    <span>{lang.name}</span>
+                                <div className="flex items-center gap-3">
+                                    <span className="text-base">{lang.flag}</span>
+                                    <span className="font-medium">{lang.name}</span>
                                 </div>
-                                {language.code === lang.code && <Check size={14} />}
+                                {language.code === lang.code && <Check size={13} className="text-amber-400" />}
                             </button>
                         ))}
                     </motion.div>
