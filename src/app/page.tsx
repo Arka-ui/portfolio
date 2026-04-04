@@ -13,9 +13,9 @@ export default function Home() {
       <Hero />
       <TechSlider />
       <About />
+      <Timeline />
       <FeaturedProjects />
       <TechStack />
-      <Timeline />
       <LiveStatus />
       <Contact />
     </div>

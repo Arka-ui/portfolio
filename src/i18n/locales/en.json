@@ -40,9 +40,10 @@
     "stat_lines": "Lines of code",
     "stat_self_taught": "Self-taught",
     "bio_1": "I'm Arka — a self-taught full-stack developer from France, building since 2023. I focus on clean code, thoughtful interfaces, and shipping things that actually work.",
-    "bio_2": "Previously built {company}, a Minecraft server platform — archived in early 2026. Lessons learned, chapter closed. Now focused on something much bigger.",
+    "bio_2": "Currently building {company}, a large-scale Minecraft server — alongside a team of friends who share the same drive. Because the best things are never built alone.",
     "bio_3": "I write French, English, and code — in that order of confidence. Currently deep into systems architecture, developer tooling, and anything that involves real-time data.",
     "bio_4": "All my projects are powered by {host} — the best hosting service in France. Affordable France-based servers, and a host who genuinely cares about his clients. The only one I trust and use.",
+    "team_quote": "Building a project solo is good, but it's always better with a team.",
     "manifesto": "I refuse to build software that costs, breaks, or disappears behind a wall.",
     "belief_0_title": "Free by default",
     "belief_0_body": "If a service can be free, it should be. You pay only for infrastructure — servers, hosting, maintenance — never for access itself.",
@@ -96,7 +97,7 @@
     "yes": "Yes",
     "no_activity": "No activity right now",
     "listening": "Listening on Spotify",
-    "irl_note": "Or IRL with a good meal at the restaurant — best way to close a deal 🍽️"
+    "irl_note": "Or IRL with a good meal at the restaurant — best way to close a deal \ud83c\udf7d\ufe0f"
   },
   "contact": {
     "title": "Get in Touch",
@@ -113,17 +114,17 @@
     "placeholder_subject": "What's this about?",
     "success_title": "Message Sent!",
     "success_desc": "I'll get back to you as soon as possible.",
-    "send_another": "Send another →",
+    "send_another": "Send another \u2192",
     "label": "Contact",
     "session": "Session ID",
-    "location": "France — available remotely",
-    "open_for": "Open for freelance work, collaborations, and interesting projects. Don't hesitate to reach out — I reply fast."
+    "location": "France \u2014 available remotely",
+    "open_for": "Open for freelance work, collaborations, and interesting projects. Don't hesitate to reach out \u2014 I reply fast."
   },
   "footer": {
     "rights": "All rights reserved.",
     "built_with": "Built with Next.js, Tailwind & Framer Motion",
     "hosted_by": "Big thanks to",
-    "hosted_desc": "— the only host I trust. Best hosting service in France: cheap, France-based servers, and a genuinely friendly team."
+    "hosted_desc": "\u2014 the only host I trust. Best hosting service in France: cheap, France-based servers, and a genuinely friendly team."
   },
   "cmd": {
     "navigate": "Navigate",

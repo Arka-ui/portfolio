@@ -72,8 +72,8 @@ export default function MobileHUD() {
                 height: "62px",
             }}
         >
-            <div className="absolute inset-0 rounded-2xl bg-[#09090b]/85 backdrop-blur-2xl border border-white/[0.07] shadow-[0_8px_40px_rgba(0,0,0,0.6)] overflow-hidden">
-                <div className="absolute top-0 left-6 right-6 h-px bg-gradient-to-r from-transparent via-amber-500/20 to-transparent" />
+            <div className="absolute inset-0 rounded-2xl bg-[#060d1f]/90 backdrop-blur-2xl border border-white/[0.06] shadow-[0_8px_40px_rgba(0,0,0,0.6)] overflow-hidden">
+                <div className="absolute top-0 left-6 right-6 h-px bg-gradient-to-r from-transparent via-[#ff6b35]/15 to-transparent" />
             </div>
 
             <div className="relative h-full flex items-center px-2">
@@ -92,7 +92,7 @@ export default function MobileHUD() {
                             {isActive && (
                                 <motion.div
                                     layoutId="hud-pill"
-                                    className="absolute inset-x-1.5 inset-y-2 rounded-xl bg-amber-500/[0.1] border border-amber-500/15"
+                                    className="absolute inset-x-1.5 inset-y-2 rounded-xl bg-[#ff6b35]/[0.08] border border-[#ff6b35]/12"
                                     transition={{ type: "spring", bounce: 0.18, duration: 0.5 }}
                                 />
                             )}
@@ -102,7 +102,7 @@ export default function MobileHUD() {
                                 transition={{ type: "spring", stiffness: 300, damping: 22 }}
                                 className={cn(
                                     "relative z-10 transition-colors duration-200",
-                                    isActive ? "text-amber-300" : "text-white/25"
+                                    isActive ? "text-[#ff6b35]" : "text-white/20"
                                 )}
                             >
                                 <Icon size={19} strokeWidth={isActive ? 2.2 : 1.8} />
@@ -113,7 +113,7 @@ export default function MobileHUD() {
                                 transition={{ duration: 0.2 }}
                                 className={cn(
                                     "relative z-10 text-[9px] font-mono tracking-wider",
-                                    isActive ? "text-amber-300" : "text-white/20"
+                                    isActive ? "text-[#ff6b35]" : "text-white/15"
                                 )}
                             >
                                 {item.label}
@@ -122,7 +122,7 @@ export default function MobileHUD() {
                             {isActive && (
                                 <motion.div
                                     layoutId="hud-pip"
-                                    className="absolute bottom-1.5 w-1 h-1 rounded-full bg-amber-400 shadow-[0_0_6px_2px_rgba(245,158,11,0.5)]"
+                                    className="absolute bottom-1.5 w-1 h-1 rounded-full bg-[#ff6b35] shadow-[0_0_6px_2px_rgba(255,107,53,0.4)]"
                                     transition={{ type: "spring", bounce: 0.2, duration: 0.5 }}
                                 />
                             )}

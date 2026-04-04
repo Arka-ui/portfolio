@@ -62,7 +62,7 @@ export default function Navbar() {
                 className={cn(
                     "fixed top-0 left-0 right-0 z-50 transition-all duration-500",
                     scrolled
-                        ? "bg-[#09090b]/80 backdrop-blur-2xl border-b border-white/[0.05]"
+                        ? "bg-[#060d1f]/85 backdrop-blur-2xl border-b border-white/[0.04]"
                         : "bg-transparent"
                 )}
             >
@@ -72,9 +72,9 @@ export default function Navbar() {
                         <div className="flex items-center gap-3">
                             <button
                                 onClick={() => warpTo("#")}
-                                className="font-heading font-black text-xl tracking-tighter text-white hover:text-amber-300 transition-colors duration-200"
+                                className="font-heading font-bold text-xl tracking-tighter text-white hover:text-[#ff6b35] transition-colors duration-200"
                             >
-                                Arka<span className="text-amber-500">.</span>
+                                Arka<span className="text-[#ff6b35]">.</span>
                             </button>
                             <AnimatePresence mode="wait">
                                 {scrolled && activeSection !== "hero" && (() => {
@@ -95,8 +95,8 @@ export default function Navbar() {
                             </AnimatePresence>
                         </div>
 
-                        {/* Desktop nav — pill style */}
-                        <nav className="hidden md:flex items-center gap-1 p-1 rounded-2xl bg-white/[0.03] border border-white/[0.05] backdrop-blur-xl">
+                        {/* Desktop nav */}
+                        <nav className="hidden md:flex items-center gap-0.5">
                             {NAV_ITEMS.map((item) => {
                                 const active = activeSection === item.id;
                                 return (
@@ -104,16 +104,16 @@ export default function Navbar() {
                                         key={item.href}
                                         onClick={() => warpTo(item.href)}
                                         className={cn(
-                                            "relative px-3.5 py-1.5 rounded-xl text-[12px] font-medium transition-all duration-200",
+                                            "relative px-3.5 py-1.5 rounded-lg text-[12px] font-medium transition-all duration-200",
                                             active
-                                                ? "text-white"
-                                                : "text-white/35 hover:text-white/65"
+                                                ? "text-[#ff6b35]"
+                                                : "text-white/30 hover:text-white/60"
                                         )}
                                     >
                                         {active && (
                                             <motion.span
                                                 layoutId="nav-pill"
-                                                className="absolute inset-0 bg-white/[0.08] border border-white/[0.08] rounded-xl"
+                                                className="absolute inset-0 bg-[#ff6b35]/[0.06] border border-[#ff6b35]/[0.1] rounded-lg"
                                                 transition={{ type: "spring", bounce: 0.15, duration: 0.5 }}
                                             />
                                         )}
@@ -128,7 +128,7 @@ export default function Navbar() {
                             <button
                                 onClick={openCmdPalette}
                                 aria-label="Open command palette"
-                                className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white/[0.03] border border-white/[0.05] hover:bg-white/[0.06] hover:border-amber-500/15 transition-all text-white/35 hover:text-white/60"
+                                className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/[0.03] border border-white/[0.05] hover:bg-white/[0.06] hover:border-[#ff6b35]/15 transition-all text-white/30 hover:text-white/60"
                             >
                                 <Search className="w-3.5 h-3.5" />
                                 <kbd className="text-[10px] font-mono">⌘K</kbd>
@@ -137,7 +137,7 @@ export default function Navbar() {
                             <button
                                 onClick={() => setMobileOpen(v => !v)}
                                 aria-label="Toggle menu"
-                                className="md:hidden p-2 text-white/50 hover:text-white transition-colors"
+                                className="md:hidden p-2 text-white/40 hover:text-white transition-colors"
                             >
                                 {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
                             </button>
@@ -155,7 +155,7 @@ export default function Navbar() {
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -8 }}
                         transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-                        className="fixed top-16 left-0 right-0 z-40 bg-[#09090b]/95 backdrop-blur-2xl border-b border-white/[0.05] md:hidden"
+                        className="fixed top-16 left-0 right-0 z-40 bg-[#060d1f]/95 backdrop-blur-2xl border-b border-white/[0.04] md:hidden"
                     >
                         <nav className="container mx-auto px-6 py-6 flex flex-col gap-0">
                             {NAV_ITEMS.map((item) => (
@@ -164,12 +164,12 @@ export default function Navbar() {
                                     onClick={() => { warpTo(item.href); setMobileOpen(false); }}
                                     className={cn(
                                         "text-left py-4 text-base font-medium transition-colors duration-200 border-b border-white/[0.04] last:border-0 flex items-center justify-between",
-                                        activeSection === item.id ? "text-white" : "text-white/35 hover:text-white/65"
+                                        activeSection === item.id ? "text-[#ff6b35]" : "text-white/30 hover:text-white/60"
                                     )}
                                 >
                                     {item.label}
                                     {activeSection === item.id && (
-                                        <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
+                                        <span className="w-1.5 h-1.5 rounded-full bg-[#ff6b35]" />
                                     )}
                                 </button>
                             ))}

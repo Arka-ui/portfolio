@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Outfit, Plus_Jakarta_Sans, JetBrains_Mono } from "next/font/google";
+import { Space_Grotesk, Sora, Space_Mono } from "next/font/google";
 import "./globals.css";
 import RootContent from "@/components/layout/RootContent";
 import ScrollManager from "@/components/layout/ScrollManager";
@@ -9,21 +9,22 @@ import { LanguageProvider } from "@/context/LanguageContext";
 import CommandPalette from "@/components/features/CommandPalette";
 import Telemetry from "@/components/Telemetry";
 
-const outfit = Outfit({
+const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
-  variable: "--font-outfit",
+  variable: "--font-space-grotesk",
   display: "swap",
 });
 
-const jakarta = Plus_Jakarta_Sans({
+const sora = Sora({
   subsets: ["latin"],
-  variable: "--font-jakarta",
+  variable: "--font-sora",
   display: "swap",
 });
 
-const jetbrainsMono = JetBrains_Mono({
+const spaceMono = Space_Mono({
+  weight: ["400", "700"],
   subsets: ["latin"],
-  variable: "--font-geist-mono",
+  variable: "--font-space-mono",
   display: "swap",
 });
 
@@ -79,7 +80,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="scroll-smooth">
-      <body className={`${jakarta.variable} ${outfit.variable} ${jetbrainsMono.variable} antialiased bg-background text-foreground overflow-x-hidden grain`}>
+      <body className={`${sora.variable} ${spaceGrotesk.variable} ${spaceMono.variable} antialiased bg-background text-foreground overflow-x-hidden grain`}>
         <WarpProvider>
           <LanguageProvider>
             <BlueprintProvider>

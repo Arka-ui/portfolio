@@ -1,23 +1,23 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowDown, Sparkles } from "lucide-react";
+import { ArrowDown, ArrowRight } from "lucide-react";
 import { useWarp } from "@/context/WarpContext";
 import { useLanguage } from "@/context/LanguageContext";
 
 const stagger = {
     hidden: {},
-    show: { transition: { staggerChildren: 0.12, delayChildren: 0.3 } },
+    show: { transition: { staggerChildren: 0.1, delayChildren: 0.2 } },
 };
 
 const fadeUp = {
-    hidden: { y: 40, opacity: 0 },
-    show: { y: 0, opacity: 1, transition: { duration: 0.9, ease: [0.16, 1, 0.3, 1] as const } },
+    hidden: { y: 50, opacity: 0 },
+    show: { y: 0, opacity: 1, transition: { duration: 1, ease: [0.16, 1, 0.3, 1] as const } },
 };
 
-const scaleIn = {
-    hidden: { scale: 0.8, opacity: 0 },
-    show: { scale: 1, opacity: 1, transition: { duration: 1.4, ease: [0.16, 1, 0.3, 1] as const } },
+const lineReveal = {
+    hidden: { scaleX: 0 },
+    show: { scaleX: 1, transition: { duration: 1.2, ease: [0.16, 1, 0.3, 1] as const, delay: 0.6 } },
 };
 
 export default function Hero() {
@@ -29,20 +29,17 @@ export default function Hero() {
             {/* Mesh background */}
             <div className="absolute inset-0 mesh-gradient pointer-events-none" aria-hidden />
 
-            {/* Floating orb — conic gradient, GPU-composited */}
-            <motion.div
-                variants={scaleIn}
-                initial="hidden"
-                animate="show"
-                className="absolute top-1/2 right-[8%] -translate-y-1/2 w-[500px] h-[500px] md:w-[650px] md:h-[650px] hero-orb rounded-full opacity-30 pointer-events-none hidden md:block"
-            />
+            {/* Diagonal accent lines */}
+            <div className="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden>
+                <div className="absolute -top-[20%] -right-[10%] w-[600px] h-[600px] md:w-[900px] md:h-[900px] border border-[#ff6b35]/[0.04] rounded-full" />
+                <div className="absolute -top-[25%] -right-[15%] w-[700px] h-[700px] md:w-[1100px] md:h-[1100px] border border-[#ff6b35]/[0.02] rounded-full" />
+            </div>
 
-            {/* Subtle grid lines */}
+            {/* Subtle grid dots */}
             <div className="absolute inset-0 pointer-events-none opacity-[0.03]" aria-hidden>
-                <div className="absolute left-[20%] top-0 bottom-0 w-px bg-white" />
-                <div className="absolute left-[40%] top-0 bottom-0 w-px bg-white" />
-                <div className="absolute left-[60%] top-0 bottom-0 w-px bg-white" />
-                <div className="absolute left-[80%] top-0 bottom-0 w-px bg-white" />
+                <div className="absolute left-[25%] top-0 bottom-0 w-px bg-white" />
+                <div className="absolute left-[50%] top-0 bottom-0 w-px bg-white" />
+                <div className="absolute left-[75%] top-0 bottom-0 w-px bg-white" />
             </div>
 
             <div className="container mx-auto px-6 md:px-12 relative z-10">
@@ -50,63 +47,65 @@ export default function Hero() {
                     variants={stagger}
                     initial="hidden"
                     animate="show"
-                    className="max-w-4xl"
+                    className="max-w-5xl"
                 >
-                    {/* Top label */}
-                    <motion.div variants={fadeUp} className="mb-8 flex items-center gap-4">
-                        <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-amber-500/20 bg-amber-500/[0.06] backdrop-blur-sm">
+                    {/* Top label row */}
+                    <motion.div variants={fadeUp} className="mb-10 flex items-center gap-5">
+                        <span className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full border border-[#ff6b35]/20 bg-[#ff6b35]/[0.05]">
                             <span className="relative flex h-2 w-2">
-                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-50" />
-                                <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-400" />
+                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#ff6b35] opacity-40" />
+                                <span className="relative inline-flex rounded-full h-2 w-2 bg-[#ff6b35]" />
                             </span>
-                            <span className="text-amber-300/90 text-xs font-mono tracking-wider">{t("hero.available")}</span>
+                            <span className="text-[#ff6b35]/90 text-xs font-mono tracking-wider">{t("hero.available")}</span>
                         </span>
-                        <div className="h-px flex-1 bg-gradient-to-r from-amber-500/20 to-transparent hidden sm:block" />
+                        <span className="text-white/20 text-xs font-mono tracking-widest hidden sm:block">{t("hero.role")}</span>
+                        <motion.div variants={lineReveal} className="h-px flex-1 bg-gradient-to-r from-[#ff6b35]/20 to-transparent origin-left hidden sm:block" />
                     </motion.div>
 
-                    {/* Giant headline — asymmetric, gradient middle line */}
-                    <div className="space-y-0">
+                    {/* Giant headline — editorial stacked type */}
+                    <div className="space-y-1 md:space-y-0">
                         <motion.div variants={fadeUp} className="overflow-hidden">
-                            <h1 className="font-heading font-black text-[clamp(48px,11vw,160px)] leading-[0.88] tracking-tighter">
+                            <h1 className="font-heading font-bold text-[clamp(52px,12vw,170px)] leading-[0.85] tracking-tighter text-white/90">
                                 {t("hero.line_1")}
                             </h1>
                         </motion.div>
                         <motion.div variants={fadeUp} className="overflow-hidden">
-                            <h1 className="font-heading font-black text-[clamp(48px,11vw,160px)] leading-[0.88] tracking-tighter text-gradient">
+                            <h1 className="font-heading font-bold text-[clamp(52px,12vw,170px)] leading-[0.85] tracking-tighter text-[#ff6b35]">
                                 {t("hero.line_2")}
                             </h1>
                         </motion.div>
                         <motion.div variants={fadeUp} className="overflow-hidden">
-                            <h1 className="font-heading font-black text-[clamp(48px,11vw,160px)] leading-[0.88] tracking-tighter text-white/90">
+                            <h1 className="font-heading font-bold text-[clamp(52px,12vw,170px)] leading-[0.85] tracking-tighter text-white/50">
                                 {t("hero.line_3")}
                             </h1>
                         </motion.div>
                     </div>
 
-                    {/* Bottom bar: bio + CTA — deliberately offset from heading */}
+                    {/* Accent rule */}
+                    <motion.div variants={lineReveal} className="mt-10 md:mt-14 rule-line origin-left" />
+
+                    {/* Bottom bar: bio + CTA */}
                     <motion.div
                         variants={fadeUp}
-                        className="mt-12 md:mt-16 flex flex-col sm:flex-row items-start sm:items-end gap-8 sm:gap-16"
+                        className="mt-8 md:mt-10 flex flex-col sm:flex-row items-start sm:items-end gap-8 sm:gap-16"
                     >
-                        <p className="text-base md:text-lg text-white/40 max-w-md leading-relaxed font-light">
+                        <p className="text-base md:text-lg text-white/35 max-w-md leading-relaxed">
                             {t("hero.bio")}
                         </p>
 
-                        <div className="flex items-center gap-3 shrink-0">
+                        <div className="flex items-center gap-4 shrink-0">
                             <button
                                 onClick={() => warpTo("#projects")}
-                                className="group relative inline-flex items-center gap-2.5 px-7 py-4 rounded-full bg-white text-black text-sm font-bold tracking-tight overflow-hidden transition-all duration-300 hover:shadow-[0_0_40px_8px_rgba(245,158,11,0.15)] active:scale-[0.97]"
+                                className="group relative inline-flex items-center gap-2.5 px-7 py-4 rounded-xl bg-[#ff6b35] text-[#060d1f] text-sm font-bold tracking-tight overflow-hidden transition-all duration-300 hover:shadow-[0_0_40px_8px_rgba(255,107,53,0.15)] active:scale-[0.97]"
                             >
                                 <span className="relative z-10 flex items-center gap-2">
                                     {t("hero.cta_projects")}
-                                    <Sparkles className="w-4 h-4 opacity-60 group-hover:opacity-100 transition-opacity" />
+                                    <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
                                 </span>
-                                {/* Hover gradient sweep */}
-                                <span className="absolute inset-0 bg-gradient-to-r from-amber-200 to-orange-200 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                             </button>
                             <button
                                 onClick={() => warpTo("#contact")}
-                                className="group inline-flex items-center gap-2 px-7 py-4 rounded-full border border-white/[0.1] text-white/60 text-sm font-medium hover:text-white hover:bg-white/[0.05] hover:border-amber-500/25 transition-all duration-300 active:scale-[0.97]"
+                                className="group inline-flex items-center gap-2 px-7 py-4 rounded-xl border border-white/[0.1] text-white/50 text-sm font-medium hover:text-white hover:bg-white/[0.04] hover:border-[#ff6b35]/20 transition-all duration-300 active:scale-[0.97]"
                             >
                                 {t("hero.cta_contact")}
                             </button>
@@ -122,9 +121,9 @@ export default function Hero() {
                             animate={{ y: [0, 6, 0] }}
                             transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
                         >
-                            <ArrowDown className="w-4 h-4 text-white/20" />
+                            <ArrowDown className="w-4 h-4 text-white/15" />
                         </motion.div>
-                        <span className="label-mono text-white/15">Scroll to explore</span>
+                        <span className="label-mono text-white/10">Scroll to explore</span>
                     </motion.div>
                 </motion.div>
             </div>

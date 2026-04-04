@@ -74,8 +74,8 @@ export default function CommandPalette() {
         : "fixed inset-0 z-[60] flex items-start justify-center pt-[12vh] sm:pt-[16vh] px-4";
 
     const paletteClass = isMobile
-        ? "relative w-full bg-[#0c0c0f]/98 border-t border-white/[0.07] rounded-t-3xl shadow-[0_-16px_80px_rgba(0,0,0,0.9)] overflow-hidden backdrop-blur-2xl animate-in slide-in-from-bottom-4 fade-in duration-200 pb-[env(safe-area-inset-bottom,0px)]"
-        : "relative w-full max-w-lg bg-[#0c0c0f]/95 border border-white/[0.07] rounded-3xl shadow-[0_16px_80px_rgba(0,0,0,0.9),0_0_0_1px_rgba(245,158,11,0.06)] overflow-hidden backdrop-blur-2xl animate-in slide-in-from-top-4 fade-in duration-200";
+        ? "relative w-full bg-[#060d1f]/98 border-t border-white/[0.07] rounded-t-3xl shadow-[0_-16px_80px_rgba(0,0,0,0.9)] overflow-hidden backdrop-blur-2xl animate-in slide-in-from-bottom-4 fade-in duration-200 pb-[env(safe-area-inset-bottom,0px)]"
+        : "relative w-full max-w-lg bg-[#060d1f]/95 border border-white/[0.07] rounded-3xl shadow-[0_16px_80px_rgba(0,0,0,0.9),0_0_0_1px_rgba(255,107,53,0.04)] overflow-hidden backdrop-blur-2xl animate-in slide-in-from-top-4 fade-in duration-200";
 
     return (
         <div className={containerClass}>
@@ -90,7 +90,7 @@ export default function CommandPalette() {
 
                 <Command className="w-full" shouldFilter>
                     <div className="flex items-center border-b border-white/[0.05] px-5">
-                        <Search className="w-4 h-4 text-amber-400/40 mr-3 shrink-0" />
+                        <Search className="w-4 h-4 text-[#ff6b35]/40 mr-3 shrink-0" />
                         <Command.Input
                             autoFocus={!isMobile}
                             value={search}
@@ -120,10 +120,10 @@ export default function CommandPalette() {
                             </Command.Group>
 
                             <Command.Group heading={t("cmd.actions")} className={GROUP_STYLE}>
-                                <CmdItem icon={copied === "email" ? <Check size={15} className="text-teal-400" /> : <Copy size={15} />} desc={t("cmd.copy_email_desc")} onSelect={() => run(() => handleCopy("email"))} kbd="C">
+                                <CmdItem icon={copied === "email" ? <Check size={15} className="text-[#ff6b35]" /> : <Copy size={15} />} desc={t("cmd.copy_email_desc")} onSelect={() => run(() => handleCopy("email"))} kbd="C">
                                     {copied === "email" ? t("cmd.copied") : t("cmd.copy_email")}
                                 </CmdItem>
-                                <CmdItem icon={copied === "link" ? <Check size={15} className="text-teal-400" /> : <Link2 size={15} />} desc={t("cmd.copy_link_desc")} onSelect={() => run(() => handleCopy("link"))}>
+                                <CmdItem icon={copied === "link" ? <Check size={15} className="text-[#ff6b35]" /> : <Link2 size={15} />} desc={t("cmd.copy_link_desc")} onSelect={() => run(() => handleCopy("link"))}>
                                     {copied === "link" ? t("cmd.copied") : t("cmd.copy_link")}
                                 </CmdItem>
                                 <CmdItem icon={<Share2 size={15} />} desc={t("cmd.share_desc")} onSelect={() => run(handleShare)}>{t("cmd.share")}</CmdItem>
@@ -136,7 +136,7 @@ export default function CommandPalette() {
                                         key={lang.code}
                                         icon={<Globe size={15} />}
                                         desc={lang.code === language.code ? t("cmd.lang_active") : t("cmd.lang_switch", { name: lang.name })}
-                                        suffix={lang.code === language.code ? <Check size={12} className="text-amber-400" /> : undefined}
+                                        suffix={lang.code === language.code ? <Check size={12} className="text-[#ff6b35]" /> : undefined}
                                         onSelect={() => run(() => setLanguage(lang))}
                                     >
                                         {lang.flag} {lang.name}
@@ -184,9 +184,9 @@ function CmdItem({ children, icon, desc, suffix, kbd: kbdHint, onSelect }: {
     return (
         <Command.Item
             onSelect={onSelect}
-            className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-white/50 cursor-pointer hover:bg-white/[0.04] hover:text-white aria-selected:bg-amber-500/[0.07] aria-selected:text-white transition-all duration-150 group"
+            className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-white/50 cursor-pointer hover:bg-white/[0.04] hover:text-white aria-selected:bg-[#ff6b35]/[0.06] aria-selected:text-white transition-all duration-150 group"
         >
-            <span className="flex items-center justify-center w-8 h-8 rounded-xl bg-white/[0.03] border border-white/[0.05] text-white/25 group-aria-selected:text-amber-400/60 group-aria-selected:border-amber-500/[0.12] group-aria-selected:bg-amber-500/[0.06] transition-all duration-150 shrink-0">
+            <span className="flex items-center justify-center w-8 h-8 rounded-xl bg-white/[0.03] border border-white/[0.05] text-white/25 group-aria-selected:text-[#ff6b35]/60 group-aria-selected:border-[#ff6b35]/[0.12] group-aria-selected:bg-[#ff6b35]/[0.06] transition-all duration-150 shrink-0">
                 {icon}
             </span>
             <div className="flex-1 min-w-0">

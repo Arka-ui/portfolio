@@ -73,11 +73,11 @@ export default function LiveStatus() {
 
     const getStatusColor = (status: string) => {
         switch (status) {
-            case "online": return "bg-green-500 shadow-[0_0_10px_rgba(34,197,94,0.5)]";
-            case "idle": return "bg-yellow-500 shadow-[0_0_10px_rgba(234,179,8,0.5)]";
-            case "dnd": return "bg-red-500 shadow-[0_0_10px_rgba(239,68,68,0.5)]";
-            case "offline": return "bg-gray-500";
-            default: return "bg-gray-500";
+            case "online": return "bg-[#ff6b35] shadow-[0_0_10px_rgba(255,107,53,0.4)]";
+            case "idle": return "bg-yellow-500 shadow-[0_0_10px_rgba(234,179,8,0.4)]";
+            case "dnd": return "bg-[#ff5c5c] shadow-[0_0_10px_rgba(255,92,92,0.4)]";
+            case "offline": return "bg-white/30";
+            default: return "bg-white/30";
         }
     };
 
@@ -102,8 +102,8 @@ export default function LiveStatus() {
                             "Avatar Hash": discord_user.avatar?.substring(0, 8) + "..." || "N/A"
                         }}
                     >
-                        <div className="bg-[#001529]/80 border border-cyan-500/30 p-6 rounded-lg relative overflow-hidden">
-                            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-cyan-500 to-transparent opacity-50" />
+                        <div className="bg-[#060d1f]/80 border border-[#ff6b35]/30 p-6 rounded-lg relative overflow-hidden">
+                            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#ff6b35] to-transparent opacity-50" />
                             <div className="flex items-center gap-6">
                                 <div className="relative">
                                     <Image
@@ -111,17 +111,17 @@ export default function LiveStatus() {
                                         alt="Avatar"
                                         width={80}
                                         height={80}
-                                        className="rounded-none border-2 border-cyan-500/50 grayscale"
+                                        className="rounded-none border-2 border-[#ff6b35]/50 grayscale"
                                     />
                                     <div className={`absolute -bottom-2 -right-2 w-4 h-4 ${statusColor} border border-black`} />
                                 </div>
                                 <div>
-                                    <h3 className="font-mono text-xl text-cyan-400 tracking-wider">{discord_user.username.toUpperCase()}</h3>
-                                    <p className="font-mono text-xs text-cyan-700 mt-1">UID: {discord_user.id}</p>
+                                    <h3 className="font-mono text-xl text-[#ff6b35] tracking-wider">{discord_user.username.toUpperCase()}</h3>
+                                    <p className="font-mono text-xs text-[#ff6b35]/40 mt-1">UID: {discord_user.id}</p>
                                     <div className="flex gap-2 mt-3">
-                                        {active_on_discord_desktop && <Monitor size={16} className="text-cyan-600" />}
-                                        {active_on_discord_mobile && <Smartphone size={16} className="text-cyan-600" />}
-                                        {active_on_discord_web && <Globe size={16} className="text-cyan-600" />}
+                                        {active_on_discord_desktop && <Monitor size={16} className="text-[#ff6b35]/50" />}
+                                        {active_on_discord_mobile && <Smartphone size={16} className="text-[#ff6b35]/50" />}
+                                        {active_on_discord_web && <Globe size={16} className="text-[#ff6b35]/50" />}
                                     </div>
                                 </div>
                             </div>
@@ -139,9 +139,9 @@ export default function LiveStatus() {
                                 "Sync": "Active"
                             }}
                         >
-                            <div className="bg-[#001529]/80 border border-cyan-500/30 p-6 rounded-lg relative overflow-hidden h-full flex flex-col justify-center">
+                            <div className="bg-[#060d1f]/80 border border-[#ff6b35]/30 p-6 rounded-lg relative overflow-hidden h-full flex flex-col justify-center">
                                 <div className="flex items-center gap-4">
-                                    <div className="relative w-16 h-16 border border-cyan-500/30">
+                                    <div className="relative w-16 h-16 border border-[#ff6b35]/30">
                                         <Image
                                             src={spotify.album_art_url}
                                             alt={spotify.album}
@@ -150,19 +150,19 @@ export default function LiveStatus() {
                                         />
                                     </div>
                                     <div className="flex-1 min-w-0">
-                                        <p className="font-mono text-xs text-cyan-700 uppercase mb-1">Now Processing</p>
-                                        <p className="font-mono text-sm text-cyan-300 truncate">{spotify.song}</p>
-                                        <p className="font-mono text-xs text-cyan-600 truncate">{spotify.artist}</p>
+                                        <p className="font-mono text-xs text-[#ff6b35]/40 uppercase mb-1">Now Processing</p>
+                                        <p className="font-mono text-sm text-[#ff6b35]/80 truncate">{spotify.song}</p>
+                                        <p className="font-mono text-xs text-[#ff6b35]/50 truncate">{spotify.artist}</p>
                                     </div>
                                 </div>
-                                <div className="mt-4 h-1 bg-cyan-900/30 w-full">
+                                <div className="mt-4 h-1 bg-[#ff6b35]/10 w-full">
                                     <div
-                                        className="h-full bg-cyan-500/50 relative"
+                                        className="h-full bg-[#ff6b35]/40 relative"
                                         style={{
                                             width: `${Math.min(100, ((currentTime - spotify.timestamps.start) / (spotify.timestamps.end - spotify.timestamps.start)) * 100)}%`
                                         }}
                                     >
-                                        <div className="absolute right-0 top-1/2 -translate-y-1/2 w-2 h-2 bg-cyan-400 rounded-full shadow-[0_0_5px_cyan]" />
+                                        <div className="absolute right-0 top-1/2 -translate-y-1/2 w-2 h-2 bg-[#ff6b35] rounded-full shadow-[0_0_5px_#ff6b35]" />
                                     </div>
                                 </div>
                             </div>
@@ -182,13 +182,13 @@ export default function LiveStatus() {
                         >
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 {sortedActivities.map((activity, index) => (
-                                    <div key={index} className="bg-[#001529]/80 border border-cyan-500/30 p-4 flex items-center gap-4">
-                                        <div className="font-mono text-xs text-cyan-500 w-6">0{index + 1}</div>
+                                    <div key={index} className="bg-[#060d1f]/80 border border-[#ff6b35]/30 p-4 flex items-center gap-4">
+                                        <div className="font-mono text-xs text-[#ff6b35]/60 w-6">0{index + 1}</div>
                                         <div className="flex-1 min-w-0">
-                                            <p className="font-mono text-sm text-cyan-300 truncate">{activity.name}</p>
-                                            <p className="font-mono text-xs text-cyan-700 truncate">{activity.state || activity.details || "Running..."}</p>
+                                            <p className="font-mono text-sm text-[#ff6b35]/80 truncate">{activity.name}</p>
+                                            <p className="font-mono text-xs text-[#ff6b35]/40 truncate">{activity.state || activity.details || "Running..."}</p>
                                         </div>
-                                        <div className="w-2 h-2 bg-cyan-500/50 animate-pulse rounded-full" />
+                                        <div className="w-2 h-2 bg-[#ff6b35]/40 animate-pulse rounded-full" />
                                     </div>
                                 ))}
                             </div>
@@ -201,14 +201,14 @@ export default function LiveStatus() {
 
     // --- NORMAL MODE RENDER ---
     return (
-        <section id="live" className="py-14 md:py-28 border-t border-white/[0.06]">
+        <section id="live" className="py-20 md:py-36 border-t border-white/[0.04]">
             <div className="container mx-auto px-6 md:px-12">
-                <div className="mb-12">
+                <div className="mb-14 md:mb-20">
                     <span className="label-mono mb-5 block">{t("live.label")}</span>
-                    <h2 className="font-heading font-black text-[clamp(36px,5vw,64px)] leading-[0.9] tracking-tighter text-white">
+                    <h2 className="font-heading font-bold text-[clamp(36px,5vw,64px)] leading-[0.9] tracking-tighter text-white">
                         {t("live.heading")}
                     </h2>
-                    <p className="text-white/35 text-sm mt-4 max-w-lg">
+                    <p className="text-white/30 text-sm mt-4 max-w-lg">
                         {t("live.subtitle")}
                     </p>
                 </div>
@@ -225,11 +225,10 @@ export default function LiveStatus() {
                             viewport={{ once: true }}
                             className="w-full max-w-sm"
                         >
-                            <div className="relative bg-[#09090b] border border-white/[0.07] rounded-3xl overflow-hidden shadow-2xl">
-                                {/* Gradient accent bar — ember to arctic */}
-                                <div className="h-0.5 w-full bg-gradient-to-r from-amber-500 via-orange-400/50 to-teal-500" />
-                                {/* Soft glow */}
-                                <div className="absolute top-0 right-0 w-52 h-52 bg-amber-500/[0.04] rounded-full blur-3xl pointer-events-none" />
+                            <div className="relative bg-[#0e1e3a]/60 border border-white/[0.07] rounded-2xl overflow-hidden shadow-2xl">
+                                {/* Gradient accent bar */}
+                                <div className="h-0.5 w-full bg-gradient-to-r from-[#ff6b35] via-[#ff85c8]/30 to-[#00cfb4]" />
+                                <div className="absolute top-0 right-0 w-52 h-52 bg-[#ff6b35]/[0.03] rounded-full blur-3xl pointer-events-none" />
 
                                 <div className="p-6 relative">
                                     {/* Identity row */}
@@ -241,20 +240,20 @@ export default function LiveStatus() {
                                                     alt="Avatar"
                                                     width={56}
                                                     height={56}
-                                                    className="rounded-2xl"
+                                                    className="rounded-xl"
                                                 />
                                             ) : (
-                                                <div className="w-14 h-14 rounded-2xl bg-amber-500/20 flex items-center justify-center">
-                                                    <User className="w-7 h-7 text-amber-500/50" />
+                                                <div className="w-14 h-14 rounded-xl bg-[#ff6b35]/15 flex items-center justify-center">
+                                                    <User className="w-7 h-7 text-[#ff6b35]/40" />
                                                 </div>
                                             )}
                                             <span
-                                                className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-[2.5px] border-[#09090b]"
+                                                className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-[2.5px] border-[#0e1e3a]"
                                                 style={{
                                                     backgroundColor:
-                                                        discord_status === "online" ? "#22c55e" :
+                                                        discord_status === "online" ? "#ff6b35" :
                                                         discord_status === "idle"   ? "#f59e0b" :
-                                                        discord_status === "dnd"    ? "#ef4444" : "#6b7280"
+                                                        discord_status === "dnd"    ? "#ff5c5c" : "#6b7280"
                                                 }}
                                             />
                                         </div>
@@ -262,21 +261,21 @@ export default function LiveStatus() {
                                             <p className="font-bold text-white text-base leading-tight truncate">
                                                 {discord_user.global_name || discord_user.username}
                                             </p>
-                                            <p className="text-xs text-white/35 font-mono truncate mt-0.5">
+                                            <p className="text-xs text-white/30 font-mono truncate mt-0.5">
                                                 @{discord_user.username}
                                             </p>
                                             <div className="flex items-center gap-2 mt-1.5">
                                                 <span
                                                     className="text-[10px] font-mono px-2 py-0.5 rounded-full border capitalize"
                                                     style={{
-                                                        color: discord_status === "online" ? "#4ade80" : discord_status === "idle" ? "#fbbf24" : discord_status === "dnd" ? "#f87171" : "#9ca3af",
-                                                        borderColor: discord_status === "online" ? "rgba(74,222,128,0.25)" : discord_status === "idle" ? "rgba(251,191,36,0.25)" : discord_status === "dnd" ? "rgba(248,113,113,0.25)" : "rgba(156,163,175,0.15)",
-                                                        backgroundColor: discord_status === "online" ? "rgba(74,222,128,0.07)" : discord_status === "idle" ? "rgba(251,191,36,0.07)" : discord_status === "dnd" ? "rgba(248,113,113,0.07)" : "rgba(156,163,175,0.04)",
+                                                        color: discord_status === "online" ? "#ff6b35" : discord_status === "idle" ? "#fbbf24" : discord_status === "dnd" ? "#ff5c5c" : "#9ca3af",
+                                                        borderColor: discord_status === "online" ? "rgba(255,107,53,0.25)" : discord_status === "idle" ? "rgba(251,191,36,0.25)" : discord_status === "dnd" ? "rgba(255,92,92,0.25)" : "rgba(156,163,175,0.15)",
+                                                        backgroundColor: discord_status === "online" ? "rgba(255,107,53,0.07)" : discord_status === "idle" ? "rgba(251,191,36,0.07)" : discord_status === "dnd" ? "rgba(255,92,92,0.07)" : "rgba(156,163,175,0.04)",
                                                     }}
                                                 >
                                                     {discord_status}
                                                 </span>
-                                                <div className="flex gap-1.5 text-white/20">
+                                                <div className="flex gap-1.5 text-white/18">
                                                     {active_on_discord_desktop && <Monitor size={12} />}
                                                     {active_on_discord_mobile && <Smartphone size={12} />}
                                                     {active_on_discord_web && <Globe size={12} />}
@@ -287,15 +286,15 @@ export default function LiveStatus() {
 
                                     <div className="border-t border-white/[0.05] mb-4" />
 
-                                    {/* Spotify now-playing */}
+                                    {/* Spotify */}
                                     {spotify && (
                                         <a
                                             href={`https://open.spotify.com/track/${spotify.track_id}`}
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className="group flex items-center gap-3 p-3 rounded-2xl bg-white/[0.03] border border-white/[0.06] hover:border-[#1DB954]/25 hover:bg-[#1DB954]/[0.04] transition-all duration-300 mb-3"
+                                            className="group flex items-center gap-3 p-3 rounded-xl bg-white/[0.03] border border-white/[0.05] hover:border-[#1DB954]/25 hover:bg-[#1DB954]/[0.04] transition-all duration-300 mb-3"
                                         >
-                                            <div className="relative w-11 h-11 rounded-xl overflow-hidden flex-shrink-0">
+                                            <div className="relative w-11 h-11 rounded-lg overflow-hidden flex-shrink-0">
                                                 <Image src={spotify.album_art_url} alt={spotify.album} fill className="object-cover" />
                                             </div>
                                             <div className="flex-1 min-w-0">
@@ -306,7 +305,7 @@ export default function LiveStatus() {
                                                 <p className="text-white text-[13px] font-semibold truncate group-hover:text-[#1DB954] transition-colors">
                                                     {spotify.song}
                                                 </p>
-                                                <p className="text-white/35 text-[11px] truncate">{spotify.artist}</p>
+                                                <p className="text-white/30 text-[11px] truncate">{spotify.artist}</p>
                                                 <div className="mt-2 h-0.5 bg-white/[0.07] rounded-full overflow-hidden">
                                                     <div
                                                         className="h-full bg-[#1DB954] rounded-full transition-all duration-1000 ease-linear"
@@ -322,19 +321,19 @@ export default function LiveStatus() {
                                     {/* Activity list */}
                                     <div className="space-y-2">
                                         {sortedActivities.filter(a => a.name !== "Spotify").map((activity, i) => (
-                                            <div key={i} className="flex items-center gap-3 p-3 rounded-xl bg-white/[0.02] border border-white/[0.05]">
+                                            <div key={i} className="flex items-center gap-3 p-3 rounded-xl bg-white/[0.02] border border-white/[0.04]">
                                                 <div className="w-8 h-8 rounded-lg bg-white/[0.04] flex items-center justify-center flex-shrink-0">
                                                     {activity.name.toLowerCase().includes("code") || activity.name.toLowerCase().includes("visual studio")
-                                                        ? <Code size={14} className="text-amber-400" />
-                                                        : <Gamepad2 size={14} className="text-white/30" />
+                                                        ? <Code size={14} className="text-[#ff6b35]" />
+                                                        : <Gamepad2 size={14} className="text-white/25" />
                                                     }
                                                 </div>
                                                 <div className="flex-1 min-w-0">
                                                     <p className="text-white text-[12px] font-semibold truncate">{activity.name}</p>
-                                                    <p className="text-white/30 text-[11px] truncate">{activity.details || activity.state || "Active"}</p>
+                                                    <p className="text-white/25 text-[11px] truncate">{activity.details || activity.state || "Active"}</p>
                                                 </div>
                                                 {activity.timestamps?.start && (
-                                                    <span className="text-[10px] font-mono text-white/20 flex-shrink-0">
+                                                    <span className="text-[10px] font-mono text-white/18 flex-shrink-0">
                                                         {(() => {
                                                             const e = currentTime - activity.timestamps!.start;
                                                             const h = Math.floor(e / 3600000);
@@ -346,7 +345,7 @@ export default function LiveStatus() {
                                             </div>
                                         ))}
                                         {sortedActivities.filter(a => a.name !== "Spotify").length === 0 && !spotify && (
-                                            <p className="text-white/20 text-xs text-center py-3 font-mono">{t("live.no_activity")}</p>
+                                            <p className="text-white/18 text-xs text-center py-3 font-mono">{t("live.no_activity")}</p>
                                         )}
                                     </div>
                                 </div>
@@ -363,44 +362,44 @@ export default function LiveStatus() {
                         className="space-y-5"
                     >
                         {/* Current timezone / local time */}
-                        <div className="p-5 rounded-2xl border border-white/[0.06] bg-white/[0.02]">
+                        <div className="p-5 rounded-2xl border border-white/[0.06] bg-[#0e1e3a]/30">
                             <span className="label-mono text-[10px] block mb-3">{t("live.local_time")}</span>
                             <div className="flex items-baseline gap-3">
-                                <span className="font-heading font-black text-3xl text-white tracking-tight">
+                                <span className="font-heading font-bold text-3xl text-white tracking-tight">
                                     {new Date(currentTime).toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit", timeZone: "Europe/Paris" })}
                                 </span>
-                                <span className="text-xs font-mono text-white/25">CET — France</span>
+                                <span className="text-xs font-mono text-white/20">CET — France</span>
                             </div>
-                            <p className="text-[12px] text-white/25 mt-2">
+                            <p className="text-[12px] text-white/20 mt-2">
                                 {new Date(currentTime).toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric", timeZone: "Europe/Paris" })}
                             </p>
                         </div>
 
-                        {/* Quick availability info */}
-                        <div className="p-5 rounded-2xl border border-white/[0.06] bg-white/[0.02]">
+                        {/* Quick availability */}
+                        <div className="p-5 rounded-2xl border border-white/[0.06] bg-[#0e1e3a]/30">
                             <span className="label-mono text-[10px] block mb-3">{t("live.availability")}</span>
                             <div className="space-y-3">
                                 <div className="flex items-center justify-between">
-                                    <span className="text-sm text-white/50">{t("live.response_time")}</span>
-                                    <span className="text-sm text-white/70 font-mono">&lt; 24h</span>
+                                    <span className="text-sm text-white/40">{t("live.response_time")}</span>
+                                    <span className="text-sm text-white/65 font-mono">&lt; 24h</span>
                                 </div>
                                 <div className="flex items-center justify-between">
-                                    <span className="text-sm text-white/50">{t("live.timezone")}</span>
-                                    <span className="text-sm text-white/70 font-mono">UTC+1</span>
+                                    <span className="text-sm text-white/40">{t("live.timezone")}</span>
+                                    <span className="text-sm text-white/65 font-mono">UTC+1</span>
                                 </div>
                                 <div className="flex items-center justify-between">
-                                    <span className="text-sm text-white/50">{t("live.open_for_work")}</span>
-                                    <span className="flex items-center gap-1.5 text-sm text-teal-400 font-medium">
-                                        <span className="w-1.5 h-1.5 rounded-full bg-teal-400 animate-pulse" />
+                                    <span className="text-sm text-white/40">{t("live.open_for_work")}</span>
+                                    <span className="flex items-center gap-1.5 text-sm text-[#ff6b35] font-medium">
+                                        <span className="w-1.5 h-1.5 rounded-full bg-[#ff6b35] animate-pulse" />
                                         {t("live.yes")}
                                     </span>
                                 </div>
                                 <div className="flex items-center justify-between">
-                                    <span className="text-sm text-white/50">{t("live.preferred_contact")}</span>
-                                    <span className="text-sm text-white/70 font-mono">Discord</span>
+                                    <span className="text-sm text-white/40">{t("live.preferred_contact")}</span>
+                                    <span className="text-sm text-white/65 font-mono">Discord</span>
                                 </div>
                                 <div className="mt-1 pt-3 border-t border-white/[0.04]">
-                                    <p className="text-[12px] text-white/25 italic leading-relaxed">
+                                    <p className="text-[12px] text-white/20 italic leading-relaxed">
                                         {t("live.irl_note")}
                                     </p>
                                 </div>
@@ -413,16 +412,16 @@ export default function LiveStatus() {
                                 href={SPOTIFY_PROFILE_URL}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="group flex items-center gap-3 p-4 rounded-2xl border border-white/[0.06] bg-white/[0.02] hover:bg-[#1DB954]/[0.04] hover:border-[#1DB954]/20 transition-all duration-300"
+                                className="group flex items-center gap-3 p-4 rounded-2xl border border-white/[0.06] bg-[#0e1e3a]/30 hover:bg-[#1DB954]/[0.04] hover:border-[#1DB954]/20 transition-all duration-300"
                             >
                                 <div className="w-10 h-10 rounded-xl bg-[#1DB954]/10 flex items-center justify-center shrink-0">
                                     <Music className="w-5 h-5 text-[#1DB954]" />
                                 </div>
                                 <div className="flex-1 min-w-0">
-                                    <p className="text-sm text-white/60 group-hover:text-[#1DB954] transition-colors font-medium">{t("live.listening")}</p>
-                                    <p className="text-[11px] text-white/25 truncate">{spotify.song} — {spotify.artist}</p>
+                                    <p className="text-sm text-white/55 group-hover:text-[#1DB954] transition-colors font-medium">{t("live.listening")}</p>
+                                    <p className="text-[11px] text-white/20 truncate">{spotify.song} — {spotify.artist}</p>
                                 </div>
-                                <ExternalLink size={14} className="text-white/15 group-hover:text-[#1DB954]/50 transition-colors shrink-0" />
+                                <ExternalLink size={14} className="text-white/12 group-hover:text-[#1DB954]/50 transition-colors shrink-0" />
                             </a>
                         )}
                     </motion.div>

@@ -39,17 +39,17 @@ const TECH_EXPLANATIONS: Record<string, string> = {
 const CATEGORIES = [
     {
         label: "Frontend",
-        color: "amber",
+        color: "lime",
         keys: ["React", "Next.js", "TypeScript", "Tailwind CSS", "HTML", "CSS", "shadcn/ui"],
     },
     {
         label: "Backend",
-        color: "teal",
+        color: "coral",
         keys: ["Node.js", "Python", "Java", "Rust", "better-auth", "Drizzle"],
     },
     {
         label: "Tools & Infra",
-        color: "orange",
+        color: "white",
         keys: ["Docker", "Git", "VS Code", "Prisma", "PostgreSQL", "GitHub Actions", "Nginx"],
     },
 ];
@@ -75,16 +75,16 @@ export default function TechStack() {
     );
 
     const colorMap: Record<string, { dot: string; border: string; bg: string; text: string }> = {
-        amber: { dot: "bg-amber-400", border: "border-amber-500/15", bg: "bg-amber-500/[0.06]", text: "text-amber-400" },
-        teal: { dot: "bg-teal-400", border: "border-teal-500/15", bg: "bg-teal-500/[0.06]", text: "text-teal-400" },
-        orange: { dot: "bg-orange-400", border: "border-orange-500/15", bg: "bg-orange-500/[0.06]", text: "text-orange-400" },
+        lime: { dot: "bg-[#ff6b35]", border: "border-[#ff6b35]/15", bg: "bg-[#ff6b35]/[0.05]", text: "text-[#ff6b35]" },
+        coral: { dot: "bg-[#00cfb4]", border: "border-[#00cfb4]/15", bg: "bg-[#00cfb4]/[0.05]", text: "text-[#00cfb4]" },
+        white: { dot: "bg-white/60", border: "border-white/15", bg: "bg-white/[0.04]", text: "text-white/70" },
     };
 
     return (
-        <section id="skills" className="py-20 md:py-32 border-t border-white/[0.04]">
+        <section id="skills" className="py-24 md:py-36 border-t border-white/[0.04]">
             <div className="container mx-auto px-6 md:px-12">
                 {/* Header */}
-                <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 md:mb-16">
+                <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-14 md:mb-20">
                     <div>
                         <span className="label-mono mb-4 block">Craft</span>
                         <motion.h2
@@ -92,12 +92,12 @@ export default function TechStack() {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-                            className="font-heading font-black text-[clamp(36px,5vw,64px)] leading-[0.9] tracking-tighter text-white"
+                            className="font-heading font-bold text-[clamp(36px,5vw,64px)] leading-[0.9] tracking-tighter text-white"
                         >
                             Tech stack
                         </motion.h2>
                     </div>
-                    <span className="text-[11px] font-mono text-white/20">
+                    <span className="text-[11px] font-mono text-white/18">
                         {usedLanguages.size > 0 ? `${usedLanguages.size} languages on GitHub` : "Click any tech for details"}
                     </span>
                 </div>
@@ -133,14 +133,14 @@ export default function TechStack() {
                                                     onClick={() => setExpandedTech(isExpanded ? null : tech)}
                                                     className={`group flex items-center justify-between w-full py-2.5 px-3 rounded-xl hover:bg-white/[0.04] transition-all duration-200 text-left ${isExpanded ? `bg-white/[0.04] ${c.border} border` : ""}`}
                                                 >
-                                                    <span className={`text-sm font-medium transition-colors ${isActive ? "text-white/80" : "text-white/40"} ${isExpanded ? c.text : ""}`}>
+                                                    <span className={`text-sm font-medium transition-colors ${isActive ? "text-white/75" : "text-white/35"} ${isExpanded ? c.text : ""}`}>
                                                         {tech}
                                                     </span>
                                                     <div className="flex items-center gap-2">
-                                                        {isActive && <span className={`w-1.5 h-1.5 rounded-full ${c.dot} opacity-70`} />}
+                                                        {isActive && <span className={`w-1.5 h-1.5 rounded-full ${c.dot} opacity-60`} />}
                                                         <ChevronRight
                                                             size={12}
-                                                            className={`text-white/15 transition-transform duration-200 ${isExpanded ? "rotate-90" : ""}`}
+                                                            className={`text-white/12 transition-transform duration-200 ${isExpanded ? "rotate-90" : ""}`}
                                                         />
                                                     </div>
                                                 </button>
@@ -161,12 +161,12 @@ export default function TechStack() {
                                                                     </span>
                                                                     <button
                                                                         onClick={(e) => { e.stopPropagation(); setExpandedTech(null); }}
-                                                                        className="text-white/20 hover:text-white/50 transition-colors shrink-0"
+                                                                        className="text-white/18 hover:text-white/50 transition-colors shrink-0"
                                                                     >
                                                                         <X size={11} />
                                                                     </button>
                                                                 </div>
-                                                                <p className="text-[13px] text-white/45 leading-relaxed">
+                                                                <p className="text-[13px] text-white/40 leading-relaxed">
                                                                     {TECH_EXPLANATIONS[tech]}
                                                                 </p>
                                                             </div>

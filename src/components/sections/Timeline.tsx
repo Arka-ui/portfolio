@@ -57,38 +57,38 @@ const EXPERIENCE: ExperienceItem[] = [
 ];
 
 const TYPE_CONFIG = {
-    work: { icon: Briefcase, accent: "amber" as const },
-    project: { icon: FolderGit2, accent: "teal" as const },
-    education: { icon: GraduationCap, accent: "orange" as const },
+    work: { icon: Briefcase, accent: "lime" as const },
+    project: { icon: FolderGit2, accent: "coral" as const },
+    education: { icon: GraduationCap, accent: "white" as const },
 };
 
 const accentColors = {
-    amber: { bg: "bg-amber-500/10", border: "border-amber-500/20", text: "text-amber-400", dot: "bg-amber-400" },
-    teal: { bg: "bg-teal-500/10", border: "border-teal-500/20", text: "text-teal-400", dot: "bg-teal-400" },
-    orange: { bg: "bg-orange-500/10", border: "border-orange-500/20", text: "text-orange-300", dot: "bg-orange-300" },
+    lime: { bg: "bg-[#ff6b35]/10", border: "border-[#ff6b35]/20", text: "text-[#ff6b35]", dot: "bg-[#ff6b35]" },
+    coral: { bg: "bg-[#00cfb4]/10", border: "border-[#00cfb4]/20", text: "text-[#00cfb4]", dot: "bg-[#00cfb4]" },
+    white: { bg: "bg-white/10", border: "border-white/20", text: "text-white/70", dot: "bg-white/70" },
 };
 
 export default function Timeline() {
     const { t } = useLanguage();
 
     return (
-        <section id="about" className="py-20 md:py-32 border-t border-white/[0.04]">
+        <section id="about" className="py-24 md:py-36 border-t border-white/[0.04]">
             <div className="container mx-auto px-6 md:px-12">
                 {/* Header */}
-                <div className="mb-12 md:mb-16">
+                <div className="mb-14 md:mb-20">
                     <span className="label-mono mb-4 block">{t("timeline.label")}</span>
                     <motion.h2
                         initial={{ opacity: 0, y: 24 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-                        className="font-heading font-black text-[clamp(36px,5vw,64px)] leading-[0.9] tracking-tighter text-white"
+                        className="font-heading font-bold text-[clamp(36px,5vw,64px)] leading-[0.9] tracking-tighter text-white"
                     >
                         {t("timeline.heading")}
                     </motion.h2>
                 </div>
 
-                {/* Horizontal scroll on mobile, grid on desktop */}
+                {/* Mobile: horizontal scroll */}
                 <div className="md:hidden overflow-x-auto pb-4 -mx-6 px-6" style={{ scrollSnapType: "x mandatory", scrollbarWidth: "none" }}>
                     <div className="flex gap-4" style={{ width: "max-content" }}>
                         {EXPERIENCE.map((item, i) => {
@@ -105,13 +105,13 @@ export default function Timeline() {
                                         <div className={`w-8 h-8 rounded-lg ${colors.bg} ${colors.border} border flex items-center justify-center ${colors.text}`}>
                                             <Icon size={14} />
                                         </div>
-                                        <span className="font-mono text-[10px] text-white/25">{item.period}</span>
+                                        <span className="font-mono text-[10px] text-white/20">{item.period}</span>
                                     </div>
                                     <div>
                                         <h3 className="font-heading font-bold text-base text-white tracking-tight">{item.title}</h3>
-                                        <p className="text-xs text-white/40 mt-0.5">{item.company}</p>
+                                        <p className="text-xs text-white/35 mt-0.5">{item.company}</p>
                                     </div>
-                                    <p className="text-xs text-white/45 leading-relaxed flex-1">{item.description}</p>
+                                    <p className="text-xs text-white/40 leading-relaxed flex-1">{item.description}</p>
                                     {item.tag && <span className="badge-muted text-[10px] self-start">{item.tag}</span>}
                                 </div>
                             );
@@ -119,10 +119,10 @@ export default function Timeline() {
                     </div>
                 </div>
 
-                {/* Desktop: vertical timeline with connecting line */}
+                {/* Desktop: vertical timeline */}
                 <div className="hidden md:block max-w-3xl relative">
                     {/* Vertical line */}
-                    <div className="absolute left-[15px] top-4 bottom-4 w-px bg-gradient-to-b from-amber-500/20 via-white/[0.06] to-transparent" />
+                    <div className="absolute left-[15px] top-4 bottom-4 w-px bg-gradient-to-b from-[#ff6b35]/25 via-white/[0.06] to-transparent" />
 
                     {EXPERIENCE.map((item, i) => {
                         const cfg = TYPE_CONFIG[item.type];
@@ -149,14 +149,14 @@ export default function Timeline() {
                                     <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-3">
                                         <div>
                                             <h3 className="font-heading font-bold text-lg text-white tracking-tight">{item.title}</h3>
-                                            <p className="text-sm text-white/40 mt-0.5">{item.company}</p>
+                                            <p className="text-sm text-white/35 mt-0.5">{item.company}</p>
                                         </div>
                                         <div className="flex flex-col sm:items-end gap-2 shrink-0">
-                                            <span className="font-mono text-xs text-white/25">{item.period}</span>
+                                            <span className="font-mono text-xs text-white/20">{item.period}</span>
                                             {item.tag && <span className="badge-muted text-[10px]">{item.tag}</span>}
                                         </div>
                                     </div>
-                                    <p className="text-sm text-white/45 leading-relaxed">{item.description}</p>
+                                    <p className="text-sm text-white/40 leading-relaxed">{item.description}</p>
                                 </div>
                             </motion.div>
                         );
