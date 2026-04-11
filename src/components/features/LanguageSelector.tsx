@@ -2,11 +2,17 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Check, ChevronDown } from "lucide-react";
+import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useLanguage, SUPPORTED_LANGUAGES, Language } from "@/context/LanguageContext";
 
-export default function LanguageSelector() {
+interface Props {
+    align?: "right" | "left";
+    variant?: "pill" | "bare";
+    direction?: "down" | "up";
+}
+
+export default function LanguageSelector({ align = "right", variant = "pill", direction = "down" }: Props) {
     const [isOpen, setIsOpen] = useState(false);
     const [mounted, setMounted] = useState(false);
     const { language, setLanguage } = useLanguage();
@@ -48,24 +54,29 @@ export default function LanguageSelector() {
         <div className="relative z-50">
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/[0.03] border border-white/[0.05] hover:bg-white/[0.06] hover:border-[#ff6b35]/15 transition-all backdrop-blur-xl text-white/35 hover:text-white/60"
+                aria-label="Change language"
+                className={cn(
+                    "flex items-center justify-center transition-all text-[#7D6B56] hover:text-[#DBC7A6]",
+                    variant === "pill"
+                        ? "gap-1.5 h-8 px-2.5 rounded-full border border-[#493B33]/50 bg-[#1B1814]/70 hover:border-[#B39F85]/40 backdrop-blur-xl"
+                        : "w-8 h-8 rounded-full border border-[#493B33]/50 bg-[#1B1814]/70 hover:border-[#B39F85]/40 backdrop-blur-xl"
+                )}
             >
-                <span className="text-base">{language.flag}</span>
-                <span className="text-[12px] font-medium hidden sm:block">{language.name}</span>
-                <ChevronDown
-                    size={12}
-                    className={cn("text-white/25 transition-transform duration-300", isOpen && "rotate-180")}
-                />
+                <span className="font-mono text-[10px] tracking-[0.2em] uppercase">{language.code}</span>
             </button>
 
             <AnimatePresence>
                 {isOpen && (
                     <motion.div
-                        initial={{ opacity: 0, y: 8, scale: 0.96 }}
+                        initial={{ opacity: 0, y: direction === "up" ? -8 : 8, scale: 0.96 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: 8, scale: 0.96 }}
-                        transition={{ duration: 0.15 }}
-                        className="absolute right-0 mt-2 w-48 overflow-y-auto rounded-2xl border border-white/[0.07] bg-[#060d1f]/95 backdrop-blur-2xl shadow-[0_16px_48px_rgba(0,0,0,0.6)] p-1.5 scrollbar-hide"
+                        exit={{ opacity: 0, y: direction === "up" ? -8 : 8, scale: 0.96 }}
+                        transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+                        className={cn(
+                            "absolute w-48 overflow-y-auto rounded-2xl border border-[#493B33]/50 bg-[#1B1814]/95 backdrop-blur-2xl shadow-[0_16px_48px_rgba(0,0,0,0.7)] p-1.5 scrollbar-hide z-[60]",
+                            align === "right" ? "right-0" : "left-0",
+                            direction === "up" ? "bottom-full mb-2" : "top-full mt-2"
+                        )}
                     >
                         {SUPPORTED_LANGUAGES.map(lang => (
                             <button
@@ -74,15 +85,15 @@ export default function LanguageSelector() {
                                 className={cn(
                                     "w-full flex items-center justify-between px-3 py-2.5 rounded-xl transition-all duration-150 text-sm",
                                     language.code === lang.code
-                                        ? "bg-[#ff6b35]/[0.08] text-[#ff6b35] border border-[#ff6b35]/[0.12]"
-                                        : "text-white/40 hover:bg-white/[0.04] hover:text-white border border-transparent"
+                                        ? "bg-[#DBC7A6]/[0.09] text-[#DBC7A6] border border-[#B39F85]/30"
+                                        : "text-[#7D6B56] hover:bg-[#251E18]/80 hover:text-[#DBC7A6] border border-transparent"
                                 )}
                             >
                                 <div className="flex items-center gap-3">
                                     <span className="text-base">{lang.flag}</span>
                                     <span className="font-medium">{lang.name}</span>
                                 </div>
-                                {language.code === lang.code && <Check size={13} className="text-[#ff6b35]" />}
+                                {language.code === lang.code && <Check size={13} className="text-[#DBC7A6]" />}
                             </button>
                         ))}
                     </motion.div>

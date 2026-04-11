@@ -1,9 +1,10 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowDown, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { useWarp } from "@/context/WarpContext";
 import { useLanguage } from "@/context/LanguageContext";
+import { useEffect, useState } from "react";
 
 const stagger = {
     hidden: {},
@@ -20,27 +21,83 @@ const lineReveal = {
     show: { scaleX: 1, transition: { duration: 1.2, ease: [0.16, 1, 0.3, 1] as const, delay: 0.6 } },
 };
 
+const ROLES = ["Full-Stack", "Creative", "Self-Taught"];
+
+function useTypedRole() {
+    const [idx, setIdx] = useState(0);
+    const [text, setText] = useState("");
+    const [phase, setPhase] = useState<"typing" | "hold" | "erasing">("typing");
+
+    useEffect(() => {
+        const full = ROLES[idx];
+        let timer: ReturnType<typeof setTimeout>;
+        if (phase === "typing") {
+            if (text.length < full.length) {
+                timer = setTimeout(() => setText(full.slice(0, text.length + 1)), 70);
+            } else {
+                timer = setTimeout(() => setPhase("hold"), 1600);
+            }
+        } else if (phase === "hold") {
+            timer = setTimeout(() => setPhase("erasing"), 1200);
+        } else {
+            if (text.length > 0) {
+                timer = setTimeout(() => setText(text.slice(0, -1)), 40);
+            } else {
+                setIdx((idx + 1) % ROLES.length);
+                setPhase("typing");
+            }
+        }
+        return () => clearTimeout(timer);
+    }, [text, phase, idx]);
+
+    return text;
+}
+
 export default function Hero() {
     const { warpTo } = useWarp();
     const { t } = useLanguage();
+    const typed = useTypedRole();
+    const [parallax, setParallax] = useState(0);
+
+    useEffect(() => {
+        if (typeof window === "undefined") return;
+        if (window.matchMedia("(max-width: 767px)").matches) return;
+        let raf = 0;
+        const onScroll = () => {
+            if (raf) return;
+            raf = requestAnimationFrame(() => {
+                setParallax(Math.min(40, window.scrollY * 0.08));
+                raf = 0;
+            });
+        };
+        window.addEventListener("scroll", onScroll, { passive: true });
+        return () => {
+            window.removeEventListener("scroll", onScroll);
+            if (raf) cancelAnimationFrame(raf);
+        };
+    }, []);
 
     return (
-        <section id="hero" className="relative min-h-screen flex items-center overflow-hidden">
-            {/* Mesh background */}
-            <div className="absolute inset-0 mesh-gradient pointer-events-none" aria-hidden />
+        <section id="hero" className="relative min-h-screen flex items-center overflow-hidden pt-16 md:pt-0 md:pl-[72px]">
+            {/* Mesh background with parallax */}
+            <div
+                className="absolute inset-0 mesh-gradient pointer-events-none"
+                style={{ transform: `translate3d(0, ${parallax}px, 0)` }}
+                aria-hidden
+            />
 
-            {/* Diagonal accent lines */}
+            {/* Editorial warm serifs — faint decorative "A" backdrop */}
             <div className="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden>
-                <div className="absolute -top-[20%] -right-[10%] w-[600px] h-[600px] md:w-[900px] md:h-[900px] border border-[#ff6b35]/[0.04] rounded-full" />
-                <div className="absolute -top-[25%] -right-[15%] w-[700px] h-[700px] md:w-[1100px] md:h-[1100px] border border-[#ff6b35]/[0.02] rounded-full" />
+                <div
+                    className="absolute -top-[10%] -right-[5%] font-display font-bold text-[clamp(400px,55vw,900px)] leading-none text-[#DBC7A6]/[0.025] select-none"
+                    style={{ transform: `translate3d(0, ${parallax * 0.4}px, 0)` }}
+                >
+                    A.
+                </div>
             </div>
 
-            {/* Subtle grid dots */}
-            <div className="absolute inset-0 pointer-events-none opacity-[0.03]" aria-hidden>
-                <div className="absolute left-[25%] top-0 bottom-0 w-px bg-white" />
-                <div className="absolute left-[50%] top-0 bottom-0 w-px bg-white" />
-                <div className="absolute left-[75%] top-0 bottom-0 w-px bg-white" />
-            </div>
+            {/* Horizon hairline at bottom */}
+            <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#493B33]/60 to-transparent" aria-hidden />
 
             <div className="container mx-auto px-6 md:px-12 relative z-10">
                 <motion.div
@@ -50,32 +107,36 @@ export default function Hero() {
                     className="max-w-5xl"
                 >
                     {/* Top label row */}
-                    <motion.div variants={fadeUp} className="mb-10 flex items-center gap-5">
-                        <span className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full border border-[#ff6b35]/20 bg-[#ff6b35]/[0.05]">
+                    <motion.div variants={fadeUp} className="mb-10 flex items-center gap-5 flex-wrap">
+                        <span className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full border border-[#B39F85]/35 bg-[#1B1814]/60 backdrop-blur-sm">
                             <span className="relative flex h-2 w-2">
-                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#ff6b35] opacity-40" />
-                                <span className="relative inline-flex rounded-full h-2 w-2 bg-[#ff6b35]" />
+                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#DBC7A6] opacity-50" />
+                                <span className="relative inline-flex rounded-full h-2 w-2 bg-[#DBC7A6]" />
                             </span>
-                            <span className="text-[#ff6b35]/90 text-xs font-mono tracking-wider">{t("hero.available")}</span>
+                            <span className="text-[#DBC7A6] text-xs font-mono tracking-wider">{t("hero.available")}</span>
                         </span>
-                        <span className="text-white/20 text-xs font-mono tracking-widest hidden sm:block">{t("hero.role")}</span>
-                        <motion.div variants={lineReveal} className="h-px flex-1 bg-gradient-to-r from-[#ff6b35]/20 to-transparent origin-left hidden sm:block" />
+                        <span className="text-[#7D6B56] text-xs font-mono tracking-widest">
+                            <span className="text-[#DBC7A6]/80">{typed}</span>
+                            <span className="caret text-[#DBC7A6]/80" />
+                            &nbsp;/ {t("hero.role")}
+                        </span>
+                        <motion.div variants={lineReveal} className="h-px flex-1 bg-gradient-to-r from-[#B39F85]/40 to-transparent origin-left hidden sm:block" />
                     </motion.div>
 
-                    {/* Giant headline — editorial stacked type */}
+                    {/* Giant editorial headline */}
                     <div className="space-y-1 md:space-y-0">
                         <motion.div variants={fadeUp} className="overflow-hidden">
-                            <h1 className="font-heading font-bold text-[clamp(52px,12vw,170px)] leading-[0.85] tracking-tighter text-white/90">
+                            <h1 className="font-display font-bold text-[clamp(48px,12vw,170px)] leading-[0.86] tracking-tighter text-[#DBC7A6]">
                                 {t("hero.line_1")}
                             </h1>
                         </motion.div>
                         <motion.div variants={fadeUp} className="overflow-hidden">
-                            <h1 className="font-heading font-bold text-[clamp(52px,12vw,170px)] leading-[0.85] tracking-tighter text-[#ff6b35]">
+                            <h1 className="font-display font-bold text-[clamp(48px,12vw,170px)] leading-[0.86] tracking-tighter text-grad-warm-shimmer">
                                 {t("hero.line_2")}
                             </h1>
                         </motion.div>
                         <motion.div variants={fadeUp} className="overflow-hidden">
-                            <h1 className="font-heading font-bold text-[clamp(52px,12vw,170px)] leading-[0.85] tracking-tighter text-white/50">
+                            <h1 className="font-display font-bold text-[clamp(48px,12vw,170px)] leading-[0.86] tracking-tighter text-[#7D6B56]">
                                 {t("hero.line_3")}
                             </h1>
                         </motion.div>
@@ -89,14 +150,14 @@ export default function Hero() {
                         variants={fadeUp}
                         className="mt-8 md:mt-10 flex flex-col sm:flex-row items-start sm:items-end gap-8 sm:gap-16"
                     >
-                        <p className="text-base md:text-lg text-white/35 max-w-md leading-relaxed">
+                        <p className="text-base md:text-lg text-[#B39F85] max-w-md leading-relaxed">
                             {t("hero.bio")}
                         </p>
 
-                        <div className="flex items-center gap-4 shrink-0">
+                        <div className="flex items-center gap-3 shrink-0">
                             <button
                                 onClick={() => warpTo("#projects")}
-                                className="group relative inline-flex items-center gap-2.5 px-7 py-4 rounded-xl bg-[#ff6b35] text-[#060d1f] text-sm font-bold tracking-tight overflow-hidden transition-all duration-300 hover:shadow-[0_0_40px_8px_rgba(255,107,53,0.15)] active:scale-[0.97]"
+                                className="group relative inline-flex items-center gap-2.5 px-6 py-3.5 rounded-xl bg-[#DBC7A6] text-[#13110E] text-sm font-bold tracking-tight overflow-hidden transition-all duration-300 hover:shadow-[0_0_44px_6px_rgba(219,199,166,0.18)] active:scale-[0.97]"
                             >
                                 <span className="relative z-10 flex items-center gap-2">
                                     {t("hero.cta_projects")}
@@ -105,7 +166,7 @@ export default function Hero() {
                             </button>
                             <button
                                 onClick={() => warpTo("#contact")}
-                                className="group inline-flex items-center gap-2 px-7 py-4 rounded-xl border border-white/[0.1] text-white/50 text-sm font-medium hover:text-white hover:bg-white/[0.04] hover:border-[#ff6b35]/20 transition-all duration-300 active:scale-[0.97]"
+                                className="group inline-flex items-center gap-2 px-6 py-3.5 rounded-xl border border-[#493B33]/70 text-[#B39F85] text-sm font-medium hover:text-[#DBC7A6] hover:bg-[#1B1814]/60 hover:border-[#B39F85]/40 transition-all duration-300 active:scale-[0.97]"
                             >
                                 {t("hero.cta_contact")}
                             </button>
@@ -115,15 +176,15 @@ export default function Hero() {
                     {/* Scroll indicator */}
                     <motion.div
                         variants={fadeUp}
-                        className="mt-20 md:mt-28 flex items-center gap-3"
+                        className="mt-16 md:mt-24 flex items-center gap-3"
                     >
+                        <div className="w-10 h-px bg-gradient-to-r from-[#DBC7A6]/50 to-transparent" />
+                        <span className="label-mono text-[#7D6B56]">// scroll</span>
                         <motion.div
-                            animate={{ y: [0, 6, 0] }}
-                            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                        >
-                            <ArrowDown className="w-4 h-4 text-white/15" />
-                        </motion.div>
-                        <span className="label-mono text-white/10">Scroll to explore</span>
+                            animate={{ y: [0, 4, 0] }}
+                            transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
+                            className="w-1.5 h-1.5 rounded-full bg-[#DBC7A6]/60"
+                        />
                     </motion.div>
                 </motion.div>
             </div>

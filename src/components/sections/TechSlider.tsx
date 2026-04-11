@@ -74,7 +74,7 @@ function TechBadge({ label, color }: { label: string; color: string }) {
             href={href}
             target="_blank"
             rel="noopener noreferrer"
-            className="group relative inline-flex items-center gap-3.5 px-6 py-4 rounded-xl border border-white/[0.05] bg-[#0e1e3a]/40 text-[14px] font-mono tracking-wider text-white/40 whitespace-nowrap hover:text-white hover:border-[#ff6b35]/20 hover:bg-[#ff6b35]/[0.03] transition-all duration-400 cursor-pointer select-none overflow-hidden"
+            className="group relative inline-flex items-center gap-3.5 px-6 py-4 rounded-xl border border-[#493B33]/45 bg-[#1B1814]/60 text-[14px] font-mono tracking-wider text-[#B39F85] whitespace-nowrap hover:text-[#DBC7A6] hover:border-[#B39F85]/35 hover:bg-[#251E18]/80 transition-all duration-400 cursor-pointer select-none overflow-hidden"
         >
             {/* Hover gradient flash */}
             <span
@@ -185,23 +185,23 @@ export default function TechSlider() {
     return (
         <section
             aria-label="Technology stack"
-            className="relative overflow-hidden py-16 border-t border-b border-white/[0.04]"
+            className="relative overflow-hidden py-16 border-t border-b border-[#493B33]/25 md:pl-[72px]"
             style={{ maxWidth: "100vw" }}
         >
             {/* Top label */}
             <div className="container mx-auto px-6 md:px-12 mb-6">
                 <div className="flex items-center gap-3">
-                    <div className="w-1.5 h-1.5 rounded-full bg-[#ff6b35] animate-pulse" />
-                    <span className="text-[11px] font-mono text-white/20 uppercase tracking-widest">
+                    <div className="w-1.5 h-1.5 rounded-full bg-[#DBC7A6] animate-pulse" />
+                    <span className="label-display">
                         Technologies I work with
                     </span>
-                    <div className="flex-1 h-px bg-gradient-to-r from-white/[0.06] to-transparent" />
+                    <div className="flex-1 h-px bg-gradient-to-r from-[#493B33]/45 to-transparent" />
                 </div>
             </div>
 
             {/* Edge fade masks */}
-            <div className="absolute inset-y-0 left-0 w-8 sm:w-20 md:w-48 bg-gradient-to-r from-[#060d1f] via-[#060d1f]/80 to-transparent z-10 pointer-events-none" />
-            <div className="absolute inset-y-0 right-0 w-8 sm:w-20 md:w-48 bg-gradient-to-l from-[#060d1f] via-[#060d1f]/80 to-transparent z-10 pointer-events-none" />
+            <div className="absolute inset-y-0 left-0 w-8 sm:w-20 md:w-48 bg-gradient-to-r from-[#13110E] via-[#13110E]/80 to-transparent z-10 pointer-events-none" />
+            <div className="absolute inset-y-0 right-0 w-8 sm:w-20 md:w-48 bg-gradient-to-l from-[#13110E] via-[#13110E]/80 to-transparent z-10 pointer-events-none" />
 
             <div className="flex flex-col gap-5">
                 <MarqueeRow items={ROW_1} speed={32} />
@@ -211,7 +211,7 @@ export default function TechSlider() {
             {/* Bottom count */}
             <div className="container mx-auto px-6 md:px-12 mt-6">
                 <div className="flex items-center justify-end gap-2">
-                    <span className="text-[11px] font-mono text-white/15">
+                    <span className="text-[11px] font-mono text-[#5F564D]">
                         {ROW_1.length + ROW_2.length} tools in the belt
                     </span>
                 </div>

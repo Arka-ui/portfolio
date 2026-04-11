@@ -3,19 +3,8 @@
 import { motion } from "framer-motion";
 import { Github, ArrowUpRight, Star, GitFork } from "lucide-react";
 import useSWR from "swr";
-import { useCallback } from "react";
 import ProjectCarousel from "@/components/features/ProjectCarousel";
 import { useLanguage } from "@/context/LanguageContext";
-
-function useSpotlight() {
-    return useCallback((e: React.PointerEvent<HTMLElement>) => {
-        const rect = e.currentTarget.getBoundingClientRect();
-        const x = ((e.clientX - rect.left) / rect.width) * 100;
-        const y = ((e.clientY - rect.top) / rect.height) * 100;
-        e.currentTarget.style.setProperty("--spotlight-x", `${x}%`);
-        e.currentTarget.style.setProperty("--spotlight-y", `${y}%`);
-    }, []);
-}
 
 const GITHUB_USERNAME = "Arka-ui";
 
@@ -46,16 +35,18 @@ const LANG_COLORS: Record<string, string> = {
 };
 
 const fadeUp = {
-    hidden: { y: 30, opacity: 0 },
+    hidden: { y: 28, opacity: 0, scale: 0.94, filter: "blur(10px)" },
     show: (i: number) => ({
-        y: 0, opacity: 1,
-        transition: { duration: 0.7, delay: i * 0.1, ease: [0.16, 1, 0.3, 1] as const },
+        y: 0, opacity: 1, scale: 1, filter: "blur(0px)",
+        transition: {
+            duration: 1.05, delay: i * 0.09, ease: [0.2, 0.9, 0.25, 1.05] as const,
+            filter: { duration: 0.75, delay: i * 0.09 },
+        },
     }),
 };
 
 function ProjectCard({ project, index }: { project: Project; index: number }) {
-    const color = project.language ? LANG_COLORS[project.language] : "#ff6b35";
-    const spotlight = useSpotlight();
+    const color = project.language ? LANG_COLORS[project.language] : "#DBC7A6";
     const { t } = useLanguage();
 
     return (
@@ -65,26 +56,31 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
             initial="hidden"
             whileInView="show"
             viewport={{ once: true, amount: 0.15 }}
-            onPointerMove={spotlight}
-            className="group bento-card p-6 md:p-8 flex flex-col gap-5 hover:border-[#ff6b35]/15 transition-all duration-500 card-spotlight"
+            className="group relative bento-card p-6 md:p-8 flex flex-col gap-5 hover:border-[#B39F85]/35 transition-all duration-500 hover:-translate-y-0.5"
         >
+            {/* Bottom accent bar — slides in on hover, language-colored */}
+            <span
+                className="pointer-events-none absolute left-0 right-0 bottom-0 h-px origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500 ease-out"
+                style={{ backgroundColor: color }}
+                aria-hidden
+            />
             {/* Top row */}
             <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                     {project.language && (
-                        <span className="flex items-center gap-2 text-xs text-white/35 font-mono">
-                            <span className="w-3 h-3 rounded-full shrink-0 ring-2 ring-white/5" style={{ backgroundColor: color }} />
+                        <span className="flex items-center gap-2 text-xs text-[#B39F85] font-mono">
+                            <span className="w-3 h-3 rounded-full shrink-0 ring-2 ring-[#493B33]/40" style={{ backgroundColor: color }} />
                             {project.language}
                         </span>
                     )}
-                    <span className="text-[10px] font-mono text-white/12">#{String(index + 1).padStart(2, "0")}</span>
+                    <span className="text-[10px] font-mono text-[#5F564D]">#{String(index + 1).padStart(2, "0")}</span>
                 </div>
                 <div className="flex gap-2">
                     <a
                         href={project.html_url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="p-2 rounded-lg bg-white/[0.03] border border-white/[0.05] hover:bg-white/[0.08] hover:border-[#ff6b35]/20 transition-all text-white/35 hover:text-white"
+                        className="p-2 rounded-lg bg-[#251E18]/60 border border-[#493B33]/50 hover:bg-[#251E18]/90 hover:border-[#B39F85]/35 transition-all text-[#7D6B56] hover:text-[#DBC7A6]"
                     >
                         <Github size={14} />
                     </a>
@@ -93,7 +89,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
                             href={project.homepage}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="p-2 rounded-lg bg-white/[0.03] border border-white/[0.05] hover:bg-white/[0.08] hover:border-[#ff5c5c]/20 transition-all text-white/35 hover:text-white"
+                            className="p-2 rounded-lg bg-[#251E18]/60 border border-[#493B33]/50 hover:bg-[#251E18]/90 hover:border-[#B39F85]/35 transition-all text-[#7D6B56] hover:text-[#DBC7A6]"
                         >
                             <ArrowUpRight size={14} />
                         </a>
@@ -103,24 +99,24 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
 
             {/* Title + description */}
             <div className="flex-1">
-                <h3 className="font-heading font-bold text-xl md:text-2xl text-white tracking-tight group-hover:text-[#ff6b35] transition-colors duration-300 mb-2">
+                <h3 className="font-display font-bold text-xl md:text-2xl text-[#DBC7A6] tracking-tight group-hover:text-[#B39F85] transition-colors duration-300 mb-2">
                     {project.name}
                 </h3>
-                <p className="text-sm text-white/35 line-clamp-2 leading-relaxed">
+                <p className="text-sm text-[#B39F85] line-clamp-2 leading-relaxed">
                     {project.description || t("projects.default_desc")}
                 </p>
             </div>
 
             {/* Bottom */}
-            <div className="flex items-center justify-between pt-4 border-t border-white/[0.05]">
+            <div className="flex items-center justify-between pt-4 border-t border-[#493B33]/40">
                 <div className="flex gap-2">
                     {project.topics.slice(0, 3).map(topic => (
-                        <span key={topic} className="px-2.5 py-1 rounded-lg bg-white/[0.03] border border-white/[0.04] text-[10px] font-mono text-white/30">
+                        <span key={topic} className="px-2.5 py-1 rounded-lg bg-[#251E18]/60 border border-[#493B33]/40 text-[10px] font-mono text-[#B39F85]">
                             {topic}
                         </span>
                     ))}
                 </div>
-                <div className="flex items-center gap-3 text-[11px] text-white/18 font-mono">
+                <div className="flex items-center gap-3 text-[11px] text-[#7D6B56] font-mono">
                     <span className="flex items-center gap-1"><Star size={11} /> {project.stargazers_count}</span>
                     <span className="flex items-center gap-1"><GitFork size={11} /> {project.forks_count}</span>
                 </div>
@@ -143,18 +139,18 @@ export default function FeaturedProjects() {
     if (!featured.length) return null;
 
     return (
-        <section id="projects" className="py-24 md:py-36 border-t border-white/[0.04]">
+        <section id="projects" className="py-24 md:py-36 border-t border-[#493B33]/25 md:pl-[72px]">
             <div className="container mx-auto px-6 md:px-12">
                 {/* Header */}
                 <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-14 md:mb-20">
                     <div>
-                        <span className="label-mono mb-4 block">{t("projects.label")}</span>
+                        <span className="label-display mb-4 block">{t("projects.label")}</span>
                         <motion.h2
                             initial={{ opacity: 0, y: 24 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-                            className="font-heading font-bold text-[clamp(36px,5vw,64px)] leading-[0.9] tracking-tighter text-white"
+                            className="font-display font-bold text-[clamp(40px,5.5vw,76px)] leading-[0.88] tracking-tighter text-[#DBC7A6]"
                         >
                             {t("projects.featured_heading")}
                         </motion.h2>
@@ -163,7 +159,7 @@ export default function FeaturedProjects() {
                         href={`https://github.com/${GITHUB_USERNAME}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="group inline-flex items-center gap-2 text-sm text-white/30 hover:text-[#ff6b35] transition-colors shrink-0"
+                        className="group inline-flex items-center gap-2 text-sm text-[#B39F85] hover:text-[#DBC7A6] transition-colors shrink-0"
                     >
                         {t("projects.all_repos")}
                         <ArrowUpRight size={14} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />

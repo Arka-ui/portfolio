@@ -35,15 +35,15 @@ export default function Preloader() {
         <AnimatePresence>
             {isLoading && (
                 <motion.div
-                    exit={{ opacity: 0, scale: 1.1, filter: "blur(10px)" }}
+                    exit={{ opacity: 0, scale: 1.02, filter: "blur(10px)" }}
                     transition={{ duration: 0.8, ease: "easeInOut" }}
-                    className="fixed inset-0 z-[10000] bg-black flex items-center justify-center font-mono text-cyan-500"
+                    className="fixed inset-0 z-[10000] bg-[#13110E] flex items-center justify-center font-mono text-[#B39F85]"
                 >
                     <div className="w-full max-w-md p-6">
                         {/* Header */}
-                        <div className="flex justify-between items-center mb-8 border-b border-cyan-500/30 pb-2">
-                            <span className="text-xs">BIOS_V.2.0.24</span>
-                            <span className="text-xs animate-pulse">BOOTING...</span>
+                        <div className="flex justify-between items-center mb-8 border-b border-[#493B33]/45 pb-2">
+                            <span className="text-xs text-[#7D6B56]">BIOS_V.2.0.24</span>
+                            <span className="text-xs animate-pulse text-[#DBC7A6]">BOOTING...</span>
                         </div>
 
                         {/* Sequence */}
@@ -55,8 +55,8 @@ export default function Preloader() {
                                     animate={{ opacity: 1, x: 0 }}
                                     className="flex items-center gap-3"
                                 >
-                                    <span className="text-cyan-500/50">[{index < 10 ? `0${index}` : index}]</span>
-                                    <span className={index === step ? "text-white" : "text-cyan-400/80"}>
+                                    <span className="text-[#7D6B56]">[{index < 10 ? `0${index}` : index}]</span>
+                                    <span className={index === step ? "text-[#DBC7A6]" : "text-[#B39F85]"}>
                                         {text}
                                     </span>
                                 </motion.div>
@@ -64,16 +64,20 @@ export default function Preloader() {
                         </div>
 
                         {/* Progress Bar */}
-                        <div className="mt-8 relative h-1 bg-cyan-900/50 rounded-full overflow-hidden">
+                        <div className="mt-8 relative h-1 bg-[#493B33]/45 rounded-full overflow-hidden">
                             <motion.div
-                                className="absolute top-0 left-0 h-full bg-cyan-400 box-shadow-[0_0_10px_rgba(34,211,238,0.5)]"
+                                className="absolute top-0 left-0 h-full"
+                                style={{
+                                    background: "linear-gradient(135deg, #DBC7A6 0%, #B39F85 50%, #DBC7A6 100%)",
+                                    boxShadow: "0 0 12px rgba(219,199,166,0.35)",
+                                }}
                                 initial={{ width: "0%" }}
                                 animate={{ width: `${((step + 1) / BOOT_SEQUENCE.length) * 100}%` }}
                                 transition={{ duration: 0.3 }}
                             />
                         </div>
 
-                        <div className="mt-2 flex justify-between text-[10px] text-cyan-500/50 uppercase">
+                        <div className="mt-2 flex justify-between text-[10px] text-[#5F564D] uppercase">
                             <span>Memory: 64TB OK</span>
                             <span>CPU: QUANTUM-9 OK</span>
                         </div>
@@ -81,9 +85,9 @@ export default function Preloader() {
 
                     {/* Background Grid */}
                     <div
-                        className="absolute inset-0 pointer-events-none z-[-1] opacity-10"
+                        className="absolute inset-0 pointer-events-none z-[-1] opacity-[0.06]"
                         style={{
-                            backgroundImage: 'linear-gradient(to right, #0891b2 1px, transparent 1px), linear-gradient(to bottom, #0891b2 1px, transparent 1px)',
+                            backgroundImage: 'linear-gradient(to right, #7D6B56 1px, transparent 1px), linear-gradient(to bottom, #7D6B56 1px, transparent 1px)',
                             backgroundSize: '40px 40px'
                         }}
                     />

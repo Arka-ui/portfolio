@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { Space_Grotesk, Sora, Space_Mono } from "next/font/google";
+import { Syne, Sora, Space_Mono } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 import RootContent from "@/components/layout/RootContent";
 import ScrollManager from "@/components/layout/ScrollManager";
@@ -9,9 +10,10 @@ import { LanguageProvider } from "@/context/LanguageContext";
 import CommandPalette from "@/components/features/CommandPalette";
 import Telemetry from "@/components/Telemetry";
 
-const spaceGrotesk = Space_Grotesk({
+const syne = Syne({
   subsets: ["latin"],
-  variable: "--font-space-grotesk",
+  weight: ["500", "600", "700", "800"],
+  variable: "--font-syne",
   display: "swap",
 });
 
@@ -25,6 +27,12 @@ const spaceMono = Space_Mono({
   weight: ["400", "700"],
   subsets: ["latin"],
   variable: "--font-space-mono",
+  display: "swap",
+});
+
+const greenEnergy = localFont({
+  src: "../../public/fonts/Green_Energy.ttf",
+  variable: "--font-green-energy",
   display: "swap",
 });
 
@@ -80,7 +88,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="scroll-smooth">
-      <body className={`${sora.variable} ${spaceGrotesk.variable} ${spaceMono.variable} antialiased bg-background text-foreground overflow-x-hidden grain`}>
+      <body className={`${sora.variable} ${syne.variable} ${spaceMono.variable} ${greenEnergy.variable} antialiased bg-background text-foreground overflow-x-hidden grain`}>
         <WarpProvider>
           <LanguageProvider>
             <BlueprintProvider>

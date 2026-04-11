@@ -75,24 +75,24 @@ export default function ProjectCarousel({ projects }: { projects: Project[] }) {
                 }}
             >
                 {visibleProjects.map((project) => {
-                    const langColor = LANG_COLORS[project.language || ""] || "#ff6b35";
+                    const langColor = LANG_COLORS[project.language || ""] || "#DBC7A6";
 
                     return (
                         <div
                             key={project.id}
                             data-card
-                            className="shrink-0 w-[calc(100%-2rem)] rounded-2xl overflow-hidden border border-white/[0.06] bg-[#0e1e3a]/40 shadow-xl"
+                            className="shrink-0 w-[calc(100%-2rem)] rounded-2xl overflow-hidden border border-[#493B33]/50 bg-[#1B1814]/80 shadow-xl"
                             style={{ scrollSnapAlign: "center" }}
                         >
                             {/* Card header gradient */}
-                            <div className="h-28 relative overflow-hidden" style={{ background: `linear-gradient(135deg, ${langColor}15 0%, rgba(255,107,53,0.05) 50%, transparent 100%)` }}>
-                                <div className="absolute inset-0 bg-gradient-to-t from-[#060d1f]/80 to-transparent" />
+                            <div className="h-28 relative overflow-hidden" style={{ background: `linear-gradient(135deg, ${langColor}20 0%, rgba(179,159,133,0.08) 50%, transparent 100%)` }}>
+                                <div className="absolute inset-0 bg-gradient-to-t from-[#13110E]/85 to-transparent" />
                                 <div className="absolute top-4 right-4 flex gap-2">
                                     <a
                                         href={project.html_url}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="p-2 rounded-lg bg-black/30 backdrop-blur-md text-white/55 border border-white/[0.07] hover:text-white transition-colors"
+                                        className="p-2 rounded-lg bg-[#13110E]/60 backdrop-blur-md text-[#B39F85] border border-[#493B33]/50 hover:text-[#DBC7A6] transition-colors"
                                     >
                                         <Github size={16} />
                                     </a>
@@ -101,7 +101,7 @@ export default function ProjectCarousel({ projects }: { projects: Project[] }) {
                                             href={project.homepage}
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className="p-2 rounded-lg bg-white/[0.06] backdrop-blur-md text-white/55 border border-white/[0.07] hover:text-white transition-colors"
+                                            className="p-2 rounded-lg bg-[#13110E]/60 backdrop-blur-md text-[#B39F85] border border-[#493B33]/50 hover:text-[#DBC7A6] transition-colors"
                                         >
                                             <ArrowUpRight size={16} />
                                         </a>
@@ -115,14 +115,14 @@ export default function ProjectCarousel({ projects }: { projects: Project[] }) {
                                     <span
                                         className="text-xs font-mono px-2 py-1 rounded-lg border"
                                         style={{
-                                            color: langColor,
-                                            borderColor: `${langColor}30`,
-                                            backgroundColor: `${langColor}10`,
+                                            color: "#DBC7A6",
+                                            borderColor: `${langColor}55`,
+                                            backgroundColor: `${langColor}1A`,
                                         }}
                                     >
                                         {project.language || "Code"}
                                     </span>
-                                    <div className="flex items-center gap-3 text-white/25 text-xs">
+                                    <div className="flex items-center gap-3 text-[#7D6B56] text-xs">
                                         <span className="flex items-center gap-1">
                                             <Star size={11} /> {project.stargazers_count}
                                         </span>
@@ -132,10 +132,10 @@ export default function ProjectCarousel({ projects }: { projects: Project[] }) {
                                     </div>
                                 </div>
 
-                                <h3 className="text-xl font-bold text-white mb-1.5 leading-tight">
+                                <h3 className="font-display text-xl font-bold text-[#DBC7A6] mb-1.5 leading-tight tracking-tight">
                                     {project.name}
                                 </h3>
-                                <p className="text-white/30 text-sm leading-relaxed mb-4 line-clamp-3">
+                                <p className="text-[#B39F85] text-sm leading-relaxed mb-4 line-clamp-3">
                                     {project.description || "Experimental project."}
                                 </p>
 
@@ -143,7 +143,7 @@ export default function ProjectCarousel({ projects }: { projects: Project[] }) {
                                     {project.topics.slice(0, 3).map(topic => (
                                         <span
                                             key={topic}
-                                            className="px-2 py-1 text-[10px] rounded-lg bg-white/[0.03] text-white/35 border border-white/[0.05]"
+                                            className="px-2 py-1 text-[10px] rounded-lg bg-[#251E18]/70 text-[#B39F85] border border-[#493B33]/40"
                                         >
                                             #{topic}
                                         </span>
@@ -153,7 +153,7 @@ export default function ProjectCarousel({ projects }: { projects: Project[] }) {
 
                             {/* Drag hint bar */}
                             <div className="pb-5 flex justify-center">
-                                <div className="w-12 h-1 bg-white/[0.06] rounded-full" />
+                                <div className="w-12 h-1 bg-[#493B33]/55 rounded-full" />
                             </div>
                         </div>
                     );
@@ -167,7 +167,7 @@ export default function ProjectCarousel({ projects }: { projects: Project[] }) {
                         key={i}
                         className={cn(
                             "h-1.5 rounded-full transition-all duration-300",
-                            i === activeIndex ? "w-6 bg-[#ff6b35]" : "w-1.5 bg-white/12"
+                            i === activeIndex ? "w-6 bg-[#DBC7A6]" : "w-1.5 bg-[#493B33]/70"
                         )}
                     />
                 ))}

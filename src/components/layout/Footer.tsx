@@ -24,15 +24,15 @@ export default function Footer() {
     };
 
     return (
-        <footer className="relative border-t border-white/[0.04] pt-12 pb-12">
-            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[500px] h-[150px] bg-[#ff6b35]/[0.02] rounded-full blur-[80px] pointer-events-none" />
+        <footer className="relative border-t border-[#493B33]/25 pt-12 pb-12 md:pl-[72px]">
+            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[500px] h-[150px] bg-[#DBC7A6]/[0.025] rounded-full blur-[80px] pointer-events-none" />
 
             <div className="container mx-auto px-6 md:px-12 relative z-10">
                 <div className="flex flex-col md:flex-row items-center justify-between gap-6">
                     {/* Left */}
                     <div className="flex items-center gap-4 flex-wrap justify-center md:justify-start">
-                        <span className="font-heading font-bold text-lg tracking-tighter text-white">Arka<span className="text-[#ff6b35]">.</span></span>
-                        <div className="w-px h-5 bg-white/[0.08]" />
+                        <span className="font-display font-bold text-lg tracking-tighter text-[#DBC7A6]">Arka<span className="text-[#B39F85]">.</span></span>
+                        <div className="w-px h-5 bg-[#493B33]/50" />
                         <div className="flex gap-2">
                             <motion.a
                                 href="https://github.com/arka-ui"
@@ -40,7 +40,7 @@ export default function Footer() {
                                 rel="noopener noreferrer"
                                 whileHover={{ y: -2 }}
                                 whileTap={{ scale: 0.95 }}
-                                className="flex items-center gap-2 px-3 py-2 rounded-lg bg-white/[0.03] border border-white/[0.05] hover:bg-white/[0.06] hover:border-[#ff6b35]/15 transition-all text-white/35 hover:text-white text-sm"
+                                className="flex items-center gap-2 px-3 py-2 rounded-lg bg-[#251E18]/60 border border-[#493B33]/50 hover:bg-[#251E18]/90 hover:border-[#B39F85]/30 transition-all text-[#7D6B56] hover:text-[#DBC7A6] text-sm"
                             >
                                 <Github size={13} strokeWidth={1.5} />
                                 <span className="text-xs">GitHub</span>
@@ -49,7 +49,7 @@ export default function Footer() {
                                 onClick={copySession}
                                 whileHover={{ y: -2 }}
                                 whileTap={{ scale: 0.95 }}
-                                className="flex items-center gap-2 px-3 py-2 rounded-lg bg-white/[0.03] border border-white/[0.05] hover:bg-white/[0.06] hover:border-[#ff6b35]/15 transition-all text-white/35 hover:text-white text-sm"
+                                className="flex items-center gap-2 px-3 py-2 rounded-lg bg-[#251E18]/60 border border-[#493B33]/50 hover:bg-[#251E18]/90 hover:border-[#B39F85]/30 transition-all text-[#7D6B56] hover:text-[#DBC7A6] text-sm"
                                 aria-label="Copy Session ID"
                             >
                                 <SessionIcon size={13} />
@@ -58,15 +58,15 @@ export default function Footer() {
                         </div>
 
                         {data && (
-                            <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-white/[0.02] border border-white/[0.04] text-xs font-mono text-white/20">
+                            <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-[#1B1814]/70 border border-[#493B33]/40 text-xs font-mono text-[#7D6B56]">
                                 <span
                                     className="w-2 h-2 rounded-full"
                                     style={{
                                         backgroundColor:
-                                            data.discord_status === "online" ? "#ff6b35"
-                                            : data.discord_status === "idle" ? "#f59e0b"
-                                            : data.discord_status === "dnd" ? "#ff5c5c"
-                                            : "#4b5563",
+                                            data.discord_status === "online" ? "#8fb573"
+                                            : data.discord_status === "idle" ? "#e0b062"
+                                            : data.discord_status === "dnd" ? "#d46a5c"
+                                            : "#5F564D",
                                     }}
                                 />
                                 {data.discord_status ?? "offline"}
@@ -76,15 +76,15 @@ export default function Footer() {
 
                     {/* Right */}
                     <div className="flex items-center gap-4">
-                        <p className="text-[11px] text-white/12 font-mono">
+                        <p className="text-[11px] text-[#5F564D] font-mono">
                             &copy; {new Date().getFullYear()} Arka &middot; {t("footer.rights")}
                         </p>
                         <button
                             onClick={scrollToTop}
-                            className="p-2.5 rounded-lg bg-white/[0.03] border border-white/[0.05] hover:bg-[#ff6b35]/[0.08] hover:border-[#ff6b35]/15 transition-all group"
+                            className="p-2.5 rounded-lg bg-[#251E18]/60 border border-[#493B33]/50 hover:bg-[#DBC7A6]/[0.08] hover:border-[#DBC7A6]/30 transition-all group"
                             aria-label="Scroll to top"
                         >
-                            <ArrowUp size={14} className="text-white/25 group-hover:text-[#ff6b35] transition-colors" />
+                            <ArrowUp size={14} className="text-[#7D6B56] group-hover:text-[#DBC7A6] transition-colors" />
                         </button>
                     </div>
                 </div>

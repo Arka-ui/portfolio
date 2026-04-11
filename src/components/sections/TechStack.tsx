@@ -55,10 +55,13 @@ const CATEGORIES = [
 ];
 
 const fadeUp = {
-    hidden: { y: 30, opacity: 0 },
+    hidden: { y: 28, opacity: 0, scale: 0.94, filter: "blur(10px)" },
     show: (i: number) => ({
-        y: 0, opacity: 1,
-        transition: { duration: 0.7, delay: i * 0.1, ease: [0.16, 1, 0.3, 1] as const },
+        y: 0, opacity: 1, scale: 1, filter: "blur(0px)",
+        transition: {
+            duration: 1.05, delay: i * 0.1, ease: [0.2, 0.9, 0.25, 1.05] as const,
+            filter: { duration: 0.75, delay: i * 0.1 },
+        },
     }),
 };
 
@@ -75,29 +78,29 @@ export default function TechStack() {
     );
 
     const colorMap: Record<string, { dot: string; border: string; bg: string; text: string }> = {
-        lime: { dot: "bg-[#ff6b35]", border: "border-[#ff6b35]/15", bg: "bg-[#ff6b35]/[0.05]", text: "text-[#ff6b35]" },
-        coral: { dot: "bg-[#00cfb4]", border: "border-[#00cfb4]/15", bg: "bg-[#00cfb4]/[0.05]", text: "text-[#00cfb4]" },
-        white: { dot: "bg-white/60", border: "border-white/15", bg: "bg-white/[0.04]", text: "text-white/70" },
+        lime:  { dot: "bg-[#DBC7A6]", border: "border-[#DBC7A6]/25", bg: "bg-[#DBC7A6]/[0.06]", text: "text-[#DBC7A6]" },
+        coral: { dot: "bg-[#B39F85]", border: "border-[#B39F85]/25", bg: "bg-[#B39F85]/[0.06]", text: "text-[#B39F85]" },
+        white: { dot: "bg-[#7D6B56]", border: "border-[#7D6B56]/30", bg: "bg-[#7D6B56]/[0.06]", text: "text-[#B39F85]" },
     };
 
     return (
-        <section id="skills" className="py-24 md:py-36 border-t border-white/[0.04]">
+        <section id="skills" className="py-24 md:py-36 border-t border-[#493B33]/25 md:pl-[72px]">
             <div className="container mx-auto px-6 md:px-12">
                 {/* Header */}
                 <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-14 md:mb-20">
                     <div>
-                        <span className="label-mono mb-4 block">Craft</span>
+                        <span className="label-display mb-4 block">Craft</span>
                         <motion.h2
                             initial={{ opacity: 0, y: 24 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-                            className="font-heading font-bold text-[clamp(36px,5vw,64px)] leading-[0.9] tracking-tighter text-white"
+                            className="font-display font-bold text-[clamp(40px,5.5vw,76px)] leading-[0.88] tracking-tighter text-[#DBC7A6]"
                         >
                             Tech stack
                         </motion.h2>
                     </div>
-                    <span className="text-[11px] font-mono text-white/18">
+                    <span className="text-[11px] font-mono text-[#7D6B56]">
                         {usedLanguages.size > 0 ? `${usedLanguages.size} languages on GitHub` : "Click any tech for details"}
                     </span>
                 </div>
@@ -131,16 +134,16 @@ export default function TechStack() {
                                             <div key={tech}>
                                                 <button
                                                     onClick={() => setExpandedTech(isExpanded ? null : tech)}
-                                                    className={`group flex items-center justify-between w-full py-2.5 px-3 rounded-xl hover:bg-white/[0.04] transition-all duration-200 text-left ${isExpanded ? `bg-white/[0.04] ${c.border} border` : ""}`}
+                                                    className={`group flex items-center justify-between w-full py-2.5 px-3 rounded-xl hover:bg-[#251E18]/60 transition-all duration-200 text-left ${isExpanded ? `bg-[#251E18]/60 ${c.border} border` : ""}`}
                                                 >
-                                                    <span className={`text-sm font-medium transition-colors ${isActive ? "text-white/75" : "text-white/35"} ${isExpanded ? c.text : ""}`}>
+                                                    <span className={`text-sm font-medium transition-colors ${isActive ? "text-[#DBC7A6]" : "text-[#7D6B56]"} ${isExpanded ? c.text : ""}`}>
                                                         {tech}
                                                     </span>
                                                     <div className="flex items-center gap-2">
-                                                        {isActive && <span className={`w-1.5 h-1.5 rounded-full ${c.dot} opacity-60`} />}
+                                                        {isActive && <span className={`w-1.5 h-1.5 rounded-full ${c.dot} opacity-80`} />}
                                                         <ChevronRight
                                                             size={12}
-                                                            className={`text-white/12 transition-transform duration-200 ${isExpanded ? "rotate-90" : ""}`}
+                                                            className={`text-[#5F564D] transition-transform duration-200 ${isExpanded ? "rotate-90" : ""}`}
                                                         />
                                                     </div>
                                                 </button>

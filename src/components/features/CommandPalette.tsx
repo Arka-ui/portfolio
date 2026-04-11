@@ -74,8 +74,8 @@ export default function CommandPalette() {
         : "fixed inset-0 z-[60] flex items-start justify-center pt-[12vh] sm:pt-[16vh] px-4";
 
     const paletteClass = isMobile
-        ? "relative w-full bg-[#060d1f]/98 border-t border-white/[0.07] rounded-t-3xl shadow-[0_-16px_80px_rgba(0,0,0,0.9)] overflow-hidden backdrop-blur-2xl animate-in slide-in-from-bottom-4 fade-in duration-200 pb-[env(safe-area-inset-bottom,0px)]"
-        : "relative w-full max-w-lg bg-[#060d1f]/95 border border-white/[0.07] rounded-3xl shadow-[0_16px_80px_rgba(0,0,0,0.9),0_0_0_1px_rgba(255,107,53,0.04)] overflow-hidden backdrop-blur-2xl animate-in slide-in-from-top-4 fade-in duration-200";
+        ? "relative w-full bg-[#13110E]/98 border-t border-[#493B33]/45 rounded-t-3xl shadow-[0_-16px_80px_rgba(0,0,0,0.9)] overflow-hidden backdrop-blur-2xl animate-in slide-in-from-bottom-4 fade-in duration-200 pb-[env(safe-area-inset-bottom,0px)]"
+        : "relative w-full max-w-lg bg-[#13110E]/95 border border-[#493B33]/45 rounded-3xl shadow-[0_16px_80px_rgba(0,0,0,0.9),0_0_0_1px_rgba(219,199,166,0.05)] overflow-hidden backdrop-blur-2xl animate-in slide-in-from-top-4 fade-in duration-200";
 
     return (
         <div className={containerClass}>
@@ -84,21 +84,21 @@ export default function CommandPalette() {
             <div className={paletteClass}>
                 {isMobile && (
                     <div className="flex justify-center pt-3 pb-1">
-                        <div className="w-10 h-1 rounded-full bg-white/15" />
+                        <div className="w-10 h-1 rounded-full bg-[#493B33]/60" />
                     </div>
                 )}
 
                 <Command className="w-full" shouldFilter>
-                    <div className="flex items-center border-b border-white/[0.05] px-5">
-                        <Search className="w-4 h-4 text-[#ff6b35]/40 mr-3 shrink-0" />
+                    <div className="flex items-center border-b border-[#493B33]/35 px-5">
+                        <Search className="w-4 h-4 text-[#B39F85] mr-3 shrink-0" />
                         <Command.Input
                             autoFocus={!isMobile}
                             value={search}
                             onValueChange={setSearch}
                             placeholder={t("nav.cmd_placeholder")}
-                            className="w-full bg-transparent py-4 text-[15px] text-white placeholder-white/15 focus:outline-none"
+                            className="w-full bg-transparent py-4 text-[15px] text-[#DBC7A6] placeholder-[#5F564D] focus:outline-none"
                         />
-                        <kbd className="hidden sm:inline-flex text-[10px] font-mono text-white/12 border border-white/[0.05] rounded-lg px-1.5 py-0.5 ml-2 shrink-0 bg-white/[0.02]">
+                        <kbd className="hidden sm:inline-flex text-[10px] font-mono text-[#7D6B56] border border-[#493B33]/50 rounded-lg px-1.5 py-0.5 ml-2 shrink-0 bg-[#251E18]/60">
                             ESC
                         </kbd>
                     </div>
@@ -106,9 +106,9 @@ export default function CommandPalette() {
                     <div className="max-h-[380px] overflow-y-auto p-2">
                         <Command.List>
                             <Command.Empty className="py-12 text-center">
-                                <Sparkles className="w-5 h-5 text-white/10 mx-auto mb-3" />
-                                <p className="text-sm text-white/25">{t("cmd.no_results")}</p>
-                                <p className="text-xs text-white/12 mt-1">{t("cmd.no_results_hint")}</p>
+                                <Sparkles className="w-5 h-5 text-[#493B33] mx-auto mb-3" />
+                                <p className="text-sm text-[#7D6B56]">{t("cmd.no_results")}</p>
+                                <p className="text-xs text-[#5F564D] mt-1">{t("cmd.no_results_hint")}</p>
                             </Command.Empty>
 
                             <Command.Group heading={t("cmd.navigate")} className={GROUP_STYLE}>
@@ -120,10 +120,10 @@ export default function CommandPalette() {
                             </Command.Group>
 
                             <Command.Group heading={t("cmd.actions")} className={GROUP_STYLE}>
-                                <CmdItem icon={copied === "email" ? <Check size={15} className="text-[#ff6b35]" /> : <Copy size={15} />} desc={t("cmd.copy_email_desc")} onSelect={() => run(() => handleCopy("email"))} kbd="C">
+                                <CmdItem icon={copied === "email" ? <Check size={15} className="text-[#DBC7A6]" /> : <Copy size={15} />} desc={t("cmd.copy_email_desc")} onSelect={() => run(() => handleCopy("email"))} kbd="C">
                                     {copied === "email" ? t("cmd.copied") : t("cmd.copy_email")}
                                 </CmdItem>
-                                <CmdItem icon={copied === "link" ? <Check size={15} className="text-[#ff6b35]" /> : <Link2 size={15} />} desc={t("cmd.copy_link_desc")} onSelect={() => run(() => handleCopy("link"))}>
+                                <CmdItem icon={copied === "link" ? <Check size={15} className="text-[#DBC7A6]" /> : <Link2 size={15} />} desc={t("cmd.copy_link_desc")} onSelect={() => run(() => handleCopy("link"))}>
                                     {copied === "link" ? t("cmd.copied") : t("cmd.copy_link")}
                                 </CmdItem>
                                 <CmdItem icon={<Share2 size={15} />} desc={t("cmd.share_desc")} onSelect={() => run(handleShare)}>{t("cmd.share")}</CmdItem>
@@ -136,7 +136,7 @@ export default function CommandPalette() {
                                         key={lang.code}
                                         icon={<Globe size={15} />}
                                         desc={lang.code === language.code ? t("cmd.lang_active") : t("cmd.lang_switch", { name: lang.name })}
-                                        suffix={lang.code === language.code ? <Check size={12} className="text-[#ff6b35]" /> : undefined}
+                                        suffix={lang.code === language.code ? <Check size={12} className="text-[#DBC7A6]" /> : undefined}
                                         onSelect={() => run(() => setLanguage(lang))}
                                     >
                                         {lang.flag} {lang.name}
@@ -146,7 +146,7 @@ export default function CommandPalette() {
 
                             <Command.Group heading={t("cmd.socials")} className={GROUP_STYLE}>
                                 {SOCIALS.map((s) => (
-                                    <CmdItem key={s.label} icon={<s.icon size={15} />} suffix={<ArrowUpRight size={12} className="text-white/12" />} desc={t("cmd.open_social", { label: s.label })} onSelect={() => run(() => window.open(s.url, "_blank"))}>
+                                    <CmdItem key={s.label} icon={<s.icon size={15} />} suffix={<ArrowUpRight size={12} className="text-[#5F564D]" />} desc={t("cmd.open_social", { label: s.label })} onSelect={() => run(() => window.open(s.url, "_blank"))}>
                                         {s.label}
                                     </CmdItem>
                                 ))}
@@ -154,18 +154,18 @@ export default function CommandPalette() {
                         </Command.List>
                     </div>
 
-                    <div className="border-t border-white/[0.04] px-5 py-2.5 flex items-center justify-between">
-                        <div className="flex items-center gap-1.5 text-[10px] font-mono text-white/12">
-                            <kbd className="border border-white/[0.05] rounded px-1 py-0.5 bg-white/[0.02]">↑↓</kbd>
+                    <div className="border-t border-[#493B33]/35 px-5 py-2.5 flex items-center justify-between">
+                        <div className="flex items-center gap-1.5 text-[10px] font-mono text-[#5F564D]">
+                            <kbd className="border border-[#493B33]/50 rounded px-1 py-0.5 bg-[#251E18]/60">↑↓</kbd>
                             <span>{t("cmd.hint_navigate")}</span>
                         </div>
-                        <div className="flex items-center gap-3 text-[10px] font-mono text-white/12">
+                        <div className="flex items-center gap-3 text-[10px] font-mono text-[#5F564D]">
                             <span className="flex items-center gap-1.5">
-                                <kbd className="border border-white/[0.05] rounded px-1 py-0.5 bg-white/[0.02]">↵</kbd>
+                                <kbd className="border border-[#493B33]/50 rounded px-1 py-0.5 bg-[#251E18]/60">↵</kbd>
                                 {t("cmd.hint_select")}
                             </span>
                             <span className="flex items-center gap-1.5">
-                                <kbd className="border border-white/[0.05] rounded px-1 py-0.5 bg-white/[0.02]">esc</kbd>
+                                <kbd className="border border-[#493B33]/50 rounded px-1 py-0.5 bg-[#251E18]/60">esc</kbd>
                                 {t("cmd.hint_close")}
                             </span>
                         </div>
@@ -176,7 +176,7 @@ export default function CommandPalette() {
     );
 }
 
-const GROUP_STYLE = "[&_[cmdk-group-heading]]:text-[10px] [&_[cmdk-group-heading]]:font-mono [&_[cmdk-group-heading]]:text-white/15 [&_[cmdk-group-heading]]:px-3 [&_[cmdk-group-heading]]:py-2.5 [&_[cmdk-group-heading]]:uppercase [&_[cmdk-group-heading]]:tracking-[0.15em] mt-1";
+const GROUP_STYLE = "[&_[cmdk-group-heading]]:text-[10px] [&_[cmdk-group-heading]]:font-mono [&_[cmdk-group-heading]]:text-[#5F564D] [&_[cmdk-group-heading]]:px-3 [&_[cmdk-group-heading]]:py-2.5 [&_[cmdk-group-heading]]:uppercase [&_[cmdk-group-heading]]:tracking-[0.15em] mt-1";
 
 function CmdItem({ children, icon, desc, suffix, kbd: kbdHint, onSelect }: {
     children: React.ReactNode; icon: React.ReactNode; desc?: string; suffix?: React.ReactNode; kbd?: string; onSelect: () => void;
@@ -184,16 +184,16 @@ function CmdItem({ children, icon, desc, suffix, kbd: kbdHint, onSelect }: {
     return (
         <Command.Item
             onSelect={onSelect}
-            className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-white/50 cursor-pointer hover:bg-white/[0.04] hover:text-white aria-selected:bg-[#ff6b35]/[0.06] aria-selected:text-white transition-all duration-150 group"
+            className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-[#B39F85] cursor-pointer hover:bg-[#251E18]/60 hover:text-[#DBC7A6] aria-selected:bg-[#DBC7A6]/[0.07] aria-selected:text-[#DBC7A6] transition-all duration-150 group"
         >
-            <span className="flex items-center justify-center w-8 h-8 rounded-xl bg-white/[0.03] border border-white/[0.05] text-white/25 group-aria-selected:text-[#ff6b35]/60 group-aria-selected:border-[#ff6b35]/[0.12] group-aria-selected:bg-[#ff6b35]/[0.06] transition-all duration-150 shrink-0">
+            <span className="flex items-center justify-center w-8 h-8 rounded-xl bg-[#251E18]/60 border border-[#493B33]/45 text-[#7D6B56] group-aria-selected:text-[#DBC7A6] group-aria-selected:border-[#DBC7A6]/25 group-aria-selected:bg-[#DBC7A6]/[0.08] transition-all duration-150 shrink-0">
                 {icon}
             </span>
             <div className="flex-1 min-w-0">
                 <span className="block truncate font-medium">{children}</span>
-                {desc && <span className="block text-[11px] text-white/15 truncate group-aria-selected:text-white/25 transition-colors">{desc}</span>}
+                {desc && <span className="block text-[11px] text-[#5F564D] truncate group-aria-selected:text-[#7D6B56] transition-colors">{desc}</span>}
             </div>
-            {kbdHint && <kbd className="hidden sm:inline-flex shrink-0 ml-auto text-[10px] font-mono text-white/12 border border-white/[0.05] rounded px-1.5 py-0.5 bg-white/[0.02]">{kbdHint}</kbd>}
+            {kbdHint && <kbd className="hidden sm:inline-flex shrink-0 ml-auto text-[10px] font-mono text-[#5F564D] border border-[#493B33]/50 rounded px-1.5 py-0.5 bg-[#251E18]/60">{kbdHint}</kbd>}
             {suffix && <span className="shrink-0 ml-auto">{suffix}</span>}
         </Command.Item>
     );
