@@ -23,10 +23,10 @@
   ],
   "private": true,
   "scripts": {
-    "dev": "next dev -p 3001",
+    "dev": "next dev",
     "build": "next build",
-    "start": "next start -p 3001",
-    "lint": "eslint"
+    "start": "next start",
+    "lint": "next lint"
   },
   "dependencies": {
     "clsx": "^2.1.1",
