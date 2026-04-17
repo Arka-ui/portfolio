@@ -6,7 +6,7 @@
 
 <br/>
 
-[![Live Site](https://img.shields.io/badge/%E2%9C%A6%20Live-Portfolio-6366f1?style=for-the-badge&labelColor=0d1117)](https://arka-ui.github.io/portfolio/)
+[![Live Site](https://img.shields.io/badge/%E2%9C%A6%20Live-Portfolio-6366f1?style=for-the-badge&labelColor=0d1117)](https://arka.riftmc.net)
 [![GitHub Repo](https://img.shields.io/badge/GitHub-Repo-181717?style=for-the-badge&logo=github&logoColor=white&labelColor=0d1117)](https://github.com/Arka-ui/portfolio)
 
 <br/>
