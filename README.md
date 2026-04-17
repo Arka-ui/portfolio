@@ -20,7 +20,7 @@
 
 <br/>
 
-<a href="https://arka-ui.github.io/portfolio/">
+<a href="https://arka.riftmc.net">
   <img src="https://img.shields.io/badge/→%20Visit%20the%20Portfolio-6366f1?style=for-the-badge&labelColor=6366f1" alt="Visit Portfolio" />
 </a>
 
