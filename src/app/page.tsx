@@ -2,6 +2,7 @@ import Hero from "@/components/sections/Hero";
 import TechSlider from "@/components/sections/TechSlider";
 import About from "@/components/sections/About";
 import FeaturedProjects from "@/components/sections/FeaturedProjects";
+import NewsFeed from "@/components/sections/NewsFeed";
 import TechStack from "@/components/sections/TechStack";
 import Timeline from "@/components/sections/Timeline";
 import LiveStatus from "@/components/features/LiveStatus";
@@ -15,6 +16,7 @@ export default function Home() {
       <About />
       <Timeline />
       <FeaturedProjects />
+      <NewsFeed />
       <TechStack />
       <LiveStatus />
       <Contact />

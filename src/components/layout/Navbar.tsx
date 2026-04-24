@@ -27,7 +27,7 @@ export default function Navbar() {
     const NAV_ITEMS = [
         { label: t("nav.home"),    href: "#",            id: "hero",         merge: [] as string[] },
         { label: t("nav.about"),   href: "#about-intro", id: "about-intro",  merge: ["about"] },
-        { label: t("nav.work"),    href: "#projects",    id: "projects",     merge: [] },
+        { label: t("nav.work"),    href: "#projects",    id: "projects",     merge: ["news"] },
         { label: t("nav.stack"),   href: "#skills",      id: "skills",       merge: [] },
         { label: t("nav.live"),    href: "#live",        id: "live",         merge: [] },
         { label: t("nav.contact"), href: "#contact",     id: "contact",      merge: [] },
@@ -42,8 +42,8 @@ export default function Navbar() {
 
     // Build the ordered list of section ids to scan, plus a map from DOM id -> rail id.
     // Timeline's own id ("about") resolves to the "about-intro" rail dot.
-    const NAV_IDS = ["hero", "about-intro", "about", "projects", "skills", "live", "contact"];
-    const RAIL_RESOLVE: Record<string, string> = { about: "about-intro" };
+    const NAV_IDS = ["hero", "about-intro", "about", "projects", "news", "skills", "live", "contact"];
+    const RAIL_RESOLVE: Record<string, string> = { about: "about-intro", news: "projects" };
 
     useEffect(() => {
         let raf = 0;

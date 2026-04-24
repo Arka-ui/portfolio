@@ -85,6 +85,17 @@
     "label": "Erfahrung",
     "heading": "Was ich gebaut habe"
   },
+  "news": {
+    "label": "Sendung",
+    "live": "Live",
+    "heading": "Das Neueste aus dem Feed",
+    "subtitle": "Veröffentlicht über das Arka News System — jeder Beitrag ist Ed25519-signiert, auf GitHub versioniert und in der CI verifiziert. Keine Server, keine Datenbank — nur kryptografisches Vertrauen.",
+    "view_all": "Alle Beiträge",
+    "read": "Beitrag lesen",
+    "verified": "Signiert",
+    "powered_by": "Bereitgestellt von",
+    "signed_note": "Ed25519 · In CI verifiziert"
+  },
   "stack": {
     "label": "Handwerk",
     "heading": "Tech-Stack",
@@ -145,12 +156,14 @@
     "go_stack": "Stack",
     "go_timeline": "Verlauf",
     "go_live": "Live",
+    "go_news": "News",
     "desc_home": "Zurück nach oben",
     "desc_about": "Wer ich bin und woran ich glaube",
     "desc_projects": "Ausgewählte Arbeiten & Projekte",
     "desc_stack": "Technologien & Tools, die ich nutze",
     "desc_timeline": "Mein Entwicklerweg bisher",
     "desc_live": "Discord-Status & Verfügbarkeit",
+    "desc_news": "Neueste Beiträge aus dem Arka News System",
     "desc_contact": "Kontakt aufnehmen",
     "copy_email": "Session ID kopieren",
     "copy_email_desc": "05459c70a2245442430b1b0dd484650013a8ad3c425957e3f2dc16ccce07cb5f54",

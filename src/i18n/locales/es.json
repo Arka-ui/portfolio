@@ -85,6 +85,17 @@
     "label": "Experiencia",
     "heading": "Lo que he construido"
   },
+  "news": {
+    "label": "Difusión",
+    "live": "En vivo",
+    "heading": "Lo más reciente",
+    "subtitle": "Publicado vía Arka News System — cada artículo está firmado con Ed25519, versionado en GitHub y verificado en CI. Sin servidores ni bases de datos — solo confianza criptográfica.",
+    "view_all": "Todos los artículos",
+    "read": "Leer artículo",
+    "verified": "Firmado",
+    "powered_by": "Impulsado por",
+    "signed_note": "Ed25519 · Verificado en CI"
+  },
   "stack": {
     "label": "Oficio",
     "heading": "Stack técnico",
@@ -145,12 +156,14 @@
     "go_stack": "Stack",
     "go_timeline": "Trayectoria",
     "go_live": "Live",
+    "go_news": "Noticias",
     "desc_home": "Volver al inicio",
     "desc_about": "Quién soy y lo que creo",
     "desc_projects": "Proyectos y trabajos destacados",
     "desc_stack": "Tecnologías y herramientas que uso",
     "desc_timeline": "Mi trayectoria como desarrollador",
     "desc_live": "Estado de Discord y disponibilidad",
+    "desc_news": "Últimas publicaciones de Arka News System",
     "desc_contact": "Ponerse en contacto",
     "copy_email": "Copiar Session ID",
     "copy_email_desc": "05459c70a2245442430b1b0dd484650013a8ad3c425957e3f2dc16ccce07cb5f54",

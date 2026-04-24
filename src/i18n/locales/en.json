@@ -85,6 +85,17 @@
     "label": "Experience",
     "heading": "What I've built"
   },
+  "news": {
+    "label": "Broadcast",
+    "live": "Live",
+    "heading": "Latest from the signal",
+    "subtitle": "Published through Arka News System — every post is Ed25519-signed, committed to GitHub, and verified in CI. No servers, no databases, just cryptographic trust.",
+    "view_all": "All posts",
+    "read": "Read post",
+    "verified": "Signed",
+    "powered_by": "Powered by",
+    "signed_note": "Ed25519 · Verified in CI"
+  },
   "stack": {
     "label": "Craft",
     "heading": "Tech stack",
@@ -145,12 +156,14 @@
     "go_stack": "Stack",
     "go_timeline": "Timeline",
     "go_live": "Live",
+    "go_news": "News",
     "desc_home": "Back to the top",
     "desc_about": "Who I am & what I believe in",
     "desc_projects": "Featured work & case studies",
     "desc_stack": "Technologies & tools I use",
     "desc_timeline": "My developer journey so far",
     "desc_live": "Discord status & availability",
+    "desc_news": "Latest posts from Arka News System",
     "desc_contact": "Get in touch with me",
     "copy_email": "Copy Session ID",
     "copy_email_desc": "05459c70a2245442430b1b0dd484650013a8ad3c425957e3f2dc16ccce07cb5f54",

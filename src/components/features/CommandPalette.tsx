@@ -5,7 +5,7 @@ import { Command } from "cmdk";
 import {
     Search, Home, Code, User, Mail, Copy, Check,
     Layers, Radio, Clock, Github, MessageCircle,
-    Share2, ArrowUpRight, Zap, Sparkles, Link2, Globe,
+    Share2, ArrowUpRight, Zap, Sparkles, Link2, Globe, Newspaper,
 } from "lucide-react";
 import { useWarp } from "@/context/WarpContext";
 import { useLanguage, SUPPORTED_LANGUAGES } from "@/context/LanguageContext";
@@ -21,13 +21,14 @@ export default function CommandPalette() {
     const { language, setLanguage, t } = useLanguage();
 
     const SECTIONS = [
-        { icon: Home,    label: t("nav.home"),     desc: t("cmd.desc_home"),     href: "#" },
-        { icon: User,    label: t("nav.about"),    desc: t("cmd.desc_about"),    href: "#about-intro" },
-        { icon: Code,    label: t("nav.projects"), desc: t("cmd.desc_projects"), href: "#projects" },
-        { icon: Layers,  label: t("cmd.go_stack"), desc: t("cmd.desc_stack"),    href: "#skills" },
-        { icon: Clock,   label: t("cmd.go_timeline"), desc: t("cmd.desc_timeline"), href: "#about" },
-        { icon: Radio,   label: t("nav.live"),     desc: t("cmd.desc_live"),     href: "#live" },
-        { icon: Mail,    label: t("nav.contact"),  desc: t("cmd.desc_contact"),  href: "#contact" },
+        { icon: Home,      label: t("nav.home"),     desc: t("cmd.desc_home"),     href: "#" },
+        { icon: User,      label: t("nav.about"),    desc: t("cmd.desc_about"),    href: "#about-intro" },
+        { icon: Code,      label: t("nav.projects"), desc: t("cmd.desc_projects"), href: "#projects" },
+        { icon: Newspaper, label: t("cmd.go_news"),  desc: t("cmd.desc_news"),     href: "#news" },
+        { icon: Layers,    label: t("cmd.go_stack"), desc: t("cmd.desc_stack"),    href: "#skills" },
+        { icon: Clock,     label: t("cmd.go_timeline"), desc: t("cmd.desc_timeline"), href: "#about" },
+        { icon: Radio,     label: t("nav.live"),     desc: t("cmd.desc_live"),     href: "#live" },
+        { icon: Mail,      label: t("nav.contact"),  desc: t("cmd.desc_contact"),  href: "#contact" },
     ];
     const [copied, setCopied] = useState<"email" | "link" | null>(null);
     const [search, setSearch] = useState("");
