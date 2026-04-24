@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import useSWR from "swr";
 import { useState } from "react";
 import { X, ChevronRight } from "lucide-react";
+import { useLanguage } from "@/context/LanguageContext";
 
 const GITHUB_USERNAME = "Arka-ui";
 
@@ -66,6 +67,7 @@ const fadeUp = {
 };
 
 export default function TechStack() {
+    const { t } = useLanguage();
     const { data: githubData } = useSWR(
         `https://api.github.com/users/${GITHUB_USERNAME}/repos?sort=pushed&per_page=30`,
         fetcher
@@ -89,7 +91,7 @@ export default function TechStack() {
                 {/* Header */}
                 <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-14 md:mb-20">
                     <div>
-                        <span className="label-display mb-4 block">Craft</span>
+                        <span className="label-display mb-4 block">{t("stack.label")}</span>
                         <motion.h2
                             initial={{ opacity: 0, y: 24 }}
                             whileInView={{ opacity: 1, y: 0 }}
@@ -97,11 +99,13 @@ export default function TechStack() {
                             transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
                             className="font-display font-bold text-[clamp(40px,5.5vw,76px)] leading-[0.88] tracking-tighter text-[#DBC7A6]"
                         >
-                            Tech stack
+                            {t("stack.heading")}
                         </motion.h2>
                     </div>
                     <span className="text-[11px] font-mono text-[#7D6B56]">
-                        {usedLanguages.size > 0 ? `${usedLanguages.size} languages on GitHub` : "Click any tech for details"}
+                        {usedLanguages.size > 0
+                            ? t("stack.languages_on_github", { count: String(usedLanguages.size) })
+                            : t("stack.click_for_details")}
                     </span>
                 </div>
 
@@ -160,16 +164,17 @@ export default function TechStack() {
                                                             <div className={`mx-3 mb-2 p-4 rounded-xl ${c.bg} ${c.border} border`}>
                                                                 <div className="flex items-start justify-between gap-3 mb-2">
                                                                     <span className={`text-[10px] font-mono ${c.text} opacity-70 uppercase tracking-wider`}>
-                                                                        Why {tech}
+                                                                        {t("stack.why")} {tech}
                                                                     </span>
                                                                     <button
                                                                         onClick={(e) => { e.stopPropagation(); setExpandedTech(null); }}
-                                                                        className="text-white/18 hover:text-white/50 transition-colors shrink-0"
+                                                                        aria-label={t("stack.close")}
+                                                                        className="text-[#7D6B56]/60 hover:text-[#DBC7A6] transition-colors shrink-0"
                                                                     >
                                                                         <X size={11} />
                                                                     </button>
                                                                 </div>
-                                                                <p className="text-[13px] text-white/40 leading-relaxed">
+                                                                <p className="text-[13px] text-[#B39F85]/80 leading-relaxed">
                                                                     {TECH_EXPLANATIONS[tech]}
                                                                 </p>
                                                             </div>

@@ -16,6 +16,14 @@ interface ExperienceItem {
 // Ordered most recent first
 const EXPERIENCE: ExperienceItem[] = [
     {
+        type: "project",
+        title: "Arka News System",
+        company: "Open-source · GitHub-native",
+        period: "Apr 2026",
+        description: "A cryptographically signed news publishing system running entirely on GitHub. Ed25519-signed posts, Python CLI, and GitHub Actions as the publishing pipeline — no server, no database, just Git.",
+        tag: "Python · Ed25519 · GitHub Actions",
+    },
+    {
         type: "work",
         title: "Founder",
         company: "EclozionMC — Archived",

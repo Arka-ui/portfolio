@@ -78,11 +78,20 @@
     "all_repos": "Todos los repositorios",
     "default_desc": "Un proyecto construido con tecnologías modernas.",
     "count_one": "{count} proyecto",
-    "count_other": "{count} proyectos"
+    "count_other": "{count} proyectos",
+    "pinned": "Fijado"
   },
   "timeline": {
     "label": "Experiencia",
     "heading": "Lo que he construido"
+  },
+  "stack": {
+    "label": "Oficio",
+    "heading": "Stack técnico",
+    "languages_on_github": "{count} lenguajes en GitHub",
+    "click_for_details": "Haz clic para más detalles",
+    "why": "Por qué",
+    "close": "Cerrar"
   },
   "live": {
     "label": "Live",

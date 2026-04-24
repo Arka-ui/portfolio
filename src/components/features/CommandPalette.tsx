@@ -4,16 +4,15 @@ import { useEffect, useState, useCallback } from "react";
 import { Command } from "cmdk";
 import {
     Search, Home, Code, User, Mail, Copy, Check,
-    Layers, Radio, Clock, Github, Music2, MessageCircle,
+    Layers, Radio, Clock, Github, MessageCircle,
     Share2, ArrowUpRight, Zap, Sparkles, Link2, Globe,
 } from "lucide-react";
 import { useWarp } from "@/context/WarpContext";
 import { useLanguage, SUPPORTED_LANGUAGES } from "@/context/LanguageContext";
 
-const SOCIALS = [
+const SOCIALS: { icon: typeof Github; label: string; url: string }[] = [
     { icon: Github,        label: "GitHub",  url: "https://github.com/arka-ui" },
     { icon: MessageCircle, label: "Discord", url: "https://discord.com/users/871084043838566400" },
-    { icon: Music2,        label: "Spotify", url: "https://open.spotify.com/user/YOUR_SPOTIFY_USER_ID" },
 ];
 
 export default function CommandPalette() {
@@ -127,7 +126,7 @@ export default function CommandPalette() {
                                     {copied === "link" ? t("cmd.copied") : t("cmd.copy_link")}
                                 </CmdItem>
                                 <CmdItem icon={<Share2 size={15} />} desc={t("cmd.share_desc")} onSelect={() => run(handleShare)}>{t("cmd.share")}</CmdItem>
-                                <CmdItem icon={<Zap size={15} />} desc={t("cmd.scroll_top_desc")} onSelect={() => run(() => window.scrollTo({ top: 0, behavior: "smooth" }))}>{t("cmd.scroll_top")}</CmdItem>
+                                <CmdItem icon={<Zap size={15} />} desc={t("cmd.scroll_top_desc")} onSelect={() => run(() => warpTo("#"))}>{t("cmd.scroll_top")}</CmdItem>
                             </Command.Group>
 
                             <Command.Group heading={t("cmd.lang_group")} className={GROUP_STYLE}>

@@ -78,11 +78,20 @@
     "all_repos": "All repositories",
     "default_desc": "A project built with modern technologies.",
     "count_one": "{count} project",
-    "count_other": "{count} projects"
+    "count_other": "{count} projects",
+    "pinned": "Pinned"
   },
   "timeline": {
     "label": "Experience",
     "heading": "What I've built"
+  },
+  "stack": {
+    "label": "Craft",
+    "heading": "Tech stack",
+    "languages_on_github": "{count} languages on GitHub",
+    "click_for_details": "Click any tech for details",
+    "why": "Why",
+    "close": "Close"
   },
   "live": {
     "label": "Live",

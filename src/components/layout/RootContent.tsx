@@ -1,6 +1,7 @@
 "use client";
 
 import { SWRConfig } from "swr";
+import { MotionConfig } from "framer-motion";
 import { useEffect, useRef } from "react";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
@@ -39,14 +40,16 @@ function KonamiListener() {
 export default function RootContent({ children }: { children: React.ReactNode }) {
     return (
         <SWRConfig value={SWR_CONFIG}>
-            <ScrollProgress />
-            <KonamiListener />
-            <Navbar />
-            <MobileHUD />
-            <main className="min-h-screen pb-mobile-hud md:pb-0">
-                {children}
-            </main>
-            <Footer />
+            <MotionConfig reducedMotion="user">
+                <ScrollProgress />
+                <KonamiListener />
+                <Navbar />
+                <MobileHUD />
+                <main className="min-h-screen pb-mobile-hud md:pb-0">
+                    {children}
+                </main>
+                <Footer />
+            </MotionConfig>
         </SWRConfig>
     );
 }

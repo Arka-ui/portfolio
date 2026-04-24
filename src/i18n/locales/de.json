@@ -78,11 +78,20 @@
     "all_repos": "Alle Repositories",
     "default_desc": "Ein Projekt mit modernen Technologien.",
     "count_one": "{count} Projekt",
-    "count_other": "{count} Projekte"
+    "count_other": "{count} Projekte",
+    "pinned": "Angeheftet"
   },
   "timeline": {
     "label": "Erfahrung",
     "heading": "Was ich gebaut habe"
+  },
+  "stack": {
+    "label": "Handwerk",
+    "heading": "Tech-Stack",
+    "languages_on_github": "{count} Sprachen auf GitHub",
+    "click_for_details": "Klicken für Details",
+    "why": "Warum",
+    "close": "Schließen"
   },
   "live": {
     "label": "Live",

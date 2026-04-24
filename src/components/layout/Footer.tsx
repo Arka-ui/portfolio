@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import { useState } from "react";
 import { useLanyard } from "@/hooks/useLanyard";
 import { useLanguage } from "@/context/LanguageContext";
+import { useWarp } from "@/context/WarpContext";
 
 const DISCORD_ID = "871084043838566400";
 const SESSION_ID = "05459c70a2245442430b1b0dd484650013a8ad3c425957e3f2dc16ccce07cb5f54";
@@ -13,9 +14,10 @@ const SESSION_ID = "05459c70a2245442430b1b0dd484650013a8ad3c425957e3f2dc16ccce07
 export default function Footer() {
     const { data } = useLanyard(DISCORD_ID);
     const { t } = useLanguage();
+    const { warpTo } = useWarp();
     const [sessionCopied, setSessionCopied] = useState(false);
 
-    const scrollToTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
+    const scrollToTop = () => warpTo("#");
 
     const copySession = () => {
         navigator.clipboard.writeText(SESSION_ID);

@@ -1,12 +1,15 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Github, ArrowUpRight, Star, GitFork } from "lucide-react";
+import { Github, ArrowUpRight, Star, GitFork, Pin } from "lucide-react";
 import useSWR from "swr";
 import ProjectCarousel from "@/components/features/ProjectCarousel";
 import { useLanguage } from "@/context/LanguageContext";
 
 const GITHUB_USERNAME = "Arka-ui";
+
+// Projects pinned to the top, bypassing star-sort. Order here = display order.
+const PINNED_REPOS = ["ArkaNewsSystem"];
 
 const fetcher = async (url: string) => {
     const res = await fetch(url);
@@ -45,7 +48,7 @@ const fadeUp = {
     }),
 };
 
-function ProjectCard({ project, index }: { project: Project; index: number }) {
+function ProjectCard({ project, index, pinned }: { project: Project; index: number; pinned?: boolean }) {
     const color = project.language ? LANG_COLORS[project.language] : "#DBC7A6";
     const { t } = useLanguage();
 
@@ -56,7 +59,11 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
             initial="hidden"
             whileInView="show"
             viewport={{ once: true, amount: 0.15 }}
-            className="group relative bento-card p-6 md:p-8 flex flex-col gap-5 hover:border-[#B39F85]/35 transition-all duration-500 hover:-translate-y-0.5"
+            className={`group relative bento-card p-6 md:p-8 flex flex-col gap-5 transition-all duration-500 hover:-translate-y-0.5 ${
+                pinned
+                    ? "border-[#DBC7A6]/35 hover:border-[#DBC7A6]/55 shadow-[0_0_0_1px_rgba(219,199,166,0.08),0_24px_60px_-24px_rgba(219,199,166,0.18)]"
+                    : "hover:border-[#B39F85]/35"
+            }`}
         >
             {/* Bottom accent bar — slides in on hover, language-colored */}
             <span
@@ -64,10 +71,22 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
                 style={{ backgroundColor: color }}
                 aria-hidden
             />
+            {pinned && (
+                <span
+                    className="pointer-events-none absolute top-0 left-0 right-0 h-px"
+                    style={{ background: "linear-gradient(90deg, transparent 0%, rgba(219,199,166,0.6) 50%, transparent 100%)" }}
+                    aria-hidden
+                />
+            )}
             {/* Top row */}
             <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                    {project.language && (
+                    {pinned ? (
+                        <span className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.22em] text-[#DBC7A6] px-2.5 py-1 rounded-full border border-[#DBC7A6]/30 bg-[#DBC7A6]/[0.05]">
+                            <Pin size={10} className="rotate-45" />
+                            {t("projects.pinned")}
+                        </span>
+                    ) : project.language && (
                         <span className="flex items-center gap-2 text-xs text-[#B39F85] font-mono">
                             <span className="w-3 h-3 rounded-full shrink-0 ring-2 ring-[#493B33]/40" style={{ backgroundColor: color }} />
                             {project.language}
@@ -80,7 +99,8 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
                         href={project.html_url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="p-2 rounded-lg bg-[#251E18]/60 border border-[#493B33]/50 hover:bg-[#251E18]/90 hover:border-[#B39F85]/35 transition-all text-[#7D6B56] hover:text-[#DBC7A6]"
+                        aria-label={`${project.name} on GitHub`}
+                        className="p-2 rounded-lg bg-[#251E18]/60 border border-[#493B33]/50 hover:bg-[#251E18]/90 hover:border-[#B39F85]/35 transition-all text-[#7D6B56] hover:text-[#DBC7A6] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#DBC7A6]/50"
                     >
                         <Github size={14} />
                     </a>
@@ -89,7 +109,8 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
                             href={project.homepage}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="p-2 rounded-lg bg-[#251E18]/60 border border-[#493B33]/50 hover:bg-[#251E18]/90 hover:border-[#B39F85]/35 transition-all text-[#7D6B56] hover:text-[#DBC7A6]"
+                            aria-label={`${project.name} live site`}
+                            className="p-2 rounded-lg bg-[#251E18]/60 border border-[#493B33]/50 hover:bg-[#251E18]/90 hover:border-[#B39F85]/35 transition-all text-[#7D6B56] hover:text-[#DBC7A6] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#DBC7A6]/50"
                         >
                             <ArrowUpRight size={14} />
                         </a>
@@ -99,7 +120,9 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
 
             {/* Title + description */}
             <div className="flex-1">
-                <h3 className="font-display font-bold text-xl md:text-2xl text-[#DBC7A6] tracking-tight group-hover:text-[#B39F85] transition-colors duration-300 mb-2">
+                <h3 className={`font-display font-bold text-xl md:text-2xl tracking-tight transition-colors duration-300 mb-2 ${
+                    pinned ? "text-grad-warm" : "text-[#DBC7A6] group-hover:text-[#B39F85]"
+                }`}>
                     {project.name}
                 </h3>
                 <p className="text-sm text-[#B39F85] line-clamp-2 leading-relaxed">
@@ -109,14 +132,20 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
 
             {/* Bottom */}
             <div className="flex items-center justify-between pt-4 border-t border-[#493B33]/40">
-                <div className="flex gap-2">
+                <div className="flex gap-2 flex-wrap">
                     {project.topics.slice(0, 3).map(topic => (
                         <span key={topic} className="px-2.5 py-1 rounded-lg bg-[#251E18]/60 border border-[#493B33]/40 text-[10px] font-mono text-[#B39F85]">
                             {topic}
                         </span>
                     ))}
                 </div>
-                <div className="flex items-center gap-3 text-[11px] text-[#7D6B56] font-mono">
+                <div className="flex items-center gap-3 text-[11px] text-[#7D6B56] font-mono shrink-0">
+                    {pinned && project.language && (
+                        <span className="flex items-center gap-1.5">
+                            <span className="w-2 h-2 rounded-full" style={{ backgroundColor: color }} />
+                            {project.language}
+                        </span>
+                    )}
                     <span className="flex items-center gap-1"><Star size={11} /> {project.stargazers_count}</span>
                     <span className="flex items-center gap-1"><GitFork size={11} /> {project.forks_count}</span>
                 </div>
@@ -132,11 +161,24 @@ export default function FeaturedProjects() {
         fetcher
     );
 
-    const featured = projects && Array.isArray(projects)
-        ? projects.filter(p => !p.fork).sort((a, b) => b.stargazers_count - a.stargazers_count).slice(0, 6)
-        : [];
+    const featured = (() => {
+        if (!projects || !Array.isArray(projects)) return [] as Project[];
+        const nonForks = projects.filter(p => !p.fork);
+        const pinned: Project[] = [];
+        for (const name of PINNED_REPOS) {
+            const match = nonForks.find(p => p.name.toLowerCase() === name.toLowerCase());
+            if (match) pinned.push(match);
+        }
+        const rest = nonForks
+            .filter(p => !pinned.some(pin => pin.id === p.id))
+            .sort((a, b) => b.stargazers_count - a.stargazers_count);
+        const slotCount = Math.max(6, pinned.length);
+        return [...pinned, ...rest].slice(0, slotCount);
+    })();
 
     if (!featured.length) return null;
+
+    const pinnedCount = featured.filter(p => PINNED_REPOS.some(n => n.toLowerCase() === p.name.toLowerCase())).length;
 
     return (
         <section id="projects" className="py-24 md:py-36 border-t border-[#493B33]/25 md:pl-[72px]">
@@ -159,7 +201,7 @@ export default function FeaturedProjects() {
                         href={`https://github.com/${GITHUB_USERNAME}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="group inline-flex items-center gap-2 text-sm text-[#B39F85] hover:text-[#DBC7A6] transition-colors shrink-0"
+                        className="group inline-flex items-center gap-2 text-sm text-[#B39F85] hover:text-[#DBC7A6] transition-colors shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#DBC7A6]/50 rounded-md px-1"
                     >
                         {t("projects.all_repos")}
                         <ArrowUpRight size={14} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
@@ -167,13 +209,16 @@ export default function FeaturedProjects() {
                 </div>
 
                 {/* Mobile carousel */}
-                <ProjectCarousel projects={featured} />
+                <ProjectCarousel projects={featured} pinnedCount={pinnedCount} />
 
                 {/* Desktop grid */}
                 <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-5">
-                    {featured.map((project, i) => (
-                        <ProjectCard key={project.id} project={project} index={i} />
-                    ))}
+                    {featured.map((project, i) => {
+                        const isPinned = PINNED_REPOS.some(n => n.toLowerCase() === project.name.toLowerCase());
+                        return (
+                            <ProjectCard key={project.id} project={project} index={i} pinned={isPinned} />
+                        );
+                    })}
                 </div>
             </div>
         </section>

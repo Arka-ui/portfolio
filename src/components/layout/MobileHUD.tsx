@@ -105,7 +105,7 @@ export default function MobileHUD() {
     };
 
     const quickActionItems = [
-        { label: "Top",   fn: () => { triggerHaptic("light"); window.scrollTo({ top: 0, behavior: "smooth" }); setQuickActions(false); } },
+        { label: "Top",   fn: () => { triggerHaptic("light"); warpTo("#"); setQuickActions(false); } },
         { label: "Copy",  fn: () => { triggerHaptic("light"); navigator.clipboard?.writeText(window.location.href); setQuickActions(false); } },
         { label: "Share", fn: () => { triggerHaptic("light"); navigator.share?.({ url: window.location.href }).catch(() => {}); setQuickActions(false); } },
     ];

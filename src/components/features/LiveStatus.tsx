@@ -11,7 +11,8 @@ import { useLanguage } from "@/context/LanguageContext";
 
 const DISCORD_ID = "871084043838566400";
 const DISCORD_AVATAR_URL = "https://cdn.discordapp.com/avatars/871084043838566400/7e3cc0e89bb88831952b204ede470ba3.webp";
-const SPOTIFY_PROFILE_URL = "https://open.spotify.com/user/YOUR_SPOTIFY_USER_ID";
+// Set to a real profile URL to re-enable the link card; empty hides it.
+const SPOTIFY_PROFILE_URL = "";
 
 interface LanyardActivity {
     name: string;
@@ -386,8 +387,8 @@ export default function LiveStatus() {
                             </div>
                         </div>
 
-                        {/* Spotify profile link */}
-                        {spotify && (
+                        {/* Spotify profile link — only renders if a real profile URL is set */}
+                        {spotify && SPOTIFY_PROFILE_URL && (
                             <a
                                 href={SPOTIFY_PROFILE_URL}
                                 target="_blank"

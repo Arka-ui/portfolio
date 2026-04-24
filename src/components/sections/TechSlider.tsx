@@ -31,6 +31,7 @@ const TECH_LINKS: Record<string, string> = {
     "better-auth": "https://www.better-auth.com",
     "Drizzle": "https://orm.drizzle.team",
     "shadcn/ui": "https://ui.shadcn.com",
+    "Ed25519": "https://ed25519.cr.yp.to",
 };
 
 const ROW_1: { label: string; color: string }[] = [
@@ -65,6 +66,7 @@ const ROW_2: { label: string; color: string }[] = [
     { label: "better-auth",    color: "#2dd4bf" },
     { label: "Drizzle",        color: "#c5f74f" },
     { label: "shadcn/ui",      color: "#f4f4f5" },
+    { label: "Ed25519",        color: "#DBC7A6" },
 ];
 
 function TechBadge({ label, color }: { label: string; color: string }) {

@@ -173,19 +173,22 @@ export default function Hero() {
                         </div>
                     </motion.div>
 
-                    {/* Scroll indicator */}
-                    <motion.div
+                    {/* Scroll indicator — clickable, glides to next section */}
+                    <motion.button
+                        type="button"
                         variants={fadeUp}
-                        className="mt-16 md:mt-24 flex items-center gap-3"
+                        onClick={() => warpTo("#about-intro")}
+                        aria-label="Scroll to next section"
+                        className="group mt-16 md:mt-24 flex items-center gap-3 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#DBC7A6]/50 focus-visible:ring-offset-4 focus-visible:ring-offset-[#13110E] rounded-full px-1 -mx-1"
                     >
-                        <div className="w-10 h-px bg-gradient-to-r from-[#DBC7A6]/50 to-transparent" />
-                        <span className="label-mono text-[#7D6B56]">// scroll</span>
+                        <div className="w-10 h-px bg-gradient-to-r from-[#DBC7A6]/50 to-transparent transition-all duration-300 group-hover:w-14 group-hover:from-[#DBC7A6]" />
+                        <span className="label-mono text-[#7D6B56] group-hover:text-[#DBC7A6] transition-colors">// scroll</span>
                         <motion.div
                             animate={{ y: [0, 4, 0] }}
                             transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
-                            className="w-1.5 h-1.5 rounded-full bg-[#DBC7A6]/60"
+                            className="w-1.5 h-1.5 rounded-full bg-[#DBC7A6]/60 group-hover:bg-[#DBC7A6] group-hover:shadow-[0_0_12px_rgba(219,199,166,0.7)]"
                         />
-                    </motion.div>
+                    </motion.button>
                 </motion.div>
             </div>
         </section>
