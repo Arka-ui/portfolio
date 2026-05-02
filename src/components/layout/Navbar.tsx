@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search } from "lucide-react";
 import LanguageSelector from "@/components/features/LanguageSelector";
 import { cn } from "@/lib/utils";
 import { useWarp } from "@/context/WarpContext";
@@ -16,14 +15,11 @@ export default function Navbar() {
     const [hidden, setHidden]               = useState(false);
     const [tapCount, setTapCount]           = useState(0);
     const [easterEgg, setEasterEgg]         = useState(false);
-    const [caretOn, setCaretOn]             = useState(true);
     const lastY = useRef(0);
     const tapTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
     const { warpTo }  = useWarp();
     const { t }       = useLanguage();
 
-    // Rail items map to real section ids. "about" (Timeline) is merged into the
-    // about-intro dot so the "About" pip stays lit while scrolling through both.
     const NAV_ITEMS = [
         { label: t("nav.home"),    href: "#",            id: "hero",         merge: [] as string[] },
         { label: t("nav.about"),   href: "#about-intro", id: "about-intro",  merge: ["about"] },
@@ -35,13 +31,6 @@ export default function Navbar() {
 
     useEffect(() => { setMounted(true); }, []);
 
-    useEffect(() => {
-        const t = setTimeout(() => setCaretOn(false), 4200);
-        return () => clearTimeout(t);
-    }, []);
-
-    // Build the ordered list of section ids to scan, plus a map from DOM id -> rail id.
-    // Timeline's own id ("about") resolves to the "about-intro" rail dot.
     const NAV_IDS = ["hero", "about-intro", "about", "projects", "news", "skills", "live", "contact"];
     const RAIL_RESOLVE: Record<string, string> = { about: "about-intro", news: "projects" };
 
@@ -54,14 +43,10 @@ export default function Navbar() {
                 const h = document.documentElement.scrollHeight - window.innerHeight;
                 setScrollProgress(h > 0 ? Math.min(1, y / h) : 0);
                 setScrolledDown(y > 80);
-                // Hide mobile top strip on scroll down, show on scroll up
                 if (y > lastY.current + 6 && y > 120) setHidden(true);
                 else if (y < lastY.current - 4) setHidden(false);
                 lastY.current = y;
 
-                // Active section detection — pivot at ~35% of viewport so the next
-                // dot lights up as soon as a new section crosses the top third,
-                // and only sections in NAV_IDS are considered (no stray ids).
                 const pivot = window.innerHeight * 0.35;
                 let currentDomId = "hero";
                 for (const id of NAV_IDS) {
@@ -85,9 +70,6 @@ export default function Navbar() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    const openCmdPalette = () =>
-        document.dispatchEvent(new KeyboardEvent("keydown", { key: "k", metaKey: true }));
-
     const handleLogoDotTap = () => {
         if (tapTimer.current) clearTimeout(tapTimer.current);
         const next = tapCount + 1;
@@ -104,164 +86,144 @@ export default function Navbar() {
         }
     };
 
-    const activeItem = NAV_ITEMS.find(n => n.id === activeSection);
+    const activeIdx = NAV_ITEMS.findIndex(n => n.id === activeSection);
+    const activeItem = NAV_ITEMS[activeIdx >= 0 ? activeIdx : 0];
 
     if (!mounted) return null;
 
     return (
         <>
-            {/* ─── Desktop: vertical side rail ─── */}
+            {/* ─── Desktop: vertical typographic index ─── */}
             <motion.aside
-                initial={{ x: -24, opacity: 0 }}
+                initial={{ x: -16, opacity: 0 }}
                 animate={{ x: 0, opacity: 1 }}
-                transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.4 }}
-                className="hidden md:flex fixed left-0 top-0 bottom-0 z-50 w-[72px] pointer-events-none flex-col items-center justify-between py-8"
+                transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
+                className="hidden md:flex fixed left-0 top-0 bottom-0 z-50 w-[88px] pointer-events-none flex-col items-stretch justify-between pt-12 pb-8"
             >
-                {/* Logo wordmark top */}
-                <button
-                    onClick={() => { handleLogoDotTap(); warpTo("#"); }}
-                    className="pointer-events-auto font-display font-bold text-sm tracking-tight text-[#DBC7A6] hover:text-[#B39F85] transition-colors duration-300"
-                >
-                    Arka<span className="text-[#B39F85] inline-block">.</span>
-                    {caretOn && activeSection === "hero" && <span className="caret" />}
-                </button>
+                {/* Wordmark — top */}
+                <div className="flex justify-center px-4">
+                    <button
+                        onClick={() => { handleLogoDotTap(); warpTo("#"); }}
+                        className="pointer-events-auto font-display font-bold text-[15px] tracking-tight text-[#DBC7A6] hover:text-[#B39F85] transition-colors duration-300"
+                    >
+                        Arka<span className="text-[#B39F85] inline-block">.</span>
+                    </button>
+                </div>
 
-                {/* Rail items */}
-                <nav className="pointer-events-auto relative flex flex-col items-center gap-7 py-4">
-                    {/* Vertical hairline spans only the item cluster */}
-                    <div className="absolute left-1/2 top-0 bottom-0 -translate-x-1/2 w-px bg-[#493B33]/45" />
+                {/* Index — middle, vertical numbered list */}
+                <nav
+                    aria-label="Section index"
+                    className="pointer-events-auto relative flex flex-col items-stretch px-4"
+                >
+                    {/* Vertical hairline */}
+                    <div className="absolute left-1/2 top-3 bottom-3 -translate-x-1/2 w-px bg-[#493B33]/35" aria-hidden />
                     {/* Scroll progress fill */}
                     <div
-                        className="absolute left-1/2 top-0 -translate-x-1/2 w-px bg-gradient-to-b from-[#DBC7A6] via-[#B39F85] to-[#7D6B56]"
-                        style={{ height: "100%", transform: `translateX(-50%) scaleY(${scrollProgress})`, transformOrigin: "top" }}
+                        aria-hidden
+                        className="absolute left-1/2 top-3 -translate-x-1/2 w-px bg-[#DBC7A6]/65"
+                        style={{
+                            height: `calc((100% - 24px) * ${scrollProgress})`,
+                            transition: "height 200ms linear"
+                        }}
                     />
-                    {NAV_ITEMS.map((item, idx) => {
-                        const active = activeSection === item.id;
-                        return (
-                            <button
-                                key={item.href}
-                                onClick={() => warpTo(item.href)}
-                                aria-label={item.label}
-                                aria-current={active ? "page" : undefined}
-                                className="group relative flex items-center"
-                            >
-                                {/* Outer ring — visible on hover/active for better tap affordance */}
-                                <span
-                                    className={cn(
-                                        "absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full border transition-all duration-500",
-                                        active
-                                            ? "w-5 h-5 border-[#DBC7A6]/30"
-                                            : "w-4 h-4 border-transparent group-hover:border-[#B39F85]/25"
-                                    )}
-                                />
-                                {/* Dot */}
-                                <span
-                                    className={cn(
-                                        "relative z-10 rounded-full transition-all duration-300",
-                                        active
-                                            ? "w-2.5 h-2.5 bg-[#DBC7A6] shadow-[0_0_16px_rgba(219,199,166,0.6)]"
-                                            : "w-1.5 h-1.5 bg-[#5F564D] group-hover:bg-[#B39F85] group-hover:scale-125"
-                                    )}
-                                />
-                                {/* Label + index slide-out */}
-                                <span
-                                    className={cn(
-                                        "absolute left-6 whitespace-nowrap flex items-center gap-2 transition-all duration-300 pointer-events-none",
-                                        active
-                                            ? "opacity-100 translate-x-0"
-                                            : "opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0"
-                                    )}
-                                >
-                                    <span className={cn(
-                                        "font-mono text-[9px] tracking-wider",
-                                        active ? "text-[#7D6B56]" : "text-[#5F564D]"
-                                    )}>
-                                        {String(idx + 1).padStart(2, "0")}
-                                    </span>
-                                    <span className={cn(
-                                        "font-mono uppercase tracking-[0.22em] text-[10px]",
-                                        active ? "text-[#DBC7A6]" : "text-[#B39F85]"
-                                    )}>
-                                        {item.label}
-                                    </span>
-                                </span>
-                            </button>
-                        );
-                    })}
+
+                    <ul className="relative flex flex-col gap-3.5">
+                        {NAV_ITEMS.map((item, idx) => {
+                            const active = activeSection === item.id;
+                            return (
+                                <li key={item.href} className="flex">
+                                    <button
+                                        onClick={() => warpTo(item.href)}
+                                        aria-label={item.label}
+                                        aria-current={active ? "page" : undefined}
+                                        className={cn(
+                                            "group relative flex items-center gap-3 w-full font-mono text-[10px] uppercase tracking-[0.22em] transition-colors duration-300",
+                                            active ? "text-[#DBC7A6]" : "text-[#5F564D] hover:text-[#B39F85]"
+                                        )}
+                                    >
+                                        {/* Tick on active row */}
+                                        <span
+                                            aria-hidden
+                                            className={cn(
+                                                "absolute -left-3 top-1/2 -translate-y-1/2 h-px transition-all duration-300",
+                                                active ? "w-2.5 bg-[#DBC7A6]" : "w-0 bg-transparent"
+                                            )}
+                                        />
+                                        <span className="w-7 text-right shrink-0 tabular-nums">
+                                            {String(idx + 1).padStart(2, "0")}
+                                        </span>
+                                        <span
+                                            className={cn(
+                                                "flex-1 whitespace-nowrap transition-all duration-300",
+                                                active ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0"
+                                            )}
+                                        >
+                                            {item.label}
+                                        </span>
+                                    </button>
+                                </li>
+                            );
+                        })}
+                    </ul>
                 </nav>
 
-                {/* Bottom cluster: ⌘K + language — direction up so popovers open above */}
-                <motion.div
-                    initial={{ opacity: 0, y: 16 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.9 }}
-                    className="pointer-events-auto flex flex-col items-center gap-3"
-                >
-                    <motion.button
-                        whileHover={{ y: -2, scale: 1.06 }}
-                        whileTap={{ scale: 0.94 }}
-                        transition={{ type: "spring", stiffness: 420, damping: 22 }}
-                        onClick={openCmdPalette}
-                        aria-label="Open command palette"
-                        className="w-8 h-8 rounded-full border border-[#493B33]/60 bg-[#1B1814]/70 backdrop-blur-xl flex items-center justify-center text-[#7D6B56] hover:text-[#DBC7A6] hover:border-[#B39F85]/40 transition-colors"
-                    >
-                        <Search className="w-3.5 h-3.5" />
-                    </motion.button>
+                {/* Bottom — language selector only */}
+                <div className="pointer-events-auto flex justify-center px-4">
                     <LanguageSelector align="left" variant="bare" direction="up" />
-                </motion.div>
+                </div>
             </motion.aside>
 
-            {/* ─── Mobile: slim top strip ─── */}
+            {/* ─── Mobile: thin running head + index sheet trigger ─── */}
             <motion.header
-                initial={{ y: -20, opacity: 0 }}
-                animate={{ y: hidden ? -60 : 0, opacity: hidden ? 0 : 1 }}
-                transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+                initial={{ y: -12, opacity: 0 }}
+                animate={{ y: hidden ? -48 : 0, opacity: hidden ? 0 : 1 }}
+                transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
                 className={cn(
-                    "md:hidden fixed top-0 left-0 right-0 z-50 h-12 flex items-center px-4",
+                    "md:hidden fixed top-0 left-0 right-0 z-50 h-11 flex items-center px-4 gap-3",
                     scrolledDown
-                        ? "bg-[#13110E]/80 backdrop-blur-xl border-b border-[#493B33]/30"
+                        ? "bg-[#13110E]/85 backdrop-blur-xl border-b border-[#493B33]/30"
                         : "bg-transparent"
                 )}
             >
                 <button
                     onClick={() => { handleLogoDotTap(); warpTo("#"); }}
-                    className="font-display font-bold text-[15px] tracking-tight text-[#DBC7A6]"
+                    className="font-display font-bold text-[14px] tracking-tight text-[#DBC7A6]"
                 >
                     Arka<span className="text-[#B39F85]">.</span>
                 </button>
 
+                <span className="text-[#5F564D] font-mono text-[10px]">·</span>
+
                 <AnimatePresence mode="wait">
-                    {activeItem && activeItem.id !== "hero" && (
-                        <motion.span
-                            key={activeItem.id}
-                            initial={{ opacity: 0, y: -4 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: 4 }}
-                            transition={{ duration: 0.2 }}
-                            className="ml-3 label-mono text-[#7D6B56]"
-                        >
-                            / {activeItem.label}
-                        </motion.span>
-                    )}
+                    <motion.span
+                        key={activeItem.id}
+                        initial={{ opacity: 0, y: -3 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 3 }}
+                        transition={{ duration: 0.18 }}
+                        className="font-mono text-[10px] tracking-[0.24em] uppercase text-[#7D6B56] truncate"
+                    >
+                        § {String((activeIdx >= 0 ? activeIdx : 0) + 1).padStart(2, "0")} · {activeItem.label}
+                    </motion.span>
                 </AnimatePresence>
 
                 <div className="flex-1" />
 
                 <button
-                    onClick={openCmdPalette}
-                    aria-label="Open command palette"
-                    className="w-8 h-8 rounded-full border border-[#493B33]/60 bg-[#1B1814]/70 backdrop-blur-xl flex items-center justify-center text-[#7D6B56] hover:text-[#DBC7A6] transition-colors"
+                    onClick={() => document.dispatchEvent(new KeyboardEvent("keydown", { key: "k", metaKey: true }))}
+                    aria-label="Open index"
+                    className="font-mono text-[10px] tracking-[0.24em] uppercase text-[#7D6B56] hover:text-[#DBC7A6] transition-colors"
                 >
-                    <Search className="w-3.5 h-3.5" />
+                    Index
                 </button>
             </motion.header>
 
-            {/* Mobile progress line under top strip */}
-            <motion.div
-                className="md:hidden fixed left-0 right-0 z-50 h-px origin-left pointer-events-none"
+            {/* Mobile progress hairline under top strip */}
+            <div
+                aria-hidden
+                className="md:hidden fixed left-0 right-0 z-50 h-px origin-left pointer-events-none bg-[#DBC7A6]/55"
                 style={{
-                    top: 48,
-                    background: "linear-gradient(90deg, #DBC7A6 0%, #B39F85 50%, #7D6B56 100%)",
+                    top: 44,
                     transform: `scaleX(${scrollProgress})`,
                     opacity: scrolledDown && !hidden ? 0.85 : 0,
                     transition: "opacity 0.3s ease"
@@ -275,10 +237,10 @@ export default function Navbar() {
                         initial={{ opacity: 0, y: -8 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -8 }}
-                        transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-                        className="fixed top-4 left-1/2 -translate-x-1/2 z-[60] px-5 py-2.5 rounded-full border border-[#B39F85]/40 bg-[#1B1814]/90 backdrop-blur-xl shadow-[0_18px_60px_rgba(0,0,0,0.55)]"
+                        transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                        className="fixed top-12 left-1/2 -translate-x-1/2 z-[60] px-5 py-2.5 border border-[#B39F85]/40 bg-[#1B1814]/90 backdrop-blur-xl"
                     >
-                        <span className="font-display text-xs tracking-[0.2em] uppercase text-[#DBC7A6]">
+                        <span className="font-mono text-[10px] tracking-[0.28em] uppercase text-[#DBC7A6]">
                             crafted with late nights
                         </span>
                     </motion.div>

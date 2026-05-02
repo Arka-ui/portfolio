@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-/* ─── Animated mesh gradient properties ─── */
+/* ─── Animated mesh gradient properties (kept defined for blueprint mode) ─── */
 @property --mesh-x  { syntax: "<percentage>"; inherits: false; initial-value: 30%; }
 @property --mesh-y  { syntax: "<percentage>"; inherits: false; initial-value: 20%; }
 @property --mesh-x2 { syntax: "<percentage>"; inherits: false; initial-value: 70%; }
@@ -11,9 +11,9 @@
   --font-heading: var(--font-sora);
   --font-display: var(--font-syne);
   --font-mono: var(--font-space-mono);
-  --font-green-energy: ui-serif, serif;
+  --font-green-energy: var(--font-green-energy);
 
-  /* ─── Warm earthy palette ─── */
+  /* ─── Warm earthy palette (unchanged) ─── */
   --color-background: #13110E;
   --color-surface:    #1B1814;
   --color-surface-2:  #251E18;
@@ -40,31 +40,23 @@
   --color-border: rgba(123, 107, 86, 0.22);
   --color-border-strong: rgba(179, 159, 133, 0.35);
 
-  --animate-fade-in: fade-in 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-  --animate-slide-up: slide-up 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  --animate-fade-in: fade-in 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  --animate-slide-up: slide-up 0.6s cubic-bezier(0.22, 1, 0.36, 1);
 
   @keyframes fade-in {
     0% { opacity: 0; }
     100% { opacity: 1; }
   }
   @keyframes slide-up {
-    0% { transform: translateY(24px); opacity: 0; }
+    0% { transform: translateY(16px); opacity: 0; }
     100% { transform: translateY(0); opacity: 1; }
-  }
-  @keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
   }
   @keyframes shimmer {
     0%   { background-position: -200% center; }
     100% { background-position: 200% center; }
   }
-  @keyframes breathe-glow {
-    0%, 100% { box-shadow: 0 0 0 0 rgba(219,199,166,0); }
-    50%       { box-shadow: 0 0 30px 4px rgba(219,199,166,0.10); }
-  }
   @keyframes stat-settle {
-    0%   { transform: scale(1.06); color: #DBC7A6; }
+    0%   { transform: scale(1.04); color: #DBC7A6; }
     100% { transform: scale(1);    color: inherit; }
   }
   @keyframes grain {
@@ -87,18 +79,18 @@
     0%, 49% { opacity: 1; }
     50%, 100% { opacity: 0; }
   }
+  /* Calmed slime: pure 16px translateY + opacity, no blur, no scale, 600ms */
   @keyframes slime-in {
-    0%   { opacity: 0; transform: translateY(26px) scale(0.94); filter: blur(10px); border-radius: 40px; }
-    40%  { opacity: 1;                                   filter: blur(3px); }
-    60%  { transform: translateY(-3px) scale(1.015);     filter: blur(0.6px); border-radius: 26px; }
-    80%  { transform: translateY(1px) scale(0.996);                              }
-    100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0);     border-radius: inherit; }
+    0%   { opacity: 0; transform: translateY(16px); }
+    100% { opacity: 1; transform: translateY(0); }
   }
   @keyframes slime-in-sm {
-    0%   { opacity: 0; transform: translateY(14px) scale(0.96); filter: blur(6px); }
-    55%  { opacity: 1;                                           filter: blur(1.5px); }
-    75%  { transform: translateY(-2px) scale(1.01);              filter: blur(0); }
-    100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+    0%   { opacity: 0; transform: translateY(10px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes underline-scrub {
+    0%   { transform: scaleX(0); transform-origin: left; }
+    100% { transform: scaleX(1); transform-origin: left; }
   }
 }
 
@@ -129,112 +121,141 @@
 }
 
 @layer utilities {
-  /* ─── Warm gradients (135°, multi-stop) ─── */
-  .grad-warm {
-    background: linear-gradient(135deg,
-      #DBC7A6 0%,
-      #B39F85 28%,
-      #7D6B56 55%,
-      #B39F85 78%,
-      #DBC7A6 100%);
+  /* ─── Atlas folio (running head label) ─── */
+  .atlas-folio {
+    font-family: var(--font-mono);
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    font-size: 11px;
+    color: #7D6B56;
   }
-  .text-grad-warm {
-    background: linear-gradient(135deg,
-      #DBC7A6 0%,
-      #B39F85 28%,
-      #7D6B56 55%,
-      #B39F85 78%,
-      #DBC7A6 100%);
-    background-size: 200% auto;
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    color: transparent;
-  }
-  .text-grad-warm-shimmer {
-    background: linear-gradient(135deg,
-      #DBC7A6 0%,
-      #B39F85 28%,
-      #7D6B56 55%,
-      #B39F85 78%,
-      #DBC7A6 100%);
-    background-size: 220% auto;
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    color: transparent;
-    animation: shimmer 7s linear infinite;
-  }
-  .grad-deep {
-    background: linear-gradient(135deg,
-      #251E18 0%,
-      #493B33 35%,
-      #4B3E26 65%,
-      #251E18 100%);
-  }
-  .grad-hairline {
-    background: linear-gradient(180deg,
-      transparent 0%,
-      rgba(179,159,133,0.25) 12%,
-      rgba(179,159,133,0.25) 88%,
-      transparent 100%);
+  .atlas-folio-strong {
+    font-family: var(--font-mono);
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    font-size: 11px;
+    color: #DBC7A6;
   }
 
-  /* ─── Surfaces ─── */
-  .card-surface {
-    @apply bg-[#251E18]/60 border border-[#493B33]/50 rounded-2xl;
+  /* ─── Atlas hairlines & rules ─── */
+  .atlas-rule {
+    height: 1px;
+    width: 100%;
+    background: linear-gradient(90deg,
+      rgba(73,59,51,0.55) 0%,
+      rgba(73,59,51,0.55) 70%,
+      transparent 100%);
   }
-  .card-surface-hover {
-    @apply bg-[#251E18]/60 border border-[#493B33]/50 rounded-2xl hover:bg-[#251E18]/80 hover:border-[#B39F85]/25 transition-all duration-300;
+  .atlas-rule-strong {
+    height: 1px;
+    width: 100%;
+    background-color: rgba(179,159,133,0.32);
   }
+  .atlas-rule-double {
+    height: 4px;
+    width: 100%;
+    background:
+      linear-gradient(rgba(123,107,86,0.32), rgba(123,107,86,0.32)) top/100% 1px no-repeat,
+      linear-gradient(rgba(123,107,86,0.32), rgba(123,107,86,0.32)) bottom/100% 1px no-repeat;
+  }
+  .atlas-tick {
+    background-image: linear-gradient(90deg, rgba(123,107,86,0.4) 1px, transparent 1px);
+    background-size: 8px 100%;
+    background-repeat: repeat-x;
+    background-position: top;
+    height: 4px;
+  }
+
+  /* ─── Drop cap (Green_Energy serif, 4 lines tall) ─── */
+  .dropcap::first-letter {
+    font-family: var(--font-green-energy);
+    font-weight: 400;
+    float: left;
+    font-size: 5.4em;
+    line-height: 0.86;
+    padding: 0.1em 0.18em 0 0;
+    color: #DBC7A6;
+  }
+
+  /* ─── Marginalia (right column note) ─── */
+  .marginalia {
+    font-family: var(--font-sans);
+    font-style: italic;
+    font-size: 13px;
+    line-height: 1.55;
+    color: #B39F85;
+    text-align: left;
+  }
+  .marginalia-num {
+    font-family: var(--font-mono);
+    font-style: normal;
+    font-size: 11px;
+    color: #7D6B56;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+
+  /* ─── Atlas link (type-only with sliding underline) ─── */
+  .atlas-link {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #DBC7A6;
+    transition: color 0.3s ease;
+  }
+  .atlas-link::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -3px;
+    height: 1px;
+    background-color: currentColor;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .atlas-link:hover::after,
+  .atlas-link:focus-visible::after {
+    transform: scaleX(1);
+  }
+  .atlas-link-static::after { transform: scaleX(1); opacity: 0.45; }
+  .atlas-link-static:hover::after { opacity: 1; }
+
+  /* ─── Ledger row (printed log) ─── */
+  .ledger-row {
+    position: relative;
+    padding-left: 0;
+    transition: padding-left 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .ledger-row::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 8%;
+    bottom: 8%;
+    width: 1px;
+    background-color: #DBC7A6;
+    transform: scaleY(0);
+    transform-origin: top;
+    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .ledger-row:hover::before,
+  .ledger-row:focus-within::before {
+    transform: scaleY(1);
+  }
+  .ledger-row:hover,
+  .ledger-row:focus-within {
+    padding-left: 16px;
+  }
+
+  /* ─── Section divider (kept for back-compat) ─── */
   .section-divider {
     @apply border-t border-[#493B33]/35;
   }
 
-  /* ─── Badges ─── */
-  .badge {
-    @apply inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono border border-[#493B33]/60 bg-[#1B1814]/60 text-[#B39F85];
-  }
-  .badge-strong {
-    @apply inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono border border-[#B39F85]/40 bg-[#B39F85]/10 text-[#DBC7A6];
-  }
-
-  /* ─── Labels ─── */
-  .label-mono {
-    @apply text-[11px] font-mono uppercase tracking-[0.24em] text-[#7D6B56];
-  }
-  .label-display {
-    font-family: var(--font-display);
-    font-weight: 600;
-    letter-spacing: 0.02em;
-    text-transform: uppercase;
-    font-size: 11px;
-    color: #7D6B56;
-  }
-
-  /* ─── Film grain ─── */
-  .grain::before {
-    content: '';
-    position: fixed;
-    inset: -50%;
-    width: 200%;
-    height: 200%;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
-    pointer-events: none;
-    z-index: 9998;
-    animation: grain 8s steps(10) infinite;
-    mix-blend-mode: overlay;
-  }
-
-  .card-glow {
-    animation: breathe-glow 4s ease-in-out infinite;
-  }
-
-  .pb-mobile-hud {
-    padding-bottom: calc(5.5rem + env(safe-area-inset-bottom, 24px));
-  }
-
-  /* ─── Mesh gradient (warm) ─── */
+  /* ─── Mesh gradient (warm) — kept defined; only Blueprint mode uses ─── */
   .mesh-gradient {
     background:
       radial-gradient(ellipse 55% 45% at var(--mesh-x) var(--mesh-y),  rgba(179,159,133,0.06) 0%, transparent 70%),
@@ -242,17 +263,15 @@
     animation: mesh-drift 18s ease-in-out infinite alternate;
   }
 
-  /* ─── Bento glass card ─── */
+  /* ─── Bento card / card surface (kept defined, no longer used in sections) ─── */
   .bento-card {
     @apply relative bg-[#1B1814]/70 border border-[#493B33]/40 rounded-2xl overflow-hidden;
   }
-  .bento-card::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    background: linear-gradient(160deg, rgba(219,199,166,0.035) 0%, transparent 50%);
-    pointer-events: none;
+  .card-surface {
+    @apply bg-[#251E18]/60 border border-[#493B33]/50 rounded-2xl;
+  }
+  .card-surface-hover {
+    @apply bg-[#251E18]/60 border border-[#493B33]/50 rounded-2xl hover:bg-[#251E18]/80 hover:border-[#B39F85]/25 transition-all duration-300;
   }
 
   /* ─── Editorial rule line ─── */
@@ -273,7 +292,7 @@
       transparent 100%);
   }
 
-  /* ─── Dashed manuscript hairline (for Timeline) ─── */
+  /* ─── Dashed manuscript hairline (Timeline mobile) ─── */
   .dashed-v {
     background-image: linear-gradient(180deg, rgba(179,159,133,0.35) 50%, transparent 50%);
     background-size: 1px 8px;
@@ -285,6 +304,45 @@
     background-size: 8px 1px;
     background-repeat: repeat-x;
     background-position: center;
+  }
+
+  /* ─── Badges (kept for status pills) ─── */
+  .badge {
+    @apply inline-flex items-center gap-1.5 px-2.5 py-1 text-[10px] font-mono border border-[#493B33]/60 bg-[#1B1814]/60 text-[#B39F85] uppercase tracking-[0.18em];
+  }
+  .badge-strong {
+    @apply inline-flex items-center gap-1.5 px-2.5 py-1 text-[10px] font-mono border border-[#B39F85]/40 bg-[#1B1814]/60 text-[#DBC7A6] uppercase tracking-[0.18em];
+  }
+
+  /* ─── Labels (kept for back-compat) ─── */
+  .label-mono {
+    @apply text-[11px] font-mono uppercase tracking-[0.24em] text-[#7D6B56];
+  }
+  .label-display {
+    font-family: var(--font-mono);
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-size: 11px;
+    color: #7D6B56;
+  }
+
+  /* ─── Film grain (kept) ─── */
+  .grain::before {
+    content: '';
+    position: fixed;
+    inset: -50%;
+    width: 200%;
+    height: 200%;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9998;
+    animation: grain 8s steps(10) infinite;
+    mix-blend-mode: overlay;
+  }
+
+  .pb-mobile-hud {
+    padding-bottom: calc(5.5rem + env(safe-area-inset-bottom, 24px));
   }
 
   /* ─── Custom cursor dot ─── */
@@ -316,42 +374,51 @@
     vertical-align: -0.05em;
   }
 
-  /* ─── Organic slime-in reveal (replaces glitchy clip-path reveals) ─── */
+  /* ─── Slime-in (calmed: pure y + opacity) ─── */
   .slime-reveal {
     opacity: 0;
-    transform: translateY(26px) scale(0.94);
-    filter: blur(10px);
-    will-change: opacity, transform, filter;
+    transform: translateY(16px);
+    will-change: opacity, transform;
   }
   .slime-reveal.is-in {
-    animation: slime-in 1.15s cubic-bezier(0.2, 0.9, 0.25, 1.05) forwards;
+    animation: slime-in 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
   }
   .slime-reveal-sm {
     opacity: 0;
-    transform: translateY(14px) scale(0.96);
-    filter: blur(6px);
-    will-change: opacity, transform, filter;
+    transform: translateY(10px);
+    will-change: opacity, transform;
   }
   .slime-reveal-sm.is-in {
-    animation: slime-in-sm 0.9s cubic-bezier(0.2, 0.9, 0.25, 1.05) forwards;
+    animation: slime-in-sm 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
   }
   @media (prefers-reduced-motion: reduce) {
     .slime-reveal, .slime-reveal-sm {
-      opacity: 1 !important; transform: none !important; filter: none !important; animation: none !important;
+      opacity: 1 !important; transform: none !important; animation: none !important;
     }
+    .atlas-link::after { transition: none !important; }
+    .ledger-row { transition: none !important; }
+    .ledger-row::before { transition: none !important; }
   }
 
-  /* Kept for backwards compat — now uses the same organic reveal */
-  .clip-reveal { opacity: 0; transform: translateY(18px); transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.16, 1, 0.3, 1); }
+  /* Back-compat (no-op smoothing) */
+  .clip-reveal { opacity: 0; transform: translateY(12px); transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.22, 1, 0.36, 1); }
   .clip-reveal.is-in { opacity: 1; transform: translateY(0); }
 
-  /* ─── Chapter diamond ─── */
+  /* ─── Chapter diamond (kept for break dividers) ─── */
   .chapter-dot {
-    width: 8px;
-    height: 8px;
-    background: #DBC7A6;
+    width: 6px;
+    height: 6px;
+    background: #B39F85;
     transform: rotate(45deg);
-    box-shadow: 0 0 16px rgba(219,199,166,0.35);
+  }
+
+  /* ─── Atlas pull-quote ─── */
+  .pull-quote {
+    font-family: var(--font-green-energy);
+    font-weight: 400;
+    line-height: 1.18;
+    color: #DBC7A6;
+    letter-spacing: -0.005em;
   }
 }
 

@@ -13,7 +13,8 @@ interface ExperienceItem {
     tag?: string;
 }
 
-// Ordered most recent first
+const ROMAN = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"];
+
 const EXPERIENCE: ExperienceItem[] = [
     {
         type: "project",
@@ -71,66 +72,72 @@ const TYPE_LABEL: Record<ExperienceItem["type"], string> = {
     education: "Education",
 };
 
-function Chapter({ item, index }: { item: ExperienceItem; index: number }) {
+function LogEntry({ item, index }: { item: ExperienceItem; index: number }) {
     const ref = useRef<HTMLDivElement>(null);
-    const inView = useInView(ref, { amount: 0.35, once: true });
-    const num = String(index + 1).padStart(2, "0");
+    const inView = useInView(ref, { amount: 0.25, once: true });
+    const roman = ROMAN[index] || String(index + 1);
 
     return (
-        <div ref={ref} className={`slime-reveal ${inView ? "is-in" : ""}`}>
-            {/* ─── Mobile layout ─── */}
+        <article
+            ref={ref}
+            className={`slime-reveal ${inView ? "is-in" : ""} ledger-row group block py-7 md:py-9`}
+        >
+            {/* Mobile */}
             <div className="md:hidden">
-                <div className="flex items-start justify-between gap-4 mb-3">
-                    <div className="font-display font-bold text-[76px] leading-[0.85] tracking-tighter text-grad-warm">
-                        {num}
-                    </div>
-                    <div className="flex flex-col items-end gap-2 pt-3">
-                        <span className="label-mono text-[#DBC7A6]/55">{item.period}</span>
-                        <span className="label-mono">{TYPE_LABEL[item.type]}</span>
+                <div className="flex items-baseline justify-between gap-3 mb-3">
+                    <span className="font-display font-bold text-[44px] leading-none text-[#DBC7A6] tracking-tighter tabular-nums">
+                        {roman}.
+                    </span>
+                    <div className="text-right">
+                        <span className="block atlas-folio">{item.period}</span>
+                        <span className="block atlas-folio mt-0.5">{TYPE_LABEL[item.type]}</span>
                     </div>
                 </div>
-                <div className="bento-card p-6">
-                    <h3 className="font-display font-bold text-xl text-[#DBC7A6] tracking-tight">{item.title}</h3>
-                    <p className="text-sm text-[#B39F85]/75 mt-0.5">{item.company}</p>
-                    <p className="text-sm text-[#B39F85] leading-relaxed mt-4">{item.description}</p>
-                    {item.tag && <span className="badge mt-5 text-[10px]">{item.tag}</span>}
-                </div>
+                <h3 className="font-display font-bold text-[20px] text-[#DBC7A6] tracking-tight leading-tight">{item.title}</h3>
+                <p className="text-[12px] font-mono text-[#7D6B56] tracking-wider mt-1">{item.company}</p>
+                <p className="text-[14px] text-[#B39F85] leading-[1.6] mt-3">{item.description}</p>
+                {item.tag && (
+                    <p className="mt-3 font-mono text-[10px] tracking-[0.18em] uppercase text-[#7D6B56]">
+                        {item.tag.split(" · ").map((t, i, a) => (
+                            <span key={i}>
+                                {t}{i < a.length - 1 && <span className="text-[#5F564D] mx-2">·</span>}
+                            </span>
+                        ))}
+                    </p>
+                )}
             </div>
 
-            {/* ─── Desktop layout: no margin hairline, no "Ch." ─── */}
-            <div className="hidden md:grid grid-cols-[180px_1fr] gap-10 pb-10 last:pb-0 relative">
-                <div className="relative">
-                    <div
-                        className="font-display font-bold leading-[0.82] tracking-tighter text-grad-warm transition-all duration-700"
-                        style={{
-                            fontSize: "clamp(68px,6.5vw,112px)",
-                            fontVariationSettings: inView ? "'wght' 800" : "'wght' 500",
-                        }}
-                    >
-                        {num}
-                    </div>
-                    <div className="font-mono text-[11px] uppercase tracking-[0.22em] text-[#B39F85]/80 mt-3">{item.period}</div>
-                    <div className="label-mono mt-1">{TYPE_LABEL[item.type]}</div>
+            {/* Desktop — printed log row */}
+            <div className="hidden md:grid md:grid-cols-[80px_140px_1fr_180px] gap-8 items-start">
+                {/* Roman */}
+                <div className="font-display font-bold text-[#DBC7A6] tracking-tighter tabular-nums leading-none" style={{ fontSize: "clamp(48px, 4.5vw, 72px)" }}>
+                    {roman}.
                 </div>
-
-                <div className="relative pt-2">
-                    <h3 className="font-display font-bold text-[26px] text-[#DBC7A6] tracking-tight leading-tight">{item.title}</h3>
-                    <p className="text-sm text-[#B39F85]/70 mt-1">{item.company}</p>
-                    <p className="text-[15px] text-[#B39F85] leading-relaxed mt-5 max-w-xl">{item.description}</p>
-                    {item.tag && <span className="badge mt-5 text-[10px] inline-flex">{item.tag}</span>}
+                {/* Date + type */}
+                <div className="pt-3">
+                    <div className="atlas-folio-strong">{item.period}</div>
+                    <div className="atlas-folio mt-1">{TYPE_LABEL[item.type]}</div>
+                </div>
+                {/* Title + company + body */}
+                <div className="pt-2 max-w-[58ch]">
+                    <h3 className="font-display font-bold text-[24px] lg:text-[28px] text-[#DBC7A6] tracking-tight leading-tight">
+                        {item.title}
+                    </h3>
+                    <p className="text-[12px] font-mono text-[#7D6B56] tracking-[0.18em] uppercase mt-1.5">{item.company}</p>
+                    <p className="text-[14px] lg:text-[15px] text-[#B39F85] leading-[1.65] mt-4">{item.description}</p>
+                </div>
+                {/* Tag stack */}
+                <div className="pt-3 text-right">
+                    {item.tag && (
+                        <ul className="space-y-1">
+                            {item.tag.split(" · ").map((t, i) => (
+                                <li key={i} className="font-mono text-[10px] tracking-[0.2em] uppercase text-[#7D6B56]">{t}</li>
+                            ))}
+                        </ul>
+                    )}
                 </div>
             </div>
-        </div>
-    );
-}
-
-function ChapterBreak() {
-    return (
-        <div className="flex items-center gap-4 my-10 md:my-12">
-            <div className="flex-1 dashed-h h-px" />
-            <div className="chapter-dot" />
-            <div className="flex-1 dashed-h h-px" />
-        </div>
+        </article>
     );
 }
 
@@ -138,42 +145,50 @@ export default function Timeline() {
     const { t } = useLanguage();
 
     return (
-        <section id="about" className="py-24 md:py-36 border-t border-[#493B33]/25 md:pl-[72px]">
+        <section id="about" className="py-24 md:py-32 border-t border-[#493B33]/35 md:pl-[88px]">
             <div className="container mx-auto px-6 md:px-12">
-                {/* Header */}
-                <div className="mb-16 md:mb-24 max-w-3xl">
-                    <span className="label-display block mb-4">{t("timeline.label")}</span>
-                    <motion.h2
-                        initial={{ opacity: 0, y: 24 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-                        className="font-display font-bold text-[clamp(40px,5.5vw,76px)] leading-[0.88] tracking-tighter text-[#DBC7A6]"
-                    >
-                        {t("timeline.heading")}
-                    </motion.h2>
-                    <div className="rule-line mt-10" />
-                </div>
+                {/* Folio head */}
+                <motion.div
+                    initial={{ opacity: 0, y: 12 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                    className="flex items-center gap-4 mb-10"
+                >
+                    <span className="atlas-folio">§ 03·b · {t("timeline.label")}</span>
+                    <span aria-hidden className="flex-1 atlas-rule" />
+                    <span className="atlas-folio">{EXPERIENCE.length} entries</span>
+                </motion.div>
 
-                {/* Mobile */}
-                <div className="md:hidden flex flex-col">
+                {/* Heading */}
+                <motion.h2
+                    initial={{ opacity: 0, y: 16 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                    className="font-display font-bold leading-[0.92] tracking-tighter text-[#DBC7A6] max-w-3xl mb-12 md:mb-16"
+                    style={{ fontSize: "clamp(36px, 5vw, 72px)" }}
+                >
+                    {t("timeline.heading")}
+                </motion.h2>
+
+                {/* Top double rule */}
+                <div className="atlas-rule-double mb-2" aria-hidden />
+
+                {/* Log entries */}
+                <div className="divide-y divide-[#493B33]/35">
                     {EXPERIENCE.map((item, i) => (
-                        <div key={i}>
-                            <Chapter item={item} index={i} />
-                            {i < EXPERIENCE.length - 1 && <ChapterBreak />}
-                        </div>
+                        <LogEntry key={i} item={item} index={i} />
                     ))}
                 </div>
 
-                {/* Desktop */}
-                <div className="hidden md:block max-w-4xl">
-                    {EXPERIENCE.map((item, i) => (
-                        <div key={i}>
-                            <Chapter item={item} index={i} />
-                            {i < EXPERIENCE.length - 1 && <ChapterBreak />}
-                        </div>
-                    ))}
-                </div>
+                {/* Bottom double rule */}
+                <div className="atlas-rule-double mt-2" aria-hidden />
+
+                {/* Footer note */}
+                <p className="mt-8 atlas-folio">
+                    Log continues — § 04 · Works
+                </p>
             </div>
         </section>
     );

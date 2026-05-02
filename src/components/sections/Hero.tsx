@@ -1,195 +1,125 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowRight } from "lucide-react";
 import { useWarp } from "@/context/WarpContext";
 import { useLanguage } from "@/context/LanguageContext";
-import { useEffect, useState } from "react";
 
-const stagger = {
-    hidden: {},
-    show: { transition: { staggerChildren: 0.1, delayChildren: 0.2 } },
-};
-
-const fadeUp = {
-    hidden: { y: 50, opacity: 0 },
-    show: { y: 0, opacity: 1, transition: { duration: 1, ease: [0.16, 1, 0.3, 1] as const } },
-};
-
-const lineReveal = {
-    hidden: { scaleX: 0 },
-    show: { scaleX: 1, transition: { duration: 1.2, ease: [0.16, 1, 0.3, 1] as const, delay: 0.6 } },
-};
-
-const ROLES = ["Full-Stack", "Creative", "Self-Taught"];
-
-function useTypedRole() {
-    const [idx, setIdx] = useState(0);
-    const [text, setText] = useState("");
-    const [phase, setPhase] = useState<"typing" | "hold" | "erasing">("typing");
-
-    useEffect(() => {
-        const full = ROLES[idx];
-        let timer: ReturnType<typeof setTimeout>;
-        if (phase === "typing") {
-            if (text.length < full.length) {
-                timer = setTimeout(() => setText(full.slice(0, text.length + 1)), 70);
-            } else {
-                timer = setTimeout(() => setPhase("hold"), 1600);
-            }
-        } else if (phase === "hold") {
-            timer = setTimeout(() => setPhase("erasing"), 1200);
-        } else {
-            if (text.length > 0) {
-                timer = setTimeout(() => setText(text.slice(0, -1)), 40);
-            } else {
-                setIdx((idx + 1) % ROLES.length);
-                setPhase("typing");
-            }
-        }
-        return () => clearTimeout(timer);
-    }, [text, phase, idx]);
-
-    return text;
-}
+const enter = (delay = 0) => ({
+    initial: { opacity: 0, y: 16 },
+    animate: { opacity: 1, y: 0 },
+    transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as const, delay },
+});
 
 export default function Hero() {
     const { warpTo } = useWarp();
     const { t } = useLanguage();
-    const typed = useTypedRole();
-    const [parallax, setParallax] = useState(0);
-
-    useEffect(() => {
-        if (typeof window === "undefined") return;
-        if (window.matchMedia("(max-width: 767px)").matches) return;
-        let raf = 0;
-        const onScroll = () => {
-            if (raf) return;
-            raf = requestAnimationFrame(() => {
-                setParallax(Math.min(40, window.scrollY * 0.08));
-                raf = 0;
-            });
-        };
-        window.addEventListener("scroll", onScroll, { passive: true });
-        return () => {
-            window.removeEventListener("scroll", onScroll);
-            if (raf) cancelAnimationFrame(raf);
-        };
-    }, []);
 
     return (
-        <section id="hero" className="relative min-h-screen flex items-center overflow-hidden pt-16 md:pt-0 md:pl-[72px]">
-            {/* Mesh background with parallax */}
+        <section
+            id="hero"
+            className="relative min-h-[92vh] flex items-stretch overflow-hidden pt-16 md:pt-12 md:pl-[88px]"
+        >
+            {/* Side margin tick ruler — desktop only */}
             <div
-                className="absolute inset-0 mesh-gradient pointer-events-none"
-                style={{ transform: `translate3d(0, ${parallax}px, 0)` }}
                 aria-hidden
+                className="hidden md:block absolute top-0 bottom-0 w-2 left-[88px] atlas-tick opacity-30"
             />
 
-            {/* Editorial warm serifs — faint decorative "A" backdrop */}
-            <div className="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden>
-                <div
-                    className="absolute -top-[10%] -right-[5%] font-display font-bold text-[clamp(400px,55vw,900px)] leading-none text-[#DBC7A6]/[0.025] select-none"
-                    style={{ transform: `translate3d(0, ${parallax * 0.4}px, 0)` }}
-                >
-                    A.
-                </div>
-            </div>
-
-            {/* Horizon hairline at bottom */}
-            <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#493B33]/60 to-transparent" aria-hidden />
-
-            <div className="container mx-auto px-6 md:px-12 relative z-10">
+            <div className="container mx-auto px-6 md:px-12 relative z-10 flex flex-col justify-between py-10 md:py-14">
+                {/* ── Top folio strip ── */}
                 <motion.div
-                    variants={stagger}
-                    initial="hidden"
-                    animate="show"
-                    className="max-w-5xl"
+                    {...enter(0)}
+                    className="flex items-center justify-between gap-6 mb-10 md:mb-14"
                 >
-                    {/* Top label row */}
-                    <motion.div variants={fadeUp} className="mb-10 flex items-center gap-5 flex-wrap">
-                        <span className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full border border-[#B39F85]/35 bg-[#1B1814]/60 backdrop-blur-sm">
-                            <span className="relative flex h-2 w-2">
-                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#DBC7A6] opacity-50" />
-                                <span className="relative inline-flex rounded-full h-2 w-2 bg-[#DBC7A6]" />
-                            </span>
-                            <span className="text-[#DBC7A6] text-xs font-mono tracking-wider">{t("hero.available")}</span>
-                        </span>
-                        <span className="text-[#7D6B56] text-xs font-mono tracking-widest">
-                            <span className="text-[#DBC7A6]/80">{typed}</span>
-                            <span className="caret text-[#DBC7A6]/80" />
-                            &nbsp;/ {t("hero.role")}
-                        </span>
-                        <motion.div variants={lineReveal} className="h-px flex-1 bg-gradient-to-r from-[#B39F85]/40 to-transparent origin-left hidden sm:block" />
-                    </motion.div>
-
-                    {/* Giant editorial headline */}
-                    <div className="space-y-1 md:space-y-0">
-                        <motion.div variants={fadeUp} className="overflow-hidden">
-                            <h1 className="font-display font-bold text-[clamp(48px,12vw,170px)] leading-[0.86] tracking-tighter text-[#DBC7A6]">
-                                {t("hero.line_1")}
-                            </h1>
-                        </motion.div>
-                        <motion.div variants={fadeUp} className="overflow-hidden">
-                            <h1 className="font-display font-bold text-[clamp(48px,12vw,170px)] leading-[0.86] tracking-tighter text-grad-warm-shimmer">
-                                {t("hero.line_2")}
-                            </h1>
-                        </motion.div>
-                        <motion.div variants={fadeUp} className="overflow-hidden">
-                            <h1 className="font-display font-bold text-[clamp(48px,12vw,170px)] leading-[0.86] tracking-tighter text-[#7D6B56]">
-                                {t("hero.line_3")}
-                            </h1>
-                        </motion.div>
+                    <div className="flex items-center gap-4 atlas-folio">
+                        <span>§ 01 · Opening</span>
+                        <span aria-hidden className="hidden sm:inline-block w-12 atlas-rule" />
+                        <span className="hidden sm:inline">Anno MMXXVI</span>
                     </div>
+                    <span className="atlas-folio-strong inline-flex items-center gap-2">
+                        <span className="relative flex h-1.5 w-1.5">
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#DBC7A6] opacity-50" />
+                            <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[#DBC7A6]" />
+                        </span>
+                        <span>{t("hero.available")}</span>
+                    </span>
+                </motion.div>
 
-                    {/* Accent rule */}
-                    <motion.div variants={lineReveal} className="mt-10 md:mt-14 rule-line origin-left" />
-
-                    {/* Bottom bar: bio + CTA */}
-                    <motion.div
-                        variants={fadeUp}
-                        className="mt-8 md:mt-10 flex flex-col sm:flex-row items-start sm:items-end gap-8 sm:gap-16"
-                    >
-                        <p className="text-base md:text-lg text-[#B39F85] max-w-md leading-relaxed">
-                            {t("hero.bio")}
-                        </p>
-
-                        <div className="flex items-center gap-3 shrink-0">
-                            <button
-                                onClick={() => warpTo("#projects")}
-                                className="group relative inline-flex items-center gap-2.5 px-6 py-3.5 rounded-xl bg-[#DBC7A6] text-[#13110E] text-sm font-bold tracking-tight overflow-hidden transition-all duration-300 hover:shadow-[0_0_44px_6px_rgba(219,199,166,0.18)] active:scale-[0.97]"
-                            >
-                                <span className="relative z-10 flex items-center gap-2">
-                                    {t("hero.cta_projects")}
-                                    <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-                                </span>
-                            </button>
-                            <button
-                                onClick={() => warpTo("#contact")}
-                                className="group inline-flex items-center gap-2 px-6 py-3.5 rounded-xl border border-[#493B33]/70 text-[#B39F85] text-sm font-medium hover:text-[#DBC7A6] hover:bg-[#1B1814]/60 hover:border-[#B39F85]/40 transition-all duration-300 active:scale-[0.97]"
-                            >
-                                {t("hero.cta_contact")}
-                            </button>
-                        </div>
+                {/* ── Main broadside ── */}
+                <div className="grid grid-cols-1 md:grid-cols-[1fr_auto] gap-10 md:gap-14 items-end flex-1">
+                    <motion.div {...enter(0.05)}>
+                        <h1 className="font-display text-[#DBC7A6]" style={{ letterSpacing: "-0.045em" }}>
+                            <span className="block font-bold leading-[0.84]" style={{ fontSize: "clamp(56px, 13vw, 184px)" }}>
+                                {t("hero.line_1")}
+                            </span>
+                            <span className="block font-medium italic text-[#B39F85] leading-[0.92] mt-1" style={{ fontSize: "clamp(38px, 8.5vw, 116px)", letterSpacing: "-0.025em" }}>
+                                {t("hero.line_2")}
+                            </span>
+                            <span className="block font-bold text-[#7D6B56] leading-[0.84] mt-1" style={{ fontSize: "clamp(56px, 13vw, 184px)" }}>
+                                {t("hero.line_3")}
+                            </span>
+                        </h1>
                     </motion.div>
 
-                    {/* Scroll indicator — clickable, glides to next section */}
-                    <motion.button
-                        type="button"
-                        variants={fadeUp}
-                        onClick={() => warpTo("#about-intro")}
-                        aria-label="Scroll to next section"
-                        className="group mt-16 md:mt-24 flex items-center gap-3 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#DBC7A6]/50 focus-visible:ring-offset-4 focus-visible:ring-offset-[#13110E] rounded-full px-1 -mx-1"
+                    {/* Right spine — vertical printed dust-jacket */}
+                    <motion.aside
+                        {...enter(0.18)}
+                        className="hidden md:flex flex-col items-start gap-5 max-w-[180px] pb-3 border-l border-[#493B33]/55 pl-5"
                     >
-                        <div className="w-10 h-px bg-gradient-to-r from-[#DBC7A6]/50 to-transparent transition-all duration-300 group-hover:w-14 group-hover:from-[#DBC7A6]" />
-                        <span className="label-mono text-[#7D6B56] group-hover:text-[#DBC7A6] transition-colors">// scroll</span>
-                        <motion.div
-                            animate={{ y: [0, 4, 0] }}
-                            transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
-                            className="w-1.5 h-1.5 rounded-full bg-[#DBC7A6]/60 group-hover:bg-[#DBC7A6] group-hover:shadow-[0_0_12px_rgba(219,199,166,0.7)]"
-                        />
-                    </motion.button>
+                        <span className="atlas-folio">Pt. I — Opening</span>
+                        <span className="atlas-folio-strong">{t("hero.role")}</span>
+                        <ul className="space-y-1 text-[11px] font-mono text-[#7D6B56]">
+                            <li>2026 · Issue 04</li>
+                            <li>Cambrai · Fr</li>
+                            <li>Self-taught · OSS</li>
+                            <li>en · fr · es · de</li>
+                        </ul>
+                    </motion.aside>
+                </div>
+
+                {/* ── Atlas rule under headline ── */}
+                <motion.div {...enter(0.25)} className="atlas-rule-double mt-10 md:mt-14" aria-hidden />
+
+                {/* ── Bio + ledger CTAs ── */}
+                <motion.div
+                    {...enter(0.32)}
+                    className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 mt-10"
+                >
+                    <p className="md:col-span-7 text-[15px] md:text-[16px] text-[#B39F85] leading-[1.65] max-w-[36ch]">
+                        {t("hero.bio")}
+                    </p>
+
+                    <div className="md:col-span-5 flex flex-col items-start md:items-end gap-3 md:gap-2 self-end">
+                        <button
+                            type="button"
+                            onClick={() => warpTo("#projects")}
+                            className="atlas-link group text-[#DBC7A6] text-[15px] md:text-[17px] tracking-tight font-medium"
+                        >
+                            <span aria-hidden className="font-mono text-[10px] tracking-[0.22em] text-[#7D6B56] group-hover:text-[#B39F85] transition-colors">→ § 04</span>
+                            <span>{t("hero.cta_projects")}</span>
+                        </button>
+                        <button
+                            type="button"
+                            onClick={() => warpTo("#contact")}
+                            className="atlas-link group text-[#B39F85] text-[15px] md:text-[17px] tracking-tight font-medium"
+                        >
+                            <span aria-hidden className="font-mono text-[10px] tracking-[0.22em] text-[#7D6B56] group-hover:text-[#DBC7A6] transition-colors">→ § 08</span>
+                            <span>{t("hero.cta_contact")}</span>
+                        </button>
+                    </div>
                 </motion.div>
+
+                {/* ── Bottom scroll cue ── */}
+                <motion.button
+                    {...enter(0.45)}
+                    type="button"
+                    onClick={() => warpTo("#about-intro")}
+                    aria-label="Scroll to next section"
+                    className="self-start mt-10 md:mt-14 inline-flex items-center gap-3 atlas-folio hover:text-[#DBC7A6] transition-colors group"
+                >
+                    <span aria-hidden className="block w-12 atlas-rule group-hover:w-20 transition-all duration-500" />
+                    <span>↓ § 02 · Instruments</span>
+                </motion.button>
             </div>
         </section>
     );

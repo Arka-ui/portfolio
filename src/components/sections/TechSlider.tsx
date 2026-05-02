@@ -34,67 +34,34 @@ const TECH_LINKS: Record<string, string> = {
     "Ed25519": "https://ed25519.cr.yp.to",
 };
 
-const ROW_1: { label: string; color: string }[] = [
-    { label: "React",          color: "#61dafb" },
-    { label: "TypeScript",     color: "#3178c6" },
-    { label: "Next.js",        color: "#e2e8f0" },
-    { label: "Node.js",        color: "#8cc84b" },
-    { label: "Tailwind CSS",   color: "#38bdf8" },
-    { label: "Framer Motion",  color: "#bb22ff" },
-    { label: "Docker",         color: "#2496ed" },
-    { label: "PostgreSQL",     color: "#336791" },
-    { label: "Prisma",         color: "#5a67d8" },
-    { label: "JavaScript",     color: "#f0db4f" },
-    { label: "HTML / CSS",     color: "#e34c26" },
-    { label: "GraphQL",        color: "#e535ab" },
-    { label: "Vite",           color: "#646cff" },
-    { label: "Zustand",        color: "#e8712a" },
-    { label: "tRPC",           color: "#398ccb" },
+const ROW_1: string[] = [
+    "React", "TypeScript", "Next.js", "Node.js", "Tailwind CSS",
+    "Framer Motion", "Docker", "PostgreSQL", "Prisma", "JavaScript",
+    "HTML / CSS", "GraphQL", "Vite", "Zustand", "tRPC",
 ];
 
-const ROW_2: { label: string; color: string }[] = [
-    { label: "Python",         color: "#3572a5" },
-    { label: "Rust",           color: "#dea584" },
-    { label: "Java",           color: "#b07219" },
-    { label: "Git",            color: "#f14e32" },
-    { label: "VS Code",        color: "#007acc" },
-    { label: "CI/CD",          color: "#e8712a" },
-    { label: "GitHub Actions", color: "#2088ff" },
-    { label: "Nginx",          color: "#009900" },
-    { label: "OpenAI",         color: "#10a37f" },
-    { label: "Markdown",       color: "#083fa1" },
-    { label: "better-auth",    color: "#2dd4bf" },
-    { label: "Drizzle",        color: "#c5f74f" },
-    { label: "shadcn/ui",      color: "#f4f4f5" },
-    { label: "Ed25519",        color: "#DBC7A6" },
+const ROW_2: string[] = [
+    "Python", "Rust", "Java", "Git", "VS Code",
+    "CI/CD", "GitHub Actions", "Nginx", "OpenAI", "Markdown",
+    "better-auth", "Drizzle", "shadcn/ui", "Ed25519",
 ];
 
-function TechBadge({ label, color }: { label: string; color: string }) {
+function TechItem({ label, index }: { label: string; index: number }) {
     const href = TECH_LINKS[label] || "#";
     return (
         <a
             href={href}
             target="_blank"
             rel="noopener noreferrer"
-            className="group relative inline-flex items-center gap-3.5 px-6 py-4 rounded-xl border border-[#493B33]/45 bg-[#1B1814]/60 text-[14px] font-mono tracking-wider text-[#B39F85] whitespace-nowrap hover:text-[#DBC7A6] hover:border-[#B39F85]/35 hover:bg-[#251E18]/80 transition-all duration-400 cursor-pointer select-none overflow-hidden"
+            className="group relative inline-flex items-baseline gap-3 px-7 py-3 whitespace-nowrap select-none"
         >
-            {/* Hover gradient flash */}
-            <span
-                className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-                style={{ background: `linear-gradient(135deg, ${color}08 0%, transparent 60%)` }}
-            />
-            <span
-                className="relative w-2.5 h-2.5 rounded-full shrink-0 transition-all duration-300 group-hover:scale-125"
-                style={{
-                    backgroundColor: color,
-                    boxShadow: `0 0 8px ${color}55`,
-                }}
-            />
-            <span className="relative">{label}</span>
-            <span
-                className="absolute bottom-3 left-6 right-6 h-px scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"
-                style={{ backgroundColor: `${color}40` }}
-            />
+            <span className="font-mono text-[10px] tracking-[0.22em] uppercase text-[#5F564D] tabular-nums group-hover:text-[#B39F85] transition-colors duration-300">
+                {String(index).padStart(2, "0")}
+            </span>
+            <span className="font-display text-[#B39F85] text-[clamp(20px,2.4vw,28px)] tracking-tight font-medium group-hover:text-[#DBC7A6] transition-colors duration-300">
+                {label}
+            </span>
+            <span aria-hidden className="font-mono text-[12px] text-[#5F564D] group-hover:text-[#7D6B56] transition-colors duration-300">·</span>
         </a>
     );
 }
@@ -103,10 +70,12 @@ function MarqueeRow({
     items,
     reverse = false,
     speed = 30,
+    indexBase = 0,
 }: {
-    items: { label: string; color: string }[];
+    items: string[];
     reverse?: boolean;
     speed?: number;
+    indexBase?: number;
 }) {
     const containerRef = useRef<HTMLDivElement>(null);
     const offsetRef = useRef(0);
@@ -122,7 +91,7 @@ function MarqueeRow({
         let w = 0;
         for (let i = 0; i < itemCount; i++) {
             const child = container.children[i] as HTMLElement;
-            if (child) w += child.offsetWidth + 12;
+            if (child) w += child.offsetWidth;
         }
         singleWidthRef.current = w;
         if (reverse) offsetRef.current = w;
@@ -166,17 +135,17 @@ function MarqueeRow({
 
     return (
         <div
-            className="overflow-hidden"
+            className="overflow-hidden border-b border-[#493B33]/35"
             onMouseEnter={() => { isPausedRef.current = true; }}
             onMouseLeave={() => { isPausedRef.current = false; }}
         >
             <div
                 ref={containerRef}
-                className="flex gap-3"
+                className="flex"
                 style={{ width: "max-content", willChange: "transform" }}
             >
-                {tripled.map((item, i) => (
-                    <TechBadge key={`${item.label}-${i}`} label={item.label} color={item.color} />
+                {tripled.map((label, i) => (
+                    <TechItem key={`${label}-${i}`} label={label} index={indexBase + (i % items.length) + 1} />
                 ))}
             </div>
         </div>
@@ -187,36 +156,26 @@ export default function TechSlider() {
     return (
         <section
             aria-label="Technology stack"
-            className="relative overflow-hidden py-16 border-t border-b border-[#493B33]/25 md:pl-[72px]"
+            className="relative overflow-hidden py-12 md:py-16 border-t border-[#493B33]/35 md:pl-[88px]"
             style={{ maxWidth: "100vw" }}
         >
-            {/* Top label */}
-            <div className="container mx-auto px-6 md:px-12 mb-6">
-                <div className="flex items-center gap-3">
-                    <div className="w-1.5 h-1.5 rounded-full bg-[#DBC7A6] animate-pulse" />
-                    <span className="label-display">
-                        Technologies I work with
-                    </span>
-                    <div className="flex-1 h-px bg-gradient-to-r from-[#493B33]/45 to-transparent" />
-                </div>
+            {/* Top folio */}
+            <div className="container mx-auto px-6 md:px-12 mb-8 flex items-center gap-4">
+                <span className="atlas-folio">§ 02 · Instruments</span>
+                <span aria-hidden className="flex-1 atlas-rule" />
+                <span className="atlas-folio">{ROW_1.length + ROW_2.length} entries</span>
             </div>
+
+            {/* Top hairline */}
+            <div className="border-t border-[#493B33]/35" aria-hidden />
 
             {/* Edge fade masks */}
-            <div className="absolute inset-y-0 left-0 w-8 sm:w-20 md:w-48 bg-gradient-to-r from-[#13110E] via-[#13110E]/80 to-transparent z-10 pointer-events-none" />
-            <div className="absolute inset-y-0 right-0 w-8 sm:w-20 md:w-48 bg-gradient-to-l from-[#13110E] via-[#13110E]/80 to-transparent z-10 pointer-events-none" />
+            <div className="absolute inset-y-0 left-0 w-12 sm:w-24 md:w-36 bg-gradient-to-r from-[#13110E] via-[#13110E]/80 to-transparent z-10 pointer-events-none" />
+            <div className="absolute inset-y-0 right-0 w-12 sm:w-24 md:w-36 bg-gradient-to-l from-[#13110E] via-[#13110E]/80 to-transparent z-10 pointer-events-none" />
 
-            <div className="flex flex-col gap-5">
-                <MarqueeRow items={ROW_1} speed={32} />
-                <MarqueeRow items={ROW_2} reverse speed={24} />
-            </div>
-
-            {/* Bottom count */}
-            <div className="container mx-auto px-6 md:px-12 mt-6">
-                <div className="flex items-center justify-end gap-2">
-                    <span className="text-[11px] font-mono text-[#5F564D]">
-                        {ROW_1.length + ROW_2.length} tools in the belt
-                    </span>
-                </div>
+            <div>
+                <MarqueeRow items={ROW_1} speed={32} indexBase={0} />
+                <MarqueeRow items={ROW_2} reverse speed={24} indexBase={ROW_1.length} />
             </div>
         </section>
     );

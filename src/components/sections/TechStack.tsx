@@ -3,7 +3,6 @@
 import { motion, AnimatePresence } from "framer-motion";
 import useSWR from "swr";
 import { useState } from "react";
-import { X, ChevronRight } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 
 const GITHUB_USERNAME = "Arka-ui";
@@ -37,34 +36,28 @@ const TECH_EXPLANATIONS: Record<string, string> = {
     "shadcn/ui": "shadcn/ui gives beautifully designed, accessible components I copy directly into my project. No dependency lock-in.",
 };
 
-const CATEGORIES = [
-    {
-        label: "Frontend",
-        color: "lime",
-        keys: ["React", "Next.js", "TypeScript", "Tailwind CSS", "HTML", "CSS", "shadcn/ui"],
-    },
-    {
-        label: "Backend",
-        color: "coral",
-        keys: ["Node.js", "Python", "Java", "Rust", "better-auth", "Drizzle"],
-    },
-    {
-        label: "Tools & Infra",
-        color: "white",
-        keys: ["Docker", "Git", "VS Code", "Prisma", "PostgreSQL", "GitHub Actions", "Nginx"],
-    },
+const ENTRIES = [
+    { label: "better-auth",   category: "Backend"        },
+    { label: "CSS",           category: "Frontend"       },
+    { label: "Docker",        category: "Tools & Infra"  },
+    { label: "Drizzle",       category: "Backend"        },
+    { label: "Git",           category: "Tools & Infra"  },
+    { label: "GitHub Actions",category: "Tools & Infra"  },
+    { label: "HTML",          category: "Frontend"       },
+    { label: "Java",          category: "Backend"        },
+    { label: "Next.js",       category: "Frontend"       },
+    { label: "Nginx",         category: "Tools & Infra"  },
+    { label: "Node.js",       category: "Backend"        },
+    { label: "PostgreSQL",    category: "Tools & Infra"  },
+    { label: "Prisma",        category: "Tools & Infra"  },
+    { label: "Python",        category: "Backend"        },
+    { label: "React",         category: "Frontend"       },
+    { label: "Rust",          category: "Backend"        },
+    { label: "shadcn/ui",     category: "Frontend"       },
+    { label: "Tailwind CSS",  category: "Frontend"       },
+    { label: "TypeScript",    category: "Frontend"       },
+    { label: "VS Code",       category: "Tools & Infra"  },
 ];
-
-const fadeUp = {
-    hidden: { y: 28, opacity: 0, scale: 0.94, filter: "blur(10px)" },
-    show: (i: number) => ({
-        y: 0, opacity: 1, scale: 1, filter: "blur(0px)",
-        transition: {
-            duration: 1.05, delay: i * 0.1, ease: [0.2, 0.9, 0.25, 1.05] as const,
-            filter: { duration: 0.75, delay: i * 0.1 },
-        },
-    }),
-};
 
 export default function TechStack() {
     const { t } = useLanguage();
@@ -73,122 +66,136 @@ export default function TechStack() {
         fetcher
     );
 
-    const [expandedTech, setExpandedTech] = useState<string | null>(null);
+    const [expanded, setExpanded] = useState<string | null>(null);
 
     const usedLanguages: Set<string> = new Set(
         githubData ? githubData.map((r: { language: string | null }) => r.language).filter(Boolean) : []
     );
 
-    const colorMap: Record<string, { dot: string; border: string; bg: string; text: string }> = {
-        lime:  { dot: "bg-[#DBC7A6]", border: "border-[#DBC7A6]/25", bg: "bg-[#DBC7A6]/[0.06]", text: "text-[#DBC7A6]" },
-        coral: { dot: "bg-[#B39F85]", border: "border-[#B39F85]/25", bg: "bg-[#B39F85]/[0.06]", text: "text-[#B39F85]" },
-        white: { dot: "bg-[#7D6B56]", border: "border-[#7D6B56]/30", bg: "bg-[#7D6B56]/[0.06]", text: "text-[#B39F85]" },
-    };
-
     return (
-        <section id="skills" className="py-24 md:py-36 border-t border-[#493B33]/25 md:pl-[72px]">
+        <section id="skills" className="py-24 md:py-32 border-t border-[#493B33]/35 md:pl-[88px]">
             <div className="container mx-auto px-6 md:px-12">
-                {/* Header */}
-                <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-14 md:mb-20">
-                    <div>
-                        <span className="label-display mb-4 block">{t("stack.label")}</span>
-                        <motion.h2
-                            initial={{ opacity: 0, y: 24 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-                            className="font-display font-bold text-[clamp(40px,5.5vw,76px)] leading-[0.88] tracking-tighter text-[#DBC7A6]"
-                        >
-                            {t("stack.heading")}
-                        </motion.h2>
-                    </div>
-                    <span className="text-[11px] font-mono text-[#7D6B56]">
+                {/* Folio head */}
+                <motion.div
+                    initial={{ opacity: 0, y: 12 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5 }}
+                    className="flex items-center gap-4 mb-10"
+                >
+                    <span className="atlas-folio">§ 06 · {t("stack.label")}</span>
+                    <span aria-hidden className="flex-1 atlas-rule" />
+                    <span className="atlas-folio">
                         {usedLanguages.size > 0
                             ? t("stack.languages_on_github", { count: String(usedLanguages.size) })
                             : t("stack.click_for_details")}
                     </span>
+                </motion.div>
+
+                {/* Heading */}
+                <motion.h2
+                    initial={{ opacity: 0, y: 16 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                    className="font-display font-bold leading-[0.92] tracking-tighter text-[#DBC7A6] max-w-3xl mb-12 md:mb-14"
+                    style={{ fontSize: "clamp(36px, 5vw, 72px)" }}
+                >
+                    {t("stack.heading")}
+                </motion.h2>
+
+                {/* Index header */}
+                <div className="hidden md:grid md:grid-cols-[40px_minmax(220px,1.6fr)_minmax(160px,1fr)_60px_36px] gap-6 atlas-folio pb-3">
+                    <span>№</span>
+                    <span>Instrument</span>
+                    <span>Section</span>
+                    <span className="text-right">In use</span>
+                    <span className="text-right">±</span>
                 </div>
+                <div className="atlas-rule-strong mb-1" aria-hidden />
 
-                {/* Category cards */}
-                <div className="grid md:grid-cols-3 gap-5">
-                    {CATEGORIES.map((cat, ci) => {
-                        const c = colorMap[cat.color];
+                {/* Entries */}
+                <ul className="divide-y divide-[#493B33]/35">
+                    {ENTRIES.map((tech, idx) => {
+                        const num = String(idx + 1).padStart(2, "0");
+                        const isActive = usedLanguages.has(tech.label);
+                        const isExpanded = expanded === tech.label;
+                        const explain = TECH_EXPLANATIONS[tech.label];
+
                         return (
-                            <motion.div
-                                key={cat.label}
-                                custom={ci}
-                                variants={fadeUp}
-                                initial="hidden"
-                                whileInView="show"
-                                viewport={{ once: true, amount: 0.2 }}
-                                className="bento-card p-6 md:p-8 flex flex-col gap-6"
-                            >
-                                {/* Category header */}
-                                <div className="flex items-center gap-3">
-                                    <span className={`w-2 h-2 rounded-full ${c.dot}`} />
-                                    <span className="label-mono tracking-[0.15em]">{cat.label}</span>
-                                </div>
+                            <li key={tech.label} className="ledger-row group block">
+                                <button
+                                    type="button"
+                                    onClick={() => setExpanded(isExpanded ? null : tech.label)}
+                                    className="w-full text-left py-4 md:py-5 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#DBC7A6]/40"
+                                    aria-expanded={isExpanded}
+                                >
+                                    {/* Mobile */}
+                                    <div className="md:hidden flex items-center justify-between gap-3">
+                                        <div className="flex items-baseline gap-3 min-w-0">
+                                            <span className="font-mono text-[10px] text-[#7D6B56] tabular-nums w-6 shrink-0">{num}</span>
+                                            <span className={`font-display text-[16px] tracking-tight ${isActive ? "text-[#DBC7A6]" : "text-[#B39F85]"}`}>
+                                                {tech.label}
+                                            </span>
+                                            <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-[#7D6B56] truncate">
+                                                {tech.category}
+                                            </span>
+                                        </div>
+                                        <span className="font-mono text-[12px] text-[#7D6B56] group-hover:text-[#DBC7A6] transition-colors">
+                                            {isExpanded ? "−" : "+"}
+                                        </span>
+                                    </div>
 
-                                {/* Tech list */}
-                                <div className="flex flex-col gap-0.5">
-                                    {cat.keys.map((tech) => {
-                                        const isActive = usedLanguages.has(tech);
-                                        const isExpanded = expandedTech === tech;
-                                        return (
-                                            <div key={tech}>
-                                                <button
-                                                    onClick={() => setExpandedTech(isExpanded ? null : tech)}
-                                                    className={`group flex items-center justify-between w-full py-2.5 px-3 rounded-xl hover:bg-[#251E18]/60 transition-all duration-200 text-left ${isExpanded ? `bg-[#251E18]/60 ${c.border} border` : ""}`}
-                                                >
-                                                    <span className={`text-sm font-medium transition-colors ${isActive ? "text-[#DBC7A6]" : "text-[#7D6B56]"} ${isExpanded ? c.text : ""}`}>
-                                                        {tech}
-                                                    </span>
-                                                    <div className="flex items-center gap-2">
-                                                        {isActive && <span className={`w-1.5 h-1.5 rounded-full ${c.dot} opacity-80`} />}
-                                                        <ChevronRight
-                                                            size={12}
-                                                            className={`text-[#5F564D] transition-transform duration-200 ${isExpanded ? "rotate-90" : ""}`}
-                                                        />
-                                                    </div>
-                                                </button>
+                                    {/* Desktop */}
+                                    <div className="hidden md:grid md:grid-cols-[40px_minmax(220px,1.6fr)_minmax(160px,1fr)_60px_36px] gap-6 items-baseline">
+                                        <span className="font-mono text-[11px] text-[#7D6B56] tabular-nums">{num}</span>
+                                        <span className={`font-display text-[18px] lg:text-[20px] tracking-tight ${isActive ? "text-[#DBC7A6]" : "text-[#B39F85] group-hover:text-[#DBC7A6]"} transition-colors duration-300`}>
+                                            {tech.label}
+                                        </span>
+                                        <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-[#7D6B56]">
+                                            {tech.category}
+                                        </span>
+                                        <span className="font-mono text-[11px] text-right inline-flex items-center justify-end gap-1.5">
+                                            <span className={`w-1.5 h-1.5 rounded-full ${isActive ? "bg-[#DBC7A6]" : "bg-[#5F564D]"}`} />
+                                            <span className={isActive ? "text-[#DBC7A6]" : "text-[#5F564D]"}>
+                                                {isActive ? "yes" : "—"}
+                                            </span>
+                                        </span>
+                                        <span className="font-mono text-[12px] text-[#7D6B56] group-hover:text-[#DBC7A6] transition-colors text-right">
+                                            {isExpanded ? "−" : "+"}
+                                        </span>
+                                    </div>
+                                </button>
 
-                                                <AnimatePresence>
-                                                    {isExpanded && TECH_EXPLANATIONS[tech] && (
-                                                        <motion.div
-                                                            initial={{ height: 0, opacity: 0 }}
-                                                            animate={{ height: "auto", opacity: 1 }}
-                                                            exit={{ height: 0, opacity: 0 }}
-                                                            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-                                                            className="overflow-hidden"
-                                                        >
-                                                            <div className={`mx-3 mb-2 p-4 rounded-xl ${c.bg} ${c.border} border`}>
-                                                                <div className="flex items-start justify-between gap-3 mb-2">
-                                                                    <span className={`text-[10px] font-mono ${c.text} opacity-70 uppercase tracking-wider`}>
-                                                                        {t("stack.why")} {tech}
-                                                                    </span>
-                                                                    <button
-                                                                        onClick={(e) => { e.stopPropagation(); setExpandedTech(null); }}
-                                                                        aria-label={t("stack.close")}
-                                                                        className="text-[#7D6B56]/60 hover:text-[#DBC7A6] transition-colors shrink-0"
-                                                                    >
-                                                                        <X size={11} />
-                                                                    </button>
-                                                                </div>
-                                                                <p className="text-[13px] text-[#B39F85]/80 leading-relaxed">
-                                                                    {TECH_EXPLANATIONS[tech]}
-                                                                </p>
-                                                            </div>
-                                                        </motion.div>
-                                                    )}
-                                                </AnimatePresence>
+                                <AnimatePresence initial={false}>
+                                    {isExpanded && explain && (
+                                        <motion.div
+                                            initial={{ opacity: 0, height: 0 }}
+                                            animate={{ opacity: 1, height: "auto" }}
+                                            exit={{ opacity: 0, height: 0 }}
+                                            transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
+                                            className="overflow-hidden"
+                                        >
+                                            <div className="md:pl-[64px] pb-5 pt-1 max-w-[68ch]">
+                                                <p className="atlas-folio mb-2">
+                                                    † {t("stack.why")} {tech.label}
+                                                </p>
+                                                <p className="text-[14px] md:text-[15px] text-[#B39F85] leading-[1.65]">
+                                                    {explain}
+                                                </p>
                                             </div>
-                                        );
-                                    })}
-                                </div>
-                            </motion.div>
+                                        </motion.div>
+                                    )}
+                                </AnimatePresence>
+                            </li>
                         );
                     })}
-                </div>
+                </ul>
+
+                <div className="atlas-rule-strong mt-1" aria-hidden />
+                <p className="mt-6 atlas-folio">
+                    {ENTRIES.length} entries · sorted alphabetically · click any row for a footnote
+                </p>
             </div>
         </section>
     );

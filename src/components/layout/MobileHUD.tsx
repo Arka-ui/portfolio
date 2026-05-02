@@ -1,6 +1,5 @@
 "use client";
 
-import { Home, User, Briefcase, Mail, Command } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
 import { useWarp } from "@/context/WarpContext";
@@ -49,7 +48,6 @@ export default function MobileHUD() {
         return () => observer.disconnect();
     }, []);
 
-    // Section progress within the currently visible section
     useEffect(() => {
         let raf = 0;
         const activeSectionId = Object.entries(SECTION_MAP).find(([, v]) => v === activeTab)?.[0];
@@ -76,11 +74,11 @@ export default function MobileHUD() {
     }, [activeTab]);
 
     const navItems = [
-        { id: "home",     icon: Home,      label: t("nav.home"),     href: "#"            },
-        { id: "about",    icon: User,      label: t("nav.about"),    href: "#about-intro" },
-        { id: "cmd",      icon: Command,   label: "⌘K",              href: "__cmd"        },
-        { id: "projects", icon: Briefcase, label: t("nav.projects"), href: "#projects"    },
-        { id: "contact",  icon: Mail,      label: t("nav.contact"),  href: "#contact"     },
+        { id: "home",     label: t("nav.home"),     short: "01", href: "#"            },
+        { id: "about",    label: t("nav.about"),    short: "02", href: "#about-intro" },
+        { id: "cmd",      label: "INDEX",           short: "⌘",  href: "__cmd"        },
+        { id: "projects", label: t("nav.projects"), short: "04", href: "#projects"    },
+        { id: "contact",  label: t("nav.contact"),  short: "08", href: "#contact"     },
     ];
 
     const openCmdPalette = () =>
@@ -113,40 +111,36 @@ export default function MobileHUD() {
     return (
         <>
             <motion.div
-                initial={{ y: 120, opacity: 0 }}
+                initial={{ y: 80, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
-                transition={{ type: "spring", stiffness: 240, damping: 24, delay: 1.2 }}
+                transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1], delay: 0.6 }}
                 className="fixed md:hidden z-50 will-change-transform"
                 style={{
-                    bottom: "max(1.25rem, env(safe-area-inset-bottom, 20px))",
-                    left: "1rem",
-                    right: "1rem",
-                    height: "66px",
+                    bottom: "max(0.75rem, env(safe-area-inset-bottom, 16px))",
+                    left: "0.75rem",
+                    right: "0.75rem",
+                    height: "52px",
                 }}
             >
-                {/* Shell */}
-                <div className="absolute inset-0 rounded-[28px] bg-[#1B1814]/92 backdrop-blur-2xl border border-[#493B33]/55 shadow-[0_14px_52px_rgba(0,0,0,0.6)] overflow-hidden">
-                    {/* Top progress track */}
-                    <div className="absolute top-0 left-5 right-5 h-[2px] rounded-full bg-[#493B33]/40 overflow-hidden">
+                {/* Frame: square, hairline border, no rounded capsule */}
+                <div className="absolute inset-0 bg-[#13110E]/92 backdrop-blur-xl border border-[#493B33]/55 overflow-hidden">
+                    {/* Top progress hairline */}
+                    <div className="absolute top-0 left-0 right-0 h-px bg-[#493B33]/40">
                         <div
-                            className="h-full origin-left"
+                            className="h-full origin-left bg-[#DBC7A6]/85"
                             style={{
                                 width: "100%",
-                                background: "linear-gradient(90deg, #DBC7A6 0%, #B39F85 60%, #7D6B56 100%)",
                                 transform: `scaleX(${sectionProgress})`,
                                 transformOrigin: "left",
                                 transition: "transform 0.12s linear"
                             }}
                         />
                     </div>
-                    {/* Subtle top gradient bloom */}
-                    <div className="absolute top-0 left-10 right-10 h-px bg-gradient-to-r from-transparent via-[#DBC7A6]/25 to-transparent" />
                 </div>
 
-                <div className="relative h-full flex items-center px-1.5">
+                <div className="relative h-full flex items-stretch">
                     {navItems.map((item) => {
                         const isActive = activeTab === item.id;
-                        const Icon = item.icon;
                         const isCmd = item.id === "cmd";
 
                         return (
@@ -156,55 +150,32 @@ export default function MobileHUD() {
                                 onTouchStart={() => handleLongPressStart(item.id)}
                                 onTouchEnd={handleLongPressEnd}
                                 onTouchCancel={handleLongPressEnd}
-                                className="relative flex-1 h-full flex flex-col items-center justify-center gap-[3px] min-w-[44px]"
+                                className={cn(
+                                    "relative flex-1 flex flex-col items-center justify-center gap-1 min-w-[44px] transition-colors duration-200",
+                                    isCmd
+                                        ? "text-[#DBC7A6] border-l border-r border-[#493B33]/55"
+                                        : isActive
+                                            ? "text-[#DBC7A6]"
+                                            : "text-[#5F564D]"
+                                )}
                                 aria-label={item.label}
                                 aria-current={isActive && !isCmd ? "page" : undefined}
                             >
+                                <span className="font-mono text-[10px] tabular-nums leading-none">
+                                    {item.short}
+                                </span>
+                                <span className={cn(
+                                    "font-mono text-[8.5px] uppercase tracking-[0.18em] leading-none",
+                                    isActive || isCmd ? "opacity-100" : "opacity-70"
+                                )}>
+                                    {item.label}
+                                </span>
+                                {/* Active underline */}
                                 {isActive && !isCmd && (
                                     <motion.div
-                                        layoutId="hud-pill"
-                                        className="absolute inset-x-1 inset-y-2 rounded-2xl bg-[#DBC7A6]/[0.07] border border-[#B39F85]/25"
-                                        transition={{ type: "spring", bounce: 0.2, duration: 0.55 }}
-                                    />
-                                )}
-
-                                {isCmd && (
-                                    <div className="absolute inset-x-1.5 inset-y-2 rounded-2xl bg-gradient-to-br from-[#DBC7A6]/[0.1] to-[#493B33]/30 border border-[#B39F85]/30" />
-                                )}
-
-                                <motion.div
-                                    animate={isActive && !isCmd ? { y: -2, scale: 1.12 } : { y: 0, scale: 1 }}
-                                    transition={{ type: "spring", stiffness: 300, damping: 22 }}
-                                    className={cn(
-                                        "relative z-10 transition-colors duration-200",
-                                        isCmd ? "text-[#DBC7A6]" : isActive ? "text-[#DBC7A6]" : "text-[#5F564D]"
-                                    )}
-                                >
-                                    <Icon size={isCmd ? 17 : 19} strokeWidth={isActive || isCmd ? 2.1 : 1.7} />
-                                </motion.div>
-
-                                {!isCmd && (
-                                    <motion.span
-                                        animate={isActive ? { opacity: 1, y: 0 } : { opacity: 0, y: 4 }}
-                                        transition={{ duration: 0.2 }}
-                                        className={cn(
-                                            "relative z-10 text-[9px] font-mono tracking-wider uppercase",
-                                            isActive ? "text-[#DBC7A6]" : "text-[#5F564D]"
-                                        )}
-                                    >
-                                        {item.label}
-                                    </motion.span>
-                                )}
-
-                                {isActive && !isCmd && (
-                                    <motion.div
-                                        layoutId="hud-pip"
-                                        className="absolute -bottom-0.5 w-4 h-[2px] rounded-full"
-                                        style={{
-                                            background: "linear-gradient(135deg, #DBC7A6 0%, #B39F85 50%, #7D6B56 100%)",
-                                            boxShadow: "0 0 10px rgba(219,199,166,0.45)"
-                                        }}
-                                        transition={{ type: "spring", bounce: 0.2, duration: 0.55 }}
+                                        layoutId="hud-underline"
+                                        className="absolute bottom-1 h-px w-6 bg-[#DBC7A6]"
+                                        transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
                                     />
                                 )}
                             </button>
@@ -213,24 +184,23 @@ export default function MobileHUD() {
                 </div>
             </motion.div>
 
-            {/* Long-press quick actions bubble */}
             <AnimatePresence>
                 {quickActions && (
                     <motion.div
-                        initial={{ opacity: 0, y: 12, scale: 0.9 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: 12, scale: 0.9 }}
-                        transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+                        initial={{ opacity: 0, y: 12 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 12 }}
+                        transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
                         className="fixed md:hidden z-[55]"
-                        style={{ bottom: "calc(6rem + env(safe-area-inset-bottom, 20px))", left: "50%", transform: "translateX(-50%)" }}
+                        style={{ bottom: "calc(4.5rem + env(safe-area-inset-bottom, 16px))", left: "50%", transform: "translateX(-50%)" }}
                         onClick={() => setQuickActions(false)}
                     >
-                        <div className="flex flex-col items-stretch gap-1 rounded-2xl border border-[#493B33]/60 bg-[#1B1814]/95 backdrop-blur-2xl shadow-[0_20px_60px_rgba(0,0,0,0.6)] p-1.5 min-w-[160px]">
+                        <div className="flex flex-col items-stretch gap-px border border-[#493B33]/60 bg-[#1B1814]/95 backdrop-blur-2xl min-w-[160px]">
                             {quickActionItems.map((qa) => (
                                 <button
                                     key={qa.label}
                                     onClick={qa.fn}
-                                    className="px-4 py-2.5 rounded-xl text-left text-[13px] font-medium text-[#DBC7A6]/85 hover:text-[#DBC7A6] hover:bg-[#251E18]/80 transition-colors"
+                                    className="px-4 py-2.5 text-left text-[12px] font-mono uppercase tracking-[0.2em] text-[#DBC7A6]/85 hover:text-[#DBC7A6] hover:bg-[#251E18]/80 transition-colors"
                                 >
                                     {qa.label}
                                 </button>

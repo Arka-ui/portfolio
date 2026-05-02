@@ -1,8 +1,7 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { Send, MapPin, CheckCircle, AlertCircle, Loader2, ArrowUpRight, Copy, Check } from "lucide-react";
-import SessionIcon from "@/components/ui/SessionIcon";
+import { Send, CheckCircle, AlertCircle, Loader2, Copy, Check } from "lucide-react";
 import { useState } from "react";
 import { sendContactMessage } from "@/lib/telemetry";
 import { useLanguage } from "@/context/LanguageContext";
@@ -11,8 +10,15 @@ const SESSION_ID = "05459c70a2245442430b1b0dd484650013a8ad3c425957e3f2dc16ccce07
 
 type Status = "idle" | "loading" | "success" | "error";
 
-const INPUT_CLASS =
-    "w-full bg-transparent border border-[#493B33]/55 rounded-xl px-5 py-3.5 text-[#DBC7A6] text-sm focus:outline-none focus:border-[#DBC7A6]/60 focus:bg-[#DBC7A6]/[0.03] transition-all placeholder-[#5F564D]";
+const FIELD_CLASS =
+    "w-full bg-transparent border-0 border-b border-[#493B33]/55 px-0 py-3 text-[#DBC7A6] text-[15px] font-sans focus:outline-none focus:border-[#DBC7A6] transition-colors duration-300 placeholder-[#5F564D]";
+
+const enter = (delay = 0) => ({
+    initial: { opacity: 0, y: 16 },
+    whileInView: { opacity: 1, y: 0 },
+    viewport: { once: true, amount: 0.2 },
+    transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as const, delay },
+});
 
 export default function Contact() {
     const { t } = useLanguage();
@@ -45,132 +51,119 @@ export default function Contact() {
         }
     };
 
-    return (
-        <section id="contact" className="relative py-24 md:py-36 border-t border-[#493B33]/25 overflow-hidden md:pl-[72px]">
-            {/* Background accents */}
-            <div className="absolute inset-0 pointer-events-none">
-                <div className="absolute bottom-0 left-0 right-0 h-[600px] bg-gradient-to-t from-[#B39F85]/[0.03] via-transparent to-transparent" />
-                <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-[#DBC7A6]/[0.025] rounded-full blur-[120px]" />
-                <div className="absolute bottom-0 left-[20%] w-[400px] h-[400px] bg-[#4B3E26]/[0.18] rounded-full blur-[100px]" />
-            </div>
+    const today = new Date().toLocaleDateString("en-GB", { day: "2-digit", month: "long", year: "numeric" });
 
+    return (
+        <section id="contact" className="relative py-24 md:py-32 border-t border-[#493B33]/35 overflow-hidden md:pl-[88px]">
             <div className="container mx-auto px-6 md:px-12 relative z-10">
-                {/* Headline */}
-                <motion.div
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-                    className="mb-16 md:mb-20"
-                >
-                    <span className="label-display mb-4 block">{t("contact.label")}</span>
-                    <h2 className="font-display font-bold text-[clamp(40px,7vw,96px)] leading-[0.88] tracking-tighter">
-                        <span className="text-[#DBC7A6]">Let&apos;s build</span><br />
-                        <span className="text-grad-warm">something</span><br />
-                        <span className="text-[#7D6B56]">great.</span>
-                    </h2>
-                    <p className="text-base text-[#B39F85] max-w-md leading-relaxed mt-6">
-                        {t("contact.open_for")}
-                    </p>
+                {/* Folio head */}
+                <motion.div {...enter(0)} className="flex items-center gap-4 mb-10">
+                    <span className="atlas-folio">§ 08 · Correspondence</span>
+                    <span aria-hidden className="flex-1 atlas-rule" />
+                    <span className="atlas-folio">{today}</span>
                 </motion.div>
 
-                <div className="grid md:grid-cols-12 gap-8 md:gap-12">
-                    {/* Left: info cards */}
-                    <motion.div
-                        initial={{ opacity: 0, y: 24 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.7, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-                        className="md:col-span-4 space-y-4"
-                    >
-                        {/* Session ID — selectable, with copy button + "no session?" link */}
-                        <div className="bento-card w-full p-5 flex flex-col gap-3 group hover:border-[#DBC7A6]/30 transition-all duration-300">
-                            <div className="flex items-center gap-4">
-                                <div className="w-10 h-10 rounded-xl bg-[#DBC7A6]/[0.06] border border-[#DBC7A6]/[0.14] flex items-center justify-center shrink-0 group-hover:bg-[#DBC7A6]/[0.1] transition-colors">
-                                    <SessionIcon size={16} className="text-[#B39F85] group-hover:text-[#DBC7A6] transition-colors" />
-                                </div>
-                                <div className="min-w-0 flex-1">
-                                    <span className="label-mono text-[9px] mb-0.5 block">
-                                        {t("contact.session")}
-                                    </span>
-                                    <span
-                                        className="text-[10px] text-[#B39F85] font-mono break-all line-clamp-1 select-all cursor-text"
-                                        onClick={(e) => e.stopPropagation()}
-                                    >
-                                        {SESSION_ID}
-                                    </span>
-                                </div>
-                                <button
-                                    onClick={copySession}
-                                    aria-label="Copy Session ID"
-                                    className="shrink-0 w-8 h-8 rounded-lg border border-[#493B33]/55 bg-[#251E18]/60 hover:bg-[#DBC7A6]/[0.08] hover:border-[#DBC7A6]/35 text-[#7D6B56] hover:text-[#DBC7A6] transition-all flex items-center justify-center"
+                {/* Heading */}
+                <motion.h2
+                    {...enter(0.05)}
+                    className="font-display font-bold leading-[0.92] tracking-tighter text-[#DBC7A6] max-w-4xl mb-6"
+                    style={{ fontSize: "clamp(40px, 7vw, 100px)" }}
+                >
+                    Begin a letter.<br />
+                    <span className="italic font-medium text-[#B39F85]">Send a thought.</span><br />
+                    <span className="text-[#7D6B56]">Build something.</span>
+                </motion.h2>
+
+                <motion.p
+                    {...enter(0.1)}
+                    className="text-[15px] text-[#B39F85] leading-[1.7] max-w-[64ch] mb-14 md:mb-20"
+                >
+                    {t("contact.open_for")}
+                </motion.p>
+
+                <div className="grid md:grid-cols-12 gap-12 md:gap-16">
+                    {/* Letterhead column */}
+                    <motion.aside {...enter(0.15)} className="md:col-span-4">
+                        <div className="atlas-folio mb-3">Letterhead</div>
+                        <div className="atlas-rule mb-6" aria-hidden />
+
+                        <ul className="space-y-5 text-[14px] leading-[1.6]">
+                            <li>
+                                <span className="atlas-folio block mb-1">Sender</span>
+                                <span className="font-display text-[#DBC7A6] text-[20px] tracking-tight font-medium block leading-tight">Arka</span>
+                                <span className="text-[#B39F85] text-[13px]">{t("contact.location")}</span>
+                            </li>
+
+                            <li>
+                                <span className="atlas-folio block mb-1">GitHub</span>
+                                <a
+                                    href="https://github.com/arka-ui"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="atlas-link text-[#B39F85] hover:text-[#DBC7A6] text-[14px]"
                                 >
-                                    {sessionCopied ? <Check size={13} className="text-[#DBC7A6]" /> : <Copy size={13} />}
+                                    @arka-ui ↗
+                                </a>
+                            </li>
+
+                            <li>
+                                <span className="atlas-folio block mb-1">{t("contact.session")}</span>
+                                <button
+                                    type="button"
+                                    onClick={copySession}
+                                    className="text-left text-[10.5px] font-mono text-[#7D6B56] hover:text-[#DBC7A6] transition-colors break-all leading-snug w-full"
+                                    aria-label="Copy Session ID"
+                                    title="Click to copy"
+                                >
+                                    {sessionCopied ? (
+                                        <span className="inline-flex items-center gap-2 text-[#DBC7A6]">
+                                            <Check size={11} /> Copied to clipboard
+                                        </span>
+                                    ) : (
+                                        <span className="inline-flex items-start gap-2">
+                                            <Copy size={11} className="mt-[2px] shrink-0" />
+                                            <span>{SESSION_ID}</span>
+                                        </span>
+                                    )}
                                 </button>
-                            </div>
-                            <a
-                                href="https://getsession.org"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="text-[10px] font-mono text-[#7D6B56] hover:text-[#DBC7A6] transition-colors underline underline-offset-4 decoration-[#493B33] hover:decoration-[#B39F85]/60 self-start uppercase tracking-wider"
-                            >
-                                download SESSION
-                            </a>
-                        </div>
+                                <a
+                                    href="https://getsession.org"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="atlas-folio block mt-2 hover:text-[#DBC7A6] transition-colors"
+                                >
+                                    Download Session ↗
+                                </a>
+                            </li>
 
-                        {/* Location */}
-                        <div className="bento-card p-5 flex items-center gap-4">
-                            <div className="w-10 h-10 rounded-xl bg-[#B39F85]/[0.06] border border-[#B39F85]/[0.14] flex items-center justify-center shrink-0">
-                                <MapPin size={16} className="text-[#B39F85]" />
-                            </div>
-                            <div>
-                                <span className="label-mono text-[9px] mb-0.5 block">Location</span>
-                                <span className="text-sm text-[#B39F85]">{t("contact.location")}</span>
-                            </div>
-                        </div>
+                            <li>
+                                <span className="atlas-folio block mb-1">Postmark</span>
+                                <span className="text-[#B39F85] text-[13px] font-mono">{today}</span>
+                            </li>
+                        </ul>
+                    </motion.aside>
 
-                        {/* GitHub */}
-                        <a
-                            href="https://github.com/arka-ui"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="bento-card p-5 flex items-center gap-4 group hover:border-[#B39F85]/30 transition-all duration-300"
-                        >
-                            <div className="w-10 h-10 rounded-xl bg-[#251E18]/60 border border-[#493B33]/50 flex items-center justify-center shrink-0">
-                                <ArrowUpRight size={16} className="text-[#7D6B56] group-hover:text-[#DBC7A6] transition-colors" />
-                            </div>
-                            <div>
-                                <span className="label-mono text-[9px] mb-0.5 block">GitHub</span>
-                                <span className="text-sm text-[#B39F85] group-hover:text-[#DBC7A6] transition-colors">@arka-ui</span>
-                            </div>
-                        </a>
-                    </motion.div>
-
-                    {/* Right: form */}
-                    <motion.div
-                        initial={{ opacity: 0, y: 24 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.7, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-                        className="md:col-span-8"
-                    >
+                    {/* Letter column */}
+                    <motion.div {...enter(0.22)} className="md:col-span-8">
                         <AnimatePresence mode="wait">
                             {status === "success" ? (
                                 <motion.div
                                     key="success"
-                                    initial={{ opacity: 0, scale: 0.95 }}
-                                    animate={{ opacity: 1, scale: 1 }}
+                                    initial={{ opacity: 0, y: 8 }}
+                                    animate={{ opacity: 1, y: 0 }}
                                     exit={{ opacity: 0 }}
-                                    className="flex flex-col items-center justify-center text-center py-20 gap-5 bento-card"
+                                    transition={{ duration: 0.4 }}
+                                    className="border-t border-b border-[#DBC7A6]/40 py-16 px-2 text-center"
                                 >
-                                    <div className="w-16 h-16 rounded-2xl bg-[#DBC7A6]/10 border border-[#DBC7A6]/25 flex items-center justify-center">
-                                        <CheckCircle className="w-8 h-8 text-[#DBC7A6]" />
-                                    </div>
-                                    <div>
-                                        <h3 className="font-display font-bold text-2xl text-[#DBC7A6] mb-2">{t("contact.success_title")}</h3>
-                                        <p className="text-[#B39F85] text-sm leading-relaxed max-w-xs">{t("contact.success_desc")}</p>
-                                    </div>
-                                    <button onClick={() => setStatus("idle")} className="text-xs font-mono text-[#7D6B56] hover:text-[#DBC7A6] transition-colors mt-2">
+                                    <CheckCircle className="w-10 h-10 text-[#DBC7A6] mx-auto mb-5" />
+                                    <h3 className="font-display font-bold text-[28px] md:text-[36px] text-[#DBC7A6] mb-2 tracking-tight">
+                                        {t("contact.success_title")}
+                                    </h3>
+                                    <p className="text-[#B39F85] text-[14px] leading-relaxed max-w-sm mx-auto">{t("contact.success_desc")}</p>
+                                    <button
+                                        onClick={() => setStatus("idle")}
+                                        className="atlas-link text-[#B39F85] hover:text-[#DBC7A6] mt-8 text-[12px] font-mono uppercase tracking-[0.22em] inline-block"
+                                    >
                                         {t("contact.send_another")}
                                     </button>
                                 </motion.div>
@@ -181,47 +174,89 @@ export default function Contact() {
                                     animate={{ opacity: 1 }}
                                     exit={{ opacity: 0 }}
                                     onSubmit={handleSubmit}
-                                    className="bento-card p-8 md:p-10 space-y-5"
+                                    className="space-y-6"
                                 >
-                                    <div className="grid sm:grid-cols-2 gap-5">
-                                        <div className="space-y-2">
-                                            <label htmlFor="name" className="label-mono text-[9px]">{t("contact.name")}</label>
-                                            <input id="name" type="text" required placeholder={t("contact.placeholder_name")} value={name} onChange={e => setName(e.target.value)} autoComplete="name" inputMode="text" enterKeyHint="next" className={INPUT_CLASS} />
+                                    <div className="atlas-folio mb-3">Compose</div>
+                                    <div className="atlas-rule-double mb-8" aria-hidden />
+
+                                    <div className="grid sm:grid-cols-2 gap-x-8 gap-y-6">
+                                        <div>
+                                            <label htmlFor="name" className="atlas-folio block mb-1">{t("contact.name")}</label>
+                                            <input
+                                                id="name" type="text" required
+                                                placeholder={t("contact.placeholder_name")}
+                                                value={name} onChange={e => setName(e.target.value)}
+                                                autoComplete="name" inputMode="text" enterKeyHint="next"
+                                                className={FIELD_CLASS}
+                                            />
                                         </div>
-                                        <div className="space-y-2">
-                                            <label htmlFor="email" className="label-mono text-[9px]">{t("contact.email")}</label>
-                                            <input id="email" type="email" required placeholder={t("contact.placeholder_email")} value={email} onChange={e => setEmail(e.target.value)} autoComplete="email" inputMode="email" enterKeyHint="next" className={INPUT_CLASS} />
+                                        <div>
+                                            <label htmlFor="email" className="atlas-folio block mb-1">{t("contact.email")}</label>
+                                            <input
+                                                id="email" type="email" required
+                                                placeholder={t("contact.placeholder_email")}
+                                                value={email} onChange={e => setEmail(e.target.value)}
+                                                autoComplete="email" inputMode="email" enterKeyHint="next"
+                                                className={FIELD_CLASS}
+                                            />
                                         </div>
                                     </div>
 
-                                    <div className="space-y-2">
-                                        <label htmlFor="subject" className="label-mono text-[9px]">{t("contact.subject")}</label>
-                                        <input id="subject" type="text" required placeholder={t("contact.placeholder_subject")} value={subject} onChange={e => setSubject(e.target.value)} autoComplete="off" inputMode="text" enterKeyHint="next" className={INPUT_CLASS} />
+                                    <div>
+                                        <label htmlFor="subject" className="atlas-folio block mb-1">{t("contact.subject")}</label>
+                                        <input
+                                            id="subject" type="text" required
+                                            placeholder={t("contact.placeholder_subject")}
+                                            value={subject} onChange={e => setSubject(e.target.value)}
+                                            autoComplete="off" inputMode="text" enterKeyHint="next"
+                                            className={FIELD_CLASS}
+                                        />
                                     </div>
 
-                                    <div className="space-y-2">
-                                        <label htmlFor="message" className="label-mono text-[9px]">{t("contact.message")}</label>
-                                        <textarea id="message" rows={5} required placeholder={t("contact.placeholder_message")} value={message} onChange={e => setMessage(e.target.value)} autoComplete="off" enterKeyHint="send" className={`${INPUT_CLASS} resize-none`} />
+                                    <div>
+                                        <label htmlFor="message" className="atlas-folio block mb-1">{t("contact.message")}</label>
+                                        <textarea
+                                            id="message" rows={6} required
+                                            placeholder={t("contact.placeholder_message")}
+                                            value={message} onChange={e => setMessage(e.target.value)}
+                                            autoComplete="off" enterKeyHint="send"
+                                            className={`${FIELD_CLASS} resize-none`}
+                                        />
                                     </div>
 
                                     {status === "error" && errMsg && (
-                                        <motion.div initial={{ opacity: 0, y: -4 }} animate={{ opacity: 1, y: 0 }} className="flex items-center gap-3 px-4 py-3 rounded-xl bg-[#d46a5c]/[0.08] border border-[#d46a5c]/25 text-[#d46a5c] text-sm">
-                                            <AlertCircle size={15} className="shrink-0" />
+                                        <motion.div
+                                            initial={{ opacity: 0, y: -4 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            className="flex items-center gap-3 px-4 py-3 border border-[#d46a5c]/40 text-[#d46a5c] text-[13px]"
+                                        >
+                                            <AlertCircle size={14} className="shrink-0" />
                                             {errMsg}
                                         </motion.div>
                                     )}
 
-                                    <button
-                                        type="submit"
-                                        disabled={status === "loading"}
-                                        className="group w-full flex items-center justify-center gap-2.5 px-6 py-4 bg-[#DBC7A6] text-[#13110E] rounded-xl font-bold text-sm hover:bg-[#E9D7B7] disabled:opacity-60 disabled:cursor-not-allowed transition-all duration-300 active:scale-[0.98]"
-                                    >
-                                        {status === "loading" ? (
-                                            <><Loader2 size={14} className="animate-spin" />{t("contact.sending")}</>
-                                        ) : (
-                                            <>{t("contact.send")}<Send size={14} className="transition-transform group-hover:translate-x-1 group-hover:-translate-y-0.5" /></>
-                                        )}
-                                    </button>
+                                    <div className="atlas-rule-double mt-10 mb-6" aria-hidden />
+
+                                    <div className="flex items-end justify-between gap-4 flex-wrap">
+                                        <p className="font-green-energy text-[#B39F85] text-[22px] md:text-[28px] leading-none">
+                                            Yours,<span className="font-mono text-[10px] tracking-[0.22em] uppercase text-[#7D6B56] ml-3">/ Arka</span>
+                                        </p>
+
+                                        <button
+                                            type="submit"
+                                            disabled={status === "loading"}
+                                            className="group inline-flex items-center gap-3 px-8 py-3.5 bg-[#DBC7A6] text-[#13110E] font-medium text-[14px] tracking-tight hover:bg-[#E9D7B7] disabled:opacity-60 disabled:cursor-not-allowed transition-colors duration-300"
+                                        >
+                                            {status === "loading" ? (
+                                                <><Loader2 size={14} className="animate-spin" />{t("contact.sending")}</>
+                                            ) : (
+                                                <>
+                                                    {t("contact.send")}
+                                                    <Send size={14} className="transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-0.5" />
+                                                </>
+                                            )}
+                                        </button>
+                                    </div>
                                 </motion.form>
                             )}
                         </AnimatePresence>
