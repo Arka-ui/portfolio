@@ -107,8 +107,8 @@ function Dispatch({ post, index, locale, verifiedLabel, readLabel }: {
 
             {/* Bottom signature row */}
             <div className="flex items-center justify-between gap-4 flex-wrap pt-4 mt-4 border-t border-[#493B33]/30">
-                <span className="font-green-energy text-[#B39F85] text-[20px] md:text-[26px] leading-none">
-                    — {post.author}<span className="font-mono text-[10px] tracking-[0.22em] uppercase text-[#7D6B56] ml-3">/ signed</span>
+                <span className="italic text-[#B39F85] text-[14px] md:text-[16px] leading-none tracking-tight">
+                    — {post.author}<span className="not-italic text-[10px] tracking-[0.22em] uppercase text-[#7D6B56] ml-3">/ signed</span>
                 </span>
                 <a
                     href={post.source_url}

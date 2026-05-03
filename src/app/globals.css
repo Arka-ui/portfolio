@@ -7,10 +7,10 @@
 @property --mesh-y2 { syntax: "<percentage>"; inherits: false; initial-value: 80%; }
 
 @theme {
-  --font-sans: var(--font-sora);
-  --font-heading: var(--font-sora);
-  --font-display: var(--font-syne);
-  --font-mono: var(--font-space-mono);
+  --font-sans: var(--font-monocraft);
+  --font-heading: var(--font-monocraft);
+  --font-display: var(--font-monocraft);
+  --font-mono: var(--font-monocraft);
   --font-green-energy: var(--font-green-energy);
 
   /* ─── Warm earthy palette (unchanged) ─── */
@@ -166,14 +166,14 @@
     height: 4px;
   }
 
-  /* ─── Drop cap (Green_Energy serif, 4 lines tall) ─── */
+  /* ─── Drop cap (Monocraft Black, 4 lines tall) ─── */
   .dropcap::first-letter {
-    font-family: var(--font-green-energy);
-    font-weight: 400;
+    font-family: var(--font-monocraft);
+    font-weight: 900;
     float: left;
-    font-size: 5.4em;
-    line-height: 0.86;
-    padding: 0.1em 0.18em 0 0;
+    font-size: 4.6em;
+    line-height: 0.92;
+    padding: 0.05em 0.16em 0 0;
     color: #DBC7A6;
   }
 
@@ -412,13 +412,14 @@
     transform: rotate(45deg);
   }
 
-  /* ─── Atlas pull-quote ─── */
+  /* ─── Atlas pull-quote (Monocraft, italic) ─── */
   .pull-quote {
-    font-family: var(--font-green-energy);
+    font-family: var(--font-monocraft);
     font-weight: 400;
+    font-style: italic;
     line-height: 1.18;
     color: #DBC7A6;
-    letter-spacing: -0.005em;
+    letter-spacing: -0.01em;
   }
 }
 

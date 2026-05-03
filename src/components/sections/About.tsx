@@ -113,8 +113,8 @@ export default function About() {
                         </p>
 
                         {/* Signature */}
-                        <p className="pt-2 font-green-energy text-[#DBC7A6] text-[28px] leading-none">
-                            — Arka<span className="text-[#7D6B56] font-mono text-[10px] tracking-[0.2em] uppercase ml-3">/ MMXXVI</span>
+                        <p className="pt-2 italic text-[#DBC7A6] text-[18px] md:text-[20px] leading-none tracking-tight">
+                            — Arka<span className="not-italic text-[#7D6B56] text-[10px] tracking-[0.2em] uppercase ml-3">/ MMXXVI</span>
                         </p>
                     </motion.div>
 
@@ -158,7 +158,7 @@ export default function About() {
                 <motion.figure {...enter(0)} className="mb-20 md:mb-28">
                     <div className="atlas-rule mb-10" aria-hidden />
                     <blockquote>
-                        <span className="font-green-energy text-[#7D6B56] text-[80px] md:text-[120px] leading-none block mb-3" aria-hidden>“</span>
+                        <span className="text-[#7D6B56] text-[64px] md:text-[96px] leading-none block mb-3 font-bold" aria-hidden>&ldquo;</span>
                         <p className="pull-quote text-[28px] md:text-[44px] lg:text-[56px] max-w-[18ch] md:max-w-[22ch]">
                             {t("about.team_quote")}
                         </p>

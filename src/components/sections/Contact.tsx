@@ -238,8 +238,8 @@ export default function Contact() {
                                     <div className="atlas-rule-double mt-10 mb-6" aria-hidden />
 
                                     <div className="flex items-end justify-between gap-4 flex-wrap">
-                                        <p className="font-green-energy text-[#B39F85] text-[22px] md:text-[28px] leading-none">
-                                            Yours,<span className="font-mono text-[10px] tracking-[0.22em] uppercase text-[#7D6B56] ml-3">/ Arka</span>
+                                        <p className="italic text-[#B39F85] text-[16px] md:text-[18px] leading-none tracking-tight">
+                                            Yours,<span className="not-italic text-[10px] tracking-[0.22em] uppercase text-[#7D6B56] ml-3">/ Arka</span>
                                         </p>
 
                                         <button
