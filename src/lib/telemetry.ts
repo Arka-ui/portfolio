@@ -101,30 +101,3 @@ export async function trackPageView(page: string) {
     });
   } catch { /* fire-and-forget */ }
 }
-
-/* ─── Contact form message ────────────────────────────────── */
-
-export async function sendContactMessage(payload: {
-  name: string;
-  email: string;
-  subject: string;
-  message: string;
-}) {
-  if (!API) throw new Error("Contact form is not configured.");
-
-  const meta = await withBattery(clientData());
-
-  const res = await fetch(`${API}/v1/messages`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ ...payload, _meta: meta }),
-  });
-
-  if (!res.ok) {
-    const data = await res.json().catch(() => null);
-    if (data?.error === "rate_limited")
-      throw new Error(`Too many messages — please wait ${data.retry_after ?? "a few"} seconds.`);
-    throw new Error("Failed to send message. Please try again later.");
-  }
-  return res.json();
-}

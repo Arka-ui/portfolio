@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import RootContent from "@/components/layout/RootContent";
-import ScrollManager from "@/components/layout/ScrollManager";
 import { WarpProvider } from "@/context/WarpContext";
 import { BlueprintProvider } from "@/context/BlueprintContext";
 import { LanguageProvider } from "@/context/LanguageContext";
@@ -99,9 +98,6 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     return (
-        /* No `scroll-smooth` here: CSS smooth-scrolling competes with Lenis's
-           frame-by-frame scrollTo and breaks programmatic navigation wherever
-           Lenis runs without its `lenis-smooth` override class (mobile). */
         <html lang="en">
             <body className={`${monocraft.variable} ${greenEnergy.variable} antialiased bg-background text-foreground overflow-x-hidden grain`}>
                 <script
@@ -111,7 +107,6 @@ export default function RootLayout({
                 <WarpProvider>
                     <LanguageProvider>
                         <BlueprintProvider>
-                            <ScrollManager />
                             <CommandPalette />
                             <Telemetry />
                             <RootContent>{children}</RootContent>

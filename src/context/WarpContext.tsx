@@ -1,73 +1,36 @@
 "use client";
 
-import { createContext, useContext, useState, ReactNode } from "react";
-import Lenis from "lenis";
+import { createContext, useContext, ReactNode } from "react";
 
 interface WarpContextType {
     warpTo: (targetId: string) => void;
-    lenis: Lenis | null;
-    registerLenis: (instance: Lenis) => void;
 }
 
 const WarpContext = createContext<WarpContextType | undefined>(undefined);
 
 export function WarpProvider({ children }: { children: ReactNode }) {
-    const [lenis, setLenis] = useState<Lenis | null>(null);
-
+    // Native scrolling only — no smooth-scroll library. The browser handles
+    // easing; reduced-motion users get an instant jump.
     const warpTo = (targetId: string) => {
-        const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        const behavior: ScrollBehavior = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+            ? "auto"
+            : "smooth";
 
-        if (!lenis) {
-            // Fallback for no Lenis
-            if (targetId === "#" || targetId === "/") {
-                window.scrollTo({ top: 0, behavior: reducedMotion ? "auto" : "smooth" });
-                return;
-            }
-            const el = document.querySelector(targetId);
-            el?.scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth" });
-            return;
-        }
-
-        // Kinetic Glide Logic
-        // 1. Handle Home / Top
         if (targetId === "#" || targetId === "/") {
-            lenis.scrollTo(0, {
-                duration: 1.5,
-                easing: (t) => t === 1 ? 1 : 1 - Math.pow(2, -10 * t), // ExpoOut for "Glide"
-                immediate: reducedMotion,
-            });
+            window.scrollTo({ top: 0, behavior });
             return;
         }
 
-        // 2. Locate Target
-        const target = document.querySelector(targetId) as HTMLElement;
+        const target = document.querySelector(targetId);
         if (!target) {
             console.warn(`Target ${targetId} not found`);
             return;
         }
-
-        // 3. Glide
-        lenis.scrollTo(target, {
-            duration: 1.5,
-            easing: (t) => t === 1 ? 1 : 1 - Math.pow(2, -10 * t), // ExpoOut for "Glide"
-            immediate: reducedMotion,
-            onComplete: () => {
-                // Sections gated on remote data (projects, news, live) can pop in
-                // mid-glide and shift the target; settle onto its final position.
-                const drift = target.getBoundingClientRect().top;
-                if (Math.abs(drift) > 4) {
-                    lenis?.scrollTo(target, { immediate: true });
-                }
-            },
-        });
-    };
-
-    const registerLenis = (instance: Lenis) => {
-        setLenis(instance);
+        target.scrollIntoView({ behavior, block: "start" });
     };
 
     return (
-        <WarpContext.Provider value={{ warpTo, lenis, registerLenis }}>
+        <WarpContext.Provider value={{ warpTo }}>
             {children}
         </WarpContext.Provider>
     );

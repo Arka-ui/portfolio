@@ -11,9 +11,7 @@ import { SECTION_ORDER, SECTION_NUM } from "@/lib/sections";
 
 /* Sections without their own nav entry highlight their parent entry. */
 const RAIL_RESOLVE: Record<string, string> = {
-    "instruments": "hero",
     "about": "about-intro",
-    "news": "projects",
 };
 
 export default function Navbar() {
@@ -32,12 +30,14 @@ export default function Navbar() {
     const activeSection = RAIL_RESOLVE[spied] ?? spied;
 
     const NAV_ITEMS = [
-        { label: t("nav.home"),    href: "#",            id: "hero",        num: SECTION_NUM["hero"] },
-        { label: t("nav.about"),   href: "#about-intro", id: "about-intro", num: SECTION_NUM["about-intro"] },
-        { label: t("nav.work"),    href: "#projects",    id: "projects",    num: SECTION_NUM["projects"] },
-        { label: t("nav.stack"),   href: "#skills",      id: "skills",      num: SECTION_NUM["skills"] },
-        { label: t("nav.live"),    href: "#live",        id: "live",        num: SECTION_NUM["live"] },
-        { label: t("nav.contact"), href: "#contact",     id: "contact",     num: SECTION_NUM["contact"] },
+        { label: t("nav.home"),        href: "#",            id: "hero",        num: SECTION_NUM["hero"] },
+        { label: t("nav.instruments"), href: "#instruments", id: "instruments", num: SECTION_NUM["instruments"] },
+        { label: t("nav.about"),       href: "#about-intro", id: "about-intro", num: SECTION_NUM["about-intro"] },
+        { label: t("nav.work"),        href: "#projects",    id: "projects",    num: SECTION_NUM["projects"] },
+        { label: t("news.label"),      href: "#news",        id: "news",        num: SECTION_NUM["news"] },
+        { label: t("nav.stack"),       href: "#skills",      id: "skills",      num: SECTION_NUM["skills"] },
+        { label: t("nav.live"),        href: "#live",        id: "live",        num: SECTION_NUM["live"] },
+        { label: t("nav.contact"),     href: "#contact",     id: "contact",     num: SECTION_NUM["contact"] },
     ];
 
     useEffect(() => { setMounted(true); }, []);
@@ -123,8 +123,9 @@ export default function Navbar() {
                     />
 
                     <ul className="relative flex flex-col gap-3.5">
-                        {NAV_ITEMS.map((item) => {
+                        {NAV_ITEMS.map((item, idx) => {
                             const active = activeSection === item.id;
+                            const passed = !active && activeIdx >= 0 && idx < activeIdx;
                             return (
                                 <li key={item.href} className="flex">
                                     <button
@@ -133,7 +134,11 @@ export default function Navbar() {
                                         aria-current={active ? "page" : undefined}
                                         className={cn(
                                             "group relative flex items-center gap-3 w-full font-mono text-[10px] uppercase tracking-[0.22em] transition-colors duration-300",
-                                            active ? "text-[#DBC7A6]" : "text-[#5F564D] hover:text-[#B39F85]"
+                                            active
+                                                ? "text-[#DBC7A6]"
+                                                : passed
+                                                    ? "text-[#7D6B56] hover:text-[#B39F85]"
+                                                    : "text-[#5F564D] hover:text-[#B39F85]"
                                         )}
                                     >
                                         {/* Tick on active row */}

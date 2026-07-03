@@ -1,12 +1,10 @@
 "use client";
 
 import { useScroll, useSpring, motion } from "framer-motion";
-import { useWarp } from "@/context/WarpContext";
 import { useState } from "react";
 
 export default function ScrollProgress() {
     const { scrollYProgress } = useScroll();
-    const { lenis } = useWarp();
     const scaleX = useSpring(scrollYProgress, {
         stiffness: 120,
         damping: 30,
@@ -18,15 +16,10 @@ export default function ScrollProgress() {
         const rect = e.currentTarget.getBoundingClientRect();
         const pct = Math.min(1, Math.max(0, (e.clientX - rect.left) / rect.width));
         const max = document.documentElement.scrollHeight - window.innerHeight;
-        const target = pct * max;
-        if (lenis) {
-            lenis.scrollTo(target, {
-                duration: 1.4,
-                easing: (t) => (t === 1 ? 1 : 1 - Math.pow(2, -10 * t)),
-            });
-        } else {
-            window.scrollTo({ top: target, behavior: "smooth" });
-        }
+        const behavior: ScrollBehavior = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+            ? "auto"
+            : "smooth";
+        window.scrollTo({ top: pct * max, behavior });
     };
 
     const handleMove = (e: React.MouseEvent<HTMLDivElement>) => {

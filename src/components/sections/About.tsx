@@ -32,13 +32,14 @@ const enter = (delay = 0) => ({
     transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as const, delay },
 });
 
+/* Numbered in reverse — counts down from VI to I. */
 const PRINCIPLES = [
-    { key: "belief_0", roman: "I" },
-    { key: "belief_1", roman: "II" },
-    { key: "belief_2", roman: "III" },
-    { key: "belief_3", roman: "IV" },
-    { key: "approach_0", roman: "V" },
-    { key: "approach_1", roman: "VI" },
+    { key: "belief_0", roman: "VI" },
+    { key: "belief_1", roman: "V" },
+    { key: "belief_2", roman: "IV" },
+    { key: "belief_3", roman: "III" },
+    { key: "approach_0", roman: "II" },
+    { key: "approach_1", roman: "I" },
 ];
 
 const FACTS = [
