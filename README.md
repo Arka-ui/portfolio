@@ -233,7 +233,7 @@ This project is **not open-source**. See the [LICENSE](LICENSE) for full details
 
 **[✦ Visit the live portfolio →](https://arka.riftmc.net)**
 
-Crafted by [Arka](https://github.com/Arka-ui) — a self-taught full-stack developer from France.
+Crafted by [Arka](https://github.com/Arka-ui) — a self-taught backend developer from France.
 
 <br/>
 

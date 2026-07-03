@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useEffect, useCallback } from "react";
+import { useRef, useEffect, useCallback, useState } from "react";
 
 const TECH_LINKS: Record<string, string> = {
     "React": "https://react.dev",
@@ -71,11 +71,13 @@ function MarqueeRow({
     reverse = false,
     speed = 30,
     indexBase = 0,
+    running = true,
 }: {
     items: string[];
     reverse?: boolean;
     speed?: number;
     indexBase?: number;
+    running?: boolean;
 }) {
     const containerRef = useRef<HTMLDivElement>(null);
     const offsetRef = useRef(0);
@@ -104,6 +106,11 @@ function MarqueeRow({
     }, [measure]);
 
     useEffect(() => {
+        // No rAF loop at all while the section is off-screen, the tab is
+        // hidden, or the user prefers reduced motion.
+        if (!running) return;
+        lastTimeRef.current = 0;
+
         const animate = (time: number) => {
             if (lastTimeRef.current === 0) lastTimeRef.current = time;
             const delta = time - lastTimeRef.current;
@@ -129,7 +136,7 @@ function MarqueeRow({
 
         requestRef.current = requestAnimationFrame(animate);
         return () => cancelAnimationFrame(requestRef.current);
-    }, [speed, reverse]);
+    }, [speed, reverse, running]);
 
     const tripled = [...items, ...items, ...items];
 
@@ -153,8 +160,37 @@ function MarqueeRow({
 }
 
 export default function TechSlider() {
+    const sectionRef = useRef<HTMLElement>(null);
+    const [running, setRunning] = useState(false);
+
+    useEffect(() => {
+        const el = sectionRef.current;
+        if (!el) return;
+
+        const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+        let onScreen = false;
+
+        const update = () => setRunning(onScreen && !document.hidden && !reducedMotion.matches);
+
+        const observer = new IntersectionObserver(
+            ([entry]) => { onScreen = entry.isIntersecting; update(); },
+            { rootMargin: "100px 0px" }
+        );
+        observer.observe(el);
+        document.addEventListener("visibilitychange", update);
+        reducedMotion.addEventListener("change", update);
+
+        return () => {
+            observer.disconnect();
+            document.removeEventListener("visibilitychange", update);
+            reducedMotion.removeEventListener("change", update);
+        };
+    }, []);
+
     return (
         <section
+            ref={sectionRef}
+            id="instruments"
             aria-label="Technology stack"
             className="relative overflow-hidden py-12 md:py-16 border-t border-[#493B33]/35 md:pl-[88px]"
             style={{ maxWidth: "100vw" }}
@@ -174,8 +210,8 @@ export default function TechSlider() {
             <div className="absolute inset-y-0 right-0 w-12 sm:w-24 md:w-36 bg-gradient-to-l from-[#13110E] via-[#13110E]/80 to-transparent z-10 pointer-events-none" />
 
             <div>
-                <MarqueeRow items={ROW_1} speed={32} indexBase={0} />
-                <MarqueeRow items={ROW_2} reverse speed={24} indexBase={ROW_1.length} />
+                <MarqueeRow items={ROW_1} speed={32} indexBase={0} running={running} />
+                <MarqueeRow items={ROW_2} reverse speed={24} indexBase={ROW_1.length} running={running} />
             </div>
         </section>
     );

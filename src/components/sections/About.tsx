@@ -47,9 +47,9 @@ const FACTS = [
 ];
 
 const TAGS = [
-    "react", "next.js", "typescript", "clean code", "open source",
-    "ui · ux", "performance", "api design", "dx", "real-time",
-    "systems", "full-stack", "devops", "automation",
+    "typescript", "api design", "security", "performance", "server ops",
+    "domain management", "seo", "node.js", "postgresql", "real-time",
+    "systems", "devops", "automation", "open source",
 ];
 
 export default function About() {

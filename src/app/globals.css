@@ -337,12 +337,19 @@
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
     pointer-events: none;
     z-index: 9998;
-    animation: grain 8s steps(10) infinite;
     mix-blend-mode: overlay;
   }
+  /* Animated grain is desktop-only: a viewport-sized blended layer repainting
+     every 800ms is a real cost on low-end phones. Mobile keeps static grain. */
+  @media (min-width: 768px) and (prefers-reduced-motion: no-preference) {
+    .grain::before {
+      animation: grain 8s steps(10) infinite;
+    }
+  }
 
+  /* Clearance for the fixed mobile bottom bar: 56px bar + 24px breathing room */
   .pb-mobile-hud {
-    padding-bottom: calc(5.5rem + env(safe-area-inset-bottom, 24px));
+    padding-bottom: calc(5rem + env(safe-area-inset-bottom, 0px));
   }
 
   /* ─── Custom cursor dot ─── */

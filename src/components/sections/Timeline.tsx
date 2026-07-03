@@ -61,7 +61,7 @@ const EXPERIENCE: ExperienceItem[] = [
         title: "Self-taught Dev",
         company: "Start of the journey",
         period: "Early 2023",
-        description: "HTML/CSS → TypeScript → React → Next.js. Full-stack through relentless building.",
+        description: "HTML/CSS → TypeScript → React — then deeper into the backend. Learned by relentless building.",
         tag: "HTML · CSS · JS",
     },
 ];
@@ -187,7 +187,7 @@ export default function Timeline() {
 
                 {/* Footer note */}
                 <p className="mt-8 atlas-folio">
-                    Log continues — § 04 · Works
+                    Log continues — § 04 · {t("projects.label")}
                 </p>
             </div>
         </section>

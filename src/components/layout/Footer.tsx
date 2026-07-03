@@ -25,7 +25,7 @@ export default function Footer() {
     const status = data?.discord_status ?? "offline";
 
     return (
-        <footer className="relative border-t border-[#493B33]/35 pt-16 pb-16 md:pl-[88px] pb-mobile-hud md:pb-16">
+        <footer className="relative border-t border-[#493B33]/35 pt-16 md:pl-[88px] pb-mobile-hud md:pb-16">
             <div className="container mx-auto px-6 md:px-12">
                 {/* Imprint head */}
                 <div className="atlas-folio mb-6">§ Colophon</div>
@@ -45,6 +45,14 @@ export default function Footer() {
                     <div className="space-y-3">
                         <div className="atlas-folio">Channels</div>
                         <ul className="text-[12px] leading-[1.85] space-y-0.5">
+                            <li>
+                                <a
+                                    href="mailto:contact@setka.dev"
+                                    className="atlas-link text-[#B39F85] hover:text-[#DBC7A6]"
+                                >
+                                    Mail <span className="text-[#5F564D]">/</span> contact@setka.dev
+                                </a>
+                            </li>
                             <li>
                                 <a
                                     href="https://github.com/arka-ui"

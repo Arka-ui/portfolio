@@ -2,11 +2,15 @@
 
 import { useEffect, useState, useRef } from "react";
 import { cn } from "@/lib/utils";
+import { useSectionSpy } from "@/hooks/useSectionSpy";
+import { SECTION_ORDER, SECTION_NUM, type SectionId } from "@/lib/sections";
 
 export default function AtlasMasthead() {
     const [hidden, setHidden] = useState(false);
-    const [folio, setFolio] = useState(1);
     const lastY = useRef(0);
+
+    const active = useSectionSpy(SECTION_ORDER);
+    const folio = SECTION_NUM[active as SectionId] ?? "01";
 
     useEffect(() => {
         let raf = 0;
@@ -17,17 +21,6 @@ export default function AtlasMasthead() {
                 if (y > lastY.current + 6 && y > 200) setHidden(true);
                 else if (y < lastY.current - 4) setHidden(false);
                 lastY.current = y;
-
-                const sections = ["hero", "about-intro", "about", "projects", "news", "skills", "live", "contact"];
-                const pivot = window.innerHeight * 0.35;
-                let idx = 1;
-                sections.forEach((id, i) => {
-                    const el = document.getElementById(id);
-                    if (!el) return;
-                    const rect = el.getBoundingClientRect();
-                    if (rect.top <= pivot) idx = i + 1;
-                });
-                setFolio(idx);
                 raf = 0;
             });
         };
@@ -58,7 +51,7 @@ export default function AtlasMasthead() {
                 <span className="text-[#5F564D]">·</span>
                 <span className="text-[#7D6B56]">MMXXVI</span>
                 <span className="text-[#5F564D]">·</span>
-                <span className="text-[#B39F85]">№ {String(folio).padStart(2, "0")}</span>
+                <span className="text-[#B39F85]">№ {folio}</span>
                 <div className="flex-1 h-px bg-[#493B33]/35" aria-hidden />
                 <button
                     type="button"

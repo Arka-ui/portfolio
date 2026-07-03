@@ -6,10 +6,18 @@ import LanguageSelector from "@/components/features/LanguageSelector";
 import { cn } from "@/lib/utils";
 import { useWarp } from "@/context/WarpContext";
 import { useLanguage } from "@/context/LanguageContext";
+import { useSectionSpy } from "@/hooks/useSectionSpy";
+import { SECTION_ORDER, SECTION_NUM } from "@/lib/sections";
+
+/* Sections without their own nav entry highlight their parent entry. */
+const RAIL_RESOLVE: Record<string, string> = {
+    "instruments": "hero",
+    "about": "about-intro",
+    "news": "projects",
+};
 
 export default function Navbar() {
     const [mounted, setMounted]             = useState(false);
-    const [activeSection, setActiveSection] = useState("hero");
     const [scrollProgress, setScrollProgress] = useState(0);
     const [scrolledDown, setScrolledDown]   = useState(false);
     const [hidden, setHidden]               = useState(false);
@@ -20,19 +28,19 @@ export default function Navbar() {
     const { warpTo }  = useWarp();
     const { t }       = useLanguage();
 
+    const spied = useSectionSpy(SECTION_ORDER);
+    const activeSection = RAIL_RESOLVE[spied] ?? spied;
+
     const NAV_ITEMS = [
-        { label: t("nav.home"),    href: "#",            id: "hero",         merge: [] as string[] },
-        { label: t("nav.about"),   href: "#about-intro", id: "about-intro",  merge: ["about"] },
-        { label: t("nav.work"),    href: "#projects",    id: "projects",     merge: ["news"] },
-        { label: t("nav.stack"),   href: "#skills",      id: "skills",       merge: [] },
-        { label: t("nav.live"),    href: "#live",        id: "live",         merge: [] },
-        { label: t("nav.contact"), href: "#contact",     id: "contact",      merge: [] },
+        { label: t("nav.home"),    href: "#",            id: "hero",        num: SECTION_NUM["hero"] },
+        { label: t("nav.about"),   href: "#about-intro", id: "about-intro", num: SECTION_NUM["about-intro"] },
+        { label: t("nav.work"),    href: "#projects",    id: "projects",    num: SECTION_NUM["projects"] },
+        { label: t("nav.stack"),   href: "#skills",      id: "skills",      num: SECTION_NUM["skills"] },
+        { label: t("nav.live"),    href: "#live",        id: "live",        num: SECTION_NUM["live"] },
+        { label: t("nav.contact"), href: "#contact",     id: "contact",     num: SECTION_NUM["contact"] },
     ];
 
     useEffect(() => { setMounted(true); }, []);
-
-    const NAV_IDS = ["hero", "about-intro", "about", "projects", "news", "skills", "live", "contact"];
-    const RAIL_RESOLVE: Record<string, string> = { about: "about-intro", news: "projects" };
 
     useEffect(() => {
         let raf = 0;
@@ -46,18 +54,6 @@ export default function Navbar() {
                 if (y > lastY.current + 6 && y > 120) setHidden(true);
                 else if (y < lastY.current - 4) setHidden(false);
                 lastY.current = y;
-
-                const pivot = window.innerHeight * 0.35;
-                let currentDomId = "hero";
-                for (const id of NAV_IDS) {
-                    const sec = document.getElementById(id);
-                    if (!sec) continue;
-                    const rect = sec.getBoundingClientRect();
-                    if (rect.top <= pivot) currentDomId = id;
-                }
-                if (y < 80) currentDomId = "hero";
-                const resolved = RAIL_RESOLVE[currentDomId] ?? currentDomId;
-                setActiveSection(resolved);
                 raf = 0;
             });
         };
@@ -67,7 +63,6 @@ export default function Navbar() {
             window.removeEventListener("scroll", onScroll);
             if (raf) cancelAnimationFrame(raf);
         };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const handleLogoDotTap = () => {
@@ -128,7 +123,7 @@ export default function Navbar() {
                     />
 
                     <ul className="relative flex flex-col gap-3.5">
-                        {NAV_ITEMS.map((item, idx) => {
+                        {NAV_ITEMS.map((item) => {
                             const active = activeSection === item.id;
                             return (
                                 <li key={item.href} className="flex">
@@ -150,7 +145,7 @@ export default function Navbar() {
                                             )}
                                         />
                                         <span className="w-7 text-right shrink-0 tabular-nums">
-                                            {String(idx + 1).padStart(2, "0")}
+                                            {item.num}
                                         </span>
                                         <span
                                             className={cn(
@@ -203,7 +198,7 @@ export default function Navbar() {
                         transition={{ duration: 0.18 }}
                         className="font-mono text-[10px] tracking-[0.24em] uppercase text-[#7D6B56] truncate"
                     >
-                        § {String((activeIdx >= 0 ? activeIdx : 0) + 1).padStart(2, "0")} · {activeItem.label}
+                        § {activeItem.num} · {activeItem.label}
                     </motion.span>
                 </AnimatePresence>
 

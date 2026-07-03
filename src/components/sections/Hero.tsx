@@ -113,11 +113,11 @@ export default function Hero() {
                 <motion.button
                     {...enter(0.45)}
                     type="button"
-                    onClick={() => warpTo("#about-intro")}
-                    aria-label="Scroll to next section"
-                    className="self-start mt-10 md:mt-14 inline-flex items-center gap-3 atlas-folio hover:text-[#DBC7A6] transition-colors group"
+                    onClick={() => warpTo("#instruments")}
+                    aria-label="Scroll to next section: § 02 · Instruments"
+                    className="self-start mt-10 md:mt-14 inline-flex items-center gap-3 atlas-folio hover:text-[#DBC7A6] focus-visible:text-[#DBC7A6] focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-4 focus-visible:outline-[#DBC7A6]/60 transition-colors group"
                 >
-                    <span aria-hidden className="block w-12 atlas-rule group-hover:w-20 transition-all duration-500" />
+                    <span aria-hidden className="block w-12 atlas-rule group-hover:w-20 group-focus-visible:w-20 transition-all duration-500" />
                     <span>↓ § 02 · Instruments</span>
                 </motion.button>
             </div>

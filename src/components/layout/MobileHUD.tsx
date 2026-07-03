@@ -5,63 +5,47 @@ import { useState, useEffect, useRef } from "react";
 import { useWarp } from "@/context/WarpContext";
 import { useHaptics } from "@/hooks/useHaptics";
 import { useLanguage } from "@/context/LanguageContext";
+import { useSectionSpy } from "@/hooks/useSectionSpy";
+import { SECTION_ORDER, SECTION_NUM } from "@/lib/sections";
 import { cn } from "@/lib/utils";
 
-const SECTION_MAP: Record<string, string> = {
+/* Every section resolves to a tab; sections without their own tab keep the
+   nearest previous tab lit so the active state never goes stale mid-page. */
+const TAB_FOR_SECTION: Record<string, string> = {
     "hero":        "home",
+    "instruments": "home",
     "about-intro": "about",
+    "about":       "about",
     "projects":    "projects",
+    "news":        "projects",
+    "skills":      "projects",
+    "live":        "projects",
     "contact":     "contact",
 };
+
+const LONG_PRESS_MS = 500;
 
 export default function MobileHUD() {
     const { warpTo } = useWarp();
     const { triggerHaptic } = useHaptics();
     const { t } = useLanguage();
-    const [activeTab, setActiveTab] = useState("home");
-    const [sectionProgress, setSectionProgress] = useState(0);
+    const [pageProgress, setPageProgress] = useState(0);
     const [quickActions, setQuickActions] = useState(false);
+
+    const activeSection = useSectionSpy(SECTION_ORDER);
+    const activeTab = TAB_FOR_SECTION[activeSection] ?? "home";
+
     const longPressTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const suppressClick = useRef(false);
 
-    useEffect(() => {
-        const sections = Object.keys(SECTION_MAP)
-            .map(id => document.getElementById(id))
-            .filter(Boolean) as HTMLElement[];
-
-        if (!sections.length) return;
-
-        const observer = new IntersectionObserver(
-            (entries) => {
-                const visible = entries
-                    .filter(e => e.isIntersecting)
-                    .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-
-                if (visible) {
-                    const tab = SECTION_MAP[visible.target.id];
-                    if (tab) setActiveTab(tab);
-                }
-            },
-            { rootMargin: "-40% 0px -40% 0px", threshold: [0, 0.1, 0.5, 1] }
-        );
-
-        sections.forEach(s => observer.observe(s));
-        return () => observer.disconnect();
-    }, []);
-
+    /* Page progress hairline — scroll offset only, no layout-forcing reads. */
     useEffect(() => {
         let raf = 0;
-        const activeSectionId = Object.entries(SECTION_MAP).find(([, v]) => v === activeTab)?.[0];
         const onScroll = () => {
             if (raf) return;
             raf = requestAnimationFrame(() => {
-                if (!activeSectionId) { raf = 0; return; }
-                const el = document.getElementById(activeSectionId);
-                if (!el) { raf = 0; return; }
-                const rect = el.getBoundingClientRect();
-                const vh = window.innerHeight;
-                const total = rect.height + vh * 0.6;
-                const scrolled = Math.max(0, vh * 0.3 - rect.top);
-                setSectionProgress(Math.min(1, Math.max(0, scrolled / total)));
+                const max = document.documentElement.scrollHeight - window.innerHeight;
+                setPageProgress(max > 0 ? Math.min(1, window.scrollY / max) : 0);
                 raf = 0;
             });
         };
@@ -71,74 +55,74 @@ export default function MobileHUD() {
             window.removeEventListener("scroll", onScroll);
             if (raf) cancelAnimationFrame(raf);
         };
-    }, [activeTab]);
+    }, []);
 
     const navItems = [
-        { id: "home",     label: t("nav.home"),     short: "01", href: "#"            },
-        { id: "about",    label: t("nav.about"),    short: "02", href: "#about-intro" },
-        { id: "cmd",      label: "INDEX",           short: "⌘",  href: "__cmd"        },
-        { id: "projects", label: t("nav.projects"), short: "04", href: "#projects"    },
-        { id: "contact",  label: t("nav.contact"),  short: "08", href: "#contact"     },
+        { id: "home",     label: t("nav.home"),     short: SECTION_NUM["hero"],        href: "#"            },
+        { id: "about",    label: t("nav.about"),    short: SECTION_NUM["about-intro"], href: "#about-intro" },
+        { id: "cmd",      label: "INDEX",           short: "⌘",                        href: "__cmd"        },
+        { id: "projects", label: t("nav.projects"), short: SECTION_NUM["projects"],    href: "#projects"    },
+        { id: "contact",  label: t("nav.contact"),  short: SECTION_NUM["contact"],     href: "#contact"     },
     ];
 
     const openCmdPalette = () =>
         document.dispatchEvent(new KeyboardEvent("keydown", { key: "k", metaKey: true }));
 
-    const handleNav = (id: string, href: string) => {
+    const handleNav = (href: string) => {
+        if (suppressClick.current) {
+            suppressClick.current = false;
+            return;
+        }
         triggerHaptic("light");
         if (href === "__cmd") { openCmdPalette(); return; }
-        setActiveTab(id);
         warpTo(href);
     };
 
-    const handleLongPressStart = (id: string) => {
+    const startLongPress = (id: string) => {
         if (id !== activeTab || id === "cmd") return;
         longPressTimer.current = setTimeout(() => {
+            suppressClick.current = true;
             triggerHaptic("medium");
             setQuickActions(true);
-        }, 500);
+        }, LONG_PRESS_MS);
     };
-    const handleLongPressEnd = () => {
-        if (longPressTimer.current) clearTimeout(longPressTimer.current);
+    const cancelLongPress = () => {
+        if (longPressTimer.current) {
+            clearTimeout(longPressTimer.current);
+            longPressTimer.current = null;
+        }
     };
 
     const quickActionItems = [
-        { label: "Top",   fn: () => { triggerHaptic("light"); warpTo("#"); setQuickActions(false); } },
-        { label: "Copy",  fn: () => { triggerHaptic("light"); navigator.clipboard?.writeText(window.location.href); setQuickActions(false); } },
-        { label: "Share", fn: () => { triggerHaptic("light"); navigator.share?.({ url: window.location.href }).catch(() => {}); setQuickActions(false); } },
+        { label: "Top",   fn: () => { triggerHaptic("light"); warpTo("#"); } },
+        { label: "Copy",  fn: () => { triggerHaptic("light"); navigator.clipboard?.writeText(window.location.href); } },
+        { label: "Share", fn: () => { triggerHaptic("light"); navigator.share?.({ url: window.location.href }).catch(() => {}); } },
     ];
 
     return (
         <>
-            <motion.div
-                initial={{ y: 80, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
+            <motion.nav
+                aria-label="Primary"
+                initial={{ y: 80 }}
+                animate={{ y: 0 }}
                 transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1], delay: 0.6 }}
-                className="fixed md:hidden z-50 will-change-transform"
-                style={{
-                    bottom: "max(0.75rem, env(safe-area-inset-bottom, 16px))",
-                    left: "0.75rem",
-                    right: "0.75rem",
-                    height: "52px",
-                }}
+                className="fixed md:hidden bottom-0 left-0 right-0 z-50 will-change-transform bg-[#13110E]/95 backdrop-blur-xl border-t border-[#493B33]/55"
+                style={{ paddingBottom: "env(safe-area-inset-bottom, 0px)" }}
             >
-                {/* Frame: square, hairline border, no rounded capsule */}
-                <div className="absolute inset-0 bg-[#13110E]/92 backdrop-blur-xl border border-[#493B33]/55 overflow-hidden">
-                    {/* Top progress hairline */}
-                    <div className="absolute top-0 left-0 right-0 h-px bg-[#493B33]/40">
-                        <div
-                            className="h-full origin-left bg-[#DBC7A6]/85"
-                            style={{
-                                width: "100%",
-                                transform: `scaleX(${sectionProgress})`,
-                                transformOrigin: "left",
-                                transition: "transform 0.12s linear"
-                            }}
-                        />
-                    </div>
+                {/* Page-progress hairline along the top edge */}
+                <div aria-hidden className="absolute top-0 left-0 right-0 h-px bg-[#493B33]/40 -translate-y-px">
+                    <div
+                        className="h-full bg-[#DBC7A6]/85"
+                        style={{
+                            width: "100%",
+                            transform: `scaleX(${pageProgress})`,
+                            transformOrigin: "left",
+                            transition: "transform 0.12s linear",
+                        }}
+                    />
                 </div>
 
-                <div className="relative h-full flex items-stretch">
+                <div className="flex items-stretch h-14">
                     {navItems.map((item) => {
                         const isActive = activeTab === item.id;
                         const isCmd = item.id === "cmd";
@@ -146,12 +130,16 @@ export default function MobileHUD() {
                         return (
                             <button
                                 key={item.id}
-                                onClick={() => handleNav(item.id, item.href)}
-                                onTouchStart={() => handleLongPressStart(item.id)}
-                                onTouchEnd={handleLongPressEnd}
-                                onTouchCancel={handleLongPressEnd}
+                                type="button"
+                                onClick={() => handleNav(item.href)}
+                                onTouchStart={() => startLongPress(item.id)}
+                                onTouchMove={cancelLongPress}
+                                onTouchEnd={cancelLongPress}
+                                onTouchCancel={cancelLongPress}
+                                onContextMenu={(e) => e.preventDefault()}
                                 className={cn(
                                     "relative flex-1 flex flex-col items-center justify-center gap-1 min-w-[44px] transition-colors duration-200",
+                                    "focus-visible:outline focus-visible:outline-1 focus-visible:-outline-offset-2 focus-visible:outline-[#DBC7A6]/60",
                                     isCmd
                                         ? "text-[#DBC7A6] border-l border-r border-[#493B33]/55"
                                         : isActive
@@ -174,7 +162,7 @@ export default function MobileHUD() {
                                 {isActive && !isCmd && (
                                     <motion.div
                                         layoutId="hud-underline"
-                                        className="absolute bottom-1 h-px w-6 bg-[#DBC7A6]"
+                                        className="absolute bottom-1.5 h-px w-6 bg-[#DBC7A6]"
                                         transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
                                     />
                                 )}
@@ -182,31 +170,39 @@ export default function MobileHUD() {
                         );
                     })}
                 </div>
-            </motion.div>
+            </motion.nav>
 
             <AnimatePresence>
                 {quickActions && (
-                    <motion.div
-                        initial={{ opacity: 0, y: 12 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: 12 }}
-                        transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
-                        className="fixed md:hidden z-[55]"
-                        style={{ bottom: "calc(4.5rem + env(safe-area-inset-bottom, 16px))", left: "50%", transform: "translateX(-50%)" }}
-                        onClick={() => setQuickActions(false)}
-                    >
-                        <div className="flex flex-col items-stretch gap-px border border-[#493B33]/60 bg-[#1B1814]/95 backdrop-blur-2xl min-w-[160px]">
-                            {quickActionItems.map((qa) => (
-                                <button
-                                    key={qa.label}
-                                    onClick={qa.fn}
-                                    className="px-4 py-2.5 text-left text-[12px] font-mono uppercase tracking-[0.2em] text-[#DBC7A6]/85 hover:text-[#DBC7A6] hover:bg-[#251E18]/80 transition-colors"
-                                >
-                                    {qa.label}
-                                </button>
-                            ))}
-                        </div>
-                    </motion.div>
+                    <>
+                        {/* Tap-away backdrop */}
+                        <div
+                            className="fixed inset-0 md:hidden z-[54]"
+                            onClick={() => setQuickActions(false)}
+                            aria-hidden
+                        />
+                        <motion.div
+                            initial={{ opacity: 0, y: 12 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: 12 }}
+                            transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
+                            className="fixed md:hidden z-[55] left-0 right-0 flex justify-center pointer-events-none"
+                            style={{ bottom: "calc(4.5rem + env(safe-area-inset-bottom, 0px))" }}
+                        >
+                            <div className="pointer-events-auto flex flex-col items-stretch gap-px border border-[#493B33]/60 bg-[#1B1814]/95 backdrop-blur-2xl min-w-[160px]">
+                                {quickActionItems.map((qa) => (
+                                    <button
+                                        key={qa.label}
+                                        type="button"
+                                        onClick={() => { qa.fn(); setQuickActions(false); }}
+                                        className="px-4 py-3 text-left text-[12px] font-mono uppercase tracking-[0.2em] text-[#DBC7A6]/85 hover:text-[#DBC7A6] hover:bg-[#251E18]/80 transition-colors"
+                                    >
+                                        {qa.label}
+                                    </button>
+                                ))}
+                            </div>
+                        </motion.div>
+                    </>
                 )}
             </AnimatePresence>
         </>

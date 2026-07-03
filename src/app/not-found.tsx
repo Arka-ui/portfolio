@@ -16,7 +16,7 @@ export default function NotFound() {
     return (
         <div className="fixed inset-0 z-[9999] bg-[#13110E] text-[#B39F85] font-mono p-8 flex flex-col items-center justify-center overflow-hidden select-none">
             <div className="text-center space-y-4">
-                <h1 className="font-display text-[clamp(96px,18vw,220px)] font-bold leading-none tracking-tighter text-grad-warm">404</h1>
+                <h1 className="font-display text-[clamp(96px,18vw,220px)] font-bold leading-none tracking-tighter text-[#DBC7A6]">404</h1>
                 <h2 className="text-2xl tracking-widest text-[#DBC7A6]">SIGNAL_LOST</h2>
                 <div className="w-full h-px bg-[#493B33]/50 my-4" />
                 <p className="text-[#B39F85] max-w-md mx-auto leading-relaxed">

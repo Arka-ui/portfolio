@@ -95,6 +95,16 @@ export default function Contact() {
                             </li>
 
                             <li>
+                                <span className="atlas-folio block mb-1">{t("contact.email")}</span>
+                                <a
+                                    href="mailto:contact@setka.dev"
+                                    className="atlas-link text-[#B39F85] hover:text-[#DBC7A6] text-[14px]"
+                                >
+                                    contact@setka.dev
+                                </a>
+                            </li>
+
+                            <li>
                                 <span className="atlas-folio block mb-1">GitHub</span>
                                 <a
                                     href="https://github.com/arka-ui"

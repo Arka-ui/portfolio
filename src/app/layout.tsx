@@ -30,17 +30,17 @@ const greenEnergy = localFont({
 });
 
 export const metadata: Metadata = {
-    title: "Arka | Creative Full Stack Developer",
-    description: "Creative Developer specializing in building premium digital experiences, modern web applications, and immersive user interfaces.",
+    title: "Arka | Backend Developer — TypeScript, APIs & Security",
+    description: "Backend developer specializing in TypeScript: secure API design, performance optimization, server & domain management, and SEO. Framework chosen per project.",
     applicationName: "Arka Portfolio",
     authors: [{ name: "Arka", url: "https://arka-ui.github.io/portfolio/" }],
-    keywords: ["Arka", "Portfolio", "Full Stack Developer", "Web Developer", "React", "Next.js", "Creative Developer", "UI/UX Design"],
+    keywords: ["Arka", "Backend Developer", "TypeScript", "API Development", "Web Security", "Performance Optimization", "Server Management", "Domain Management", "SEO", "Node.js"],
     creator: "Arka",
     publisher: "Arka",
     metadataBase: new URL("https://arka-ui.github.io"),
     openGraph: {
-        title: "Arka | Creative Full Stack Developer",
-        description: "Creative Developer specializing in building premium digital experiences, modern web applications, and immersive user interfaces.",
+        title: "Arka | Backend Developer — TypeScript, APIs & Security",
+        description: "Backend developer specializing in TypeScript: secure API design, performance optimization, server & domain management, and SEO. Framework chosen per project.",
         url: "https://arka-ui.github.io/portfolio/",
         siteName: "Arka Portfolio",
         locale: "en_US",
@@ -56,8 +56,8 @@ export const metadata: Metadata = {
     },
     twitter: {
         card: "summary_large_image",
-        title: "Arka | Creative Full Stack Developer",
-        description: "Check out my portfolio featuring my latest full stack web projects.",
+        title: "Arka | Backend Developer — TypeScript, APIs & Security",
+        description: "Backend developer — TypeScript, secure APIs, performance optimization, server management, and SEO.",
         creator: "@arka_dev",
         images: ["/og-image.jpg"],
     },
@@ -74,14 +74,40 @@ export const metadata: Metadata = {
     },
 };
 
+const personJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: "Arka",
+    url: "https://arka-ui.github.io/portfolio/",
+    email: "mailto:contact@setka.dev",
+    jobTitle: "Backend Developer",
+    knowsAbout: [
+        "TypeScript",
+        "API development",
+        "Web security",
+        "Backend performance optimization",
+        "Server administration",
+        "Domain management",
+        "SEO",
+    ],
+    sameAs: ["https://github.com/arka-ui"],
+};
+
 export default function RootLayout({
     children,
 }: Readonly<{
     children: React.ReactNode;
 }>) {
     return (
-        <html lang="en" className="scroll-smooth">
+        /* No `scroll-smooth` here: CSS smooth-scrolling competes with Lenis's
+           frame-by-frame scrollTo and breaks programmatic navigation wherever
+           Lenis runs without its `lenis-smooth` override class (mobile). */
+        <html lang="en">
             <body className={`${monocraft.variable} ${greenEnergy.variable} antialiased bg-background text-foreground overflow-x-hidden grain`}>
+                <script
+                    type="application/ld+json"
+                    dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
+                />
                 <WarpProvider>
                     <LanguageProvider>
                         <BlueprintProvider>

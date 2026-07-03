@@ -55,7 +55,7 @@ const ENTRIES = [
     { label: "Rust",          category: "Backend"        },
     { label: "shadcn/ui",     category: "Frontend"       },
     { label: "Tailwind CSS",  category: "Frontend"       },
-    { label: "TypeScript",    category: "Frontend"       },
+    { label: "TypeScript",    category: "Backend"        },
     { label: "VS Code",       category: "Tools & Infra"  },
 ];
 

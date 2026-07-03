@@ -8,34 +8,45 @@ export default function ScrollManager() {
     const { registerLenis } = useWarp();
 
     useEffect(() => {
-        const mobile = window.innerWidth < 768;
+        const desktopQuery = window.matchMedia("(min-width: 768px)");
+        let lenis: Lenis | null = null;
+        let rafId = 0;
 
-        const lenis = new Lenis({
-            // Mobile: shorter duration feels native; desktop: cinematic 1.2s
-            duration: mobile ? 0.8 : 1.2,
-            // Mobile: cubic ease-out (feels like native iOS momentum)
-            // Desktop: expo-out (editorial snap)
-            easing: mobile
-                ? (t: number) => 1 - Math.pow(1 - t, 3)
-                : (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-            orientation: "vertical",
-            gestureOrientation: "vertical",
-            smoothWheel: !mobile,
-            wheelMultiplier: 1,
-        });
+        const raf = (time: number) => {
+            lenis?.raf(time);
+            rafId = requestAnimationFrame(raf);
+        };
 
-        registerLenis(lenis);
+        const init = () => {
+            lenis?.destroy();
+            const mobile = !desktopQuery.matches;
+            lenis = new Lenis({
+                // Mobile: shorter duration feels native; desktop: cinematic 1.2s
+                duration: mobile ? 0.8 : 1.2,
+                // Mobile: cubic ease-out (feels like native iOS momentum)
+                // Desktop: expo-out (editorial snap)
+                easing: mobile
+                    ? (t: number) => 1 - Math.pow(1 - t, 3)
+                    : (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+                orientation: "vertical",
+                gestureOrientation: "vertical",
+                smoothWheel: !mobile,
+                wheelMultiplier: 1,
+            });
+            registerLenis(lenis);
+        };
 
-        function raf(time: number) {
-            lenis.raf(time);
-            requestAnimationFrame(raf);
-        }
-
-        requestAnimationFrame(raf);
+        init();
+        rafId = requestAnimationFrame(raf);
+        desktopQuery.addEventListener("change", init);
 
         return () => {
-            lenis.destroy();
+            desktopQuery.removeEventListener("change", init);
+            cancelAnimationFrame(rafId);
+            lenis?.destroy();
+            lenis = null;
         };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return null;

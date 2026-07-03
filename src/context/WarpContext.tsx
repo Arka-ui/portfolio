@@ -15,14 +15,16 @@ export function WarpProvider({ children }: { children: ReactNode }) {
     const [lenis, setLenis] = useState<Lenis | null>(null);
 
     const warpTo = (targetId: string) => {
+        const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
         if (!lenis) {
             // Fallback for no Lenis
             if (targetId === "#" || targetId === "/") {
-                window.scrollTo({ top: 0, behavior: "smooth" });
+                window.scrollTo({ top: 0, behavior: reducedMotion ? "auto" : "smooth" });
                 return;
             }
             const el = document.querySelector(targetId);
-            el?.scrollIntoView({ behavior: 'smooth' });
+            el?.scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth" });
             return;
         }
 
@@ -31,7 +33,8 @@ export function WarpProvider({ children }: { children: ReactNode }) {
         if (targetId === "#" || targetId === "/") {
             lenis.scrollTo(0, {
                 duration: 1.5,
-                easing: (t) => t === 1 ? 1 : 1 - Math.pow(2, -10 * t) // ExpoOut for "Glide"
+                easing: (t) => t === 1 ? 1 : 1 - Math.pow(2, -10 * t), // ExpoOut for "Glide"
+                immediate: reducedMotion,
             });
             return;
         }
@@ -46,7 +49,16 @@ export function WarpProvider({ children }: { children: ReactNode }) {
         // 3. Glide
         lenis.scrollTo(target, {
             duration: 1.5,
-            easing: (t) => t === 1 ? 1 : 1 - Math.pow(2, -10 * t) // ExpoOut for "Glide"
+            easing: (t) => t === 1 ? 1 : 1 - Math.pow(2, -10 * t), // ExpoOut for "Glide"
+            immediate: reducedMotion,
+            onComplete: () => {
+                // Sections gated on remote data (projects, news, live) can pop in
+                // mid-glide and shift the target; settle onto its final position.
+                const drift = target.getBoundingClientRect().top;
+                if (Math.abs(drift) > 4) {
+                    lenis?.scrollTo(target, { immediate: true });
+                }
+            },
         });
     };
 
