@@ -103,7 +103,6 @@
     color: var(--color-foreground);
     font-family: var(--font-sans);
     overflow-x: hidden;
-    overscroll-behavior-y: contain;
     @apply antialiased selection:bg-[#B39F85]/25 selection:text-[#DBC7A6];
   }
   h1, h2, h3, h4, h5, h6 {
